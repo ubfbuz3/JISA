@@ -5,7 +5,7 @@
     "gitea_version_emulated": "1.22.6-seeded-control",
     "reused_code": "experiments/real_system/run_real.py (topology/mutation/crawl/introspection/adjudication)",
     "honesty_boundary": "靶机复刻的是引擎实际消费的 API 契约；检测器在'真有越权时能否检出'被公平测量；不声称能发现 Gitea 真实 CVE。植入缺陷只影响运行期读/写绕过，列表/搜索/自省走正确模型。",
-    "elapsed_s": 1.9
+    "elapsed_s": 2.7
   },
   "phaseA_topology": {
     "steps": [

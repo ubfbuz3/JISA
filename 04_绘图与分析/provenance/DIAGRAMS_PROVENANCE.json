@@ -3,14 +3,14 @@
     "spec": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\04_绘图与分析\\figures\\specs\\fig1_protocol.json",
     "renderer": "C:\\Users\\Administrator\\.workbuddy\\skills\\figure-spec\\scripts\\figure_renderer.py",
     "svg_sha256": "06133254e3a8d8d2",
-    "pdf_sha256": "ec2e5c31b91626f3",
+    "pdf_sha256": "f08e05e26424361f",
     "pixels_generated_by_model": false
   },
   "fig7_boundaries": {
     "spec": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\04_绘图与分析\\figures\\specs\\fig7_boundaries.json",
     "renderer": "C:\\Users\\Administrator\\.workbuddy\\skills\\figure-spec\\scripts\\figure_renderer.py",
     "svg_sha256": "e2b8dce6c80ca2f2",
-    "pdf_sha256": "8e1d4212db2a6c89",
+    "pdf_sha256": "853593f04f0d30d9",
     "pixels_generated_by_model": false
   }
 }
