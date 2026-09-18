@@ -1,0 +1,361 @@
+\section{Three boundaries}
+\label{sec:boundaries}
+
+Figure~\ref{fig:boundaries} places the boundaries relative to the protocol. We
+state each one as a claim about the MR family, name the evidence that carries it,
+and say what would falsify it.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\linewidth]{fig7_boundaries.pdf}
+\caption{The three boundaries against the protocol of Figure~\ref{fig:protocol}.
+Boundary~1 is the deterministic false proof produced by the adjudication as
+designed; boundary~2 is the emptiness of the obvious repair---once a readable
+oracle exists, the metamorphic step is not empirically necessary; boundary~3 is the conditional
+nature of the specificity figure computed over the reachability model.}
+\label{fig:boundaries}
+\end{figure}
+
+\subsection{Boundary 1 (RQ1): the adjudication as designed produces deterministic false proofs}
+
+\emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
+exceptions---the adjudication reports a legitimate access granted out of band
+after the crawl as an already-established violation, and it does so in one
+direction.}
+
+The evidence is twofold. On the constructed system, a legitimate share created
+out of band yields \ResObsOobVtwoFalseProof{} false proofs out of
+\ResObsOobFalseAlarm{} alarms, a rate of \ResObsOobVtwoFpRate{}, against
+\ResObsFwVtwoFalseProof{} when the same share was created through the framework's
+facility. On Gitea, the bookkeeping adjudication produces
+\ResRsMrBookkeepingFp{} false proofs on \ResRsAuthorizedCells{} authorized cells
+(\ResRsMrBookkeepingFpRate{}), and the same method under a live reading of the
+reachability model produces \ResRsMrBookkeepingAlarmsLive{} alarms---so the
+error is not a property of the system, it is a property of the reading.
+
+We stress the \emph{deterministic direction}, because the original literature
+attributes its residual false alarms partly to asynchronous behaviour. Here the
+direction is forced. The predicate has exactly two representations available
+---``the subject cannot reach this object'' and ``the subject can reach this
+object''---and a grant created outside the crawled interface has no
+representation other than the first. The error is therefore systematic, which is
+why the false-proof count is not merely non-zero but equal to the alarm count on
+the out-of-band scenario. Section~\ref{sec:threats} records why our
+approximation of the exception semantics cannot turn this into a measurement of
+the original engine's behaviour.
+
+This boundary is not our discovery. The predecessor design attributes its own
+residual false alarms to the crawler failing to traverse ``all URLs for all
+users''~\cite{Mai2019Metamorphic}. What we add is the identification of the
+failure as a function of \emph{when} the model was read rather than \emph{which}
+objects it contained, which is what makes the repair of Boundary~2 available---
+and, as we now show, empty.
+
+\subsection{Boundary 2 (RQ2): once a sound, readable oracle exists, the metamorphic step is not empirically necessary}
+
+\emph{If the false proofs of Boundary~1 are removed by consulting a readable
+authorization introspection surface, then it is the oracle that carries the
+work: replacing the entire metamorphic step with a single ordinary request
+changes nothing measurable.}
+
+The evidence is the ablation of Section~\ref{sec:synthetic-ablation}.
+\texttt{direct\_observe}---an ordinary request that succeeds, checked against
+the same readable surface---attains false proofs of \ResAbDirectObserveFP{}
+against v3's \ResAbVThreeFP{}, and recall \ResAbDirectObserveRec{} against v3's
+\ResAbVThreeRec{}. The Gitea experiment reproduces the ordering on a real
+system, with \texttt{direct\_observe} emitting \ResRsDirectObserveAlarms{}
+alarms and \ResRsDirectObserveFp{} false proofs against v3's
+\ResRsVThreeFp{}.
+
+Three qualifications are part of the claim, not disclaimers appended to it.
+
+The first is that the false-proof comparison is a \emph{tie at zero}, not a win.
+We state it as a tie because that is what it is: once either method can read the
+oracle, both stop producing false proofs, and the surviving difference is on
+recall alone. The pair of numbers in the previous paragraph must therefore be
+read as ``no measurable change'', and a reader who takes \ResAbDirectObserveFP{}
+against \ResAbVThreeFP{} as an advantage has misread us.
+
+The second is the honest arithmetic on that surviving difference. The recall
+difference is \ResAbRecallDiff{} with 95\% CI
+$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$, which includes zero, so
+\texttt{direct\_observe} is \emph{not} demonstrated to be better. It is
+demonstrated to be \emph{not worse}, and that is already decisive, because for
+the metamorphic step to carry work it would have to be better at something the
+plain request cannot do. It is not: on the \ResAbDisagreementN{} records where
+the two methods differ, the MR-based method is the one that fails, its
+reachability precondition blocking a detection the plain request makes.
+
+The third is that the control is \emph{constructed}, not discovered. The two
+observables \texttt{direct\_observe} consumes---the request succeeded, and the
+authorization surface reports no entitlement---are definitionally the same
+quantities that define the ground truth. The comparison is therefore a
+statement about the definitions, and it must be read as one: we do not claim a
+formal non-inferiority result, because no margin was fixed in advance; when the
+oracle is readable, the metamorphic relation has nothing left to compute. This is also why
+we do not present it as a competing method.
+
+\subsection{Boundary 3 (RQ3): the reported specificity rests on an undeclared premise and a low-resolution denominator}
+
+\emph{The reported specificity of \ResLitReportedSpecPct{}\% is a statement about
+a corpus of generated inputs under the assumption that the reachability model
+coincides with the true authorization state. It cannot detect a failure that is
+uniform across a scenario class, and that assumption is not stated.}
+
+There are two distinct issues and we keep them apart.
+
+\paragraph{The premise} The adjudication of an authorization MR is a function of
+the reachability model (Section~\ref{sec:background}). A specificity figure
+computed over that adjudication is therefore conditional on the model being
+right. Where the model and the true authorization state diverge---exactly the
+out-of-band case of Boundary~1---the figure is not measuring the tool's
+agreement with authorization, it is measuring its agreement with its own
+crawler. None of this is concealed by the authors: they say the role-to-resource
+mapping is ``not always available''~\cite{Chaleshtari2022Metamorphic}, and their
+predecessor names the crawler as the source of its false
+alarms~\cite{Mai2019Metamorphic}. Our point is that the number is reported
+without that condition attached.
+
+\paragraph{The denominator} The published definition phrases specificity as the
+fraction of \emph{generated inputs} that do not lead to a false
+positive---\ResLitMaiFalseAlarms{} of \ResLitMaiGenInputs{} in the predecessor's
+own accounting, a figure whose own text attributes the residual cases to crawler
+coverage. A denominator in generated inputs is divided by every request the
+generator emits. A failure that removes an entire scenario class from correct
+handling contributes only as many false positives as that class emits inputs, so
+it is diluted by the rest of the run. In our approximation
+(Table~\ref{tab:spec}) the configuration in which a whole class of legitimate
+access is misreported still reports a specificity of \ResSpecRowOneSpec{}.
+The metric is not computed incorrectly; it is \emph{low-resolution with respect
+to this failure mode}, and that is a property of the choice of denominator, not
+of the arithmetic.
+
+\paragraph{What we are not saying} We are not saying the reported figure is
+false, and we are not saying the reported false positives were misdiagnosed. The
+published attribution for those is asynchronous action, which is a different
+cause from the one we describe. The claim is narrower: a specificity in
+input-units, computed against a reachability model, cannot discharge the premise
+that model embeds, and cannot see a class-uniform failure.
+
+\subsection{Implementation-level confirmation}
+\label{sec:impl}
+
+An earlier draft of this argument rested on the published \emph{definitions} of
+the two predicates. Definitions can be read generously. We therefore obtained the
+implementation---the MST/SMRL library that realises \mbox{MST-wi} is
+public~\cite{Chaleshtari2022Metamorphic}---and checked the predicates at source.
+The library ships \ResArtMrTotal{} concrete metamorphic relations, of which
+\ResArtAuthzMrTotal{} are authorization relations;
+\ResArtAuthzGatedEither{} of those gate on one of the two predicates we analyse
+(\ResArtAuthzGatedCrtg{} on \texttt{cannotReachThroughGUI},
+\ResArtAuthzGatedUcrc{} on \texttt{userCanRetrieveContent}), and
+\ResArtAuthzGatedNeither{} gate on neither.
+
+Three facts emerged that the published text does not state.
+
+\paragraph{The freeze is hard-coded, not incidental}
+\texttt{cannotReachThroughGUI} resolves to a set-membership test: for the current
+account it collects the URLs recorded in the \emph{crawl} inputs and asks whether
+the URL under test is absent from that set. It issues no request.
+\ifnum\ResArtFactFOneurlsetmemoizedneverinvalidated=1
+The per-account set is then cached in a field that is written exactly once and
+never invalidated anywhere in the library,\else
+(The library differs from our reading here.)\fi{}
+so the snapshot is not an artefact of when the crawl happened to run; it is
+enforced by the implementation. \texttt{userCanRetrieveContent} is the same in
+kind: it compares against an output store read from a filesystem directory
+produced by the crawl, and that store too is loaded once and reused.
+
+\paragraph{The clause that could have caught it is inert} The reachability test
+has a second clause: the URL must also be absent from the set recorded
+\emph{across all users}, which is the clause that would prevent an alarm on an
+object many accounts can reach. That set is built by scanning every recorded
+sequence and stopping at the first login action; every record in our snapshot
+begins with a login action, so the set is empty and the clause never fires. This
+is not the same as the snapshot merely \emph{having no second opinion}: the
+library \emph{has} one and it cannot report, so the per-account record alone
+decides the verdict.
+
+\paragraph{Missing data defaults to an alarm}
+\ifnum\ResArtFactFTwofailopenwhencrawlinputempty=1
+The predicate returns \texttt{true}---``the subject cannot reach this
+object''---when the crawl input list is empty, and again when either argument is
+null.\else
+(The library differs from our reading here.)\fi{}
+An empty crawl therefore \emph{satisfies} the MR's precondition instead of
+abstaining. This is the mechanism behind the deterministic direction we reported
+in Boundary~1: that failure is not noise, it is a default.
+
+\paragraph{The role relation is configuration, not state}
+\ifnum\ResArtFactFFivesupervisorfromstaticconfig=1
+The guard on the second MR family is a supervisor relation read from the
+system's static configuration file, and it reports \texttt{true} when the two
+accounts are the same.\else
+(The library differs from our reading here.)\fi{}
+Attributes of this kind are fixed at configuration time and cannot reflect an
+authorization granted afterwards.
+
+What this removes is a specific objection---that we inferred the predicates'
+semantics from prose. The semantics are in the code. It does not by itself
+establish that the code \emph{behaves} as read, so we also executed it.
+
+\subsection{Executing the published relations}
+\label{sec:native-run}
+
+The library ships the relations but not the execution environment: no system
+configuration, no crawl snapshot, no subject system. We supplied those, and ran
+the relations themselves---source unmodified, with the build configuration
+(\texttt{pom.xml}) and an external harness/driver added---against Gitea
+\NtGiteaVersion{}.
+
+\paragraph{What ran} \NtMrExecuted{} of the \NtMrTotal{} authorization relations
+executed. The engine's own input split partitions the input view into
+\NtInputView{} parts, one per crawl record, and each part is evaluated against
+the \NtUserCount{} accounts it derives from those records' login actions, so
+every relation is exercised over the full record--account product.
+\NtMrFired{} of the \NtMrExecuted{} relations returned at least one failure,
+\NtAlarms{} alarms in total. Those counts are the engine's own
+\texttt{getFailures()} return value, not our adjudication of it.
+Table~\ref{tab:native} lists them per relation.
+
+\paragraph{What dominates the wall time} Almost none of the run's \NtElapsedS{}
+seconds is analysis. Each of the \NtIterations{} leaf evaluations invokes the
+engine's own browser-cleanup hook, which on Windows spawns two process-kill
+commands and waits on each whether or not a browser is present; relations that
+issue no request at all still consume minutes. This is a cost of the execution
+environment the artifact does not ship, and it bounds how much of the catalog a
+reproduction can exercise.
+
+\paragraph{The load-bearing cell} Take the topology of
+Section~\ref{sec:realsystem}: the subject \NtKeyGrantee{} holds a legitimate
+entitlement to \NtKeyRepo{}, granted out of band, after the crawl. On that cell
+the published predicate \texttt{cannotReachThroughGUI} answers ``cannot
+reach''---which is the answer it is \emph{defined} to give, because the
+subject's crawl record contains no entry for the repository. Across the run the
+predicate was invoked \NtCrtgCalls{} times and returned that answer \NtCrtgTrue{}
+times (\NtCrtgTruePct{}\%), of which \NtKeyCrtgTrue{} fall on this cell.
+\NtKeyMrFired{} relations (\NtKeyMrNames{}) report a failure there. The alarm is
+therefore a false proof produced by the published relations, under the published
+predicate, on a real system: the subject's request succeeds and returns the same
+bytes as the owner's, and the family's guarded comparison---gate on the
+predicate, then compare the credentials-changed observation with the original
+(Section~\ref{sec:impl})---reads an unchanged observation as a violation. The
+access is authorized. Byte-equality is not inferred here from the lengths the run
+happened to record: the \NtByteCells{} granted cells were re-probed afterwards, and
+in each case the owner's and the grantee's response to the same URL hash
+identically while a third account is refused.
+
+The alarms are not confined to that one cell, and they go nowhere else: the
+engine emitted \NtAlarms{} of them, on \NtAlarmCells{} cells, every one of them
+an object to which the subject holds a grant made after the crawl\ifnum\NtAlarmsOffGrant=0,
+and none on an object the subject is not entitled to.\else, and
+\NtAlarmsOffGrant{} on an object the subject is not entitled to.\fi{}
+
+\paragraph{What was and was not changed} We did not modify the library.
+\texttt{git status} on the upstream tree reports exactly \NtUpstreamModified{}
+changed file, \texttt{pom.xml}, and \NtUpstreamJavaModified{} changed Java
+sources; the diff adds one \texttt{<source>} entry declaring the relation
+directory as a build source and removes nothing. Two classes were \emph{added}: a
+provider and a driver, \NtHarnessLines{} lines together. The provider reproduces
+the session semantics the original replay relies on---the identity established by
+a login action carries to the actions that follow it, rather than being read off
+each action separately---because the credential-substitution helper rewrites only
+the credential-bearing action and leaves the rest carrying the original account.
+Getting this wrong does not merely add noise: it makes a credentials-changed input
+fetch under the original identity, so the observation is unchanged and the
+relation reports a violation on cells where the subject's own objects are at
+stake. We record it because it is the kind of substitution defect that a
+false-proof rate cannot distinguish from the failure being studied. The
+substitution is otherwise confined to the observation channel, which the
+two-stage architecture makes separable: the relations read a crawl snapshot that
+the driver loads from disk, and \texttt{cannotReachThroughGUI} resolves to
+set-membership over those loaded records and issues no request of its own. Every
+record in that snapshot is re-read after the crawl as its own user---\NtSeedVerified{}
+access points in all, each one resolving---which is necessary and not sufficient
+for a crawl record, but it rules out the failure mode that mattered here: a record
+no crawl could have produced. Our channel therefore cannot reach the predicate,
+which is why the cell above is attributable to the definition rather than to the
+harness.
+
+Three limits belong to the claim. The content predicate
+\texttt{userCanRetrieveContent} was invoked \NtUcrcCalls{} times, so this run
+does not exercise it; and because that predicate is fed the observed output, our
+channel \emph{would} propagate into it if it were---we report the count rather
+than assert a clean separation we did not test. The supervisor guard
+\texttt{isSupervisorOf} was invoked \NtSupCalls{} times
+(\NtSupTrue{} true). Nor do all the relations gated on that predicate fire, and
+the reasons are inside their own guards rather than in the system: one compares
+the redirect URL a navigation produces, and our observations are direct responses
+with no navigation, so that attribute is empty and it passes; another requires a
+six-input composition our view does not furnish, so its guard is false and it
+passes. Nor does every relation that runs produce a verdict: \NtMrErrored{}
+aborts with no request issued at all---the engine's own reporting path
+dereferences an input slot its guard never bound---and that is the one missing
+from the executed count, shown as \texttt{error} in Table~\ref{tab:native}. We therefore read the alarms as
+originating in the gate, not as a count of how many published relations a full
+replay would flag. And Gitea is correct, so the run can only exhibit false
+proofs: it cannot measure detection.
+
+\begin{table}[t]
+\centering
+\caption{The published authorization relations (source unmodified; the build
+configuration and a replay harness were added) executed against
+Gitea \NtGiteaVersion{}. Alarms are the engine's own return value. Requests
+counts observations actually issued, \NtHttpCalls{} in total: a relation
+evaluated on an output already observed earlier in the same run issues none, so
+requests are attributed to whichever relation observed them first.}
+\label{tab:native}
+\small
+\input{native_engine_table.tex}
+\end{table}
+
+\subsection{The admissibility condition, and why it is the real ceiling}
+\label{sec:admissibility}
+
+The results above suggest the only repair available inside this design. An
+adjudicator may promote a verdict to \texttt{violation-proven} on the strength of
+a readable authorization introspection surface only when \emph{both} of the
+following hold:
+
+\begin{enumerate}
+\item the application exposes a readable introspection surface, \emph{and}
+\item one can give a reason that this surface is not of the same kind as the
+      defect under test---that is, that the surface is not itself a
+      reachability or GUI-derived artefact whose blind spot is correlated with
+      the blindness being tested for.
+\end{enumerate}
+
+The second clause is the one that matters, and it is not automatable. It is a
+judgement about the provenance of a piece of evidence, and it must be made per
+system. The cross-vendor replication of Section~\ref{sec:gogs} makes the clause
+concrete: on Gogs \GgVersion{} the only readable surface fails it, on GitLab
+\GlVersion{} the readable membership surface fails it on every channel that
+does not itself confer membership (it resolves inherited membership, and is
+blind to public visibility and site administration), and on both systems the
+oracle-gated adjudicators convert those blind spots into \GgFpVthree{} (Gogs)
+and \GlFpVthree{} (GitLab) false proofs for v3, where the sound oracle of
+Gitea produced none. This is why we describe the outcome as a boundary rather
+than as a
+mechanism: where the condition holds, the honest method is one that consumes the
+oracle directly and drops the relation (Boundary~2); where it does not, the
+honest method abstains, as v3 does on the unreadable stratum, where it keeps
+\ResIntroOffVthreeKeepRate{} of the detections the exception-aware method keeps
+and abstains \ResIntroOffAbstain{} times. We note that in that stratum the
+aggregate table would have shown v3 as the best method in the study. It is not
+better; it has stopped answering.
+
+\subsection{What would falsify each boundary}
+
+\begin{itemize}
+\item \textbf{Boundary~1.} A demonstration that the predicates are defined over
+      live reachability rather than recorded reachability, which would remove the
+      time-dependence entirely and make the out-of-band case unremarkable.
+\item \textbf{Boundary~2.} An authorization MR whose adjudication requires an
+      observable that a succeeding request plus a readable oracle cannot
+      produce---for instance, evidence about a subject's entitlements that the
+      subject itself cannot read but the test can. We do not have such an MR; we
+      have two, of the same family (Section~\ref{sec:threats}).
+\item \textbf{Boundary~3.} A specificity reported in scenario units, or with the
+      reachability premise made explicit, that still fails to separate the
+      configurations of Table~\ref{tab:spec}.
+\end{itemize}

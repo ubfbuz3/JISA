@@ -1,0 +1,67 @@
+{
+  "title": "The MR family is squeezed between two boundaries",
+  "canvas": {
+    "width": 900,
+    "height": 300
+  },
+  "style": {
+    "font_family": "DejaVu Sans, Helvetica, Arial, sans-serif",
+    "font_size": 14,
+    "bg_color": "#FFFFFF"
+  },
+  "nodes": [
+    {
+      "id": "left",
+      "label": "Boundary 1: oracle readable",
+      "sublabel": "a plain request with the oracle matches or beats the MR family",
+      "x": 230,
+      "y": 96,
+      "width": 400,
+      "height": 92,
+      "shape": "rounded",
+      "fill": "#E1F5EE",
+      "stroke": "#0F6E56",
+      "text_color": "#04342C"
+    },
+    {
+      "id": "right",
+      "label": "Boundary 2: oracle absent",
+      "sublabel": "MR is the only evidence, but it is a GUI-reachability proxy",
+      "x": 670,
+      "y": 96,
+      "width": 400,
+      "height": 92,
+      "shape": "rounded",
+      "fill": "#FAEEDA",
+      "stroke": "#854F0B",
+      "text_color": "#412402"
+    },
+    {
+      "id": "banner",
+      "label": "No regime in which the MR family is the best available method",
+      "x": 450,
+      "y": 232,
+      "width": 860,
+      "height": 60,
+      "shape": "rounded",
+      "fill": "#FCEBEB",
+      "stroke": "#A32D2D",
+      "text_color": "#501313"
+    }
+  ],
+  "edges": [
+    {
+      "from": "left",
+      "to": "banner",
+      "style": "dotted",
+      "color": "#888780"
+    },
+    {
+      "from": "right",
+      "to": "banner",
+      "style": "dotted",
+      "color": "#888780"
+    }
+  ],
+  "labels": []
+}

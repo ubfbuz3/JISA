@@ -1,0 +1,395 @@
+\section{Real system: Gitea \ResRsVersion{}}
+\label{sec:realsystem}
+
+\subsection{Scope, and what this experiment can and cannot show}
+
+A synthetic system lets us construct the scenarios we want but cannot tell us
+whether the reachability reading we identified is an artefact of our
+construction. We therefore repeated the essential comparison on a real system.
+
+We chose Gitea \ResRsVersion{} because it has what the question requires: genuine
+object-level sharing with per-object visibility, a machine-readable sharing
+surface, and a documented administrative grant path. Two properties of the
+experiment bound its conclusions, and we state them before the numbers.
+
+First, Gitea is \emph{correct}: it does not contain the object-level
+authorization vulnerability we are studying. This experiment therefore measures
+only the false-proof side. It cannot measure detection, and we do not report a
+recall from it.
+
+Second, the cell study below uses our instantiation of the predicates, not the
+engine. The engine's own relations are executed separately, on the same system,
+in Section~\ref{sec:native-run}. We do not claim this experiment shows that
+\mbox{MST-wi} fails; we claim it locates where the adjudication departs from the
+system's real authorization state---and Section~\ref{sec:native-run} shows that
+the published code locates the same departure.
+
+Third and most importantly, we report the reachability model under \emph{both}
+readings---a crawl-time snapshot, which is what the original definitions
+presuppose, and a live reading---so that the reader can see which one is
+responsible. The experiment produces \ResRsCells{} cells,
+\ResRsCellsSnapshot{} under each reading.
+
+\subsection{Characterising the system}
+
+Table~\ref{tab:rs-m1} characterises the grant surface. We counted an endpoint as
+a grant endpoint if, without modifying the system under test, a request to it can
+change a (subject, object) pair from not-entitled to entitled; the direction was
+determined by the HTTP methods actually available, so an endpoint offering only
+\texttt{DELETE} counts as a revocation, not a grant.
+
+\begin{table}[t]
+\centering
+\caption{The grant surface of Gitea \ResRsVersion{} (instance-independent).}
+\label{tab:rs-m1}
+\begin{tabular}{lr}
+\toprule
+quantity & count \\
+\midrule
+paths in the system's API description & \ResRsSwaggerPaths{} \\
+grant endpoints & \ResRsGrantEndpoints{} \\
+revocation endpoints & \ResRsRevokeEndpoints{} \\
+grant endpoints usable without site-administrator rights & \ResRsGrantNoAdmin{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The counts above are raw grant-capable routes taken from Gitea's API
+description (Swagger). The cross-vendor Table~\ref{tab:gogs-cross} reports a
+\emph{normalised} M1 census in which semantically equivalent routes are merged
+and non-authorization grant surface (e.g.\ repository-transfer and
+star-toggle endpoints) is excluded; this is why its Gitea grant figure
+(\GtGrantEndpoints{}) differs from the raw route count
+(\ResRsGrantEndpoints{}) reported here. The two tables answer different
+questions and are not in conflict.
+
+The \ResRsGrantNoAdmin{} endpoints that a non-administrator can drive are the
+ones that matter, because they are exactly the out-of-band channel of
+Section~\ref{sec:synthetic-observability} in its real form: a subject who is not
+an administrator can create an entitlement that a crawl of that subject's own
+interface does not have to reveal.
+
+\subsection{Is the authorization oracle readable, and from where?}
+
+Any claim that a readable oracle makes the metamorphic step unnecessary has to
+establish that the oracle is readable (and that its provenance is not the defect
+under test) for the party who would use it. We checked
+this deliberately from two vantages, because the answer differs.
+
+From the owner/administrator vantage the sharing surface is readable on
+\ResRsOwnerReadable{} of \ResRsOwnerReadableTotal{} attempts
+(\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}): complete. From a
+\emph{black-box subject's own} vantage---the vantage a black-box testing tool
+occupies---it is readable on \ResRsBlackboxSelfReadable{} of
+\ResRsBlackboxSelfCells{} (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{}):
+never. The intermediate count of \ResRsSelfReadable{} of \ResRsSelfTotal{}
+readable attempts is not a counterexample, and we flag it explicitly because it
+invites a misreading: those successes come from subjects that happen to be the
+object's owner, or a site administrator, and not from an arbitrary subject
+reading its own entitlements. The black-box count is the one that constrains
+the mechanism.
+
+We verified that our model of the system agrees with the system's own behavior:
+on \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable cells the
+credential-substitution check agreed
+(\ResRsFidelityNa{} cells were not applicable, being the case where the acting
+credential is the subject's own).
+
+\subsection{The mismatch is in time, not in visibility}
+
+Table~\ref{tab:rs-m4} is the load-bearing result of this section. Under the
+crawl-time reading, the adjudication departs from the real authorization state on
+\ResRsMismatchSnapshot{} of \ResRsMismatchDenom{} cells. Under the live reading
+it departs on \ResRsMismatchLive{} of \ResRsMismatchDenom{}. The same objects,
+the same entitlements and the same predicates produce a mismatch or not
+depending solely on when the reachability model was read.
+
+\begin{table}[t]
+\centering
+\caption{Departure from the real authorization state, per reading of the
+reachability model, over the representative slice.}
+\label{tab:rs-m4}
+\begin{tabular}{lrr}
+\toprule
+reading of the reachability model & mismatches & cells \\
+\midrule
+crawl-time snapshot (as the definitions presuppose) & \ResRsMismatchSnapshot{} & \ResRsMismatchDenom{} \\
+live at execution time & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This is what turns the synthetic result from a property of our construction into
+a property of the definition. On the synthetic system we could always be accused
+of having chosen objects that a crawler would miss; here, nothing about the
+objects changed between the two rows.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\linewidth]{fig5_real_system.pdf}
+\caption{Gitea \ResRsVersion{}. (a) the grant-endpoint space; (b) readability of
+the authorization oracle by vantage---complete from the owner/administrator
+vantage (\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}), never from a
+black-box subject's own vantage
+(\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{}); (c) the mismatch is
+temporal: \ResRsMismatchSnapshot{}/\ResRsMismatchDenom{} under the crawl-time
+reading against \ResRsMismatchLive{}/\ResRsMismatchDenom{} live; (d) alarms
+against false proofs per method.}
+\label{fig:realsystem}
+\end{figure}
+
+\subsection{Consequences for the verdict}
+
+On the \ResRsAuthorizedCells{} cells that carry an authorized access, we
+evaluated the methods of Section~\ref{sec:protocol} under the crawl-time
+reading. A bookkeeping implementation of the MR family produces
+\ResRsMrBookkeepingAlarms{} alarms, of which \ResRsMrBookkeepingFp{} are false
+proofs---a false-proof rate of \ResRsMrBookkeepingFpRate{} on authorized cells.
+Under the live reading the same method produces
+\ResRsMrBookkeepingAlarmsLive{} alarms. The state-calibrated adjudicator v3
+produces \ResRsVThreeFp{} false proofs
+(rate \ResRsVThreeFpRate{}), consistent with its behaviour on the synthetic
+system when the oracle is readable.
+
+The two controls behave as the synthetic study predicts, and one of them
+reproduces the straw-man failure on a real system:
+\texttt{direct\_only} emits \ResRsDirectOnlyAlarms{} alarms with
+\ResRsDirectOnlyFp{} false proofs---its precision on this system is poor because
+it consults the sharing surface without checking whether the access actually
+succeeded---whereas \texttt{direct\_observe} emits
+\ResRsDirectObserveAlarms{} alarms with \ResRsDirectObserveFp{} false proofs.
+
+\subsection{How the authorization came to be, and why it is not a field rate}
+
+Each authorized cell's provenance was classified by channel
+(Table~\ref{tab:rs-m6}). Of \ResRsChannelAuthorizedTotal{} authorized accesses,
+\ResRsChannelInBand{} arrived through a share created in band and was therefore
+visible in the framework's own records, while
+\ResRsChannelNotObservable{} were not observable by the framework's log
+(\ResRsChannelNotObservableRate{}); of those, \ResRsChannelOobLiteral{} came
+through a literal out-of-band channel
+(\ResRsChannelOobLiteralRate{}).
+
+\begin{table}[t]
+\centering
+\caption{Provenance of authorized access, by observability channel.}
+\label{tab:rs-m6}
+\begin{tabular}{lr}
+\toprule
+channel & authorized cells \\
+\midrule
+in-band share (visible in the framework log) & \ResRsChannelInBand{} \\
+literal out-of-band grant & \ResRsChannelOobLiteral{} \\
+implicit: site-administrator or public-by-configuration & \ResRsChannelImplicit{} \\
+\midrule
+not observable by the framework log & \ResRsChannelNotObservable{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We must be unambiguous here: these proportions are properties of the topology we
+constructed, not a field prevalence. Choosing a topology with many out-of-band
+grants is how we test the mechanism; it is not evidence about how often that
+happens in deployment. The instance-independent measurement in this section is
+Table~\ref{tab:rs-m1}; the channel breakdown is a design parameter. We label it
+as such wherever it is quoted.
+
+\subsection{An endogenous control}
+
+The most serious alternative explanation for the snapshot mismatch is that
+public objects are simply harder to enumerate, i.e.\ that the failure is about
+visibility rather than about time. We control for this with two objects that are
+public at the end of the experiment but public at different times
+(Table~\ref{tab:rs-endo}).
+
+\begin{table}[t]
+\centering
+\caption{Endogenous control: two objects that are both public at the end.}
+\label{tab:rs-endo}
+\begin{tabular}{lrrr}
+\toprule
+object & cells & \texttt{cannotReach} true & MR fires \\
+\midrule
+public before the crawl & \ResRsEndoFromStartCells{} & \ResRsEndoFromStartReach{} & \ResRsEndoFromStartFires{} \\
+public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawlReach{} & \ResRsEndoAfterCrawlFires{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both objects end in the same state: public. One was already public when the
+crawl ran, the other became public afterwards. The predicate reports that the
+subject cannot reach the object on \ResRsEndoAfterCrawlReach{} of
+\ResRsEndoAfterCrawlCells{} cells in the second case and \ResRsEndoFromStartReach{}
+in the first; the MR fires on \ResRsEndoAfterCrawlFires{} cells in the second
+case and \ResRsEndoFromStartFires{} in the first. Since the objects' final
+visibility is identical, visibility cannot explain the difference. \emph{Time}
+can, and does.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{fig6_endogenous_control.pdf}
+\caption{Endogenous control. Two objects are both public at the end of the
+experiment; one was public before the crawl, the other only after. Holding final
+visibility fixed, the predicate still reports unreachability on
+\ResRsEndoAfterCrawlReach{} of \ResRsEndoAfterCrawlCells{} cells only in the
+second case. The responsible variable is the time at which the reachability
+model was read.}
+\label{fig:endo}
+\end{figure}
+
+\subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
+\label{sec:gogs}
+
+Everything above was measured on one system. To test whether the measurements
+are properties of Gitea rather than of the design, we repeated the identical
+three-phase protocol (same \ResRsCellsSnapshot{}-cell grid, same channel
+taxonomy, one shared pattern table normalising the M1 census) on two further
+systems (Table~\ref{tab:gogs-cross}). \textbf{Gogs} \GgVersion{} is the
+project Gitea forked from in 2016---related lineage, independently evolved
+code base; it publishes no swagger document, so its census denominator of
+\GgRoutePaths{} API paths comes from parsing the route table of the pinned
+version. \textbf{GitLab} \GlVersion{} shares no lineage with either; its
+denominator of \GlRoutePaths{} API paths comes from enumerating the routes of
+the pinned running instance (its own OpenAPI document is partial---core grant
+endpoints are absent from it---so it cannot serve as a denominator). The
+disclosure cuts both ways: Gogs is a replication across implementations, not
+across unrelated vendors; GitLab is a replication across vendors within one
+domain, the git forge.
+
+\input{gogs_cross_table}
+
+The replication changes one thing and confirms two. The one thing it changes
+concerns the oracle. Gitea exposes a readable owner-vantage introspection
+surface (\texttt{GET \dots/collaborators/\{u\}/permission}) that is also
+\emph{sound}: on all \GtOracleAgree{} cells its answer agrees with actual
+access. Gogs exposes only a collaborator-membership endpoint with 204/404
+semantics. It is equally readable---\GgOracleReadable{} of \GgCells{} cells at
+the owner vantage---but it is \emph{unsound}: on \GgOracleWrong{} cells
+(\GgOracleWrongPct\%) it reports no access for a subject who in fact has
+access. Its blind spot is exactly the set of authorizations that arise through
+any channel other than direct collaborator membership: site administration
+(\GgFnSiteAdmin{} cells), public visibility (\GgFnPublic{}), and out-of-band
+grants (\GgFnOob{}). GitLab falls between the two, and the placement is
+mechanical rather than accidental. Its membership endpoint
+(\texttt{members/all/\{u\}}) resolves \emph{inherited} membership by
+construction, so where Gogs's oracle fails on team-derived access GitLab's
+answers correctly (\GlFnOob{} false negatives on that channel); but a
+membership oracle measures membership, and neither public visibility nor site
+administration confers membership. On those channels GitLab's oracle is blind
+in its turn: \GlOracleWrong{} false negatives in all (\GlFnSiteAdmin{}
+administrative, \GlFnPublic{} public), \GlOracleWrongPct\% of the grid. What
+the oracle cannot see is predictable from what the surface measures---which is
+exactly the judgement clause~2 of the admissibility condition asks for, and
+exactly why it cannot be automated from readability alone.
+
+The consequence is measurable, and it is the strongest single datum in this
+section. On Gitea, the oracle-gated adjudicators produced no false proofs at
+all (\GtFpVthree{} for v3, \GtFpDirectObserve{} for direct-observe). On Gogs,
+the same adjudicators, fed the same design and the only oracle available,
+manufacture false proofs: \GgFpVthree{} under the snapshot reading and
+\GgFpVthreeLive{} under the live reading for v3, and \GgFpDirectObserve{} for
+direct-observe. On GitLab they manufacture false proofs again---\GlFpVthree{}
+for v3, \GlFpDirectObserve{} for direct-observe---and the placement is
+surgical: every v3 false proof falls on a cell whose authorization arose
+through the visibility channel, the one channel the oracle cannot see. A
+readable oracle is not sufficient; a readable oracle with a blind spot does
+not merely fail to help---it converts its own blind spot into confirmed
+violations. On Gogs no admissible oracle exists; on GitLab none exists either;
+the honest adjudicator abstains on both.
+
+Two results replicate across all three systems. First, the bookkeeping alarm
+false-proofs on legitimately granted access everywhere (\GtFpBookkeeping{}
+cells on Gitea, \GgFpBookkeeping{} on Gogs, \GlFpBookkeeping{} on GitLab,
+snapshot reading), and the grant channels that cause it are the same kind: of
+the \GlProvRows{} recorded access grants on GitLab, \GlOobGrants{} were
+out-of-band, \GlImplicitSiteAdmin{} implicit through site administration, and
+\GlImplicitPublic{} implicit through public visibility, against \GlInBand{}
+in-band share---the same out-of-band-dominant profile as Gogs. Second, the
+reachability mismatch persists (\GgMismatchSnap{} of \GgCells{} cells on Gogs
+and \GlMismatchSnap{} on GitLab under the snapshot reading, against
+\GtMismatchSnap{} on Gitea). Two quantitative differences deserve note. On
+Gogs the mismatch only partially resolves under the live reading
+(\GgMismatchLive{} of \GgCells{} remain), because objects granted through
+teams or public visibility never enter a subject's personal crawl at all; on
+GitLab the membership-based listing surfaces group-derived access, so the live
+reading recovers everything the snapshot reading missed (\GlMismatchLive{}
+remain)---a second vendor-specific way for the snapshot premise to fail, this
+one in the crawl model rather than in the oracle. And GitLab's mutation set
+includes a visibility flip that Gogs has no route for; its false-proof counts
+absorb that channel, which is why its direct-observe count (\GlFpDirectObserve{})
+exceeds its v3 count while Gogs's do not.
+
+\subsection{A positive control with a seeded vulnerability}
+\label{sec:seeded}
+
+Section~\ref{sec:realsystem} measures only the false-proof side, because the
+three real systems are correct and contain no object-level authorization
+vulnerability to detect. That leaves the question the reviewer is entitled to
+ask: \emph{when a real object-level flaw is present, does the same detector
+find it?} We answer this with a positive control rather than by weakening any
+of the three systems in place.
+
+We built a \emph{controlled authorization target} that faithfully emulates the
+Gitea \ResRsVersion{} object-level authorization API contract the engine
+actually consumes---the same endpoints and fields probed above---with a correct
+internal authorization model and \SeedBolaN{} deterministically seeded BOLA
+defects. Each defect is a runtime bypass at \texttt{GET
+/api/v1/repos/\{owner\}/\{repo\}}: a subject who, by the model, has no
+entitlement (\texttt{none}) is nonetheless served the object. Crucially, the
+introspection surface (\texttt{GET
+/api/v1/repos/\{owner\}/\{repo\}/collaborators/\{u\}/permission}) reports the
+\emph{correct} \texttt{none} permission, so the oracle stays sound and the
+defect is observable only through the discrepancy between what the oracle says
+and what the request returns. We drove the target with the \emph{same}
+topology, mutation, crawl, introspection and four-method adjudication code as
+Section~\ref{sec:realsystem} (run\_real.py), differing only in the system
+under test; the ground truth of which cells are vulnerable is supplied by the
+seed list, not inferred.
+
+\begin{table}[t]
+\centering
+\caption{Positive control: detection of \SeedBolaN{} deterministically seeded
+BOLA defects by each method. TP/FN/FP/TN are counted against the known seed,
+not against a model.}
+\label{tab:seeded}
+\begin{tabular}{lrrrr}
+\toprule
+method & TP & FN & FP & TN \\
+\midrule
+\texttt{mr\_bookkeeping} & \SeedTPMrBookkeeping{} & \SeedFNMrBookkeeping{} & \SeedFPMrBookkeeping{} & \SeedTNMrBookkeeping{} \\
+\texttt{v3} (owner vantage) & \SeedTPVThree{} & \SeedFNVThree{} & \SeedFPVThree{} & \SeedTNVThree{} \\
+\texttt{v3} (subject vantage) & \SeedTPVThreeSelf{} & \SeedFNVThreeSelf{} & \SeedFPVThreeSelf{} & \SeedTNVThreeSelf{} \\
+\texttt{direct\_only} & \SeedTPDirectOnly{} & \SeedFNDirectOnly{} & \SeedFPDirectOnly{} & \SeedTNDirectOnly{} \\
+\texttt{direct\_observe} & \SeedTPDirectObserve{} & \SeedFNDirectObserve{} & \SeedFPDirectObserve{} & \SeedTNDirectObserve{} \\
+\texttt{direct\_observe} (subject) & \SeedTPDirectObserveSelf{} & \SeedFNDirectObserveSelf{} & \SeedFPDirectObserveSelf{} & \SeedTNDirectObserveSelf{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The observation-gated adjudicator behaves exactly as the negative result
+predicts (Table~\ref{tab:seeded}). \texttt{direct\_observe} and \texttt{v3}
+both catch all \SeedBolaN{} planted defects with zero false positives
+(TP~=~\SeedTPDirectObserve{}, FP~=~\SeedFPDirectObserve{}); they are not
+defeated by the presence of a real vulnerability. The straw man
+\texttt{direct\_only} again over-claims, emitting \SeedFPDirectOnly{} false
+positives on cells where the oracle says \texttt{none} but no access actually
+succeeds---the same failure it shows on the correct real systems. The paper's
+central claim therefore now has both halves: when no vulnerability is present
+the metamorphic step adds nothing (\S\ref{sec:boundaries}), and when one is
+present the right adjudicator detects it without inventing others.
+
+The control also delimits the detector. We seeded one BFLA defect---a
+non-privileged actor (\SeedBflaActor{}) successfully performing a collaborator
+grant that only an owner or administrator should be able to
+(\texttt{PUT \dots/collaborators/\{u\}} returned HTTP~\SeedBflaStatus{}, so the
+defect was present). The read-oriented introspection and observation logic does
+not cover this write-oriented action; that is a known boundary, consistent with
+the oracle-fidelity discussion in \S\ref{sec:boundaries}, and we report it as
+such rather than as a detection failure.
+
+Honesty boundary, stated plainly: this is a controlled target, not production
+Gitea. It validates that the detector's logic fires on a genuine broken
+object-level check and stays silent elsewhere; it does not claim to discover
+Gitea's real CVEs. The system under test is a research artefact, and its
+source, seed list and run script are published with the rest of the
+reproducibility package.

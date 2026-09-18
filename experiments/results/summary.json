@@ -1,0 +1,718 @@
+{
+  "main_matrix_md": "| config | S1 | S2 | S3 | S4 | S5 | S6 | S7 |\n|---|---|---|---|---|---|---|---|\n| V-E3-vuln0-listed | ·· (0/2) | ·· (0/2) | ·· (0/2) | ·· (0/2) | · (0/1) | ·· (0/2) | ·· (0/2) |\n| V-E3-vuln0-unlisted | ·· (0/2) | ·· (0/2) | TT (2/2) | ·· (0/2) | · (0/1) | TT (2/2) | ·· (0/2) |\n| V-E3-vuln0-unlisted-nointro | ·· (0/2) | ·· (0/2) | TT (2/2) | ·· (0/2) | · (0/1) | TT (2/2) | ·· (0/2) |\n| V-E3-vuln1-listed | TT (2/2) | TT (2/2) | ·· (0/2) | TT (2/2) | · (0/1) | ·· (0/2) | TT (2/2) |\n| V-E3-vuln1-unlisted | TT (2/2) | TT (2/2) | TT (2/2) | TT (2/2) | T (1/1) | TT (2/2) | TT (2/2) |\n| V-E3-vuln1-unlisted-nointro | TT (2/2) | TT (2/2) | TT (2/2) | TT (2/2) | T (1/1) | TT (2/2) | TT (2/2) |\n| V-noE3-vuln0 | ·· (0/2) | ·· (0/2) | ·· (0/2) | ·· (0/2) | · (0/1) | — | — |\n| V-noE3-vuln1 | TT (2/2) | TT (2/2) | TT (2/2) | TT (2/2) | T (1/1) | — | — |",
+  "block2": {
+    "FP_E3": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0,
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S3"
+    },
+    "baseline_FP": {
+      "hits": 0,
+      "total": 2,
+      "rate": 0.0,
+      "config": "V-noE3-vuln0",
+      "scenario": "S1"
+    },
+    "FP_E3_listed_control": {
+      "hits": 0,
+      "total": 2,
+      "rate": 0.0,
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S3"
+    },
+    "recall_vuln1_unlisted": {
+      "S2": {
+        "hits": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "S4": {
+        "hits": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "S5": {
+        "hits": 1,
+        "total": 1,
+        "rate": 1.0
+      }
+    }
+  },
+  "block3": {
+    "raw": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0
+    },
+    "e1": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0
+    },
+    "e1e2": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0
+    }
+  },
+  "block4_e3_only": {
+    "v1": {
+      "raw_false_alarm": 4,
+      "recovered": 2,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
+    "v2": {
+      "raw_false_alarm": 4,
+      "recovered": 2,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
+    "v3": {
+      "raw_false_alarm": 4,
+      "recovered": 4,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
+    "degrade_all": {
+      "raw_false_alarm": 4,
+      "recovered": 4,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    }
+  },
+  "block4_all": {
+    "v1": {
+      "raw_false_alarm": 16,
+      "recovered": 8,
+      "detection_kept": 33,
+      "costly_downgrade": 2,
+      "missed": 1,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": 0.9429,
+      "cost_rate": 0.0571,
+      "fn_rate_among_bola": 0.0278
+    },
+    "v2": {
+      "raw_false_alarm": 16,
+      "recovered": 8,
+      "detection_kept": 35,
+      "costly_downgrade": 0,
+      "missed": 1,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": 1.0,
+      "cost_rate": 0.0,
+      "fn_rate_among_bola": 0.0278
+    },
+    "v3": {
+      "raw_false_alarm": 16,
+      "recovered": 16,
+      "detection_kept": 17,
+      "costly_downgrade": 18,
+      "missed": 1,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": 0.4857,
+      "cost_rate": 0.5143,
+      "fn_rate_among_bola": 0.0278
+    },
+    "degrade_all": {
+      "raw_false_alarm": 16,
+      "recovered": 16,
+      "detection_kept": 0,
+      "costly_downgrade": 35,
+      "missed": 1,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": 0.0,
+      "cost_rate": 1.0,
+      "fn_rate_among_bola": 0.0278
+    }
+  },
+  "block5": {
+    "pairs_compared": 12,
+    "decision_equivalence_rate": 0.8333,
+    "structural_equivalence_rate": 1.0,
+    "scope": "仅 vuln=1 的应用（此时 S4/S5 亦为 BOLA，才构成『合法 vs 越权』的不可区分对）",
+    "pairs": [
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "mr": "MR-002",
+        "gui_mode": "blind",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "mr": "MR-004",
+        "gui_mode": "aware",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "mr": "MR-004",
+        "gui_mode": "blind",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "pair": "S3 vs S5（写越权）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "mr": "MR-002",
+        "gui_mode": "blind",
+        "pair": "S3 vs S5（写越权）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": false,
+        "triggered_other": true,
+        "decision_equivalent": false,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "mr": "MR-002",
+        "gui_mode": "blind",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "mr": "MR-004",
+        "gui_mode": "aware",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": false,
+        "triggered_other": true,
+        "decision_equivalent": false,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "mr": "MR-004",
+        "gui_mode": "blind",
+        "pair": "S3 vs S4（访问未共享对象）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "pair": "S3 vs S5（写越权）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": false,
+        "triggered_other": false,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "mr": "MR-002",
+        "gui_mode": "blind",
+        "pair": "S3 vs S5（写越权）",
+        "truth_S3": "normal",
+        "truth_other": "bola",
+        "triggered_S3": true,
+        "triggered_other": true,
+        "decision_equivalent": true,
+        "structural_equivalent": true
+      }
+    ],
+    "note": "判定等价 = MR 对「合法共享访问」与「越权访问」给出相同触发结论; 结构等价 = 两次观测在 status+schema 形状上不可区分（具体取值不同）"
+  },
+  "m4_specificity": [
+    {
+      "config": "V-noE3-vuln0",
+      "cases": 9,
+      "false_alarms": 0,
+      "followup_inputs_approx": 18,
+      "specificity": 1.0
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "cases": 13,
+      "false_alarms": 4,
+      "followup_inputs_approx": 26,
+      "specificity": 0.846154
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "cases": 13,
+      "false_alarms": 0,
+      "followup_inputs_approx": 26,
+      "specificity": 1.0
+    }
+  ],
+  "confusion": {
+    "V-E3-vuln0-listed|TN": 13,
+    "V-E3-vuln0-unlisted|FP": 4,
+    "V-E3-vuln0-unlisted|TN": 9,
+    "V-E3-vuln0-unlisted-nointro|FP": 4,
+    "V-E3-vuln0-unlisted-nointro|TN": 9,
+    "V-E3-vuln1-listed|FN": 1,
+    "V-E3-vuln1-listed|TN": 4,
+    "V-E3-vuln1-listed|TP": 8,
+    "V-E3-vuln1-unlisted|FP": 4,
+    "V-E3-vuln1-unlisted|TP": 9,
+    "V-E3-vuln1-unlisted-nointro|FP": 4,
+    "V-E3-vuln1-unlisted-nointro|TP": 9,
+    "V-noE3-vuln0|TN": 9,
+    "V-noE3-vuln1|TP": 9
+  },
+  "block0_2x2": {
+    "grid": [
+      {
+        "config": "V-E3-vuln0-unlisted",
+        "channel_visibility": "unlisted",
+        "app_authorization": "correct",
+        "cases": 9,
+        "FP": 4,
+        "FN": 0,
+        "TP": 0,
+        "TN": 5
+      },
+      {
+        "config": "V-E3-vuln0-listed",
+        "channel_visibility": "listed",
+        "app_authorization": "correct",
+        "cases": 9,
+        "FP": 0,
+        "FN": 0,
+        "TP": 0,
+        "TN": 9
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "channel_visibility": "unlisted",
+        "app_authorization": "violating",
+        "cases": 9,
+        "FP": 4,
+        "FN": 0,
+        "TP": 5,
+        "TN": 0
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "channel_visibility": "listed",
+        "app_authorization": "violating",
+        "cases": 9,
+        "FP": 0,
+        "FN": 1,
+        "TP": 4,
+        "TN": 4
+      }
+    ],
+    "scope": "仅含存在对象级共享的场景 S3–S7；代表切片 raw+GUI-aware",
+    "note": "每个格子都可能同时出现 FP 与 FN —— 这正是「谓词在误报与漏报之间二选一」的可视化证据，也说明误报并非「关掉谓词」造出来的。"
+  },
+  "block7_s3_s5_dilemma": {
+    "rows": [
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "S3_no_trigger": false,
+        "S3_detail": "0/2",
+        "S5_trigger": true,
+        "S5_detail": "1/1",
+        "both_correct": false
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "S3_no_trigger": true,
+        "S3_detail": "2/2",
+        "S5_trigger": false,
+        "S5_detail": "0/1",
+        "both_correct": false
+      }
+    ],
+    "any_config_correct": false,
+    "note": "在 vuln=1（S3 与 S5 仅能靠授权区分）上，不存在使 S3 与 S5 同时判对的配置 ⇒ MR 判定被迫在「误报」与「漏报」之间二选一。"
+  },
+  "block6_observability": {
+    "framework_share_legit": {
+      "scenario": "S3",
+      "share_origin": [
+        "framework"
+      ],
+      "n": 12,
+      "triggered": 8,
+      "bola_total": 0,
+      "TP": 0,
+      "FP": 8,
+      "FN": 0,
+      "TN": 4,
+      "false_alarm_n": 8,
+      "recovered_n": 8,
+      "false_proof_n": 0,
+      "proven_on_bola_n": 0,
+      "v3_recovered_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 0,
+      "v3_abstain_unavailable_n": 4,
+      "share_log_records": 12,
+      "recovery_rate": 1.0,
+      "false_proof_rate": 0.0,
+      "v3_recovery_rate": 1.0,
+      "v3_false_proof_rate": 0.0
+    },
+    "out_of_band_share_legit": {
+      "scenario": "S6",
+      "share_origin": [
+        "out_of_band"
+      ],
+      "n": 12,
+      "triggered": 8,
+      "bola_total": 0,
+      "TP": 0,
+      "FP": 8,
+      "FN": 0,
+      "TN": 4,
+      "false_alarm_n": 8,
+      "recovered_n": 0,
+      "false_proof_n": 8,
+      "proven_on_bola_n": 0,
+      "v3_recovered_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 0,
+      "v3_abstain_unavailable_n": 4,
+      "share_log_records": 0,
+      "recovery_rate": 0.0,
+      "false_proof_rate": 1.0,
+      "v3_recovery_rate": 1.0,
+      "v3_false_proof_rate": 0.0
+    },
+    "out_of_band_share_bola": {
+      "scenario": "S7",
+      "share_origin": [
+        "out_of_band"
+      ],
+      "n": 12,
+      "triggered": 6,
+      "bola_total": 6,
+      "TP": 6,
+      "FP": 0,
+      "FN": 0,
+      "TN": 6,
+      "false_alarm_n": 0,
+      "recovered_n": 0,
+      "false_proof_n": 0,
+      "proven_on_bola_n": 6,
+      "v3_recovered_n": 0,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 4,
+      "v3_abstain_unavailable_n": 2,
+      "share_log_records": 0,
+      "recovery_rate": null,
+      "false_proof_rate": null,
+      "v3_recovery_rate": null,
+      "v3_false_proof_rate": null
+    },
+    "claim": "修正机制的有效范围 = 共享操作对测试框架可观测；不可观测时失效方向为**假确证**"
+  },
+  "block8_introspection_boundary": {
+    "introspection_on": {
+      "introspection": "on",
+      "n": 36,
+      "false_alarm_n": 8,
+      "bola_trig_n": 9,
+      "v3_recovered_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 9,
+      "v3_abstain_unavailable_n": 0,
+      "v2_false_proof_n": 4,
+      "v2_proven_on_bola_n": 9,
+      "v3_recovery_rate": 1.0,
+      "v3_false_proof_rate": 0.0,
+      "v3_detection_keep_rate": 1.0
+    },
+    "introspection_off": {
+      "introspection": "off",
+      "n": 18,
+      "false_alarm_n": 8,
+      "bola_trig_n": 5,
+      "v3_recovered_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 0,
+      "v3_abstain_unavailable_n": 13,
+      "v2_false_proof_n": 4,
+      "v2_proven_on_bola_n": 5,
+      "v3_recovery_rate": 1.0,
+      "v3_false_proof_rate": 0.0,
+      "v3_detection_keep_rate": 0.0
+    },
+    "claim": "v3 的可容许性条件 = 应用暴露测试者可读的授权自省面；面可读 ⇒ 既消除假确证又保住检测力；面缺失 ⇒ 退化为诚实弃权（检测力归零）。"
+  },
+  "meta": {
+    "total_records": 576,
+    "completed": 576,
+    "errors": 0,
+    "representative_slice": {
+      "precond_variant": "raw",
+      "gui_mode": "aware",
+      "n": 96
+    },
+    "scenarios": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7"
+    ]
+  },
+  "fns": [
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S5",
+      "scenario_intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "mr": "MR-002",
+      "precond_variant": "raw",
+      "gui_mode": "aware",
+      "action": {
+        "actor": "B",
+        "method": "PUT",
+        "path": "/doc/doc0001",
+        "op": "write"
+      },
+      "setup": {
+        "scenario": "S5",
+        "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+        "owner": "A",
+        "actor": "B",
+        "target_doc": "doc0001",
+        "op": "write",
+        "shares": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ],
+        "share_origin": "framework"
+      },
+      "share_log": [
+        {
+          "doc_id": "doc0001",
+          "grantee": "B",
+          "permission": "read",
+          "by": "A",
+          "status": 200,
+          "resp": {
+            "by": "A",
+            "grantee": "B",
+            "origin": "api",
+            "permission": "read",
+            "share_id": "sh0004"
+          }
+        }
+      ],
+      "http_requests": 9,
+      "mr_result": {
+        "mr": "MR-002",
+        "catalog_line": 579,
+        "owner": "A",
+        "follower": "B",
+        "method": "PUT",
+        "path": "/doc/doc0001",
+        "input1": {
+          "status": 200,
+          "body": {
+            "content": "mutated-by-follower",
+            "id": "doc0001",
+            "owner": "A",
+            "title": "A-main"
+          },
+          "url": "/doc/doc0001"
+        },
+        "input2": {
+          "status": 200,
+          "body": {
+            "content": "mutated-by-follower",
+            "id": "doc0001",
+            "owner": "A",
+            "title": "A-main"
+          },
+          "url": "/doc/doc0001"
+        },
+        "ph_notSupervisorOf": true,
+        "ph_cannotReachThroughGUI": false,
+        "ph_gui_reachable_for_follower": true,
+        "gui_mode": "aware",
+        "precondition_met": false,
+        "isError_out1": false,
+        "out1_equals_out2": true,
+        "precondition_flags": {},
+        "triggered": false
+      },
+      "truth": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "confusion": "FN",
+      "verdicts": {
+        "v1": {
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "witness": null
+        },
+        "v2": {
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "witness": null
+        },
+        "v3": {
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "witness": null
+        },
+        "degrade_all": {
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "witness": null
+        }
+      },
+      "grades": {
+        "v1": {
+          "raw_false_alarm": false,
+          "recovered": false,
+          "detection_kept": false,
+          "costly_downgrade": false,
+          "missed": true
+        },
+        "v2": {
+          "raw_false_alarm": false,
+          "recovered": false,
+          "detection_kept": false,
+          "costly_downgrade": false,
+          "missed": true
+        },
+        "v3": {
+          "raw_false_alarm": false,
+          "recovered": false,
+          "detection_kept": false,
+          "costly_downgrade": false,
+          "missed": true
+        },
+        "degrade_all": {
+          "raw_false_alarm": false,
+          "recovered": false,
+          "detection_kept": false,
+          "costly_downgrade": false,
+          "missed": true
+        }
+      }
+    }
+  ],
+  "m5_second_impl": {
+    "compared": 54,
+    "agree": 54,
+    "disagree": 0,
+    "agreement_rate": 1.0,
+    "mismatches": [],
+    "mapping_note": "第二实现的 MR-002 无 GUI 前置条件 → 与主实现 gui_blind 切片对比；第二实现的 MR-004 用列举建模可见性 → 与主实现 gui_aware 切片对比。映射错位会产生假分歧，故显式记录。",
+    "caveat": "同一模型编写的独立实现，只排除实现偶然性，不排除共同盲点。"
+  }
+}

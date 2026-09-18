@@ -1,0 +1,94 @@
+{
+  "methods": {
+    "snapshot|mr_bookkeeping": {
+      "alarms": 10,
+      "on_authorized": 10,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "snapshot|v3": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "snapshot|v3_self": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "snapshot|direct_only": {
+      "alarms": 23,
+      "on_authorized": 0,
+      "on_denied": 23,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "snapshot|direct_observe": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "snapshot|direct_observe_self": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "live|mr_bookkeeping": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "live|v3": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "live|v3_self": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "live|direct_only": {
+      "alarms": 23,
+      "on_authorized": 0,
+      "on_denied": 23,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "live|direct_observe": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    },
+    "live|direct_observe_self": {
+      "alarms": 0,
+      "on_authorized": 0,
+      "on_denied": 0,
+      "cells": 48,
+      "authorized_cells": 25
+    }
+  },
+  "cells": 96,
+  "grant_endpoints": 15,
+  "grant_endpoints_without_site_admin": 8,
+  "revoke_endpoints": 2,
+  "introspection_infidelity": 0,
+  "oob_share": 0.96
+}

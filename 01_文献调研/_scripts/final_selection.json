@@ -1,0 +1,534 @@
+{
+  "core": [
+    {
+      "openalex_id": "https://openalex.org/W7172299201",
+      "doi": "https://doi.org/10.1145/3833417",
+      "title": "Rethinking Broken Object Level Authorization Attacks Under Zero Trust Principle",
+      "year": 2026,
+      "date": "2026-08-03",
+      "venue": "ACM Transactions on Software Engineering and Methodology",
+      "venue_type": "journal",
+      "citations": 0,
+      "type": "article",
+      "authors": [
+        "Anbin Wu",
+        "Zhiyong Feng",
+        "Ruitao Feng",
+        "Zhenchang Xing",
+        "Yang Liu"
+      ],
+      "n_authors": 5,
+      "abstract": "RESTful APIs facilitate data exchange between applications, but they also expose sensitive resources to potential exploitation. Broken Object Level Authorization (BOLA) is the top vulnerability in the OWASP API Security Top 10, exemplifies a critical access control flaw where attackers manipulate API parameters to gain unauthorized access. To address this, we propose BolaZ , a defense framework grounded in zero trust principles. BolaZ analyzes the data flow of resource IDs, pinpointing BOLA attack injection points and determining the associated authorization intervals to prevent horizontal privilege escalation. Our approach leverages static taint tracking to categorize APIs into producers and consumers based on how they handle resource IDs. By mapping the propagation paths of resource IDs, BolaZ captures the context in which these IDs are produced and consumed, allowing for precise identification of authorization boundaries. Unlike defense methods based on common authorization models, BolaZ is the first authorization-guided method that adapts defense rules based on the system's best-practice authorization logic. We validate BolaZ through empirical research on 10 GitHub projects. The results demonstrate BolaZ 's effectiveness in defending against vulnerabilities collected from CVE and discovering 35 new BOLA vulnerabilities in the wild, demonstrating its practicality in real-world deployments.",
+      "concepts": [
+        "Computer science",
+        "Computer security",
+        "Context (archaeology)",
+        "Object (grammar)",
+        "Authorization",
+        "Access control"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "API越权/BOLA"
+      ],
+      "_tag": "API-越权",
+      "_why": "首个把 BOLA 攻击放到零信任假设下重新审视，指出既有防御的失效边界"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4407823559",
+      "doi": "https://doi.org/10.1007/s10207-024-00970-5",
+      "title": "Automated broken object-level authorization attack detection in REST APIs through OpenAPI to colored petri nets transformation",
+      "year": 2025,
+      "date": "2025-02-21",
+      "venue": "International Journal of Information Security",
+      "venue_type": "journal",
+      "citations": 6,
+      "type": "article",
+      "authors": [
+        "Ailton Santos Filho",
+        "Ricardo J. Rodríguez",
+        "Eduardo Feitosa"
+      ],
+      "n_authors": 3,
+      "abstract": "Abstract The representational state transfer architectural style (REST) specifies a set of rules for creating web services. In REST, data and functionality are considered resources, accessed, and manipulated using a uniform, well-defined set of rules. RESTful web services are web services that follow the REST architectural style and are exposed to the Internet using RESTful APIs. Most of them are described by OpenAPI, a standard language-independent interface for RESTful APIs. RESTful APIs are continuously available on the Internet and are therefore a common target for cyberattacks. To prevent vulnerabilities and reduce risks in web systems, there are several security guidelines available, such as those provided by the Open Web Application Security Project (OWASP) foundation. A common vulnerability in web services is broken object level authorization (BOLA), which allows an attacker to modify or delete data or perform actions intended only for authorized users. For example, an attacker can change an order status, delete a user account, or add unauthorized data to the server. In this paper, we propose a transformation from OpenAPI to Petri nets, which enables formal modeling and analysis of REST APIs using existing Petri net analysis techniques to detect potential security risks directly from the analysis of web server logs. In addition, we also provide a tool, named , which automatically performs model transformation (taking the OpenAPI specification as input) and BOLA attack detection by analyzing web server execution traces. We apply it to a case study of a vulnerable web application to demonstrate its applicability. Our results show that it is capable of detecting BOLA attacks with an accuracy greater than 95% in the proposed scenarios.",
+      "concepts": [
+        "Computer science",
+        "Rest (music)",
+        "Colored",
+        "Transformation (genetics)",
+        "Object (grammar)",
+        "Authorization"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "API安全"
+      ],
+      "_tag": "API-越权",
+      "_why": "OpenAPI 规格 → 彩色 Petri 网，自动推导并检测 BOLA；规格驱动路线代表"
+    },
+    {
+      "openalex_id": "https://openalex.org/W7172524253",
+      "doi": "https://doi.org/10.1016/j.jss.2026.113060",
+      "title": "Enhancing REST API fuzzing with access policy violation checks and injection attacks",
+      "year": 2026,
+      "date": "2026-08-05",
+      "venue": "Journal of Systems and Software",
+      "venue_type": "journal",
+      "citations": 0,
+      "type": "article",
+      "authors": [
+        "Ömür Şahin",
+        "Man Zhang",
+        "Andrea Arcuri"
+      ],
+      "n_authors": 3,
+      "abstract": "Due to their widespread use in industry, several techniques have been proposed in the literature to fuzz REST APIs. Existing fuzzers for REST APIs have been focusing on detecting crashes (e.g., 500 HTTP server error status code). However, security vulnerabilities can have major drastic consequences on existing cloud infrastructures. In this paper, we propose a series of novel automated oracles aimed at detecting violations of access policies in REST APIs, as well as executing traditional attacks such as SQL Injection and XSS. These novel automated oracles can be integrated into existing fuzzers, in which, once the fuzzing session is completed, a “security testing” phase is executed to verify these oracles. When a security fault is detected, as output our technique is able to general executable test cases in different formats, like Java, Kotlin, Python and JavaScript test suites. Our novel techniques are integrated as an extension of EvoMaster , a state-of-the-art open-source fuzzer for REST APIs. Experiments are carried out on 9 artificial examples, 8 vulnerable-by-design REST APIs with black-box testing, and 36 REST APIs from the WFD corpus with white-box testing, for a total of 52 distinct APIs. Results show that our novel oracles and their automated integration in a fuzzing process can lead to detect security issues in several of these APIs.",
+      "concepts": [
+        "Fuzz testing",
+        "Rest (music)",
+        "Computer security",
+        "Computer science",
+        "Operating system",
+        "Security policy"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "API模糊测试"
+      ],
+      "_tag": "API-模糊测试",
+      "_why": "REST API 模糊测试加入访问策略违规检查 + 注入攻击，扩展了 oracle 维度"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4392652182",
+      "doi": "https://doi.org/10.1145/3652157",
+      "title": "Advanced White-Box Heuristics for Search-Based Fuzzing of REST APIs",
+      "year": 2024,
+      "date": "2024-03-11",
+      "venue": "ACM Transactions on Software Engineering and Methodology",
+      "venue_type": "journal",
+      "citations": 17,
+      "type": "article",
+      "authors": [
+        "Andrea Arcuri",
+        "Man Zhang",
+        "Juan Pablo Galeotti"
+      ],
+      "n_authors": 3,
+      "abstract": "Due to its importance and widespread use in industry, automated testing of REST APIs has attracted major interest from the research community in the last few years. However, most of the work in the literature has been focused on black-box fuzzing. Although existing fuzzers have been used to automatically find many faults in existing APIs, there are still several open research challenges that hinder the achievement of better results (e.g., in terms of code coverage and fault finding). For example, under-specified schemas are a major issue for black-box fuzzers. Currently, EvoMaster is the only existing tool that supports white-box fuzzing of REST APIs. In this paper, we provide a series of novel white-box heuristics, including for example how to deal with under-specified constrains in API schemas, as well as under-specified schemas in SQL databases. Our novel techniques are implemented as an extension to our open-source, search-based fuzzer EvoMaster . An empirical study on 14 APIs from the EMB corpus, plus one industrial API, shows clear improvements of the results in some of these APIs.",
+      "concepts": [
+        "Fuzz testing",
+        "Computer science",
+        "Heuristics",
+        "White box",
+        "Black box",
+        "Rest (music)"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "API模糊测试"
+      ],
+      "_tag": "API-模糊测试",
+      "_why": "REST API 白盒搜索式模糊测试的启发式设计，EvoMaster 系路线"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4409730455",
+      "doi": "https://doi.org/10.1145/3731558",
+      "title": "Handling Web Service Interactions in Fuzzing with Search-Based Mock-Generation",
+      "year": 2025,
+      "date": "2025-04-23",
+      "venue": "ACM Transactions on Software Engineering and Methodology",
+      "venue_type": "journal",
+      "citations": 2,
+      "type": "article",
+      "authors": [
+        "Susruthan Seran",
+        "Man Zhang",
+        "Onur Duman",
+        "Andrea Arcuri"
+      ],
+      "n_authors": 4,
+      "abstract": "Testing large and complex enterprise software systems can be a challenging task. This is especially the case when the functionality of the system depends on interactions with other external services over a network (e.g., external web services accessed through REST API calls). Although several techniques in the research literature have been shown to be effective at generating test cases in a good number of different software testing contexts, dealing with external services is still a major research challenge. In industry, a common approach is to mock external web services for testing purposes. However, generating and configuring mock web services can be a very time-consuming task, e.g., external services may not be under the control of the same developers of the tested application, making it challenging to identify the external services and simulate various possible responses. In this article, we present a novel search-based approach aimed at fully automated mocking of external web services as part of white-box, search-based fuzzing. We rely on code instrumentation to detect all interactions with external services, and how their response data is parsed. We then use such information to enhance a search-based approach for fuzzing. The tested application is automatically modified (by manipulating DNS lookups) to rather interact with instances of mock web servers. The search process not only generates inputs to the tested applications but also automatically configures responses in those mock web server instances, aiming at maximizing code coverage and fault-finding. An empirical study on four open source REST APIs from EMB, and one industrial API from an industry partner, shows the effectiveness of our novel techniques (i.e., in terms of line coverage and fault detection).",
+      "concepts": [
+        "Fuzz testing",
+        "Computer science",
+        "Web service",
+        "World Wide Web",
+        "Software engineering",
+        "Database"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "API模糊测试"
+      ],
+      "_tag": "API-模糊测试",
+      "_why": "用搜索式 mock 生成处理 Web 服务交互依赖，解决被测服务外部依赖问题"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4393029443",
+      "doi": "https://doi.org/10.1016/j.jss.2024.112031",
+      "title": "GRACE: Empowering LLM-based software vulnerability detection with graph structure and in-context learning",
+      "year": 2024,
+      "date": "2024-03-21",
+      "venue": "Journal of Systems and Software",
+      "venue_type": "journal",
+      "citations": 171,
+      "type": "article",
+      "authors": [
+        "Guilong Lu",
+        "Xiaolin Ju",
+        "Xiang Chen",
+        "Wenlong Pei",
+        "Zhilong Cai"
+      ],
+      "n_authors": 5,
+      "abstract": "Software vulnerabilities inflict considerable economic and societal harm. Therefore, timely and accurate detection of these flaws has become vital. Large language models (LLMs) have emerged as a promising tool for vulnerability detection in recent studies. However, their effectiveness suffers when limited to plain text source code, which may ignore the syntactic and semantic information of the code. To address this limitation, we propose a novel vulnerability detection approach GRACE that empowers LLM-based software vulnerability detection by incorporating graph structural information in the code and in-context learning. We also design an effective demonstration retrieval approach that identifies highly relevant code examples by considering semantic, lexical, and syntactic similarities for the target code to provide better demonstrations for in-context learning. To evaluate the effectiveness of GRACE, we conducted an empirical study on three vulnerability detection datasets (i.e., Devign, Reveal, and Big-Vul). The results demonstrate that GRACE outperforms six state-of-the-art vulnerability detection baselines by at least 28.65% in terms of the F1 score across these three datasets. Keywords: Graph structure; In-context learning; Large language model; Source code representation; Vulnerability detection. [来源：ScienceDirect/ACM 官方摘要页]",
+      "concepts": [
+        "Computer science",
+        "Graph",
+        "Vulnerability (computing)",
+        "Software",
+        "Context (archaeology)",
+        "Software engineering"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "LLM辅助漏洞检测"
+      ],
+      "_tag": "LLM-检测",
+      "_why": "GRACE：图结构 + 上下文学习增强 LLM 漏洞检测，高被引代表"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4403524384",
+      "doi": "https://doi.org/10.1016/j.jss.2024.112234",
+      "title": "DLAP: A Deep Learning Augmented Large Language Model Prompting framework for software vulnerability detection",
+      "year": 2024,
+      "date": "2024-10-18",
+      "venue": "Journal of Systems and Software",
+      "venue_type": "journal",
+      "citations": 38,
+      "type": "article",
+      "authors": [
+        "Yanjing Yang",
+        "Xin Zhou",
+        "Runfeng Mao",
+        "Jinwei Xu",
+        "Lanxin Yang",
+        "Yu Zhang",
+        "Haifeng Shen",
+        "He Zhang"
+      ],
+      "n_authors": 8,
+      "abstract": "Software vulnerability detection is generally supported by automated static analysis tools, which have recently been reinforced by deep learning (DL) models. However, despite the superior performance of DL-based approaches over rule-based ones in research, applying DL approaches to software vulnerability detection in practice remains a challenge. This is due to the complex structure of source code, the black-box nature of DL, and the extensive domain knowledge required to understand and validate the black-box results for addressing tasks after detection. Conventional DL models are trained by specific projects and, hence, excel in identifying vulnerabilities in these projects but not in others. These models with poor performance in vulnerability detection would impact the downstream tasks such as location and repair. More importantly, these models do not provide explanations for developers to comprehend detection results. In contrast, Large Language Models (LLMs) with prompting techniques achieve stable performance across projects and provide explanations for results. However, using existing prompting techniques, the detection performance of LLMs is relatively low and cannot be used for real-world vulnerability detections. This paper contributes DLAP, a Deep Learning Augmented LLMs Prompting framework that combines the best of both DL models and LLMs to achieve exceptional vulnerability detection performance. Experimental evaluation results confirm that DLAP outperforms state-of-the-art prompting frameworks, including role-based prompts, auxiliary information prompts, chain-of-thought prompts, and in-context learning prompts, as well as fine-tuning, on multiple metrics. [来源：ScienceDirect/arXiv:2405.01202]",
+      "concepts": [
+        "Vulnerability (computing)",
+        "Computer science",
+        "Deep learning",
+        "Software",
+        "Artificial intelligence",
+        "Software engineering"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "LLM辅助漏洞检测"
+      ],
+      "_tag": "LLM-检测",
+      "_why": "DLAP：深度学习增强的 LLM 提示框架，用 DL 模型产出高质量提示"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4403411676",
+      "doi": "https://doi.org/10.1016/j.cose.2024.104151",
+      "title": "SecureQwen: Leveraging LLMs for vulnerability detection in python codebases",
+      "year": 2024,
+      "date": "2024-10-15",
+      "venue": "Computers & Security",
+      "venue_type": "journal",
+      "citations": 27,
+      "type": "article",
+      "authors": [
+        "Abdechakour Mechri",
+        "Mohamed Amine Ferrag",
+        "Mérouane Debbah"
+      ],
+      "n_authors": 3,
+      "abstract": "Identifying vulnerabilities in software code is crucial for ensuring the security of modern systems. However, manual detection requires expert knowledge and is time-consuming, underscoring the need for automated techniques. In this paper, we present SecureQwen, a novel vulnerability detection tool leveraging large language models (LLMs) with a context length of 64K tokens to identify potential security threats in large-scale Python codebases. Utilizing a decoder-only transformer architecture, SecureQwen captures complex relationships between code tokens, enabling accurate classification of vulnerable code sequences across 14 common weakness enumerations (CWEs), including OS Command Injection, SQL Injection, Improper Check or Handling of Exceptional Conditions, Path Traversal, Broken or Risky Cryptographic Algorithm, Deserialization of Untrusted Data, and Cleartext Transmission of Sensitive Information. We evaluate SecureQwen on a large Python dataset with over 1.875 million function-level code snippets from different sources, including GitHub repositories, Codeparrot's dataset, and synthetic data generated by GPT-4o. The experimental evaluation demonstrates high accuracy, with F1 scores ranging from 84% to 99%. [来源：ScienceDirect 官方摘要页]",
+      "concepts": [
+        "Python (programming language)",
+        "Computer science",
+        "Vulnerability (computing)",
+        "Computer security",
+        "Programming language"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "LLM辅助漏洞检测",
+        "代码Transformer漏洞检测"
+      ],
+      "_tag": "LLM-检测",
+      "_why": "SecureQwen：面向 Python 代码库的 LLM 漏洞检测，工程落地视角"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4413925951",
+      "doi": "https://doi.org/10.1109/tse.2025.3605442",
+      "title": "Towards Explainable Vulnerability Detection With Large Language Models",
+      "year": 2025,
+      "date": "2025-09-02",
+      "venue": "IEEE Transactions on Software Engineering",
+      "venue_type": "journal",
+      "citations": 17,
+      "type": "article",
+      "authors": [
+        "Qiheng Mao",
+        "Zhenhao Li",
+        "Xing Hu",
+        "Kui Liu",
+        "Xin Xia",
+        "Jianling Sun"
+      ],
+      "n_authors": 6,
+      "abstract": "Software vulnerabilities pose significant risks to the security and integrity of software systems. Although prior studies have explored vulnerability detection using deep learning and pre-trained models, these approaches often fail to provide the detailed explanations necessary for developers to understand and remediate vulnerabilities effectively. The advent of large language models (LLMs) has introduced transformative potential due to their advanced generative capabilities and ability to comprehend complex contexts, offering new possibilities for addressing these challenges. In this paper, we propose LLMVulExp, an automated framework designed to specialize LLMs for the dual tasks of vulnerability detection and explanation. To address the challenges of acquiring high-quality annotated data and injecting domain-specific knowledge, LLMVulExp leverages prompt-based techniques for annotating vulnerability explanations and fine-tunes LLMs using instruction tuning with Low-Rank Adaptation (LoRA), enabling LLMVulExp to detect vulnerability types in code while generating detailed explanations, including the cause, location, and repair suggestions. Additionally, we employ a Chain-of-Thought (CoT) based key code extraction strategy to focus LLMs on analyzing vulnerability-prone code, further enhancing detection accuracy and explanatory depth.We conducted experiments across multiple vulnerability detection settings on three benchmark datasets, demonstrating the effectiveness of our method. This study highlights the feasibility of utilizing LLMs for real-world vulnerability detection and explanation tasks, providing critical insights into their adaptation and application in software security.",
+      "concepts": [
+        "Computer science",
+        "Vulnerability (computing)",
+        "Data science",
+        "Programming language",
+        "Software engineering",
+        "Natural language processing"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "LLM辅助漏洞检测"
+      ],
+      "_tag": "LLM-检测",
+      "_why": "可解释漏洞检测：让 LLM 给出判定依据，直指 LLM 检测可信度痛点"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4403182498",
+      "doi": "https://doi.org/10.1109/tse.2024.3470333",
+      "title": "Multitask-Based Evaluation of Open-Source LLM on Software Vulnerability",
+      "year": 2024,
+      "date": "2024-10-07",
+      "venue": "IEEE Transactions on Software Engineering",
+      "venue_type": "journal",
+      "citations": 68,
+      "type": "article",
+      "authors": [
+        "Xin Yin",
+        "Chao Ni",
+        "Shaohua Wang"
+      ],
+      "n_authors": 3,
+      "abstract": "This paper proposes a pipeline for quantitatively evaluating interactive Large Language Models (LLMs) using publicly available datasets. We carry out an extensive technical evaluation of LLMs using Big-Vul covering four different common software vulnerability tasks. This evaluation assesses the multi-tasking capabilities of LLMs based on this dataset. We find that the existing state-of-the-art approaches and pre-trained Language Models (LMs) are generally superior to LLMs in software vulnerability detection. However, in software vulnerability assessment and location, certain LLMs (e.g., CodeLlama and WizardCoder) have demonstrated superior performance compared to pre-trained LMs, and providing more contextual information can enhance the vulnerability assessment capabilities of LLMs. Moreover, LLMs exhibit strong vulnerability description capabilities, but their tendency to produce excessive output significantly weakens their performance compared to pre-trained LMs. Overall, though LLMs perform well in some aspects, they still need improvement in understanding the subtle differences in code vulnerabilities and the ability to describe vulnerabilities to fully realize their potential. Our evaluation pipeline provides valuable insights into the capabilities of LLMs in handling software vulnerabilities.",
+      "concepts": [
+        "Computer science",
+        "Open source",
+        "Open source software",
+        "Software engineering",
+        "Software",
+        "Vulnerability (computing)"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "LLM辅助漏洞检测"
+      ],
+      "_tag": "LLM-评测",
+      "_why": "多任务评估开源 LLM 在软件漏洞上的能力边界，评测类基准"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4392481752",
+      "doi": "https://doi.org/10.1016/j.jisa.2024.103741",
+      "title": "Defendroid: Real-time Android code vulnerability detection via blockchain federated neural network with XAI",
+      "year": 2024,
+      "date": "2024-03-05",
+      "venue": "Journal of Information Security and Applications",
+      "venue_type": "journal",
+      "citations": 22,
+      "type": "article",
+      "authors": [
+        "Janaka Senanayake",
+        "Harsha Kalutarage",
+        "Andrei Petrovski",
+        "Luca Piras",
+        "M. Omar Al-Kadri"
+      ],
+      "n_authors": 5,
+      "abstract": "Ensuring strict adherence to security during the phases of Android app development is essential, primarily due to the prevalent issue of apps being released without adequate security measures in place. While a few automated tools are employed to reduce potential vulnerabilities during development, their effectiveness in detecting vulnerabilities may fall short. To address this, “Defendroid”, a blockchain-based federated neural network enhanced with Explainable Artificial Intelligence (XAI) is introduced in this work. Trained on the LVDAndro dataset, the vanilla neural network model achieves a 96% accuracy and 0.96 F1-Score in binary classification for vulnerability detection. Additionally, in multi-class classification, the model accurately identifies Common Weakness Enumeration (CWE) categories with a 93% accuracy and 0.91 F1-Score. In a move to foster collaboration and model improvement, the model has been deployed within a blockchain-based federated environment. This environment enables community-driven collaborative training and enhancements in partnership with other clients. The extended model demonstrates improved accuracy of 96% and F1-Score of 0.96 in both binary and multi-class classifications. The use of XAI plays a pivotal role in presenting vulnerability detection results to developers, offering prediction probabilities for each word within the code. This model has been integrated into an Application Programming Interface (API) as the backend and further incorporated into Android Studio as a plugin, facilitating real-time vulnerability detection. Notably, Defendroid exhibits high efficiency, delivering prediction probabilities for a single code line in an average processing time of a mere 300 ms. The weight-sharing transparency in the blockchain-driven federated model enhances trust and traceability, fostering community engagement while preserving source code privacy and contributing to accuracy improvement.",
+      "concepts": [
+        "Computer science",
+        "Android (operating system)",
+        "Artificial neural network",
+        "Vulnerability (computing)",
+        "Plug-in",
+        "Artificial intelligence"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "API安全"
+      ],
+      "_tag": "JISA-本体",
+      "_why": "Defendroid：区块链联邦神经网络 + XAI 做 Android 代码漏洞实时检测"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4404890940",
+      "doi": "https://doi.org/10.1016/j.jisa.2024.103925",
+      "title": "Enhancing vulnerability detection efficiency: An exploration of light-weight LLMs with hybrid code features",
+      "year": 2024,
+      "date": "2024-11-30",
+      "venue": "Journal of Information Security and Applications",
+      "venue_type": "journal",
+      "citations": 10,
+      "type": "article",
+      "authors": [
+        "Jianing Liu",
+        "Guanjun Lin",
+        "Huan Mei",
+        "Fan Yang",
+        "Yonghang Tai"
+      ],
+      "n_authors": 5,
+      "abstract": "Vulnerability detection is a critical research topic. However, the performance of existing neural network-based approaches requires further improvement. The emergence of large language models (LLMs) has demonstrated their superior performance in natural language processing (NLP) compared to conventional neural architectures, motivating researchers to apply LLMs for vulnerability detection. This paper focuses on evaluating the performance of various Transformer-based LLMs for source-code-level vulnerability detection. We propose a framework named VulACLLM (AST & CFG-based LLMs Vulnerability Detection), which leverages combined feature sets derived from Abstract Syntax Tree (AST) and Control Flow Graph (CFG). The recall rate of VulACLLM in the field of vulnerability detection reached 0.73, while the F1-score achieved 0.725. Experimental results show that the proposed feature sets significantly enhance detection performance. To further improve the efficiency of LLM-based detection, we examine the performance of LLMs compressed using two techniques: Knowledge Distillation (KD) and Low-Rank Adaptation (LoRA). To assess the performance of these compressed models, we introduce efficiency metrics that quantify both performance loss and efficiency gains achieved through compression. Our findings reveal that, compared to KD, LLMs compressed with LoRA achieve higher recall, achieving a maximum recall rate of 0.82, while substantially reducing training time, taking only 20 min to complete one epoch, and disk size, requiring only 4.89 MB of memory. [来源：ScienceDirect 官方摘要页]",
+      "concepts": [
+        "Vulnerability (computing)",
+        "Code (set theory)",
+        "Computer science",
+        "Business",
+        "Computer security",
+        "Programming language"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "代码Transformer漏洞检测"
+      ],
+      "_tag": "JISA-本体",
+      "_why": "轻量级 LLM + 混合代码特征提升漏洞检测效率，命中 JISA 的选题偏好"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4283752374",
+      "doi": "https://doi.org/10.1016/j.cose.2022.102823",
+      "title": "HyVulDect: A hybrid semantic vulnerability mining system based on graph neural network",
+      "year": 2022,
+      "date": "2022-07-01",
+      "venue": "Computers & Security",
+      "venue_type": "journal",
+      "citations": 40,
+      "type": "article",
+      "authors": [
+        "Wenbo Guo",
+        "Yong Fang",
+        "Cheng Huang",
+        "Haoran Ou",
+        "Chun Lin",
+        "Yongyan Guo"
+      ],
+      "n_authors": 6,
+      "abstract": "",
+      "concepts": [
+        "Computer science",
+        "Source code",
+        "Software security assurance",
+        "Dependency graph",
+        "Vulnerability (computing)",
+        "Classifier (UML)"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "静态分析+神经网络"
+      ],
+      "_tag": "经典-GNN",
+      "_why": "HyVulDect：图神经网络 + 语义切片做混合语义漏洞挖掘"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4392627157",
+      "doi": "https://doi.org/10.1016/j.cose.2024.103802",
+      "title": "Python source code vulnerability detection with named entity recognition",
+      "year": 2024,
+      "date": "2024-03-08",
+      "venue": "Computers & Security",
+      "venue_type": "journal",
+      "citations": 15,
+      "type": "article",
+      "authors": [
+        "M. Ehrenberg",
+        "Shahram Sarkani",
+        "Thomas A. Mazzuchi"
+      ],
+      "n_authors": 3,
+      "abstract": "Vulnerabilities within source code have grown over the last 20 years to become a common threat to systems and networks. As the implementation of open-source software continues to develop, more unknown vulnerabilities will exist throughout system networks. This research proposes an enhanced vulnerability detection method specific to Python source code that utilizes pre-trained, BERT-based transformer models to apply tokenization, embedding, and named entity recognition (a natural language processing technique). The use of named entity recognition not only allows for the detection of potential vulnerabilities, but also for the classification of different vulnerability types. This research uses the publicly available CodeBERT, RoBERTa, and DistilBERT models to fine-tune for the downstream task of token classification for six different common weakness enumeration specifications. The results achieved in this research outperform previous Python-based vulnerability detection methods. 代码开源：github.com/sonhai1401/PyVulDet-NER [来源：ScienceDirect/PlumX 官方摘要]",
+      "concepts": [
+        "Python (programming language)",
+        "Computer science",
+        "Source code",
+        "Named-entity recognition",
+        "Lexical analysis",
+        "Open source"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "代码Transformer漏洞检测"
+      ],
+      "_tag": "经典-NER",
+      "_why": "把命名实体识别迁移到 Python 源码漏洞检测"
+    },
+    {
+      "openalex_id": "https://openalex.org/W4388826738",
+      "doi": "https://doi.org/10.1007/s10664-023-10346-3",
+      "title": "AIBugHunter: A Practical tool for predicting, classifying and repairing software vulnerabilities",
+      "year": 2023,
+      "date": "2023-11-20",
+      "venue": "Empirical Software Engineering",
+      "venue_type": "journal",
+      "citations": 66,
+      "type": "article",
+      "authors": [
+        "Michael C. Fu",
+        "Chakkrit Tantithamthavorn",
+        "Trung Le",
+        "Yuki Kume",
+        "Van Nguyen",
+        "Dinh Phung",
+        "John Grundy"
+      ],
+      "n_authors": 7,
+      "abstract": "Abstract Many Machine Learning(ML)-based approaches have been proposed to automatically detect, localize, and repair software vulnerabilities. While ML-based methods are more effective than program analysis-based vulnerability analysis tools, few have been integrated into modern Integrated Development Environments (IDEs), hindering practical adoption. To bridge this critical gap, we propose in this article AIBugHunter , a novel Machine Learning-based software vulnerability analysis tool for C/C++ languages that is integrated into the Visual Studio Code (VS Code) IDE. AIBugHunter helps software developers to achieve real-time vulnerability detection, explanation, and repairs during programming. In particular, AIBugHunter scans through developers’ source code to (1) locate vulnerabilities, (2) identify vulnerability types, (3) estimate vulnerability severity, and (4) suggest vulnerability repairs. We integrate our previous works (i.e., LineVul and VulRepair) to achieve vulnerability localization and repairs. In this article, we propose a novel multi-objective optimization (MOO)-based vulnerability classification approach and a transformer-based estimation approach to help AIBugHunter accurately identify vulnerability types and estimate severity. Our empirical experiments on a large dataset consisting of 188K+ C/C++ functions confirm that our proposed approaches are more accurate than other state-of-the-art baseline methods for vulnerability classification and estimation. Furthermore, we conduct qualitative evaluations including a survey study and a user study to obtain software practitioners’ perceptions of our AIBugHunter tool and assess the impact that AIBugHunter may have on developers’ productivity in security aspects. Our survey study shows that our AIBugHunter is perceived as useful where 90% of the participants consider adopting our AIBugHunter during their software development. Last but not least, our user study shows that our AIBugHunter can enhance developers’ productivity in combating cybersecurity issues during software development. AIBugHunter is now publicly available in the Visual Studio Code marketplace.",
+      "concepts": [
+        "Vulnerability (computing)",
+        "Computer science",
+        "Secure coding",
+        "Software",
+        "Machine learning",
+        "Artificial intelligence"
+      ],
+      "retracted": false,
+      "matched_queries": [
+        "代码Transformer漏洞检测"
+      ],
+      "_tag": "经典-工具",
+      "_why": "AIBugHunter：漏洞预测+分类+修复一体的实用工具，EMSE"
+    }
+  ],
+  "reserve": [
+    {
+      "doi": "10.1109/tifs.2023.3338965",
+      "desc": "SPGNN-API：可迁移 GNN 做攻击路径识别与自主缓解（TIFS）",
+      "found": true,
+      "title": "SPGNN-API: A Transferable Graph Neural Network for Attack Paths Identification and Autonomous Mitigation"
+    },
+    {
+      "doi": "10.1007/s10207-026-01307-0",
+      "desc": "Hive-AI：面向生成式 AI API 的多服务蜜罐防御框架（IJIS 2026，最新）",
+      "found": true,
+      "title": "Hive-AI: a defended multi-service honeypot framework for generative AI APIs"
+    },
+    {
+      "doi": "10.1145/3779222",
+      "desc": "Context-Enhanced Vulnerability Detection Based on LLMs（TOSEM 2025）",
+      "found": true,
+      "title": "Context-Enhanced Vulnerability Detection Based on Large Language Models"
+    },
+    {
+      "doi": "10.1016/j.cose.2022.102831",
+      "desc": "XSS 对抗样本攻击（深度强化学习，C&S 2022）",
+      "found": true,
+      "title": "XSS adversarial example attacks based on deep reinforcement learning"
+    }
+  ]
+}

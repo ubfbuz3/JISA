@@ -1,0 +1,87 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Metamorphic testing substitutes for a missing oracle by asserting a relation
+across executions. For object-level authorization the relation must know
+whether the acting subject is entitled to the object, and \mbox{MST-wi}'s
+predicates do not know that: they know what the interface, as crawled,
+permitted. We instantiated the predicates as defined---against a reachability
+model recorded at crawl time---and drove a constructed system through
+\ResSynRecords{} records and a real system, Gitea \ResRsVersion{}, through
+\ResRsCells{} cells under two readings.
+
+Three boundaries came out of it. Taken as designed---raw alarms, or alarms
+filtered by bookkeeping exceptions---the adjudication reports a legitimate access
+granted out of band after the crawl as a proven violation, at rate
+\ResObsOobVtwoFpRate{} on the constructed system and
+\ResRsMrBookkeepingFpRate{} on Gitea; it does so deterministically, in one
+direction, because the predicate has two representations and an out-of-band
+grant fits only the wrong one. The obvious repair, consulting a readable
+authorization oracle, works---and, in that oracle-available regime, makes the
+metamorphic step unnecessary in our evaluated scenarios, because
+replacing it with a single ordinary request changes nothing measurable (false
+proofs \ResAbDirectObserveFP{} against \ResAbVThreeFP{}, a tie at zero; recall
+difference \ResAbRecallDiff{}, 95\% CI
+$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$, not distinguishable from zero),
+and on the \ResAbDisagreementN{} records where the two differ it is the MR-based
+method that fails. We report a descriptive, point-estimate comparison rather
+than superiority, and do not claim a formal non-inferiority test. On the real
+system the mismatch appears under the crawl-time reading
+(\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}) and never under a live reading
+(\ResRsMismatchLive{}/\ResRsMismatchDenom{}), with an endogenous control that
+holds final visibility fixed; the responsible variable is time, not visibility.
+And the reported specificity of \ResLitReportedSpecPct{}\% is conditional on a
+premise it does not state and is computed in units---generated inputs---that
+cannot resolve a scenario-uniform failure.
+
+One methodological result deserves separating from the three boundaries. The
+arguments above could have been made---and in an earlier draft were made---from the
+published \emph{definitions} of the two predicates, which is weak evidence, since
+a definition can be read generously. Reading the implementation instead
+(Section~\ref{sec:impl}) confirms the semantics and adds two facts the published
+text does not state: the crawl-time model is frozen by a cache that is never
+invalidated, and a missing crawl makes the predicate report ``unreachable'', so
+the MR's precondition is satisfied by an absence of data rather than by evidence.
+That supplies a mechanism for the deterministic direction we report, and it is a
+mechanism that a definition cannot supply.
+
+We did not set out to write this paper. Our first version proposed a mechanism,
+the state-calibrated adjudicator, and our own ablation removed it: once the
+metamorphic step is replaced by the most naive consumer of the same observable,
+the mechanism's advantage disappears (\ResAbDirectObserveFP{} false proofs
+against \ResAbVThreeFP{}), and its precision had been bought with
+\ResAbVThreeFN{} false negatives. What is left is what we can defend: a
+characterisation, a measurement caveat, and one negative result.
+
+\paragraph{What we do not claim} We do not claim that \mbox{MST-wi} is wrong,
+and we claim nothing about its accuracy as a detector. We read its engine
+(Section~\ref{sec:impl}) and we ran it (Section~\ref{sec:native-run}); the run
+establishes a qualitative outcome, for one gate family, on one real system that
+is itself correct---not a rate. Its authors
+announce the reachability stand-in,
+and its predecessor attributes its own residual false alarms to crawler
+coverage. We do not claim a field prevalence for out-of-band grants; our channel
+proportions are a design parameter. We do not claim that our two MRs represent
+the catalog; they are two, of one family, and that is the ceiling on everything
+we say. And we do not claim to have found a better detector.
+
+\paragraph{What we would do next, and what it would cost} We have taken the
+obvious first step: the library's own relations now execute
+(Section~\ref{sec:native-run}), which lifts the false-proof side from our two
+relations to \NtMrExecuted{} of the catalog's. That does not lift the ceiling
+that matters most. The run cannot measure detection, because the system is
+correct; and the relations it executes share one gate family, which is the thing
+we set out to characterise, so a broader catalog of the same kind would broaden
+the illustration without testing the boundary. Two things would move this from a
+characterisation into something stronger, and both remain expensive. The first
+is a real system that \emph{contains} an object-level authorization flaw, so that
+the detection side can be measured and not only the false-proof side. The second
+is relations whose gate is \emph{not} the absence of evidence---checkable
+against a subject's entitlements without pretending that entitlements are
+reachable facts---which is a construction problem, not a measurement problem.
+
+\paragraph{The transferable part} The condition that killed our mechanism is the
+one we would put in front of any similar claim: a component's necessity must be
+tested against a substitute that consumes the \emph{same} observable quantity as
+the ground truth. A substitute that consumes less is a straw man, and a
+mechanism that survives only a straw man has not been shown to do anything.

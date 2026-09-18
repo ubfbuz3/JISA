@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300" font-family="DejaVu Sans, Helvetica, Arial, sans-serif">
+  <rect width="900" height="300" fill="#FFFFFF"/>
+  <defs>
+    <marker id="arrow-default" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#555555"/>
+    </marker>
+    <marker id="arrow-c0" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#2563EB"/>
+    </marker>
+    <marker id="arrow-c1" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#10B981"/>
+    </marker>
+    <marker id="arrow-c2" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#7C3AED"/>
+    </marker>
+    <marker id="arrow-c3" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#EA580C"/>
+    </marker>
+    <marker id="arrow-c4" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#C62828"/>
+    </marker>
+    <marker id="arrow-c5" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#0D47A1"/>
+    </marker>
+    <marker id="arrow-c6" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#1B5E20"/>
+    </marker>
+    <marker id="arrow-c7" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#4A148C"/>
+    </marker>
+    <marker id="arrow-c8" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#BF360C"/>
+    </marker>
+    <marker id="arrow-c9" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 8 4, 0 8" fill="#37474F"/>
+    </marker>
+  </defs>
+  <path d="M 304.4,142.0 L 401.5,202.0" stroke="#888780" stroke-width="2" fill="none" marker-end="url(#arrow-default)" stroke-dasharray="3,3"/>
+  <path d="M 595.6,142.0 L 498.5,202.0" stroke="#888780" stroke-width="2" fill="none" marker-end="url(#arrow-default)" stroke-dasharray="3,3"/>
+  <rect x="30.0" y="50.0" width="400.0" height="92.0" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2" rx="8"/>
+  <text x="230.0" y="92.9" font-size="14" fill="#04342C" text-anchor="middle" font-weight="bold">Boundary 1: oracle readable</text>
+  <text x="230.0" y="108.9" font-size="11" fill="#888888" text-anchor="middle">a plain request with the oracle matches or beats the MR family</text>
+  <rect x="470.0" y="50.0" width="400.0" height="92.0" fill="#FAEEDA" stroke="#854F0B" stroke-width="2" rx="8"/>
+  <text x="670.0" y="92.9" font-size="14" fill="#412402" text-anchor="middle" font-weight="bold">Boundary 2: oracle absent</text>
+  <text x="670.0" y="108.9" font-size="11" fill="#888888" text-anchor="middle">MR is the only evidence, but it is a GUI-reachability proxy</text>
+  <rect x="20.0" y="202.0" width="860.0" height="60.0" fill="#FCEBEB" stroke="#A32D2D" stroke-width="2" rx="8"/>
+  <text x="450.0" y="236.9" font-size="14" fill="#501313" text-anchor="middle" font-weight="bold">No regime in which the MR family is the best available method</text>
+</svg>

@@ -1,0 +1,66 @@
+# 受控实验编排：六个应用变体
+#
+# 三个正交开关定义两个系统变体与两个缺陷/可见性维度：
+#   --mode              noe3 | e3          是否存在对象级共享能力
+#   --vulnerable        0 | 1              是否注入 BOLA 缺陷（对象级端点只查登录）
+#   --share-visibility  listed | unlisted  共享是否对列举端点（≈GUI）可见
+#
+# ⚠️ 本机 Docker 守护进程未运行 → 本文件未在本机执行验证。
+#    本机实际执行路径见 experiments/run_matrix.py（进程内实例，同一份 app.py）。
+#
+#   docker compose up -d && docker compose ps
+#   curl http://127.0.0.1:18001/health   # V-noE3 / vuln=0
+#   curl http://127.0.0.1:18003/health   # V-E3  / vuln=0 / unlisted  ← FP_E3 的测量点
+#   docker compose down
+
+name: bola-e3-experiment
+
+x-common: &common
+  build:
+    context: ./target_api
+    dockerfile: Dockerfile
+  restart: "no"
+  healthcheck:
+    test: ["CMD", "python", "-c",
+           "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8080/health')"]
+    interval: 5s
+    timeout: 3s
+    retries: 5
+    start_period: 3s
+
+services:
+  v-noe3-vuln0:
+    <<: *common
+    container_name: bola-v-noe3-vuln0
+    command: ["--mode", "noe3", "--vulnerable", "0", "--share-visibility", "unlisted", "--port", "8080"]
+    ports: ["18001:8080"]
+
+  v-noe3-vuln1:
+    <<: *common
+    container_name: bola-v-noe3-vuln1
+    command: ["--mode", "noe3", "--vulnerable", "1", "--share-visibility", "unlisted", "--port", "8080"]
+    ports: ["18002:8080"]
+
+  v-e3-vuln0-unlisted:
+    <<: *common
+    container_name: bola-v-e3-vuln0-unlisted
+    command: ["--mode", "e3", "--vulnerable", "0", "--share-visibility", "unlisted", "--port", "8080"]
+    ports: ["18003:8080"]
+
+  v-e3-vuln1-unlisted:
+    <<: *common
+    container_name: bola-v-e3-vuln1-unlisted
+    command: ["--mode", "e3", "--vulnerable", "1", "--share-visibility", "unlisted", "--port", "8080"]
+    ports: ["18004:8080"]
+
+  v-e3-vuln0-listed:
+    <<: *common
+    container_name: bola-v-e3-vuln0-listed
+    command: ["--mode", "e3", "--vulnerable", "0", "--share-visibility", "listed", "--port", "8080"]
+    ports: ["18005:8080"]
+
+  v-e3-vuln1-listed:
+    <<: *common
+    container_name: bola-v-e3-vuln1-listed
+    command: ["--mode", "e3", "--vulnerable", "1", "--share-visibility", "listed", "--port", "8080"]
+    ports: ["18006:8080"]

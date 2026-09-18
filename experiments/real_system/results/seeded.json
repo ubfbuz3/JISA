@@ -1,0 +1,1638 @@
+{
+  "meta": {
+    "experiment": "seeded vulnerable control (positive control)",
+    "target": "seeded_target.py (faithful Gitea API emulator, NOT production Gitea)",
+    "gitea_version_emulated": "1.22.6-seeded-control",
+    "reused_code": "experiments/real_system/run_real.py (topology/mutation/crawl/introspection/adjudication)",
+    "honesty_boundary": "靶机复刻的是引擎实际消费的 API 契约；检测器在'真有越权时能否检出'被公平测量；不声称能发现 Gitea 真实 CVE。植入缺陷只影响运行期读/写绕过，列表/搜索/自省走正确模型。",
+    "elapsed_s": 1.8
+  },
+  "phaseA_topology": {
+    "steps": [
+      {
+        "step": "user:alice",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "user:bob",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "user:carol",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "user:dave",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "user:eve",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "user:frank",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "org:acme",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "team:dev",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "team:ops",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r1",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r2",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r3",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r4",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/pub1",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:acme/t1",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:acme/t2",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:dave/r5",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "baseline team dev += bob",
+        "status": 204,
+        "error": null
+      },
+      {
+        "step": "baseline team dev += repo acme/t1",
+        "status": 204,
+        "error": null
+      },
+      {
+        "step": "baseline in-band share alice/r1 <- bob",
+        "status": 204,
+        "error": null
+      }
+    ],
+    "team_ids": {
+      "dev": 1,
+      "ops": 2
+    },
+    "failures": []
+  },
+  "phaseC_mutations": {
+    "mutations": [
+      {
+        "mutation": "admin_grant_collaborator:alice/r2<-carol",
+        "executed_by": "root",
+        "status": 204,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "alice/r2",
+        "subject": "carol"
+      },
+      {
+        "mutation": "admin_grant_collaborator:alice/r3<-eve",
+        "executed_by": "root",
+        "status": 204,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "alice/r3",
+        "subject": "eve"
+      },
+      {
+        "mutation": "team_grant_repo:acme/t2 -> team dev",
+        "executed_by": "dave",
+        "status": 204,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "acme/t2",
+        "subject": "(team dev members)"
+      },
+      {
+        "mutation": "admin_flip_visibility:alice/r4 -> public",
+        "executed_by": "root",
+        "status": 200,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "alice/r4",
+        "subject": "(everyone)"
+      },
+      {
+        "mutation": "admin_add_org_member:acme<-frank",
+        "executed_by": "root",
+        "status": 204,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "acme",
+        "subject": "frank"
+      },
+      {
+        "mutation": "admin_add_team_member:dev<-frank",
+        "executed_by": "root",
+        "status": 204,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "team:1",
+        "subject": "frank"
+      }
+    ],
+    "failures": []
+  },
+  "phaseE_cells": [
+    {
+      "object": "alice/r1",
+      "subject": "bob",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": true,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "carol",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "dave",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "eve",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "frank",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "root",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "bob",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "carol",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "dave",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "eve",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "frank",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "root",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "bob",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "carol",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "dave",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "eve",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "frank",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "root",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "bob",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "carol",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "dave",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "eve",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "frank",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "root",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "bob",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "carol",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "dave",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "eve",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "frank",
+      "cannotReachThroughGUI": false,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "root",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "alice",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "bob",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "carol",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "eve",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "frank",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "root",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "alice",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "bob",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "carol",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "eve",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "frank",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "read",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "root",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "alice",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "bob",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "carol",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "eve",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "frank",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "none",
+      "introspection_readable": true,
+      "introspection_says_none": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "root",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": "admin",
+      "introspection_readable": true,
+      "introspection_says_none": false,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    }
+  ],
+  "seeded_truth": {
+    "bola": [
+      [
+        "bob",
+        "dave/r5"
+      ],
+      [
+        "carol",
+        "acme/t2"
+      ],
+      [
+        "eve",
+        "alice/r1"
+      ]
+    ],
+    "bfla": [
+      "BFLA",
+      "bob",
+      "alice/r4"
+    ]
+  },
+  "positive_control_TP_FN_FP": {
+    "mr_bookkeeping": {
+      "TP": 3,
+      "FN": 0,
+      "FP": 2,
+      "TN": 43
+    },
+    "v3": {
+      "TP": 3,
+      "FN": 0,
+      "FP": 0,
+      "TN": 45
+    },
+    "v3_self": {
+      "TP": 3,
+      "FN": 0,
+      "FP": 0,
+      "TN": 45
+    },
+    "direct_only": {
+      "TP": 3,
+      "FN": 0,
+      "FP": 30,
+      "TN": 15
+    },
+    "direct_observe": {
+      "TP": 3,
+      "FN": 0,
+      "FP": 0,
+      "TN": 45
+    },
+    "direct_observe_self": {
+      "TP": 3,
+      "FN": 0,
+      "FP": 0,
+      "TN": 45
+    }
+  },
+  "bfla_probe": {
+    "actor": "bob",
+    "target_object": "alice/r4",
+    "unauthorized_grant_status": 204,
+    "vulnerable_present": true,
+    "detector_coverage": "引擎的读向自省/观察裁决不直接覆盖写向 BFLA；此为已知边界，与论文 §6 的 oracle 保真度边界一致。"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "Launched deep search 'Existing work that uses identifiability reasoning, metamorphic relations, or cross-channel consistency to decide whether a black-box authorization violation (BOLAIDORBFLA) can be conclusively determin'. Call display_deep_search_results(search='/Existing work that uses identifiability reasoning, metamorphic relations, or cross-channel consistency to decide whether a black-box authorization violation (BOLAIDORBFLA) can be conclusively determin') now so the user can follow its progress and see its results when it finishes (unless you're launching many deep searches as a batch).\n\nWhen mentioning this deep search to the user, include its web-app link: https://app.undermind.ai/projects/68e924b3-ec86-4d62-bf1c-b997e03767c3?path=/Existing%20work%20that%20uses%20identifiability%20reasoning%2C%20metamorphic%20relations%2C%20or%20cross-channel%20consistency%20to%20decide%20whether%20a%20black-box%20authorization%20violation%20%28BOLAIDORBFLA%29%20can%20be%20conclusively%20determin"
+    }
+  ],
+  "structuredContent": {
+    "result": "Launched deep search 'Existing work that uses identifiability reasoning, metamorphic relations, or cross-channel consistency to decide whether a black-box authorization violation (BOLAIDORBFLA) can be conclusively determin'. Call display_deep_search_results(search='/Existing work that uses identifiability reasoning, metamorphic relations, or cross-channel consistency to decide whether a black-box authorization violation (BOLAIDORBFLA) can be conclusively determin') now so the user can follow its progress and see its results when it finishes (unless you're launching many deep searches as a batch).\n\nWhen mentioning this deep search to the user, include its web-app link: https://app.undermind.ai/projects/68e924b3-ec86-4d62-bf1c-b997e03767c3?path=/Existing%20work%20that%20uses%20identifiability%20reasoning%2C%20metamorphic%20relations%2C%20or%20cross-channel%20consistency%20to%20decide%20whether%20a%20black-box%20authorization%20violation%20%28BOLAIDORBFLA%29%20can%20be%20conclusively%20determin"
+  },
+  "isError": false
+}

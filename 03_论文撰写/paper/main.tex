@@ -1,0 +1,114 @@
+% =====================================================================
+%  Squeezed Between Two Boundaries
+%  Elsevier / Journal of Information Security and Applications (JISA)
+% ---------------------------------------------------------------------
+%  硬规则:
+%    * 正文**不得手敲任何数字** —— 全部引用 \Res* 宏（由
+%      04_绘图与分析/analysis/compute_all.py 从原始记录重算生成）。
+%    * 参考文献**不得手敲** —— refs.bib 由
+%      04_绘图与分析/analysis/normalize_bib.py 从带 DOI 的记录规范化生成。
+%    * 全部图为**矢量**，由 matplotlib / figure-spec 确定性生成，无 AI 生成像素。
+%  编译: bash build.sh   （会把源码装配到纯 ASCII 目录再编译，避开中文路径）
+% =====================================================================
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+% ---- 图中/文中引用的全部数字（自动生成，勿手改） ----
+\input{numbers.tex}
+% ---- 原生引擎运行的数字（由 analysis/ingest_native_engine.py 生成） ----
+\input{native_engine_numbers.tex}
+% ---- GitLab 跨厂商复制的数字（由 analysis/ingest_gitlab.py 生成） ----
+\input{gitlab_numbers.tex}
+% ---- Gogs 跨厂商复制的数字与对照表（由 analysis/ingest_gogs.py 生成） ----
+\input{gogs_numbers.tex}
+% ---- 受控靶机阳性对照的数字与对照表（由 analysis/ingest_seeded.py 生成） ----
+\input{seeded_table.tex}
+
+\graphicspath{{figures/}}
+
+\journal{Journal of Information Security and Applications}
+
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Squeezed Between Two Boundaries: Deterministic False Proofs and an
+Unseeing Metric in Metamorphic Testing for Object-Level Authorization}
+
+\author[a,b]{Qiulong Lin}
+\author[a,b]{Nanlei Chen\corref{cor}}
+\ead{ubfbzu3@163.com}
+\cortext[cor]{Corresponding author.}
+
+\affiliation[a]{organization={Yango University},
+                city={Fuzhou}, postcode={350015}, country={China}}
+\affiliation[b]{organization={Sogang University},
+                city={Seoul}, postcode={04107}, country={Republic of Korea}}
+
+\begin{abstract}
+Metamorphic testing is the standard answer to the oracle problem in Web security
+testing: \mbox{MST-wi} defines \ResLitMrCatalog{} system-agnostic metamorphic
+relations (MRs) over a Web-specific domain language, and reports a specificity of
+\ResLitReportedSpecPct{}\%. We show that, for object-level authorization, these
+relations delegate adjudication to a \emph{GUI-reachability model} that is a
+\emph{crawl-time snapshot}, and that this delegation fails along a deterministic
+direction rather than as noise.
+
+From a three-phase instantiation of the predicates as originally defined---crawl,
+out-of-band authorization change, execute---a \ResSynRecords{}-instance factorial
+study and a controlled study on Gitea \ResRsVersion{}, replicated on Gogs
+\GgVersion{} and GitLab \GlVersion{}, we characterise the failure
+as three boundaries. (i) An access legitimately granted out of band after the
+crawl is reported as a \emph{proven} violation---a \emph{false proof}---because
+the predicate has only two representations and one is unavailable. (ii) Repairing
+this with a readable authorization oracle makes the MR step unnecessary in that
+oracle-available regime: replacing
+it with a single ordinary request changes nothing measurable, a descriptive,
+point-estimate comparison (not a formal non-inferiority test), and not
+domination. (iii) The reported specificity therefore rests
+on an undeclared premise---that the reachability model coincides with the true
+authorization state---and on an input-level denominator blind to scenario-level
+failure.
+
+On Gitea the mismatch appears only under a crawl-time reading and never live,
+locating the mechanism in \emph{time} rather than visibility; and the oracle that
+would discharge the premise is readable from an owner's vantage but never from a
+black-box subject's own. We confirm the predicates' semantics at source and
+execute the published relations---their source unmodified, with the build
+configuration and a replay harness added---reproducing the false proof on a real
+system. We contribute a characterisation, a measurement caveat, and one negative
+result.
+\end{abstract}
+
+\begin{keyword}
+oracle problem \sep metamorphic testing \sep object-level authorization \sep
+BOLA/BFLA \sep specificity measurement \sep false proof
+\end{keyword}
+
+\end{frontmatter}
+
+\input{sections/01_intro}
+\input{sections/02_background}
+\input{sections/03_protocol}
+\input{sections/04_synthetic}
+\input{sections/05_realsystem}
+\input{sections/06_boundaries}
+\input{sections/07_threats}
+\input{sections/08_related}
+\input{sections/09_conclusion}
+\input{sections/10_declarations}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+
+\end{document}

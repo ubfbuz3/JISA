@@ -1,0 +1,98 @@
+{
+  "about": "同一 URL 对拥有者与受让者的响应是否逐字节相同（§6.5 断言所需凭据）",
+  "workdir": "C:\\Users\\Administrator\\WorkBuddy\\gitea_native_lab2",
+  "cells": [
+    {
+      "repo": "alice/s1",
+      "url": "/api/v1/repos/alice/s1/raw/README.md",
+      "owner": "alice",
+      "grantee": "bob",
+      "outsider": "eve",
+      "owner_resp": {
+        "as": "alice",
+        "status": 200,
+        "bytes": 4,
+        "sha256": "137c153a57632e26ee965dc5d77ec013b27b971761ba4e469fd917deef60c843",
+        "head": "# s1"
+      },
+      "grantee_resp": {
+        "as": "bob",
+        "status": 200,
+        "bytes": 4,
+        "sha256": "137c153a57632e26ee965dc5d77ec013b27b971761ba4e469fd917deef60c843",
+        "head": "# s1"
+      },
+      "outsider_resp": {
+        "as": "eve",
+        "status": 404,
+        "bytes": -1,
+        "sha256": "58c307f828dad9b1174b860a12b71c40f269ae00261574e8c8aedfcecc7c4913",
+        "head": "{\"errors\": null, \"messag"
+      },
+      "owner_grantee_identical_bytes": true,
+      "outsider_denied": true
+    },
+    {
+      "repo": "carol/s1",
+      "url": "/api/v1/repos/carol/s1/raw/README.md",
+      "owner": "carol",
+      "grantee": "eve",
+      "outsider": "bob",
+      "owner_resp": {
+        "as": "carol",
+        "status": 200,
+        "bytes": 4,
+        "sha256": "137c153a57632e26ee965dc5d77ec013b27b971761ba4e469fd917deef60c843",
+        "head": "# s1"
+      },
+      "grantee_resp": {
+        "as": "eve",
+        "status": 200,
+        "bytes": 4,
+        "sha256": "137c153a57632e26ee965dc5d77ec013b27b971761ba4e469fd917deef60c843",
+        "head": "# s1"
+      },
+      "outsider_resp": {
+        "as": "bob",
+        "status": 404,
+        "bytes": -1,
+        "sha256": "58c307f828dad9b1174b860a12b71c40f269ae00261574e8c8aedfcecc7c4913",
+        "head": "{\"errors\": null, \"messag"
+      },
+      "owner_grantee_identical_bytes": true,
+      "outsider_denied": true
+    },
+    {
+      "repo": "acme/t1",
+      "url": "/api/v1/repos/acme/t1/raw/README.md",
+      "owner": "dave",
+      "grantee": "frank",
+      "outsider": "eve",
+      "owner_resp": {
+        "as": "dave",
+        "status": 200,
+        "bytes": 4,
+        "sha256": "5f5a9ba83f7b0bc0af4dc15d4ea630d4209bc50e635df3b33ff9f2322a024d76",
+        "head": "# t1"
+      },
+      "grantee_resp": {
+        "as": "frank",
+        "status": 200,
+        "bytes": 4,
+        "sha256": "5f5a9ba83f7b0bc0af4dc15d4ea630d4209bc50e635df3b33ff9f2322a024d76",
+        "head": "# t1"
+      },
+      "outsider_resp": {
+        "as": "eve",
+        "status": 404,
+        "bytes": -1,
+        "sha256": "58c307f828dad9b1174b860a12b71c40f269ae00261574e8c8aedfcecc7c4913",
+        "head": "{\"errors\": null, \"messag"
+      },
+      "owner_grantee_identical_bytes": true,
+      "outsider_denied": true
+    }
+  ],
+  "all_owner_grantee_identical": true,
+  "all_outsider_denied": true
+}

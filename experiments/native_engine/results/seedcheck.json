@@ -1,0 +1,249 @@
+{
+  "users": [
+    "alice",
+    "bob",
+    "carol",
+    "dave",
+    "eve",
+    "frank",
+    "grace",
+    "hugo",
+    "iris",
+    "jack",
+    "kate",
+    "leo",
+    "mallory"
+  ],
+  "base_target": 160,
+  "mode": "augmented",
+  "gitea": {
+    "base": "http://127.0.0.1:3311",
+    "ready_ms": 2048,
+    "version": "1.22.6"
+  },
+  "channel": {
+    "channel": "api",
+    "evidence": [
+      {
+        "channel": "html",
+        "url": "/alice/s1",
+        "as": "alice",
+        "status": 404,
+        "kind": "HTTP404"
+      },
+      {
+        "channel": "html",
+        "url": "/alice/s1",
+        "as": "eve",
+        "status": 404,
+        "kind": "HTTP404"
+      },
+      {
+        "channel": "html",
+        "url": "/alice/s1",
+        "as": "bob",
+        "status": 404,
+        "kind": "HTTP404"
+      },
+      {
+        "channel": "html",
+        "url": "/alice/s1",
+        "as": "anon",
+        "status": 404,
+        "kind": "HTTP404"
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1",
+        "as": "alice",
+        "status": 200,
+        "len": 2255
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1/raw/README.md",
+        "as": "alice",
+        "status": 200,
+        "len": 4
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1",
+        "as": "eve",
+        "status": 404,
+        "len": 104
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1/raw/README.md",
+        "as": "eve",
+        "status": 404,
+        "len": 104
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1",
+        "as": "bob",
+        "status": 200,
+        "len": 2257
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1/raw/README.md",
+        "as": "bob",
+        "status": 200,
+        "len": 4
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1",
+        "as": "anon",
+        "status": 404,
+        "len": 104
+      },
+      {
+        "channel": "api",
+        "url": "/api/v1/repos/alice/s1/raw/README.md",
+        "as": "anon",
+        "status": 404,
+        "len": 104
+      }
+    ]
+  },
+  "data": {
+    "base_inputs": 160,
+    "store_files": 224,
+    "pairing_entries": 160,
+    "pairing_sample": {
+      "snapshot|alice|alice/s1": "bob",
+      "snapshot|alice|acme/t1": "frank",
+      "snapshot|alice|acme/t2": "bob",
+      "snapshot|alice|acme/t3": "bob",
+      "snapshot|alice|acme/t4": "bob"
+    },
+    "snapshot_size": {
+      "alice": 20,
+      "bob": 20,
+      "carol": 20,
+      "dave": 20,
+      "eve": 16,
+      "frank": 16,
+      "grace": 16,
+      "hugo": 16,
+      "iris": 16,
+      "jack": 16,
+      "kate": 16,
+      "leo": 16,
+      "mallory": 16
+    },
+    "oob_grants": [
+      {
+        "repo": "alice/s1",
+        "grantee": "bob",
+        "perm": "read"
+      },
+      {
+        "repo": "carol/s1",
+        "grantee": "eve",
+        "perm": "read"
+      },
+      {
+        "repo": "acme/t1",
+        "grantee": "frank",
+        "perm": "read"
+      }
+    ],
+    "key_cell": {
+      "repo": "alice/s1",
+      "grantee": "bob",
+      "in_snapshot_of_grantee": false
+    },
+    "seed_verified_points": 227
+  },
+  "elapsed_s": 154.9,
+  "log_tail": [
+    "user alice    -> 201",
+    "user bob      -> 201",
+    "user carol    -> 201",
+    "user dave     -> 201",
+    "user eve      -> 201",
+    "user frank    -> 201",
+    "user grace    -> 201",
+    "user hugo     -> 201",
+    "user iris     -> 201",
+    "user jack     -> 201",
+    "user kate     -> 201",
+    "user leo      -> 201",
+    "user mallory  -> 201",
+    "org acme       (owner=dave) -> 201",
+    "team dev       -> 201 (id=2)",
+    "org repo acme/t1        -> 201",
+    "org repo acme/t2        -> 201",
+    "org repo acme/t3        -> 201",
+    "org repo acme/t4        -> 201",
+    "team member alice    -> 204",
+    "team member bob      -> 204",
+    "team member carol    -> 204",
+    "team repo acme/t1         -> 204",
+    "team repo acme/t2         -> 204",
+    "team repo acme/t3         -> 204",
+    "team repo acme/t4         -> 204",
+    "repo alice/s1       -> 201",
+    "repo alice/s2       -> 201",
+    "repo alice/s3       -> 201",
+    "repo alice/pub      -> 201",
+    "repo bob/s1         -> 201",
+    "repo bob/s2         -> 201",
+    "repo bob/s3         -> 201",
+    "repo bob/pub        -> 201",
+    "repo carol/s1       -> 201",
+    "repo carol/s2       -> 201",
+    "repo carol/s3       -> 201",
+    "repo carol/pub      -> 201",
+    "repo dave/s1        -> 201",
+    "repo dave/s2        -> 201",
+    "repo dave/s3        -> 201",
+    "repo dave/pub       -> 201",
+    "repo eve/s1         -> 201",
+    "repo eve/s2         -> 201",
+    "repo eve/s3         -> 201",
+    "repo eve/pub        -> 201",
+    "repo frank/s1       -> 201",
+    "repo frank/s2       -> 201",
+    "repo frank/s3       -> 201",
+    "repo frank/pub      -> 201",
+    "repo grace/s1       -> 201",
+    "repo grace/s2       -> 201",
+    "repo grace/s3       -> 201",
+    "repo grace/pub      -> 201",
+    "repo hugo/s1        -> 201",
+    "repo hugo/s2        -> 201",
+    "repo hugo/s3        -> 201",
+    "repo hugo/pub       -> 201",
+    "repo iris/s1        -> 201",
+    "repo iris/s2        -> 201",
+    "repo iris/s3        -> 201",
+    "repo iris/pub       -> 201",
+    "repo jack/s1        -> 201",
+    "repo jack/s2        -> 201",
+    "repo jack/s3        -> 201",
+    "repo jack/pub       -> 201",
+    "repo kate/s1        -> 201",
+    "repo kate/s2        -> 201",
+    "repo kate/s3        -> 201",
+    "repo kate/pub       -> 201",
+    "repo leo/s1         -> 201",
+    "repo leo/s2         -> 201",
+    "repo leo/s3         -> 201",
+    "repo leo/pub        -> 201",
+    "repo mallory/s1     -> 201",
+    "repo mallory/s2     -> 201",
+    "repo mallory/s3     -> 201",
+    "repo mallory/pub    -> 201",
+    "--- 采集期结束，开始带外授权变更 ---",
+    "OOB grant alice/s1     -> bob      (read) -> 204",
+    "OOB grant carol/s1     -> eve      (read) -> 204",
+    "OOB grant acme/t1      -> frank    (read) -> 204",
+    "通道自检结论: api"
+  ]
+}

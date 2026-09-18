@@ -1,0 +1,72 @@
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Metamorphic security testing} The lineage this paper interrogates
+begins with metamorphic security testing for Web systems~\cite{Mai2019Metamorphic},
+which introduced system-agnostic relations comparing the behaviour of authorized
+and unauthorized users, and continues with the \mbox{MST-wi}
+design~\cite{Chaleshtari2022Metamorphic}, which generalises it into
+\ResLitMrCatalog{} catalogued relations over a \ResLitSmrlFunctions{}-predicate
+domain language. Our contribution is not a new relation but a characterisation of
+where this family's adjudication stops discriminating, and of what the reported
+metric can and cannot see. We are explicitly building on the design's own
+admission that the role-to-resource mapping is ``not always
+available''~\cite{Chaleshtari2022Metamorphic}.
+
+\paragraph{Black-box and specification-driven API testing} RESTler derives
+producer--consumer dependencies from an API specification and prunes
+sequences with response feedback~\cite{Atlidakis2019RESTler}. Search-based
+approaches extend white-box heuristics to REST APIs and to service
+interactions~\cite{Arcuri2024Advanced,Seran2025Handling}. These systems generate
+requests well but inherit the same oracle difficulty: a successful response
+cannot by itself distinguish an authorized from an unauthorized access. Our
+Boundary~1 describes what happens when the missing oracle is supplied by a
+reachability model rather than by the system.
+
+\paragraph{Dedicated broken-access-control detection} A recent line targets
+access control directly, using black-box probing~\cite{Liu2025BACScan},
+access-policy-violation checks inside fuzzers~\cite{Sahin2026Enhancing},
+LLM-driven test generation for microservice
+authorization~\cite{Uddin2026Automated}, automated detection of function- and
+object-level access-control flaws~\cite{Schlaubitz2025A}, and Java-specific
+access-control vulnerability detection
+\cite{Shi2025Facilitating,Feng2025JAuthGuard}. Database-level and
+policy-inference approaches recover the enforced access-control policy from the
+implementation, either to find missing owner checks~\cite{Huang2024Detecting,Liu2025MOCGuard}
+or to extract the policy itself~\cite{Le2021Automated,Berger2020Static,Zhang2024Extracting,Zuo2017AUTHSCOPE}.
+Our question is orthogonal to all of these: we do not propose a better detector,
+we ask what an existing oracle-substituting technique actually decides when the
+entitlement information it needs is not among its observables.
+
+\paragraph{Automated BOLA attack detection and the shape of the problem} Closely
+related work constructs the object-level attack and detects
+it~\cite{Filho2025Automated}, re-examines BOLA under a zero-trust
+framing~\cite{Wu2026Rethinking}, or evaluates broken access control empirically
+in deployed systems~\cite{Chehade2025Forbidden}. These establish that the problem
+matters and that it is empirically present; our contribution is a
+methodological measurement of one class of oracle substitution, not a new
+prevalence estimate.
+
+\paragraph{LLM-based vulnerability detection and specification inference} Large
+language models are used broadly for vulnerability
+detection~\cite{Guo2022HyVulDect,Lu2024GRACE,Yang2024DLAP,Mao2025Towards,Yin2024Multitask,Ehrenberg2024Python,Fu2023AIBugHunter,Liu2024Enhancing,Senanayake2024Defendroid,Mechri2024SecureQwen},
+and there are efforts to extract privilege-related facts or program
+specifications with their help~\cite{Wang2024A,Wen2024Enchanting}, including
+work measuring the reasoning boundaries of LLMs on implicit
+specifications~\cite{Wang2026Measuring,LeCong2025Can}. Rows in this literature
+are also known to be of uneven
+quality~\cite{Croft2023Data}. We do not use an LLM in the detection loop: our
+negative result is an argument for keeping the \emph{decision} in a
+deterministic component and being explicit about what that component can observe.
+An LLM-driven extension of this work would still face Boundary~1, because the
+missing observable is missing regardless of who reasons about it.
+
+\paragraph{The oracle problem as a first-class object} Finally, we note the
+methodological framing this paper belongs to. Studies that ask where a testing
+technique's assumptions break---rather than proposing an
+improvement---are rarer than they should be, and in our own case the boundary was
+found by a control rather than by a hypothesis: the negative result of
+Section~\ref{sec:synthetic-ablation} was produced by replacing our own mechanism
+with the most naive consumer of the same observable. We regard the condition this
+exposes---that any claim of necessity must be tested against a fair
+substitute---as the transferable part of this work.

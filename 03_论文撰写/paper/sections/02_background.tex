@@ -1,0 +1,87 @@
+\section{Background: the predicates in question}
+\label{sec:background}
+
+\subsection{The oracle problem and metamorphic relations}
+
+An oracle decides whether an execution has failed. For memory-safety or
+injection faults the oracle can often be a crash, a sanitizer, or a schema. For
+authorization there is no such intrinsic signal: the vulnerable and the correct
+execution are both successful HTTP responses. Metamorphic testing replaces the
+absent oracle with a relation over multiple executions: execute the same
+operation under a transformed configuration, and require that the two observed
+outcomes stay in a specified relation. The relation becomes the oracle.
+
+The price is a new dependency. The relation is only as sound as the assumptions
+under which it is expected to hold, and those assumptions are, for authorization,
+exactly the facts that the absent oracle was supposed to supply.
+
+\subsection{How \mbox{MST-wi} decides an authorization MR}
+
+\mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic} builds on the earlier
+metamorphic security testing design of Mai et al.~\cite{Mai2019Metamorphic}. It
+introduces a Security Metamorphic Relation Language (SMRL) with
+\ResLitSmrlFunctions{} Web-specific functions, and a catalog of
+\ResLitMrCatalog{} system-agnostic MRs. Its architecture has two stages: a
+crawler builds a model of the application as reached through the user interface
+and records, per user, which URLs and contents that user could reach; then a
+generator emits follow-up inputs derived from a seed input and the MRs are
+checked against the recorded model.
+
+The predicates that guard an authorization MR belong, in the artifact we
+inspected, to a small family. Two of them read the recorded reachability model
+directly---a ``cannot reach through the GUI'' predicate and a ``user can
+retrieve content'' predicate---and two read static properties of the acting
+subject, namely whether the subject is a supervisor of another or a site
+administrator. We say that such a predicate is \emph{GUI-derived} when its value
+is a function of the crawl.
+
+\subsection{Two facts about the catalog, both counted mechanically}
+
+We parsed the authors' public artifact rather than reasoning about the language
+in the abstract. Two counts matter for what follows.
+
+\paragraph{The gate is GUI-derived, and the catalog is mostly not about
+authorization} Over the \ResCatalogMrTotal{} MRs in the catalog,
+\ResCatalogGuiDerived{} (\ResCatalogGuiDerivedPct{}\%) gate on a GUI-derived
+predicate, and \ResCatalogAnyPred{} gate on a GUI-derived or
+identity-property predicate. Only \ResCatalogAuthzName{} MRs are named
+\texttt{OTG\_AUTHZ} and only \ResCatalogChangeCred{} call the credential-change
+action; their union is \ResCatalogUnion{} (\ResCatalogUnionPct{}\%), of which
+\ResCatalogUnionGated{} are gated on a GUI-derived or identity predicate. The
+honest reading of these numbers is a caveat, not a scandal: depending on the
+count, the authorization-relevant share of the catalog is between
+\ResCatalogAuthzName{}/\ResCatalogMrTotal{} and
+\ResCatalogUnion{}/\ResCatalogMrTotal{}, and the union is an \emph{upper bound}
+on authorization relevance, not a measurement. We report all counts together
+for exactly this reason, and we do not claim that authorization coverage is
+thin: the authors' own accounting shows that they address \ResLitAuthzAddressed{}
+of \ResLitAuthzWeakAll{} weaknesses under the \emph{Authorize Actors} design
+principle, i.e.\ \ResLitAuthzAddressedPct{}\%, which ranks
+\ResLitAuthzRank{}-rd of the principles they cover.
+
+\paragraph{The vocabulary contains no authorization-artifact-state
+predicate} We searched the full text of the original paper for predicates that
+read the \emph{state of an authorization artifact}---ownership, an access
+predicate, a permission record, a share. Words such as \code{isOwner},
+\code{canAccess}, \code{ownerOf}, \code{hasPermission}, \code{ownership} and
+\code{shares\_of} occur \ResCatalogAuthzStateHits{} times in total. This is not
+a discovery; it is the necessary consequence of the vocabulary being the one
+listed in the paper, and we treat it as a premise throughout. The predicates
+that \emph{are} present occur with the counts
+\ResVocabisSupervisorOf{}/\ResVocabcannotReachThroughGUI{}/\ResVocabuserCanRetrieveContent{}/\ResVocabisAdmin{}
+respectively, which is what makes the delegation to reachability unavoidable.
+
+\subsection{Why this makes the reading moment part of the specification}
+
+Suppose a subject's entitlement to an object changes after the crawl: the owner
+grants it out of band, or the object is made public, or an administrative action
+grants access. Nothing in the two-stage architecture observes that change,
+because the model the MR consults was frozen at crawl time. The MR will then
+evaluate reachability against a world that no longer exists.
+
+This is not a bug report about an implementation. It is a statement about what
+the relations \emph{mean}: because they are defined over a recorded reachability
+model, their verdict is a statement about that model. Our experiments are
+constructed so that the two readings---the crawl-time one, and a live one---can
+be told apart, so that we can report which one is responsible for an observed
+disagreement.

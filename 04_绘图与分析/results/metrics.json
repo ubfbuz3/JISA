@@ -1,0 +1,925 @@
+{
+  "meta": {
+    "synthetic_records_total": 576,
+    "synthetic_records_ok": 576,
+    "synthetic_errors": 0,
+    "configs": [
+      "V-E3-vuln0-listed",
+      "V-E3-vuln0-unlisted",
+      "V-E3-vuln0-unlisted-nointro",
+      "V-E3-vuln1-listed",
+      "V-E3-vuln1-unlisted",
+      "V-E3-vuln1-unlisted-nointro",
+      "V-noE3-vuln0",
+      "V-noE3-vuln1"
+    ],
+    "scenarios": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7"
+    ],
+    "representative_slice": {
+      "precond_variant": "raw",
+      "gui_mode": "aware",
+      "n": 96
+    },
+    "truth_domain": [
+      "bola",
+      "normal"
+    ],
+    "adjudicators": [
+      "degrade_all",
+      "v1",
+      "v2",
+      "v3"
+    ],
+    "validation_problems": []
+  },
+  "design_structure": {
+    "records": 576,
+    "design_cells": 52,
+    "mrs": [
+      "MR-002",
+      "MR-004"
+    ],
+    "n_mrs": 2,
+    "precond_variants": [
+      "e1",
+      "e1e2",
+      "raw"
+    ],
+    "gui_modes": [
+      "aware",
+      "blind"
+    ],
+    "records_per_cell": [
+      6,
+      12
+    ],
+    "min_records_per_cell": 6,
+    "max_records_per_cell": 12,
+    "scenarios": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7"
+    ],
+    "n_scenarios": 7,
+    "cell_expansion": 6,
+    "independence_verdict": "记录之间**不独立**：同一设计格内的记录共享对象图、setup 与真值，仅由 precond_variant 与 gui_mode 两个确定性开关区分。",
+    "interval_warning": "★ 本工作报出的 Wilson / Newcombe 区间是**约定性**的：它们假设记录为独立伯努利抽样，而本设计是固定矩阵的确定性枚举，故区间**系统性偏窄**。正因如此：(1) 每条计数都要同时给出其**设计格数**而非仅记录数；(2) 区间只用于说明**量级**与**不确定方向**，不得用于跨方法显著性主张；(3) 唯一的例外是 Block 9 的 Newcombe 差值区间——它同样偏窄，所以其「不显著」结论是**稳健**的（偏窄只会更容易判显著）。",
+    "effective_replication_statement": "有效重复层级：设计格 52 个 / MR 2 条 / 情景 7 个 / 真实系统 1 个；对「MST-wi 的 MR 总体」的外推上界即 MR 条数。"
+  },
+  "block0_2x2": {
+    "grid": [
+      {
+        "config": "V-E3-vuln0-unlisted",
+        "channel_visibility": "unlisted",
+        "app_authorization": "correct",
+        "cases": 9,
+        "FP": 4,
+        "FN": 0,
+        "TP": 0,
+        "TN": 5,
+        "FP_rate": 0.4444,
+        "FP_ci": [
+          0.1888,
+          0.7333
+        ],
+        "FN_rate": 0.0
+      },
+      {
+        "config": "V-E3-vuln0-listed",
+        "channel_visibility": "listed",
+        "app_authorization": "correct",
+        "cases": 9,
+        "FP": 0,
+        "FN": 0,
+        "TP": 0,
+        "TN": 9,
+        "FP_rate": 0.0,
+        "FP_ci": [
+          0.0,
+          0.2991
+        ],
+        "FN_rate": 0.0
+      },
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "channel_visibility": "unlisted",
+        "app_authorization": "violating",
+        "cases": 9,
+        "FP": 4,
+        "FN": 0,
+        "TP": 5,
+        "TN": 0,
+        "FP_rate": 0.4444,
+        "FP_ci": [
+          0.1888,
+          0.7333
+        ],
+        "FN_rate": 0.0
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "channel_visibility": "listed",
+        "app_authorization": "violating",
+        "cases": 9,
+        "FP": 0,
+        "FN": 1,
+        "TP": 4,
+        "TN": 4,
+        "FP_rate": 0.0,
+        "FP_ci": [
+          0.0,
+          0.2991
+        ],
+        "FN_rate": 0.1111
+      }
+    ],
+    "scope": "仅含存在对象级共享的场景 S3–S7；代表切片 raw+GUI-aware",
+    "cells_with_any_error": 3,
+    "cells_total": 4,
+    "clean_cells": [
+      "V-E3-vuln0-listed"
+    ],
+    "clean_cells_are_trivially_clean": true,
+    "note": "复核后修正：原摘要『四个格子无一零错误』**不成立**——listed×correct 格 FP=FN=0。但该格零错误是**平凡**的：MR 在该格完全不触发（无告警 ⇒ 无 FP；vuln=0 ⇒ 无真 BOLA ⇒ 无 FN）。同一机制在配对的 listed×violating 格转为漏报（见该格 FN）。真正可支撑的结论是：**避免误报与保住检测力由同一个开关控制，无法同时达成**（unlisted 格 FP>0 而 FN=0；listed 格 FP=0 而 FN>0）。"
+  },
+  "block2": {
+    "FP_E3": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0,
+      "ci": [
+        0.3424,
+        1.0
+      ],
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S3",
+      "meaning": "存在 E3 例外（合法共享）且应用授权正确 ⇒ MR 触发即误报"
+    },
+    "baseline_FP": {
+      "hits": 0,
+      "total": 2,
+      "rate": 0.0,
+      "config": "V-noE3-vuln0",
+      "scenario": "S1"
+    },
+    "listed_control_FP": {
+      "hits": 0,
+      "total": 2,
+      "rate": 0.0,
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S3"
+    },
+    "recall_vuln1_unlisted": {
+      "S2": {
+        "hits": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "S4": {
+        "hits": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "S5": {
+        "hits": 1,
+        "total": 1,
+        "rate": 1.0
+      }
+    }
+  },
+  "block3_exception_ladder": {
+    "raw": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0
+    },
+    "e1": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0
+    },
+    "e1e2": {
+      "hits": 2,
+      "total": 2,
+      "rate": 1.0
+    },
+    "conclusion": "E1/E2 例外谓词对 FP_E3 无改善（1.00 → 1.00 → 1.00）——构造性结论"
+  },
+  "block4_verdict_quality_all": {
+    "v1": {
+      "raw_false_alarm": 16,
+      "recovered": 8,
+      "detection_kept": 33,
+      "costly_downgrade": 2,
+      "missed": 1,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": 0.9429,
+      "cost_rate": 0.0571,
+      "fn_rate_among_bola": 0.0278
+    },
+    "v2": {
+      "raw_false_alarm": 16,
+      "recovered": 8,
+      "detection_kept": 35,
+      "costly_downgrade": 0,
+      "missed": 1,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": 1.0,
+      "cost_rate": 0.0,
+      "fn_rate_among_bola": 0.0278
+    },
+    "v3": {
+      "raw_false_alarm": 16,
+      "recovered": 16,
+      "detection_kept": 17,
+      "costly_downgrade": 18,
+      "missed": 1,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": 0.4857,
+      "cost_rate": 0.5143,
+      "fn_rate_among_bola": 0.0278
+    },
+    "degrade_all": {
+      "raw_false_alarm": 16,
+      "recovered": 16,
+      "detection_kept": 0,
+      "costly_downgrade": 35,
+      "missed": 1,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": 0.0,
+      "cost_rate": 1.0,
+      "fn_rate_among_bola": 0.0278
+    }
+  },
+  "catalog_census": {
+    "mr_total": 76,
+    "name_contains_OTG_AUTHZ": 10,
+    "calls_changeCredentials": 9,
+    "union": 14,
+    "union_rate": 0.1842,
+    "gates_on_GUI_derived": 38,
+    "gates_on_GUI_derived_rate": 0.5,
+    "gates_on_any_identity_or_gui": 40,
+    "of_union_gated_on_GUI_or_identity": 13,
+    "unchanged_actor": 62,
+    "unchanged_actor_rate": 0.8158,
+    "source": "refine-logs\\catalog_census.csv",
+    "caveat": "口径分歧必须并列报出：名称含 OTG_AUTHZ / 调用 changeCredentials / 两者并集给出不同的分母；并集是授权相关性的**上界**。",
+    "dsl_vocabulary_counts": {
+      "isOwner": 0,
+      "canAccess": 0,
+      "ownerOf": 0,
+      "hasPermission": 0,
+      "ownership": 0,
+      "shares_of": 0,
+      "isSupervisorOf": 5,
+      "cannotReachThroughGUI": 7,
+      "userCanRetrieveContent": 7,
+      "isAdmin": 0
+    },
+    "authorization_state_predicate_hits": 0
+  },
+  "artifact_inventory": {
+    "source_root": "C:\\Users\\Administrator\\WorkBuddy\\mst_engine\\MST",
+    "mr_dir": "src-mrs-icst2020",
+    "owasp_mr_total": 23,
+    "authz_mr_total": 11,
+    "authz_mrs": [
+      "OTG_AUTHZ_001",
+      "OTG_AUTHZ_001b",
+      "OTG_AUTHZ_001b2",
+      "OTG_AUTHZ_002",
+      "OTG_AUTHZ_002a",
+      "OTG_AUTHZ_002b",
+      "OTG_AUTHZ_002c",
+      "OTG_AUTHZ_002d",
+      "OTG_AUTHZ_002e",
+      "OTG_AUTHZ_003",
+      "OTG_AUTHZ_004"
+    ],
+    "family_counts": {
+      "AUTHN": 3,
+      "AUTHZ": 11,
+      "BUSLOGIC": 1,
+      "CONFIG": 1,
+      "CRYPST": 1,
+      "INPVAL": 2,
+      "SESS": 4
+    },
+    "gates_on_cannotReachThroughGUI": 5,
+    "gates_on_cannotReachThroughGUI_names": [
+      "OTG_AUTHZ_002",
+      "OTG_AUTHZ_002a",
+      "OTG_AUTHZ_002b",
+      "OTG_AUTHZ_002c",
+      "OTG_AUTHZ_002e"
+    ],
+    "gates_on_userCanRetrieveContent": 4,
+    "gates_on_userCanRetrieveContent_names": [
+      "OTG_AUTHZ_001",
+      "OTG_AUTHZ_001b",
+      "OTG_AUTHZ_002e",
+      "OTG_AUTHZ_004"
+    ],
+    "authz_gated_on_either": 8,
+    "authz_gated_on_neither": 3,
+    "authz_gated_on_neither_names": [
+      "OTG_AUTHZ_001b2",
+      "OTG_AUTHZ_002d",
+      "OTG_AUTHZ_003"
+    ],
+    "facts": {
+      "F1_url_set_memoized_never_invalidated": true,
+      "F2_failopen_when_crawl_input_empty": true,
+      "F2_failopen_when_user_or_url_null": true,
+      "F4_output_store_read_from_fs": true,
+      "F4_output_store_loaded_once": true,
+      "F5_supervisor_from_static_config": true,
+      "F5_supervisor_true_when_same_account": true,
+      "F6_upstream_pom_declares_mr_source_root": false
+    },
+    "caveat": "源码级证据已有运行级补充：本工作在自建 harness（无浏览器，仅替换 HTTP 观测通道）下执行了上游 OTG_AUTHZ_* 关系本身；产物与消化脚本见 experiments/native_engine/results/native_engine.json 与 analysis/ingest_native_engine.py。上游 Java 源码零改动（git status 仅 pom.xml，且其改动为一行 <source> 声明）。「同一 URL 对拥有者与受让者响应逐字节相同」这条断言另有摘要级凭据：experiments/native_engine/verify_channel_bytes.py 产出 results/channel_bytes.json（sha256 逐格比对，含无权者 404 对照）。"
+  },
+  "block4_verdict_quality_fp_config": {
+    "v1": {
+      "raw_false_alarm": 4,
+      "recovered": 2,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
+    "v2": {
+      "raw_false_alarm": 4,
+      "recovered": 2,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 0.5,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
+    "v3": {
+      "raw_false_alarm": 4,
+      "recovered": 4,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
+    "degrade_all": {
+      "raw_false_alarm": 4,
+      "recovered": 4,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 1.0,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    }
+  },
+  "block6_observability": {
+    "framework_share_legit": {
+      "scenario": "S3",
+      "share_origin": [
+        "framework"
+      ],
+      "n": 12,
+      "triggered": 8,
+      "bola_total": 0,
+      "framework_log_records": 12,
+      "v1_false_alarm_n": 8,
+      "v1_false_proof_n": 0,
+      "v1_recovered_n": 8,
+      "v1_proven_on_bola_n": 0,
+      "v2_false_alarm_n": 8,
+      "v2_false_proof_n": 0,
+      "v2_recovered_n": 8,
+      "v2_proven_on_bola_n": 0,
+      "v3_false_alarm_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_recovered_n": 8,
+      "v3_proven_on_bola_n": 0,
+      "v3_abstain_unavailable_n": 4,
+      "v1v2_false_proof_rate": 0.0,
+      "v3_false_proof_rate": 0.0,
+      "v3_recovery_rate": 1.0
+    },
+    "out_of_band_share_legit": {
+      "scenario": "S6",
+      "share_origin": [
+        "out_of_band"
+      ],
+      "n": 12,
+      "triggered": 8,
+      "bola_total": 0,
+      "framework_log_records": 0,
+      "v1_false_alarm_n": 8,
+      "v1_false_proof_n": 8,
+      "v1_recovered_n": 0,
+      "v1_proven_on_bola_n": 0,
+      "v2_false_alarm_n": 8,
+      "v2_false_proof_n": 8,
+      "v2_recovered_n": 0,
+      "v2_proven_on_bola_n": 0,
+      "v3_false_alarm_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_recovered_n": 8,
+      "v3_proven_on_bola_n": 0,
+      "v3_abstain_unavailable_n": 4,
+      "v1v2_false_proof_rate": 1.0,
+      "v3_false_proof_rate": 0.0,
+      "v3_recovery_rate": 1.0
+    },
+    "out_of_band_share_bola": {
+      "scenario": "S7",
+      "share_origin": [
+        "out_of_band"
+      ],
+      "n": 12,
+      "triggered": 6,
+      "bola_total": 6,
+      "framework_log_records": 0,
+      "v1_false_alarm_n": 0,
+      "v1_false_proof_n": 0,
+      "v1_recovered_n": 0,
+      "v1_proven_on_bola_n": 6,
+      "v2_false_alarm_n": 0,
+      "v2_false_proof_n": 0,
+      "v2_recovered_n": 0,
+      "v2_proven_on_bola_n": 6,
+      "v3_false_alarm_n": 0,
+      "v3_false_proof_n": 0,
+      "v3_recovered_n": 0,
+      "v3_proven_on_bola_n": 4,
+      "v3_abstain_unavailable_n": 2,
+      "v1v2_false_proof_rate": null,
+      "v3_false_proof_rate": null,
+      "v3_recovery_rate": null
+    }
+  },
+  "block7_s3_s5_dilemma": {
+    "rows": [
+      {
+        "config": "V-E3-vuln1-unlisted",
+        "S3_correct_no_trigger": false,
+        "S3_detail": "0/2",
+        "S5_correct_trigger": true,
+        "S5_detail": "1/1",
+        "both_correct": false
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "S3_correct_no_trigger": true,
+        "S3_detail": "2/2",
+        "S5_correct_trigger": false,
+        "S5_detail": "0/1",
+        "both_correct": false
+      }
+    ],
+    "any_config_correct": false
+  },
+  "block8_introspection_boundary": {
+    "on": {
+      "introspection": "on",
+      "n": 36,
+      "false_alarm_n": 8,
+      "bola_trig_n": 9,
+      "v2_recovered_n": 4,
+      "v2_false_proof_n": 4,
+      "v2_proven_on_bola_n": 9,
+      "v3_recovered_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 9,
+      "v3_abstain_unavailable_n": 0,
+      "v3_recovery_rate": 1.0,
+      "v3_false_proof_rate": 0.0,
+      "v3_detection_keep_rate": 1.0,
+      "v2_false_proof_rate": 0.5
+    },
+    "off": {
+      "introspection": "off",
+      "n": 18,
+      "false_alarm_n": 8,
+      "bola_trig_n": 5,
+      "v2_recovered_n": 4,
+      "v2_false_proof_n": 4,
+      "v2_proven_on_bola_n": 5,
+      "v3_recovered_n": 8,
+      "v3_false_proof_n": 0,
+      "v3_proven_on_bola_n": 0,
+      "v3_abstain_unavailable_n": 13,
+      "v3_recovery_rate": 1.0,
+      "v3_false_proof_rate": 0.0,
+      "v3_detection_keep_rate": 0.0,
+      "v2_false_proof_rate": 0.5
+    }
+  },
+  "block9_direct_observe": {
+    "methods": {
+      "v1": {
+        "TP": 198,
+        "FP": 60,
+        "FN": 18,
+        "TN": 300,
+        "precision": 0.7674418604651163,
+        "recall": 0.9166666666666666,
+        "f1": 0.8354430379746837,
+        "precision_ci": [
+          0.7122,
+          0.8148
+        ],
+        "recall_ci": [
+          0.8721,
+          0.9466
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      },
+      "v2": {
+        "TP": 213,
+        "FP": 60,
+        "FN": 3,
+        "TN": 300,
+        "precision": 0.7802197802197802,
+        "recall": 0.9861111111111112,
+        "f1": 0.8711656441717792,
+        "precision_ci": [
+          0.7274,
+          0.8253
+        ],
+        "recall_ci": [
+          0.96,
+          0.9953
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      },
+      "v3": {
+        "TP": 105,
+        "FP": 0,
+        "FN": 111,
+        "TN": 360,
+        "precision": 1.0,
+        "recall": 0.4861111111111111,
+        "f1": 0.6542056074766355,
+        "precision_ci": [
+          0.9647,
+          1.0
+        ],
+        "recall_ci": [
+          0.4203,
+          0.5524
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      },
+      "degrade_all": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 216,
+        "TN": 360,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0175
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      },
+      "direct_only": {
+        "TP": 108,
+        "FP": 108,
+        "FN": 108,
+        "TN": 252,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "precision_ci": [
+          0.4339,
+          0.5661
+        ],
+        "recall_ci": [
+          0.4339,
+          0.5661
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      },
+      "direct_observe": {
+        "TP": 108,
+        "FP": 0,
+        "FN": 108,
+        "TN": 360,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "precision_ci": [
+          0.9657,
+          1.0
+        ],
+        "recall_ci": [
+          0.4339,
+          0.5661
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      }
+    },
+    "recall_difference_direct_observe_minus_v3": {
+      "diff": 0.0139,
+      "ci": [
+        -0.0797,
+        0.1072
+      ],
+      "significant_at_95": false
+    },
+    "point_estimate_dominates": true,
+    "disagreement_records": [
+      {
+        "config": "V-E3-vuln1-listed",
+        "scenario": "S5",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "precond_variant": "raw",
+        "truth": "bola",
+        "v3_alarm": false,
+        "direct_observe_alarm": true,
+        "mr_triggered": false,
+        "precondition_met": false
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "scenario": "S5",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "precond_variant": "e1",
+        "truth": "bola",
+        "v3_alarm": false,
+        "direct_observe_alarm": true,
+        "mr_triggered": false,
+        "precondition_met": false
+      },
+      {
+        "config": "V-E3-vuln1-listed",
+        "scenario": "S5",
+        "mr": "MR-002",
+        "gui_mode": "aware",
+        "precond_variant": "e1e2",
+        "truth": "bola",
+        "v3_alarm": false,
+        "direct_observe_alarm": true,
+        "mr_triggered": false,
+        "precondition_met": false
+      }
+    ],
+    "disagreement_mechanism": "全部 3 条不一致落在 V-E3-vuln1-listed/S5：MR 因 GUI 可达性前置条件不成立而**不触发**（listed ⇒ cannotReachThroughGUI=False），故 v3 无告警；direct_observe 不依赖 MR 触发，仍能告警。即差异由**本文核心机制**（判定外包给 GUI 可达性）产生，而非随机噪声。",
+    "agreement_v3_vs_direct_observe": {
+      "same": 573,
+      "diff": 3
+    },
+    "f1_of_v3": 0.6542056074766355,
+    "construction_caveat": "direct_observe 的两个输入（普通请求 200、授权面报 none）与 truth 的定义（bola ⟺ ¬should_allow ∧ app_allowed）同源 ⇒ 该对照与真值**部分同构**，其支配性是**构造性**的，不能读作『一个独立方法更优』。",
+    "statistical_caveat": "★ 第二轮修正：第七轮以『严格支配』表述该结果，但 TP 差异 108 vs 105 的 95% 区间包含 0（不显著）。正确表述是**点估计不劣于**（同 FP、TP 略高但差异不显著），而不是『严格支配』。差异虽小，但其 3 条记录有共同且可解释的机制（见 disagreement_mechanism）。"
+  },
+  "m4_specificity_reproduction": {
+    "rows": [
+      {
+        "config": "V-noE3-vuln0",
+        "cases": 9,
+        "false_alarms": 0,
+        "followup_inputs_approx": 18,
+        "specificity": 1.0
+      },
+      {
+        "config": "V-E3-vuln0-unlisted",
+        "cases": 13,
+        "false_alarms": 4,
+        "followup_inputs_approx": 26,
+        "specificity": 0.846154
+      },
+      {
+        "config": "V-E3-vuln0-listed",
+        "cases": 13,
+        "false_alarms": 0,
+        "followup_inputs_approx": 26,
+        "specificity": 1.0
+      }
+    ],
+    "caveat": "分母按 MST-wi 定义为 follow-up 输入数；此处以每 case 2 条 follow-up 输入近似，**不是原引擎的精确输入计数**，只用于说明该口径为何掩盖失效模式。"
+  },
+  "m5_second_implementation": {
+    "compared": 54,
+    "agree": 54,
+    "disagree": 0,
+    "agreement_rate": 1.0,
+    "agreement_ci": [
+      1.0,
+      0.9336,
+      1.0
+    ],
+    "mismatches": [],
+    "caveat": "同一模型编写的独立实现，只排除实现偶然性，不排除共同盲点。"
+  },
+  "real_system": {
+    "version": "1.22.6",
+    "generated_by": "experiments/real_system/run_real.py",
+    "honesty_boundary": "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。",
+    "cells_total": 96,
+    "cells_per_reading": {
+      "snapshot": 48,
+      "live": 48
+    },
+    "M1_grant_endpoints": {
+      "swagger_total_paths": 253,
+      "grant_endpoints_total": 15,
+      "revoke_endpoints_total": 2,
+      "without_site_admin": 8,
+      "predicate": "端点计入当且仅当：在不修改被测系统代码的前提下，能使某 (主体, 对象) 的访问权限从否变为是；方向由该端点实际可用的 HTTP 方法推出（仅 DELETE ⇒ 撤销，不算授予）。",
+      "framework_log_coverage_upper_bound": 1
+    },
+    "M2_readability": {
+      "owner_admin_readable": 56,
+      "owner_admin_total": 56,
+      "self_readable": 16,
+      "self_total": 56,
+      "self_readable_subjects": [
+        "alice",
+        "dave",
+        "root"
+      ],
+      "blackbox_self_cells": 40,
+      "blackbox_self_readable": 0,
+      "self_readable_only_for_object_owner_or_site_admin": true,
+      "readable_perm_values": [
+        "owner"
+      ]
+    },
+    "M3_fidelity": {
+      "consistent": 48,
+      "total": 48,
+      "not_applicable": 8,
+      "not_applicable_reason": "is_acting_credential 单元格（执行者读自己的单元格）不参与换凭证一致性判定",
+      "raw_consistent_over_all": 48,
+      "raw_total": 56
+    },
+    "M4_snapshot_mismatch": {
+      "snapshot": 10,
+      "live": 0,
+      "denominator": 48
+    },
+    "M5_methods": {
+      "mr_bookkeeping": {
+        "alarms_snapshot": 10,
+        "false_proofs_snapshot": 10,
+        "false_proof_rate_on_authorized": 0.4,
+        "alarms_live": 0,
+        "false_proofs_live": 0
+      },
+      "v3": {
+        "alarms_snapshot": 0,
+        "false_proofs_snapshot": 0,
+        "false_proof_rate_on_authorized": 0.0,
+        "alarms_live": 0,
+        "false_proofs_live": 0
+      },
+      "v3_self": {
+        "alarms_snapshot": 0,
+        "false_proofs_snapshot": 0,
+        "false_proof_rate_on_authorized": 0.0,
+        "alarms_live": 0,
+        "false_proofs_live": 0
+      },
+      "direct_only": {
+        "alarms_snapshot": 23,
+        "false_proofs_snapshot": 0,
+        "false_proof_rate_on_authorized": 0.0,
+        "alarms_live": 23,
+        "false_proofs_live": 0
+      },
+      "direct_observe": {
+        "alarms_snapshot": 0,
+        "false_proofs_snapshot": 0,
+        "false_proof_rate_on_authorized": 0.0,
+        "alarms_live": 0,
+        "false_proofs_live": 0
+      },
+      "direct_observe_self": {
+        "alarms_snapshot": 0,
+        "false_proofs_snapshot": 0,
+        "false_proof_rate_on_authorized": 0.0,
+        "alarms_live": 0,
+        "false_proofs_live": 0
+      }
+    },
+    "M5_authorized_cells": 25,
+    "M6_provenance": {
+      "none": 31,
+      "in_band_share": 1,
+      "implicit_site_admin": 8,
+      "out_of_band": 11,
+      "implicit_public": 5
+    },
+    "M6_authorized_out_of_band": 0,
+    "endogenous_control": {
+      "public_from_start": {
+        "object": "alice/pub1",
+        "cells": 6,
+        "cannotReach_true": 0,
+        "mr_fires": 0
+      },
+      "public_after_crawl": {
+        "object": "alice/r4",
+        "cells": 6,
+        "cannotReach_true": 5,
+        "mr_fires": 5
+      }
+    },
+    "M6_channel_breakdown": {
+      "counts": {
+        "in_band_share": 1,
+        "implicit_site_admin": 8,
+        "out_of_band": 11,
+        "implicit_public": 5
+      },
+      "authorized_total": 25,
+      "in_band_share": 1,
+      "not_observable_by_framework_log": 24,
+      "out_of_band_literal": 11,
+      "implicit_derived": 13,
+      "not_observable_rate": 0.96,
+      "out_of_band_literal_rate": 0.44,
+      "caveat": "这是**构造拓扑的设计参数**，不是野外发生率。口径有二：字面 out_of_band 通道，或全部非 in_band 通道（含隐式派生）。两者必须分别标注，不得混用。"
+    }
+  },
+  "literature": {
+    "mstwi_mr_catalog": {
+      "value": 76,
+      "unit": "MRs",
+      "source": "mstwi_paper_text.txt：'a catalog of system-agnostic metamorphic relations'；文献调研报告_v2.md line 237 '76 个系统无关 metamorphic relations'",
+      "note": "与 refine-logs/catalog_census.csv 实测计数一致（76），可互证。"
+    },
+    "smrl_web_functions": {
+      "value": 55,
+      "unit": "functions",
+      "source": "mstwi_paper_text.txt：'Table 2 describes a portion of the 55 Web-specific functions in SMRL'",
+      "note": "SMRL DSL 的全部内建谓词即此 55 个；授权制品状态谓词不在其中。"
+    },
+    "reported_detection": {
+      "value": 85,
+      "unit": "%",
+      "source": "mstwi_paper_text.txt 摘要：'It automatically detected 85% of their vulnerabilities'（Jenkins + Joomla）",
+      "note": "工程级检出率，非按 CWE 逐项。"
+    },
+    "reported_specificity": {
+      "value": 99.81,
+      "unit": "%",
+      "source": "mstwi_paper_text.txt 摘要：'showed a high specificity (99.81% of the generated inputs do not lead to a false positive)'",
+      "note": "★ 分母原文明确为 'the generated inputs' —— 输入级口径。本工作边界 (iii) 即针对该口径的结构性盲区。"
+    },
+    "authorize_actors_coverage": {
+      "weaknesses_all": 60,
+      "covered_generic": 55,
+      "addressed": 34,
+      "addressed_pct": 57,
+      "rank": 3,
+      "source": "mstwi_paper_text.txt TABLE 8 行 'Authorize Actors 60 55 34 (57%) 3rd'",
+      "note": "★ MST-wi 自陈的授权类 CWE 覆盖：60 个中命中 34（57%），在 12 个设计原则中排第 3 —— 即原文并未主张授权覆盖薄弱。此条用于**拒斥**'授权覆盖薄'叙事，不得反向引用。"
+    },
+    "mai19_predecessor": {
+      "mr_count": 22,
+      "specificity_pct": 99.5,
+      "false_alarms": 32,
+      "generated_inputs": 6401,
+      "sensitivity_num": 10,
+      "sensitivity_den": 12,
+      "source": "01_文献调研/Undermind_全文精读.md 与 文献调研报告_v2.md 对 Mai2019Metamorphic（Metamorphic Security Testing for Web Systems）的记录",
+      "note": "★★ 与本工作边界 (ii)/(iii) 直接呼应：该文自陈其 32 例误报**主要成因**是 'limitations in the crawler (Crawljax) failing to traverse all URLs for all users' —— 即 **GUI 可达性模型本身失效**，且误报分母同样是 'generated inputs'（输入级）。这是边界 (ii) 的**独立文献佐证**（不是本工作的发现）。"
+    }
+  }
+}

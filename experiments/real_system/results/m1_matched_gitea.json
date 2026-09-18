@@ -1,0 +1,175 @@
+{
+  "source": "Gitea 1.22.6 · 运行时 /swagger.v1.json",
+  "denominator": "swagger paths（全部，含只读端点）",
+  "denominator_entries": 253,
+  "matched_rows_total": 14,
+  "grant_endpoints_total": 13,
+  "revoke_endpoints_total": 1,
+  "grant_endpoints_without_site_admin": 10,
+  "grant_categories": {
+    "site_user_create": 1,
+    "site_create_as_user": 2,
+    "org_repo_create": 2,
+    "org_create": 1,
+    "org_team_create": 1,
+    "repo_properties": 1,
+    "repo_collaborator": 1,
+    "repo_deploy_key": 1,
+    "repo_transfer": 1,
+    "team_member": 1,
+    "team_repo": 1
+  },
+  "endpoints": [
+    {
+      "endpoint": "/orgs",
+      "methods": [
+        "POST"
+      ],
+      "category": "org_create",
+      "kind": "组织级：新建组织（站点管理员通道）",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/orgs/{}/members/{}",
+      "methods": [
+        "DELETE"
+      ],
+      "category": "org_member",
+      "kind": "组织级：用户加入/移出组织",
+      "direction": "revoke",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/org/{}/repos",
+      "methods": [
+        "POST"
+      ],
+      "category": "org_repo_create",
+      "kind": "组织级：在组织内建仓",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/orgs/{}/repos",
+      "methods": [
+        "POST"
+      ],
+      "category": "org_repo_create",
+      "kind": "组织级：在组织内建仓",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/orgs/{}/teams",
+      "methods": [
+        "POST"
+      ],
+      "category": "org_team_create",
+      "kind": "组织级：新建团队（授权单位本身）",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/repos/{}/{}/collaborators/{}",
+      "methods": [
+        "DELETE",
+        "PUT"
+      ],
+      "category": "repo_collaborator",
+      "kind": "仓库级：把某用户设为协作者（PUT 授予 / DELETE 撤销）",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/repos/{}/{}/keys",
+      "methods": [
+        "POST"
+      ],
+      "category": "repo_deploy_key",
+      "kind": "仓库级：部署密钥（授予持有者读/写）",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/repos/{}/{}",
+      "methods": [
+        "DELETE",
+        "PATCH"
+      ],
+      "category": "repo_properties",
+      "kind": "仓库级：改属性（私有→公开即向所有人授予）",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/repos/{}/{}/transfer",
+      "methods": [
+        "POST"
+      ],
+      "category": "repo_transfer",
+      "kind": "仓库级：转移所有权（把对象交给另一主体）",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/admin/users/{}/orgs",
+      "methods": [
+        "POST"
+      ],
+      "category": "site_create_as_user",
+      "kind": "站点级：以某用户名义建组织/仓库",
+      "direction": "grant",
+      "requires_site_admin": true
+    },
+    {
+      "endpoint": "/admin/users/{}/repos",
+      "methods": [
+        "POST"
+      ],
+      "category": "site_create_as_user",
+      "kind": "站点级：以某用户名义建组织/仓库",
+      "direction": "grant",
+      "requires_site_admin": true
+    },
+    {
+      "endpoint": "/admin/users",
+      "methods": [
+        "POST"
+      ],
+      "category": "site_user_create",
+      "kind": "站点级：建用户",
+      "direction": "grant",
+      "requires_site_admin": true
+    },
+    {
+      "endpoint": "/teams/{}/members/{}",
+      "methods": [
+        "DELETE",
+        "PUT"
+      ],
+      "category": "team_member",
+      "kind": "团队级：用户加入团队",
+      "direction": "grant",
+      "requires_site_admin": false
+    },
+    {
+      "endpoint": "/teams/{}/repos/{}/{}",
+      "methods": [
+        "DELETE",
+        "PUT"
+      ],
+      "category": "team_repo",
+      "kind": "团队级：仓库挂到团队",
+      "direction": "grant",
+      "requires_site_admin": false
+    }
+  ],
+  "predicate": "端点计入当且仅当：在不修改被测系统代码的前提下，能使某 (主体, 对象) 的访问权限从否变为是；方向由该端点实际可用的 HTTP 方法推出（方法集 ⊆ {DELETE} ⇒ 撤销，不算授予）。两系统路径已归一化后用同一张模式表普查。",
+  "meta": {
+    "gitea_version": "1.22.6",
+    "swagger_paths_total": 253,
+    "note": "本表用 m1_census.SHARED_PATTERNS 重算，目的是与 Gogs 侧可比；正文原有的 Gitea M1 数字（run_real.py 的 Gitea 形正则表）不改。",
+    "elapsed_s": 3.9
+  }
+}

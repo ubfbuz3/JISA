@@ -1,0 +1,160 @@
+\section{Protocol: a faithful three-phase instantiation}
+\label{sec:protocol}
+
+\subsection{What ``faithful'' has to mean here}
+
+This paper uses two instruments, and it matters which claim rests on which. The
+first is the three-phase instantiation described below; it carries the
+quantitative results of Sections~\ref{sec:synthetic} and~\ref{sec:realsystem}.
+The second is a direct execution of the library's own relations---their source
+unmodified, with the build configuration and a replay harness added---supplying
+the system configuration and crawl snapshot that the library does not
+ship; it carries one qualitative claim---that the published code, run, produces
+the false proof we predict---and is reported in Section~\ref{sec:native-run}.
+
+Neither instrument is a benchmark. We report no sensitivity and no specificity
+attributable to \mbox{MST-wi}, and the run-level statements we do make are
+qualitative and confined to Section~\ref{sec:native-run}.
+
+Faithfulness therefore has to be argued, and it has three parts. First, the
+predicates are evaluated against a reachability model \emph{recorded before the
+MR executes}, because that is how the two-stage architecture defines them.
+Second, the adjudication follows the definition we give in
+Section~\ref{sec:metrics}: an MR fires, and the verdict may be an alarm, a
+pass, or an abstention. Third, and most importantly, the design admits a
+\emph{control that consumes the same observable quantity as the MR}, so that the
+question ``does the metamorphic step carry work?'' can be answered without a
+straw man.
+
+\subsection{The three phases}
+
+Figure~\ref{fig:protocol} shows the protocol.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\linewidth]{fig1_protocol.pdf}
+\caption{The three-phase instantiation. Phase~1 records the reachability model
+and freezes it; phase~2 changes an entitlement through a channel outside the
+crawled interface; phase~3 executes the MR, whose predicates consult the frozen
+model. The middle phase is the one the original design does not exercise, and it
+is where the reachability stand-in becomes wrong.}
+\label{fig:protocol}
+\end{figure}
+
+\begin{enumerate}
+\item \textbf{Crawl.} We record, for each subject and each object in the
+      topology, whether the subject can reach the object through the interface,
+      and freeze that record. This is the reachability model the predicates
+      will consult.
+\item \textbf{Change authorization out of band.} We alter the entitlement of a
+      (subject, object) pair through a channel outside the crawled interface.
+      The application's own behavior is what changes; the frozen model is not
+      updated, because the architecture has no mechanism to update it.
+\item \textbf{Execute the MR.} We run the MR against the current system state
+      while the predicates consult the frozen model.
+\end{enumerate}
+
+Phase~2 is what the original evaluation does not exercise, and it is precisely
+where the reachability stand-in can be wrong. Figure~\ref{fig:boundaries}
+relates this to the boundaries of Section~\ref{sec:boundaries}.
+
+\subsection{Adjudicator variants and internal controls}
+
+The MRs in question emit a raw alarm when the relation is violated. Turning a
+raw alarm into a verdict requires a policy for exceptions, and different
+policies are different methods. We therefore evaluate several:
+
+\begin{itemize}
+\item \textbf{v1 (raw).} Any raw alarm is reported as
+      \texttt{violation-proven}.
+\item \textbf{v2 (exception-aware).} Known legitimate-sharing exceptions are
+      filtered before reporting.
+\item \textbf{v3 (state-calibrated).} The adjudicator additionally consults an
+      authorization introspection surface when one is readable, and abstains
+      when it is not.
+\item \textbf{\texttt{degrade\_all}.} The floor: abstain on every raw alarm.
+      This method has \ResVdDegradeallFalseAlarm{} false proofs and
+      \ResVdDegradeallKeepRate{} detection-keep rate, and no method is
+      interesting unless it keeps some detection that \texttt{degrade\_all}
+      throws away.
+\item \textbf{\texttt{direct\_only}.} Consume \emph{only} an observable
+      authorization surface, ignoring the access outcome. We include it to
+      document a mistake: a control that ignores the access result is a straw
+      man, and we show below that it is one.
+\item \textbf{\texttt{direct\_observe}.} A plain request that succeeds, checked
+      against the same readable authorization surface. This is the control that
+      consumes the same observable quantity as the MR family, and it is the one
+      that decides the negative result.
+\end{itemize}
+
+\subsection{Scenario matrix and configuration axes}
+
+The scenarios are constructed to separate the reasons an MR can misfire:
+
+\begin{itemize}
+\item \textbf{S1, S2}---no shared object; control cases with no legitimate
+      exception available.
+\item \textbf{S3}---a legitimate share created through the framework's own
+      sharing facility, so the share is visible in the framework's log.
+\item \textbf{S4}---an unshared object; the plain violation case.
+\item \textbf{S5}---a read-only share exists, and the violation is a write:
+      entitlement to read does not imply entitlement to write.
+\item \textbf{S6}---a legitimate share created \emph{out of band}, so no
+      framework log record exists.
+\item \textbf{S7}---an out-of-band share \emph{plus} a genuine violation.
+\end{itemize}
+
+Each scenario is crossed with a configuration whose axes are the instantiation
+mode, whether the application enforces authorization correctly or violates it,
+the visibility of the sharing channel, and whether the authorization
+introspection surface is enabled. The full matrix is
+\ResSynRecords{} records with \ResSynErrors{} errors
+(\ResSynOk{} usable), over \ResSynConfigs{} configuration labels.
+
+\subsection{Statistical treatment}
+\label{sec:stats}
+
+We state the statistical basis here rather than in a footnote, because it
+constrains how every number in Sections~\ref{sec:synthetic} and
+\ref{sec:realsystem} may be read.
+
+\paragraph{The independent unit is the design cell, not the record} The
+\ResSynRecords{} records are not \ResSynRecords{} independent observations. They
+are the deterministic expansion of \ResDesignCells{} design cells---pairs of
+(scenario, configuration)---crossed with \ResDesignMrs{} MRs, and, within a
+cell, with \ResDesignPrecondVariants{} exception-policy variants and
+\ResDesignGuiModes{} reachability readings, giving
+\ResDesignMinPerCell{}--\ResDesignMaxPerCell{} records per cell. The two inner
+axes are switches we deliberately throw, not replications. Records inside a cell
+share the object graph, the setup and the ground truth.
+
+\paragraph{Consequence for intervals} Every interval we report is a Wilson
+score interval (for a proportion) or a Newcombe hybrid-score interval (for a
+difference of proportions), computed by our own code in
+\texttt{compute\_all.py}; we did not use \texttt{scipy}, which was unavailable
+in our environment. Because the design is a fixed enumeration rather than an
+i.i.d.\ sample, these intervals are \emph{conventional} and systematically
+\emph{narrow}. We therefore report, for every count, both the number of records
+and the number of design cells behind it, and we use the intervals to convey
+magnitude and direction only. We make no cross-method significance claim on the
+strength of a record-level interval.
+
+\paragraph{Multiplicity} The comparisons in this paper are descriptive. We
+report no corrected family of tests, with one exception: a single prespecified
+contrast, the recall difference between \texttt{direct\_observe} and v3
+(Section~\ref{sec:synthetic}). A narrow interval makes a difference \emph{easier}
+to declare significant, so the non-significance of that single contrast is
+robust to the optimism noted above.
+
+\paragraph{Effective replication} The replication available to us is: one
+constructed system, \ResDesignCells{} design cells, \ResDesignMrs{} MRs and one
+real system. The ceiling on any generalization to ``\mbox{MST-wi}'s MRs'' is
+therefore the number of MRs we instantiated, namely \ResDesignMrs{}.
+
+\paragraph{Small-denominator counts} Several of our headline counts have very
+small denominators---the anchored false-proof rate is
+\ResFpEthreeHits{}/\ResFpEthreeTotal{}, whose interval
+[$[\ResFpEthreeLo{}\%, \ResFpEthreeHi{}\%]$] is wide by construction. Where a
+larger-denominator count of the same phenomenon exists we lead with that
+count instead, and we never present a small-denominator rate in the absence of
+its interval.

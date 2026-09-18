@@ -1,0 +1,168 @@
+{
+  "users": [
+    "alice",
+    "bob"
+  ],
+  "base_target": 160,
+  "mode": "augmented",
+  "gitea": {
+    "base": "http://127.0.0.1:3311",
+    "ready_ms": 1234,
+    "version": "1.22.6"
+  },
+  "channel": {
+    "channel": "api",
+    "evidence": []
+  },
+  "data": {
+    "base_inputs": 160,
+    "store_files": 200,
+    "pairing_entries": 160,
+    "pairing_sample": {},
+    "snapshot_size": {
+      "alice": 10,
+      "bob": 8
+    },
+    "oob_grants": [
+      {
+        "repo": "alice/s1",
+        "grantee": "bob",
+        "perm": "write"
+      },
+      {
+        "repo": "carol/s1",
+        "grantee": "eve",
+        "perm": "write"
+      },
+      {
+        "repo": "acme/t1",
+        "grantee": "frank",
+        "perm": "read"
+      }
+    ],
+    "key_cell": {
+      "repo": "alice/s1",
+      "grantee": "bob",
+      "in_snapshot_of_grantee": false
+    }
+  },
+  "engine": {
+    "mode": "augmented",
+    "base_inputs": 160,
+    "derived_inputs": 160,
+    "derive_failed": 0,
+    "input_view_size": 320,
+    "chunk_size_floor_div_160": 2,
+    "groups_sample": [],
+    "mrs": [
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_001",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 10,
+        "ms": 100,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_001b",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 11,
+        "ms": 101,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_001b2",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 12,
+        "ms": 102,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_002",
+        "status": "executed",
+        "fired": 7,
+        "http_calls": 13,
+        "ms": 103,
+        "failure_samples": [
+          "Input(2) ... http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md"
+        ]
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_002a",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 14,
+        "ms": 104,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_002b",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 15,
+        "ms": 105,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_002c",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 16,
+        "ms": 106,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_002d",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 17,
+        "ms": 107,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_002e",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 18,
+        "ms": 108,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_003",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 19,
+        "ms": 109,
+        "failure_samples": []
+      },
+      {
+        "mr": "smrl.mr.owasp.OTG_AUTHZ_004",
+        "status": "executed",
+        "fired": 0,
+        "http_calls": 20,
+        "ms": 110,
+        "failure_samples": []
+      }
+    ],
+    "counters": {
+      "cannotReachThroughGUI_url_calls": 900,
+      "cannotReachThroughGUI_url_true": 700,
+      "cannotReachThroughGUI_input_calls": 10,
+      "cannotReachThroughGUI_input_true": 8,
+      "isSupervisorOf_calls": 40,
+      "isSupervisorOf_true": 0,
+      "userCanRetrieveContent_calls": 0,
+      "userCanRetrieveContent_true": 0,
+      "http_calls_total": 150,
+      "http_memo_hits": 20
+    },
+    "crtg_cells": {
+      "true|bob|http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md": 3,
+      "false|alice|http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md": 1
+    }
+  },
+  "elapsed_s": 1700.5,
+  "log_tail": []
+}

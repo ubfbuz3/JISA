@@ -1,0 +1,97 @@
+{
+  "gogs_version": "0.14.3",
+  "lab_dir": "C:\\Users\\Administrator\\WorkBuddy\\gogs_lab\\inst_g7",
+  "note": "Gogs 无 /api/v1/version 与 swagger 端点；本表是逐端点实测状态码。",
+  "surface": [
+    {
+      "path": "/api/v1/version",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    },
+    {
+      "path": "/api/v1/swagger",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    },
+    {
+      "path": "/api/v1/repos/search",
+      "status": 200,
+      "snippet": "{\"data\": [], \"ok\": true}"
+    },
+    {
+      "path": "/api/v1/user",
+      "status": 200,
+      "snippet": "{\"id\": 1, \"username\": \"root\", \"login\": \"root\", \"full_name\": \"\", \"email\": \"root@lab.local\", \"avatar_url\": \"http://127.0.0.1:3312/avatars/1\"}"
+    },
+    {
+      "path": "/api/v1/user/repos",
+      "status": 200,
+      "snippet": "[]"
+    },
+    {
+      "path": "/api/v1/user/orgs",
+      "status": 200,
+      "snippet": "[]"
+    },
+    {
+      "path": "/api/v1/users/search",
+      "status": 200,
+      "snippet": "{\"data\": [], \"ok\": true}"
+    },
+    {
+      "path": "/api/v1/admin/users",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    },
+    {
+      "path": "/api/v1/orgs/{org}/repos",
+      "status": 404,
+      "snippet": ""
+    },
+    {
+      "path": "/api/v1/org/{org}/repos",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    },
+    {
+      "path": "/api/v1/orgs/{org}/teams",
+      "status": 404,
+      "snippet": ""
+    },
+    {
+      "path": "/api/v1/orgs/{orgname}",
+      "status": 404,
+      "snippet": ""
+    },
+    {
+      "path": "/api/v1/repos/{o}/{r}",
+      "status": 404,
+      "snippet": ""
+    },
+    {
+      "path": "/api/v1/repos/{o}/{r}/collaborators",
+      "status": 404,
+      "snippet": ""
+    },
+    {
+      "path": "/api/v1/repos/{o}/{r}/collaborators/{u}",
+      "status": 404,
+      "snippet": ""
+    },
+    {
+      "path": "/api/v1/repos/{o}/{r}/collaborators/{u}/permission",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    },
+    {
+      "path": "/api/v1/teams/{id}/members/{u}",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    },
+    {
+      "path": "/api/v1/teams/{id}/repos/{o}/{r}",
+      "status": 404,
+      "snippet": "<!DOCTYPE html>\n<html>\n<head data-suburl=\"\">\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n\t\n\t\t<meta name=\"author\" cont"
+    }
+  ]
+}

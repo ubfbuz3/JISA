@@ -1,0 +1,16 @@
+{
+  "searches": {
+    "BOLA BFLA 自动化检测技术全景": {
+      "folder": "/01-BOLA-BFLA 检测/",
+      "launch": "Launched deep search 'BOLA BFLA 自动化检测技术全景'. Call display_deep_search_results(search='/01-BOLA-BFLA 检测/BOLA BFLA 自动化检测技术全景') now so the user can follow its progress and see its results when it finishes (unless you're launching many deep searches as a batch).  When mentioning this deep search to the u"
+    },
+    "LLM 推断授权与访问控制语义": {
+      "folder": "/02-LLM 授权语义推理/",
+      "launch": "Launched deep search 'LLM 推断授权与访问控制语义'. Call display_deep_search_results(search='/02-LLM 授权语义推理/LLM 推断授权与访问控制语义') now so the user can follow its progress and see its results when it finishes (unless you're launching many deep searches as a batch).  When mentioning this deep search to the user, inclu"
+    },
+    "Security Oracle 与差分测试": {
+      "folder": "/03-Oracle 与差分测试/",
+      "launch": "Launched deep search 'Security Oracle 与差分测试'. Call display_deep_search_results(search='/03-Oracle 与差分测试/Security Oracle 与差分测试') now so the user can follow its progress and see its results when it finishes (unless you're launching many deep searches as a batch).  When mentioning this deep search to t"
+    }
+  }
+}

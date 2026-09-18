@@ -1,0 +1,426 @@
+{
+  "note": "direct-only = 不消费 MR 观测，仅查询 SUT 授权自省面；用于检验 MR 触发步骤是否必要",
+  "tally": {
+    "v1": {
+      "TN": 300,
+      "TP": 198,
+      "FP": 60,
+      "FN": 18
+    },
+    "v2": {
+      "TN": 300,
+      "TP": 213,
+      "FP": 60,
+      "FN": 3
+    },
+    "v3": {
+      "TN": 360,
+      "FN": 111,
+      "TP": 105,
+      "FP": 0
+    },
+    "degrade_all": {
+      "TN": 360,
+      "FN": 216,
+      "TP": 0,
+      "FP": 0
+    },
+    "direct": {
+      "TN": 252,
+      "FN": 108,
+      "FP": 108,
+      "TP": 108
+    }
+  },
+  "per_scenario": {
+    "v1": {
+      "S1": {
+        "TN": 48,
+        "TP": 48
+      },
+      "S2": {
+        "TN": 48,
+        "TP": 48
+      },
+      "S3": {
+        "TN": 84,
+        "TP": 12
+      },
+      "S4": {
+        "TN": 48,
+        "TP": 48
+      },
+      "S5": {
+        "TN": 24,
+        "TP": 6,
+        "FN": 18
+      },
+      "S6": {
+        "FP": 60,
+        "TN": 12
+      },
+      "S7": {
+        "TN": 36,
+        "TP": 36
+      }
+    },
+    "v2": {
+      "S1": {
+        "TN": 48,
+        "TP": 48
+      },
+      "S2": {
+        "TN": 48,
+        "TP": 48
+      },
+      "S3": {
+        "TN": 84,
+        "TP": 12
+      },
+      "S4": {
+        "TN": 48,
+        "TP": 48
+      },
+      "S5": {
+        "TN": 24,
+        "TP": 21,
+        "FN": 3
+      },
+      "S6": {
+        "FP": 60,
+        "TN": 12
+      },
+      "S7": {
+        "TN": 36,
+        "TP": 36
+      }
+    },
+    "v3": {
+      "S1": {
+        "TN": 48,
+        "FN": 24,
+        "TP": 24,
+        "FP": 0
+      },
+      "S2": {
+        "TN": 48,
+        "FN": 24,
+        "TP": 24,
+        "FP": 0
+      },
+      "S3": {
+        "TN": 84,
+        "FN": 12,
+        "TP": 0,
+        "FP": 0
+      },
+      "S4": {
+        "TN": 48,
+        "FN": 24,
+        "TP": 24,
+        "FP": 0
+      },
+      "S5": {
+        "TN": 24,
+        "FN": 15,
+        "TP": 9,
+        "FP": 0
+      },
+      "S6": {
+        "TN": 72,
+        "TP": 0,
+        "FP": 0,
+        "FN": 0
+      },
+      "S7": {
+        "TN": 36,
+        "TP": 24,
+        "FN": 12,
+        "FP": 0
+      }
+    },
+    "degrade_all": {
+      "S1": {
+        "TN": 48,
+        "FN": 48
+      },
+      "S2": {
+        "TN": 48,
+        "FN": 48
+      },
+      "S3": {
+        "TN": 84,
+        "FN": 12
+      },
+      "S4": {
+        "TN": 48,
+        "FN": 48
+      },
+      "S5": {
+        "TN": 24,
+        "FN": 24
+      },
+      "S6": {
+        "TN": 72
+      },
+      "S7": {
+        "TN": 36,
+        "FN": 36
+      }
+    },
+    "direct": {
+      "S1": {
+        "TN": 24,
+        "FN": 24,
+        "FP": 24,
+        "TP": 24
+      },
+      "S2": {
+        "TN": 24,
+        "FN": 24,
+        "FP": 24,
+        "TP": 24
+      },
+      "S3": {
+        "TN": 84,
+        "FN": 12,
+        "TP": 0,
+        "FP": 0
+      },
+      "S4": {
+        "TN": 24,
+        "FN": 24,
+        "FP": 24,
+        "TP": 24
+      },
+      "S5": {
+        "TN": 12,
+        "FN": 12,
+        "FP": 12,
+        "TP": 12
+      },
+      "S6": {
+        "TN": 72,
+        "TP": 0,
+        "FP": 0,
+        "FN": 0
+      },
+      "S7": {
+        "FP": 24,
+        "TP": 24,
+        "TN": 12,
+        "FN": 12
+      }
+    }
+  },
+  "probe_cache": {
+    "V-E3-vuln0-listed|S1": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-listed|S2": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-listed|S3": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln0-listed|S4": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-listed|S5": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln0-listed|S6": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln0-listed|S7": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S1": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S2": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S3": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S4": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S5": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S6": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted|S7": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln0-unlisted-nointro|S1": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln0-unlisted-nointro|S2": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln0-unlisted-nointro|S3": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln0-unlisted-nointro|S4": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln0-unlisted-nointro|S5": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln0-unlisted-nointro|S6": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln0-unlisted-nointro|S7": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-listed|S1": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-listed|S2": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-listed|S3": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln1-listed|S4": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-listed|S5": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln1-listed|S6": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln1-listed|S7": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S1": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S2": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S3": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S4": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S5": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S6": {
+      "read": "covering",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted|S7": {
+      "read": "none",
+      "write": "none"
+    },
+    "V-E3-vuln1-unlisted-nointro|S1": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-unlisted-nointro|S2": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-unlisted-nointro|S3": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-unlisted-nointro|S4": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-unlisted-nointro|S5": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-unlisted-nointro|S6": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-E3-vuln1-unlisted-nointro|S7": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln0|S1": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln0|S2": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln0|S3": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln0|S4": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln0|S5": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln1|S1": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln1|S2": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln1|S3": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln1|S4": {
+      "read": "unavailable",
+      "write": "unavailable"
+    },
+    "V-noE3-vuln1|S5": {
+      "read": "unavailable",
+      "write": "unavailable"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "_inputs": {
+    "experiments/results/raw_matrix.jsonl": "c72a3083975f24cf",
+    "experiments/results/ablation_direct_observe.json": "408027b3f4abaf4c",
+    "experiments/real_system/results/real_system.json": "db9669436bfb4eac"
+  },
+  "_rule": "所有数据点来自 metrics.json 与其上游真实运行记录；图形为 matplotlib 矢量绘制或 figure-spec 确定性 SVG，**无任何图像生成模型参与像素**。",
+  "fig4_methods": {
+    "pdf": {
+      "sha256": "1d9428ba99180eb4",
+      "bytes": 17071
+    },
+    "svg": {
+      "sha256": "2476ad997e21dce0",
+      "bytes": 73349
+    },
+    "png": {
+      "sha256": "bed505d8e649a7c5",
+      "bytes": 137901
+    }
+  },
+  "fig3_strata": {
+    "pdf": {
+      "sha256": "5912e2d0fa01229d",
+      "bytes": 14604
+    },
+    "svg": {
+      "sha256": "9674f1e1a0256af8",
+      "bytes": 61940
+    },
+    "png": {
+      "sha256": "7ec4d302f86aebe0",
+      "bytes": 131919
+    }
+  },
+  "fig2_scenarios": {
+    "pdf": {
+      "sha256": "77ba5e194c579ad5",
+      "bytes": 14929
+    },
+    "svg": {
+      "sha256": "98dc616a68c98be7",
+      "bytes": 61562
+    },
+    "png": {
+      "sha256": "c5216ddc954afc6b",
+      "bytes": 99163
+    }
+  },
+  "fig5_real_system": {
+    "pdf": {
+      "sha256": "e4eda4e8ab466e38",
+      "bytes": 17067
+    },
+    "svg": {
+      "sha256": "80e155f83cfe99e9",
+      "bytes": 78337
+    },
+    "png": {
+      "sha256": "bbd909bebbfee782",
+      "bytes": 122833
+    }
+  },
+  "fig6_endogenous_control": {
+    "pdf": {
+      "sha256": "ce46d883aff48347",
+      "bytes": 17844
+    },
+    "svg": {
+      "sha256": "4b439eccc6afe93c",
+      "bytes": 41935
+    },
+    "png": {
+      "sha256": "714232235ec6befa",
+      "bytes": 61355
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "title": "Three-phase faithful instantiation of the metamorphic-relation protocol",
+  "canvas": {
+    "width": 900,
+    "height": 300
+  },
+  "style": {
+    "font_family": "DejaVu Sans, Helvetica, Arial, sans-serif",
+    "font_size": 14,
+    "bg_color": "#FFFFFF"
+  },
+  "nodes": [
+    {
+      "id": "phaseA",
+      "label": "Phase A\nCrawl",
+      "sublabel": "freeze the GUI-reachability model",
+      "x": 135,
+      "y": 86,
+      "width": 190,
+      "height": 76,
+      "shape": "rounded",
+      "fill": "#E6F1FB",
+      "stroke": "#185FA5",
+      "text_color": "#042C53"
+    },
+    {
+      "id": "phaseB",
+      "label": "Phase B\nMutate",
+      "sublabel": "grant access out of band",
+      "x": 450,
+      "y": 86,
+      "width": 190,
+      "height": 76,
+      "shape": "rounded",
+      "fill": "#FAEEDA",
+      "stroke": "#854F0B",
+      "text_color": "#412402"
+    },
+    {
+      "id": "phaseC",
+      "label": "Phase C\nExecute MR",
+      "sublabel": "evaluate predicates vs. frozen model",
+      "x": 765,
+      "y": 86,
+      "width": 190,
+      "height": 76,
+      "shape": "rounded",
+      "fill": "#E6F1FB",
+      "stroke": "#185FA5",
+      "text_color": "#042C53"
+    },
+    {
+      "id": "outcome",
+      "label": "Legitimate access granted after Phase A looks GUI-unreachable\n→ the exception predicate is not discharged → false proof",
+      "x": 450,
+      "y": 232,
+      "width": 800,
+      "height": 68,
+      "shape": "rounded",
+      "fill": "#FCEBEB",
+      "stroke": "#A32D2D",
+      "text_color": "#501313"
+    }
+  ],
+  "edges": [
+    {
+      "from": "phaseA",
+      "to": "phaseB",
+      "label": "snapshot\nfrozen",
+      "color": "#555555"
+    },
+    {
+      "from": "phaseB",
+      "to": "phaseC",
+      "label": "authorization\nchanged",
+      "color": "#555555"
+    },
+    {
+      "from": "phaseC",
+      "to": "outcome",
+      "label": "staleness",
+      "style": "dashed",
+      "color": "#A32D2D"
+    }
+  ],
+  "labels": [
+    {
+      "text": "predicates read crawler-recorded reachability (userCanRetrieveContent, cannotReachThroughGUI)",
+      "x": 450,
+      "y": 30,
+      "font_size": 12,
+      "color": "#5F5E5A",
+      "anchor": "middle"
+    }
+  ]
+}

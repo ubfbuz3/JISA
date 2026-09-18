@@ -1,0 +1,37 @@
+% 由 analysis/ingest_gitlab.py 自动生成 —— 勿手改
+\begin{table}[t]
+\centering
+\small
+\caption{Cross-vendor replication under the identical three-phase protocol
+(crawl, out-of-band authorization change, adjudicate) on Gitea
+\ResRsVersion{}, Gogs \GgVersion{}, and GitLab \GlVersion{}. Counts are per
+reading of the same \ResRsCellsSnapshot{}-cell grid; the live reading is
+given in parentheses where both exist. The snapshot reading is the operating
+point of the published relations. Gitea and Gogs share lineage
+(fork, 2016); GitLab shares none. The team-derived row is read out of the
+per-system oracle false negatives by channel (Section~\ref{sec:gogs}). The
+Gitea grant count here is the \emph{normalised} M1 census (semantically
+equivalent routes merged, non-authorization grant surface excluded), and
+therefore differs from the raw route count in Table~\ref{tab:rs-m1}; the two
+tables use different normalisations and are not in conflict.}
+\label{tab:gogs-cross}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+ & Gitea \ResRsVersion{} & Gogs \GgVersion{} & GitLab \GlVersion{} \\
+\midrule
+API entries in pinned version (M1 denominator) & 253 & 80 & 1357 \\
+Grant endpoints (M1) & 13 & 10 & 18 \\
+\;of which usable without site admin & 10 & 4 & 17 \\
+Owner-vantage oracle readable & 48 & 48 & 48 \\
+\;oracle agrees with actual access & 48 & 31 & 30 \\
+\;oracle wrong (false negatives) & 0 & 17 & 18 \\
+\;oracle wrong: team-derived access missed & 0 & 4 & 0 \\
+Subject-vantage oracle readable & 8 & 35 & 48 \\
+Reachability mismatch, snapshot (live) & 10 (0) & 19 (13) & 10 (0) \\
+False proofs: bookkeeping alarm, snapshot (live) & 10 (0) & 11 (5) & 10 (0) \\
+False proofs: v3 (oracle-gated), snapshot (live) & 0 (0) & 8 (5) & 5 (0) \\
+False proofs: direct-only (oracle only) & 0 (0) & 17 (17) & 18 (18) \\
+False proofs: direct-observe (oracle $\wedge$ request) & 0 (0) & 17 (17) & 18 (18) \\
+\bottomrule
+\end{tabular}
+\end{table}

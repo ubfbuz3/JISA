@@ -1,0 +1,148 @@
+\section{Introduction}
+\label{sec:intro}
+
+Broken object-level authorization (BOLA), ranked first in the OWASP API Security
+Top~10~\cite{OWASP2023API1}, is the failure to enforce, per object, that the
+authenticated subject is entitled to the object being touched. It is attractive
+to attackers precisely because the request is well formed and the endpoint is
+reachable: only the \emph{entitlement} is wrong.
+
+Detecting it is an \emph{oracle} problem. A test that fires a request and reads
+the response cannot, by itself, tell a legitimate access from an illegitimate
+one, because a vulnerable system answers both with the same success status. The
+standard answer in the literature is \emph{metamorphic testing}: instead of
+asserting an expected output, assert a relation that must hold across several
+executions. \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic} is the most
+developed instance of this idea for Web systems. It contributes a catalog of
+\ResLitMrCatalog{} system-agnostic metamorphic relations (MRs) written in a
+domain-specific language whose vocabulary contains
+\ResLitSmrlFunctions{} Web-specific predicates, and it reports that it
+``automatically detected \ResLitReportedDetection{}\% of their vulnerabilities''
+with a specificity of \ResLitReportedSpecPct{}\%.
+
+This paper is about what happens to that claim when the object of the assertion
+is \emph{object-level authorization}. Our starting observation is not a
+measurement but a reading of the relations themselves. To decide
+object-level authorization, an MR must know whether the acting subject is
+entitled to the object. \mbox{MST-wi}'s predicates do not express entitlement;
+they express what its own authors describe as reachability---what ``the
+functionality exposed by the user interface'' permits. The authors are explicit
+that this is a stand-in, and that the information it stands in for can be
+missing: to determine the test outcome, ``we need a mapping between roles and
+resources, \textbf{which is not always available}''~\cite{Chaleshtari2022Metamorphic}.
+We take that sentence as our premise rather than our finding.
+
+If the adjudication of an MR is delegated to a \emph{reachability} model, then
+the model's reading of the system---and in particular the moment at which it was
+read---becomes part of the specification. We therefore instantiate the
+predicates \emph{as they are defined}, i.e.\ relative to a reachability model
+recorded at crawl time, and we drive the system through three phases: crawl,
+change authorization out of band, then execute the MR. The middle phase is the
+one the original design does not exercise, because in its evaluation the
+authorization state is stable across the crawl and the run.
+
+Under that faithful instantiation we run a
+\ResSynRecords{}-instance factorial
+study over a constructed system, and a controlled study on Gitea
+\ResRsVersion{}. We do not propose a new mechanism; an earlier iteration of this
+work did, and our own ablation killed it (Section~\ref{sec:synthetic},
+Block~9). What survives is a characterisation of where the MR family stops
+being informative, stated as three boundaries: two that squeeze the technique
+from either side, and a third in the metric that would otherwise have reported
+it.
+
+\begin{enumerate}
+\item \textbf{The adjudication as designed produces deterministic false proofs.}
+      Taken as published---raw alarms, or alarms filtered by bookkeeping
+      exceptions---it reports a legitimate access granted out of band after the
+      crawl as an already-established violation: a \emph{false proof} at rate
+      \ResObsOobVtwoFpRate{} on the out-of-band scenario
+      (\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} alarms) and at rate
+      \ResRsMrBookkeepingFpRate{} on Gitea
+      (\ResRsMrBookkeepingFp{} of \ResRsAuthorizedCells{} authorized cells). The
+      direction is deterministic rather than noisy, because the predicate has
+      only two representations available and one of them cannot describe an
+      out-of-band grant.
+\item \textbf{When a sound, readable authorization oracle is available, the
+      metamorphic step is not empirically necessary in our evaluated scenarios.}
+      Repairing (i) by consulting a readable introspection surface
+      works, but it is the \emph{oracle} that does the work, not the relation:
+      replacing the metamorphic step with a single ordinary request changes
+      nothing measurable---false proofs \ResAbDirectObserveFP{} against
+      \ResAbVThreeFP{}, recall \ResAbDirectObserveRec{} against
+      \ResAbVThreeRec{}.       We report \emph{point-estimate non-inferiority}---a descriptive
+      comparison, not a formal non-inferiority test (no margin was fixed in
+      advance)---and not domination: the difference of \ResAbRecallDiff{} is not
+      distinguishable
+      from zero (95\% CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$). On the
+      \ResAbDisagreementN{} records where the two methods disagree it is the
+      MR-based method that errs, its reachability precondition blocking a
+      detection the plain request makes.
+\item \textbf{The reported specificity rests on an undeclared premise and on a
+      low-resolution denominator.} The premise is that the reachability model
+      coincides with the true authorization state; the denominator is the count
+      of generated \emph{inputs}, which is structurally insensitive to a failure
+      that is uniform across a whole scenario class.
+\end{enumerate}
+
+The boundaries are not a claim that \mbox{MST-wi} is wrong. Two of them are
+anticipated in the original literature: the reachability stand-in is announced,
+and the predecessor design attributes its own residual false alarms to crawler
+coverage of ``all URLs for all users''~\cite{Mai2019Metamorphic}. Our
+contribution is to locate the failure \emph{mechanically}---it is a function of
+\emph{when} the reachability model was read, not of \emph{which} objects are
+visible---and to attach it to the reported metric.
+
+\paragraph{Research questions}
+The characterisation is organised around three research questions, one per
+boundary. \textbf{RQ1} (temporal): does a crawl-time GUI-reachability proxy
+systematically misclassify authorisation changes that occur after the crawl?
+\textbf{RQ2} (oracle): when a sound, readable authorisation oracle is available,
+does metamorphic adjudication provide measurable benefit over a direct request
+that consumes the same observable? \textbf{RQ3} (measurement): can an
+input-level specificity metric reveal failures that are uniform at the scenario
+level?
+
+\paragraph{Contributions}
+\begin{enumerate}
+\item A three-phase instantiation of \mbox{MST-wi}'s reachability predicates
+      that makes the crawl-time reading explicit, together with two internal
+      control methods that consume the same observables and therefore bound any
+      claim about the MR step (Section~\ref{sec:protocol}).
+\item A \ResSynRecords{}-instance factorial study
+      (\ResSynErrors{} errors) whose design has \ResDesignCells{} independent
+      cells and \ResDesignMrs{} MRs, reported at that granularity
+      (Section~\ref{sec:synthetic}).
+\item A controlled study on Gitea \ResRsVersion{} in which the mismatch appears
+      under a crawl-time reading (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{})
+      and never under a live reading (\ResRsMismatchLive{}/\ResRsMismatchDenom{}),
+      locating the mechanism in time rather than in visibility; and in which the
+      oracle that would discharge the premise is readable from the
+      owner/administrator vantage (\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{})
+      but never from a black-box subject's own vantage
+      (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{})
+      (Section~\ref{sec:realsystem}).
+\item A replication of the same protocol on Gogs \GgVersion{} and GitLab
+      \GlVersion{}---one lineage-related, one independent---where the only
+      readable oracles are readable but unsound, wrong on \GgOracleWrong{}
+      (Gogs) and \GlOracleWrong{} (GitLab) of \GgCells{} cells, and the
+      oracle-gated adjudicators convert those blind spots into \GgFpVthree{}
+      and \GlFpVthree{} (v3) false proofs that the sound oracle of Gitea
+      never produced (Section~\ref{sec:gogs}).
+\item An execution of the library's own authorization relations---their source
+      unmodified, with the build configuration (\texttt{pom.xml}) and a replay
+      harness added---against that system: the legitimate entitlement granted
+      after the crawl is
+      answered ``cannot reach'' \NtKeyCrtgTrue{} times and \NtKeyMrFired{}
+      relations raise an alarm on it, so the false proof is attributable to the
+      published code rather than to our reading of it
+      (Section~\ref{sec:native-run}).
+\item One negative result: for this problem the MR step carries no work that a
+      plain request does not carry, and we show it with a control that consumes
+      the same observable quantity, rather than with a straw man
+      (Section~\ref{sec:synthetic}, Block~9).
+\end{enumerate}
+
+Section~\ref{sec:boundaries} states the three boundaries and the condition under
+which the first of them may be lifted; Section~\ref{sec:threats} lists what our
+evidence cannot support.
