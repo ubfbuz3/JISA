@@ -10,7 +10,7 @@ and say what would falsify it.
 \includegraphics[width=0.98\linewidth]{fig7_boundaries.pdf}
 \caption{The three boundaries against the protocol of Figure~\ref{fig:protocol}.
 Boundary~1 is the deterministic false proof produced by the adjudication as
-designed; boundary~2 is the emptiness of the obvious repair---once a readable
+designed; boundary~2 is the emptiness of the natural repair---once a readable
 oracle exists, the metamorphic step is not empirically necessary; boundary~3 is the conditional
 nature of the specificity figure computed over the reachability model.}
 \label{fig:boundaries}
@@ -79,8 +79,9 @@ against \ResAbVThreeFP{} as an advantage has misread us.
 The second is the honest arithmetic on that surviving difference. The recall
 difference is \ResAbRecallDiff{} with 95\% CI
 $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$, which includes zero, so
-\texttt{direct\_observe} is \emph{not} demonstrated to be better. It is
-demonstrated to be \emph{not worse}, and that is already decisive, because for
+\texttt{direct\_observe} is \emph{not} demonstrated to be better. We found no
+measurable advantage of the metamorphic step over direct observation in these
+oracle-available scenarios, and that absence is already decisive, because for
 the metamorphic step to carry work it would have to be better at something the
 plain request cannot do. It is not: on the \ResAbDisagreementN{} records where
 the two methods differ, the MR-based method is the one that fails, its
@@ -90,8 +91,8 @@ The third is that the control is \emph{constructed}, not discovered. The two
 observables \texttt{direct\_observe} consumes---the request succeeded, and the
 authorization surface reports no entitlement---are definitionally the same
 quantities that define the ground truth. The comparison is therefore a
-statement about the definitions, and it must be read as one: we do not claim a
-formal non-inferiority result, because no margin was fixed in advance; when the
+statement about the definitions, and it must be read as one: because no margin
+was fixed in advance, we do not read it as a formal hypothesis-test result; when the
 oracle is readable, the metamorphic relation has nothing left to compute. This is also why
 we do not present it as a competing method.
 
@@ -293,7 +294,8 @@ aborts with no request issued at all---the engine's own reporting path
 dereferences an input slot its guard never bound---and that is the one missing
 from the executed count, shown as \texttt{error} in Table~\ref{tab:native}. We therefore read the alarms as
 originating in the gate, not as a count of how many published relations a full
-replay would flag. And Gitea is correct, so the run can only exhibit false
+replay would flag. And Gitea, on the tested endpoints and transitions, enforced
+the expected decisions, so the run can only exhibit false
 proofs: it cannot measure detection.
 
 \begin{table}[t]
@@ -341,8 +343,8 @@ oracle directly and drops the relation (Boundary~2); where it does not, the
 honest method abstains, as v3 does on the unreadable stratum, where it keeps
 \ResIntroOffVthreeKeepRate{} of the detections the exception-aware method keeps
 and abstains \ResIntroOffAbstain{} times. We note that in that stratum the
-aggregate table would have shown v3 as the best method in the study. It is not
-better; it has stopped answering.
+aggregate table would have shown v3 as the best method in the study, but that
+ranking reflects abstention rather than improved detection.
 
 \subsection{What would falsify each boundary}
 

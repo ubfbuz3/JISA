@@ -55,10 +55,10 @@ scenario-uniform failure---does not depend on the exact count.
 in Section~\ref{sec:stats}, the \ResSynRecords{} records expand
 \ResDesignCells{} cells by \ResDesignMrs{} MRs and by two switches that we throw
 deliberately. Records inside a cell are not independent. All intervals in this
-paper are consequently conventional and optimistic, which makes our
-\emph{negative} finding---non-significance of the recall difference in
-Boundary~2---conservative rather than fragile: a narrower interval only makes a
-difference easier to call significant, and we still cannot call ours.
+paper are therefore reported \emph{descriptively}: because records within a
+design cell are not independent, they do not support a formal hypothesis-test
+reading, and the recall difference in Boundary~2 in particular is not a test
+outcome. The paper's conclusions do not rest on statistical significance.
 
 \paragraph{Two MRs, and a catalog of one family} We instantiated
 \ResDesignMrs{} MRs, both from the same family---authorization relations whose
@@ -83,11 +83,12 @@ reading of the predicate semantics, so this bounds implementation accident only.
 It does not bound a shared misreading, and we do not present it as
 corroboration.
 
-\paragraph{Real systems, all correct, none vulnerable} The real-system study
+\paragraph{Real systems, none vulnerable on the tested surface} The real-system study
 spans three systems---Gitea \ResRsVersion{}, Gogs \GgVersion{} (lineage-related:
 Gitea forked from Gogs in 2016), and GitLab \GlVersion{}
 (no lineage)---chosen for accessibility rather than for representativeness, and
-none contains an object-level authorization vulnerability. The experiment
+on the endpoints and authorization transitions exercised, none presented an
+object-level authorization vulnerability. The experiment
 therefore measures only the false-proof side and cannot speak to detection on a
 vulnerable real system. The replication is across git forges, one domain; it is
 not a sample of web applications at large.

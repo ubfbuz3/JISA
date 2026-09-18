@@ -313,8 +313,9 @@ $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$, includes zero).}
 v3's \ResAbVThreeRec{}. The recall difference of \ResAbRecallDiff{} is not
 distinguishable from zero (95\% CI
 $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$), so the correct description is
-a \emph{descriptive, point-estimate} comparison, not domination; we do not claim
-a formal non-inferiority test (no margin was pre-specified), and the descriptive
+a \emph{descriptive, point-estimate} comparison, not domination; because no
+margin was pre-specified, no formal hypothesis-test claim attaches to it, and
+the descriptive
 comparison is already enough to answer the question, because the two methods
 disagree on only
 \ResAbDisagreementN{} of the records. On every one of those, v3 does not fire
@@ -388,9 +389,16 @@ $S_{\mathrm{input}} = 1 - (f a) / (f a + s m)$. As $m \to \infty$ the fraction
 tends to $0$, so $S_{\mathrm{input}} \to 1$, whereas the scenario-level figure
 depends only on the fixed counts $f$ and $s$. \hfill $\square$
 
-The metric is therefore not merely imprecise: it is structurally blind to a
-failure mode that is uniform across a scenario class, and adding unaffected
-inputs cannot restore that resolution.
+\smallskip
+\noindent\textbf{Corollary.} No fixed input-level specificity threshold
+$t < 1$ can guarantee detection of a scenario-uniform failure class: choosing
+$m > (\mathit{fa}/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
+the $f$ failing scenarios remain failing. \hfill $\square$
+
+The metric is therefore not merely imprecise: it is arbitrarily dilutable
+with respect to a failure mode that is uniform across a scenario class---adding
+unaffected inputs drives it toward $1$ without touching the failure---so it
+lacks stable scenario-level resolution.
 
 \subsection{Second implementation}
 

@@ -49,13 +49,12 @@ prevalence estimate.
 
 \paragraph{LLM-based vulnerability detection and specification inference} Large
 language models are used broadly for vulnerability
-detection~\cite{Guo2022HyVulDect,Lu2024GRACE,Yang2024DLAP,Mao2025Towards,Yin2024Multitask,Ehrenberg2024Python,Fu2023AIBugHunter,Liu2024Enhancing,Senanayake2024Defendroid,Mechri2024SecureQwen},
-and there are efforts to extract privilege-related facts or program
-specifications with their help~\cite{Wang2024A,Wen2024Enchanting}, including
+detection~\cite{Guo2022HyVulDect,Yang2024DLAP,Liu2024Enhancing}, and there are
+efforts to extract privilege-related facts or program specifications with their
+help~\cite{Wang2024A,Wen2024Enchanting}, including
 work measuring the reasoning boundaries of LLMs on implicit
-specifications~\cite{Wang2026Measuring,LeCong2025Can}. Rows in this literature
-are also known to be of uneven
-quality~\cite{Croft2023Data}. We do not use an LLM in the detection loop: our
+specifications~\cite{Wang2026Measuring,LeCong2025Can}. We do not use an LLM in
+the detection loop: our
 negative result is an argument for keeping the \emph{decision} in a
 deterministic component and being explicit about what that component can observe.
 An LLM-driven extension of this work would still face Boundary~1, because the

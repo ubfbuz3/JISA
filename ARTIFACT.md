@@ -70,8 +70,9 @@ Go/MinGW toolchain), so the control uses a *controlled authorization target*
 faithfully emulates the Gitea 1.22.6 object-level authorization API contract
 the engine actually consumes (same endpoints and fields probed above), backed
 by a *correct* internal authorization model, with **3 deterministically
-seeded BOLA defects** (`SEED_FLAWS`: none-entitlement subjects served the
-object at `GET /api/v1/repos/{owner}/{repo}`) and **1 seeded BFLA defect**
+seeded vulnerable instances** (3 cases of one fault pattern: none-entitlement
+subjects served the object at `GET /api/v1/repos/{owner}/{repo}`; they differ
+in subject and object, not in fault location) and **1 seeded BFLA defect**
 (non-privileged actor succeeds at `PUT .../collaborators/{u}`).
 The ground truth of which cells are vulnerable comes from the seed list, not
 from the detector.

@@ -12,7 +12,9 @@ object-level sharing with per-object visibility, a machine-readable sharing
 surface, and a documented administrative grant path. Two properties of the
 experiment bound its conclusions, and we state them before the numbers.
 
-First, Gitea is \emph{correct}: it does not contain the object-level
+First, for the endpoints and authorization transitions exercised in this
+study, Gitea enforced the expected authorization decisions: we found no
+instance of the object-level
 authorization vulnerability we are studying. This experiment therefore measures
 only the false-proof side. It cannot measure detection, and we do not report a
 recall from it.
@@ -322,8 +324,9 @@ exceeds its v3 count while Gogs's do not.
 \subsection{A positive control with a seeded vulnerability}
 \label{sec:seeded}
 
-Section~\ref{sec:realsystem} measures only the false-proof side, because the
-three real systems are correct and contain no object-level authorization
+Section~\ref{sec:realsystem} measures only the false-proof side, because on
+the tested endpoints and transitions the three real systems enforce the expected
+decisions and presented no object-level authorization
 vulnerability to detect. That leaves the question the reviewer is entitled to
 ask: \emph{when a real object-level flaw is present, does the same detector
 find it?} We answer this with a positive control rather than by weakening any
@@ -332,10 +335,21 @@ of the three systems in place.
 We built a \emph{controlled authorization target} that faithfully emulates the
 Gitea \ResRsVersion{} object-level authorization API contract the engine
 actually consumes---the same endpoints and fields probed above---with a correct
-internal authorization model and \SeedBolaN{} deterministically seeded BOLA
-defects. Each defect is a runtime bypass at \texttt{GET
-/api/v1/repos/\{owner\}/\{repo\}}: a subject who, by the model, has no
-entitlement (\texttt{none}) is nonetheless served the object. Crucially, the
+internal authorization model and \SeedBolaN{} seeded vulnerable
+instances. The instances instantiate a single fault pattern---a runtime bypass
+at \texttt{GET
+/api/v1/repos/\{owner\}/\{repo\}} whereby a subject who, by the model, has no
+entitlement (\texttt{none}) is nonetheless served the object---differing in
+subject and object, not in fault location; we therefore read
+Table~\ref{tab:seeded} as evidence that the adjudicator detects this fault
+pattern, not as three independent defect discoveries. Two design points of the
+target must be stated. First, the
+target deliberately exposes its authorization state to the subject-side
+harness, mirroring the admissibility condition of Boundary~2; production Gitea
+does not, which is why the subject-vantage rows are readable here and
+unobservable on the real system (\ResRsSelfReadable{}/\ResRsSelfTotal{} cells,
+against \ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{} from the owner
+vantage). Second, the
 introspection surface (\texttt{GET
 /api/v1/repos/\{owner\}/\{repo\}/collaborators/\{u\}/permission}) reports the
 \emph{correct} \texttt{none} permission, so the oracle stays sound and the
@@ -348,8 +362,9 @@ seed list, not inferred.
 
 \begin{table}[t]
 \centering
-\caption{Positive control: detection of \SeedBolaN{} deterministically seeded
-BOLA defects by each method. TP/FN/FP/TN are counted against the known seed,
+\caption{Positive control: detection of \SeedBolaN{} seeded vulnerable
+instances (one fault pattern) by each method. TP/FN/FP/TN are counted against
+the known seed,
 not against a model.}
 \label{tab:seeded}
 \begin{tabular}{lrrrr}
@@ -368,12 +383,12 @@ method & TP & FN & FP & TN \\
 
 The observation-gated adjudicator behaves exactly as the negative result
 predicts (Table~\ref{tab:seeded}). \texttt{direct\_observe} and \texttt{v3}
-both catch all \SeedBolaN{} planted defects with zero false positives
+both catch all \SeedBolaN{} planted instances with zero false positives
 (TP~=~\SeedTPDirectObserve{}, FP~=~\SeedFPDirectObserve{}); they are not
 defeated by the presence of a real vulnerability. The straw man
 \texttt{direct\_only} again over-claims, emitting \SeedFPDirectOnly{} false
 positives on cells where the oracle says \texttt{none} but no access actually
-succeeds---the same failure it shows on the correct real systems. The paper's
+succeeds---the same failure it shows on the non-vulnerable real systems. The paper's
 central claim therefore now has both halves: when no vulnerability is present
 the metamorphic step adds nothing (\S\ref{sec:boundaries}), and when one is
 present the right adjudicator detects it without inventing others.
@@ -391,5 +406,5 @@ Honesty boundary, stated plainly: this is a controlled target, not production
 Gitea. It validates that the detector's logic fires on a genuine broken
 object-level check and stays silent elsewhere; it does not claim to discover
 Gitea's real CVEs. The system under test is a research artefact, and its
-source, seed list and run script are published with the rest of the
-reproducibility package.
+source, seed list and run script are published in the reproducibility package
+at \url{https://github.com/ubfbuz3/JISA} (commit \texttt{c577a16}).
