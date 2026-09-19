@@ -1,23 +1,45 @@
 \section{Related work}
 \label{sec:related}
 
-\paragraph{Metamorphic security testing} The lineage begins with Mai et
-al.~\cite{Mai2019Metamorphic} and continues with \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic},
-whose own admission that the role-to-resource mapping is ``not always available''
-we build on deliberately. We contribute no new relation but a characterisation of
-where this family's adjudication stops discriminating.
+\paragraph{Metamorphic security testing} Metamorphic testing was brought to web
+security by Mai et al.~\cite{Mai2019Metamorphic}, who cast security test
+patterns---authentication, authorization, session---as metamorphic relations so
+that faults can be exposed without an oracle. The line matured into
+\mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic}, whose \ResLitMrCatalog{}
+system-agnostic relations over a Web-specific domain language are the object of
+our study. We propose no new relation and no better detector; we take the
+technique's own admission that the role-to-resource mapping is ``not always
+available'' at face value and follow it to its consequence for what the
+adjudication can decide. A relation whose guard reads a crawl-time model is
+sound only while the model equals the authorization state, and that equality is
+exactly what the technique cannot check for itself.
 
-\paragraph{API testing and access-control detection} Specification-driven
-fuzzers generate requests well but inherit the same oracle difficulty~\cite{Atlidakis2019RESTler,Arcuri2024Advanced,Seran2025Handling};
-a recent line targets access control directly by black-box probing, policy
-checks, or LLM-driven generation~\cite{Liu2025BACScan,Sahin2026Enhancing,Uddin2026Automated,Schlaubitz2025A},
-and policy-inference approaches recover the enforced policy from the
-implementation~\cite{Huang2024Detecting,Le2021Automated}. BOLA is further
-examined as an attack surface and empirically in deployed
-systems~\cite{Filho2025Automated,Wu2026Rethinking,Chehade2025Forbidden}. Our
-question is orthogonal to all of these: not a better detector, but what an
-existing oracle-substituting technique actually decides when the entitlement
-information it needs is not among its observables.
+\paragraph{Detecting broken access control} A large and active literature
+detects access-control flaws directly, and it is worth separating the oracles it
+relies on. Black-box probing drives requests with and without the rights of
+another subject and looks for a missing refusal~\cite{Liu2025BACScan,Dharmaadi2025BACFuzz},
+a line that runs back to AUTHSCOPE~\cite{Zuo2017AUTHSCOPE} and that has been
+extended to deployed systems under ethical constraints~\cite{Chehade2025Forbidden}.
+A complementary, white-box line recovers the \emph{enforced} policy from the
+implementation---by reverse-engineering RBAC policies~\cite{Le2021Automated}, by
+statically extracting authorization policies~\cite{Berger2020Static} or database
+access-control rules~\cite{Zhang2024Extracting}, or by locating the permission
+checks themselves~\cite{Shi2025Facilitating}---and then flags violations against
+that recovered model: BOLA in database-backed applications~\cite{Huang2024Detecting},
+missing-owner-check and function-level flaws in Java web
+applications~\cite{Liu2025MOCGuard,Feng2025JAuthGuard}, and privilege escalation
+in polyglot microservices~\cite{Li2026Detecting}. Specification-driven API
+fuzzers generate the requests well but inherit the same oracle
+difficulty~\cite{Atlidakis2019RESTler,Arcuri2024Advanced,Seran2025Handling};
+adding explicit access-policy violation checks~\cite{Sahin2026Enhancing} moves
+them toward the detection problem but does not remove the need for a ground
+truth, and a recent turn delegates generation or probing to language
+models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. Our question is
+orthogonal to all of these. Each reports detections against an oracle it holds
+privately---a policy, a seeded defect, a differential response; we ask what an
+existing oracle-substituting technique \emph{decides} when the entitlement
+information it needs is not among its observables, and we make that a measurable
+property of the technique rather than of a system.
 
 \paragraph{LLMs and the oracle problem} LLMs are used for vulnerability detection
 and specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can};
@@ -27,3 +49,15 @@ LLM-driven extension would still face Boundary~1. Studies asking where a
 technique's assumptions break, rather than proposing improvements, are rarer than
 they should be; the transferable condition this paper exposes is that any claim
 of necessity must be tested against a fair substitute.
+
+\paragraph{Measurement and evaluation} Our contribution is finally a measurement,
+and it connects to work on the quality of the artefacts security studies are
+built on---for instance the observation that vulnerability datasets are
+frequently mislabelled, duplicated or otherwise unfit for the claims drawn from
+them~\cite{Croft2023Data}. The artefact we report is of the same family but
+inside a study rather than a dataset: a specificity figure whose
+\emph{denominator} is structurally unable to register a whole class of failure,
+and whose operating point silently assumes a reachability model equals the
+authorization state. Reading a testing technique's own reported metric as a
+measurement instrument---with an explicit statement of what its denominator can
+and cannot resolve---is the habit we would like this paper to encourage.

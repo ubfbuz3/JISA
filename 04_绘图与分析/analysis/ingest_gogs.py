@@ -198,7 +198,8 @@ def emit_cross_table(vals: dict) -> str:
     body = "\n".join(f"{name} & {tv} & {gv} \\\\"
                      for name, (tv, gv) in rows)
     tex = r"""% 由 analysis/ingest_gogs.py 自动生成 —— 勿手改
-\begin{table}[t]
+% 双栏排版下本表列宽超出单栏 ⇒ 用 table* 跨栏（全宽）。
+\begin{table*}[t]
 \centering
 \small
 \caption{Cross-vendor replication under the identical three-phase protocol
@@ -215,7 +216,7 @@ published relations.}
 """ + body + r"""
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 """
     return tex
 

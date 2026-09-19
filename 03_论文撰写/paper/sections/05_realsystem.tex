@@ -38,7 +38,7 @@ quantity & count \\
 paths in the system's API description & \ResRsSwaggerPaths{} \\
 grant endpoints & \ResRsGrantEndpoints{} \\
 revocation endpoints & \ResRsRevokeEndpoints{} \\
-grant endpoints usable without site-administrator rights & \ResRsGrantNoAdmin{} \\
+\quad of which usable without site-admin & \ResRsGrantNoAdmin{} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -70,7 +70,7 @@ emits \ResRsDirectObserveFp{}. Channel provenance of the authorized access
 by the framework log, \ResRsChannelNotObservableRate{}) is a property of our
 topology---a design parameter, not a field prevalence.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{Departure from the real authorization state, per reading of the
 reachability model.}
@@ -83,7 +83,7 @@ crawl-time snapshot (as the definitions presuppose) & \ResRsMismatchSnapshot{} &
 live at execution time & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \paragraph{An endogenous control}
 The most serious alternative explanation is that public objects are simply harder
@@ -96,7 +96,7 @@ the MR firing correspondingly (\ResRsEndoAfterCrawlFires{}
 vs.~\ResRsEndoFromStartFires{}). Final visibility is identical; the responsible
 variable is when the model was read.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{Endogenous control: two objects that are both public at the end.}
 \label{tab:rs-endo}
@@ -108,7 +108,7 @@ public before the crawl & \ResRsEndoFromStartCells{} & \ResRsEndoFromStartReach{
 public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawlReach{} & \ResRsEndoAfterCrawlFires{} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}

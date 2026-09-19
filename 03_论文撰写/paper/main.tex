@@ -1,6 +1,6 @@
 % =====================================================================
 %  Squeezed Between Two Boundaries
-%  Elsevier / Journal of Information Security and Applications (JISA)
+%  Elsevier CAS double-column template (cas-dc) / JISA
 % ---------------------------------------------------------------------
 %  硬规则:
 %    * 正文**不得手敲任何数字** —— 全部引用 \Res* 宏（由
@@ -10,15 +10,16 @@
 %    * 全部图为**矢量**，由 matplotlib / figure-spec 确定性生成，无 AI 生成像素。
 %  编译: bash build.sh   （会把源码装配到纯 ASCII 目录再编译，避开中文路径）
 % =====================================================================
-\documentclass[preprint,11pt]{elsarticle}
+\documentclass[a4paper,fleqn]{cas-dc}
 
+\usepackage[numbers,sort&compress]{natbib}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{url}
-\usepackage[hidelinks]{hyperref}
+\hypersetup{hidelinks}
 
 % ---- 图中/文中引用的全部数字（自动生成，勿手改） ----
 \input{numbers.tex}
@@ -33,27 +34,39 @@
 
 \graphicspath{{figures/}}
 
-\journal{Journal of Information Security and Applications}
+% 双栏窄列下允许更宽的词间弹性，避免长 hyphen/等宽 token 造成 overfull hbox
+\setlength{\emergencystretch}{2.5em}
 
 \newcommand{\ttt}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
 
 \begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
 
-\begin{frontmatter}
+% Short title
+\shorttitle{Bounds of metamorphic testing for object-level authorization}
 
-\title{Squeezed Between Two Boundaries: Deterministic False Proofs and an
+% Short author
+\shortauthors{Q.~Lin and N.~Chen}
+
+% Main title of the paper
+\title[mode = title]{Squeezed Between Two Boundaries: Deterministic False Proofs and an
 Unseeing Metric in Metamorphic Testing for Object-Level Authorization}
 
 \author[a,b]{Qiulong Lin}
-\author[a,b]{Nanlei Chen\corref{cor}}
+
+\author[a,b]{Nanlei Chen}
+\cormark[1]
 \ead{ubfbzu3@163.com}
-\cortext[cor]{Corresponding author.}
 
 \affiliation[a]{organization={Yango University},
                 city={Fuzhou}, postcode={350015}, country={China}}
 \affiliation[b]{organization={Sogang University},
                 city={Seoul}, postcode={04107}, country={Republic of Korea}}
+
+\cortext[1]{Corresponding author.}
 
 \begin{abstract}
 Metamorphic testing is the standard answer to the oracle problem in Web security
@@ -90,12 +103,12 @@ system. We contribute a characterisation, a measurement caveat, and one negative
 result.
 \end{abstract}
 
-\begin{keyword}
+\begin{keywords}
 oracle problem \sep metamorphic testing \sep object-level authorization \sep
 BOLA/BFLA \sep specificity measurement \sep false proof
-\end{keyword}
+\end{keywords}
 
-\end{frontmatter}
+\maketitle
 
 \input{sections/01_intro}
 \input{sections/02_background}

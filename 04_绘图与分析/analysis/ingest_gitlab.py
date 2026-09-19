@@ -190,7 +190,8 @@ def main() -> None:
     body = "\n".join(f"{name} & {a} & {b} & {c} \\\\"
                      for name, a, b, c in rows)
     tex = r"""% 由 analysis/ingest_gitlab.py 自动生成 —— 勿手改
-\begin{table}[t]
+% 双栏排版下本表列宽超出单栏 ⇒ 用 table* 跨栏（全宽）。
+\begin{table*}[t]
 \centering
 \small
 \caption{Cross-vendor replication under the identical three-phase protocol
@@ -213,7 +214,7 @@ tables use different normalisations and are not in conflict.}
 """ + body + r"""
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 """
 
     OUT.mkdir(parents=True, exist_ok=True)

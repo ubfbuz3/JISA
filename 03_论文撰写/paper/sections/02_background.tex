@@ -13,6 +13,25 @@ the recorded model directly (\texttt{cannotReachThroughGUI},
 \texttt{userCanRetrieveContent}) or static subject properties; we call a
 predicate \emph{GUI-derived} when its value is a function of the crawl.
 
+\paragraph{Why the false proof is a design consequence, not a bug} A single
+example makes the mechanism concrete. Suppose a subject can reach an object at
+crawl time, so the record stores that object as reachable. Afterwards an
+administrator grants the same subject access to a \emph{further} object through
+a channel---an administrative endpoint or a share link---that a crawl of the
+subject's own interface never traverses. At execution the guard still reads the
+frozen record, finds the new object absent from it, and concludes the subject
+cannot reach that object; the relation then treats the successful response as a
+violation. Every step is exactly as specified, so no implemented guard is at
+fault and no individual relation is miswritten. The false proof is structural:
+the predicate's two representations---``reachable as recorded'' and ``not
+reachable as recorded''---cannot express ``reachable, but only after the record
+was taken''. More crawling does not remove it, because the grant need not be
+visible through the subject's interface at all; and the reported specificity
+never registers it, because the error is a property of the adjudication's
+\emph{reading moment} rather than of any single generated input. This is the
+mechanism the rest of the paper measures, and the reason we speak of a boundary
+of the specification rather than a defect of an implementation.
+
 Two mechanical counts frame what follows. Over the \ResCatalogMrTotal{} catalog
 MRs, \ResCatalogGuiDerived{} (\ResCatalogGuiDerivedPct{}\%) gate on a
 GUI-derived or identity predicate, and only \ResCatalogUnion{}
