@@ -84,36 +84,35 @@
 \cortext[1]{Corresponding author.}
 
 \begin{abstract}
-Metamorphic testing is the standard answer to the oracle problem in Web security
-testing: \mbox{MST-wi} defines \ResLitMrCatalog{} system-agnostic metamorphic
-relations (MRs) over a Web-specific domain language, and reports a specificity of
-\ResLitReportedSpecPct{}\%. We show that, for object-level authorization, these
+Metamorphic testing is the standard answer to the Web-security oracle problem:
+\mbox{MST-wi} defines \ResLitMrCatalog{} system-agnostic metamorphic relations
+(MRs) over a Web-specific domain language and reports
+\ResLitReportedSpecPct{}\% specificity. We show that, for object-level
+authorization, these
 relations delegate adjudication to a \emph{GUI-reachability model} that is a
 \emph{crawl-time snapshot}, and that the delegation fails deterministically, in
 one direction.
 
-From a three-phase instantiation of the predicates as originally defined---crawl,
+From a three-phase instantiation of the predicates as defined---crawl,
 out-of-band authorization change, execute---a \ResSynRecords{}-record
-scenario/configuration study and a controlled study on Gitea \ResRsVersion{},
-replicated on Gogs \GgVersion{} and GitLab \GlVersion{}, characterise the failure
-as three boundaries. (i) An access legitimately granted out of band after the
-crawl is reported as a \emph{proven} violation---a \emph{false proof}---because
-one of the predicate's two representations is unavailable. (ii) Repairing this
-with a readable, sound authorization oracle makes the MR step add no adjudication
-information there---a necessary condition, not a surprise: a direct adjudicator
-consuming the same oracle and request outcome reproduces the verdict, and
-replacing the step with an ordinary request changes nothing measurable (a
-descriptive point estimate, not a non-inferiority test, and not domination).
-(iii) The reported specificity is not conditioned on a reachability--authorization
-check and its input-level denominator cannot resolve a scenario-level failure.
+scenario/configuration study, and a Gitea \ResRsVersion{} study replicated on
+Gogs \GgVersion{} and GitLab \GlVersion{}, yield three findings. (i) An access
+legitimately granted out of band after the crawl is reported as a \emph{proven}
+violation---a \emph{false proof}---because one of the predicate's two
+representations is unavailable. (ii) Repairing this with a readable, sound
+authorization oracle leaves the MR step adding no adjudication information: a
+necessary condition, since a direct adjudicator consuming the same oracle and
+request outcome reproduces the verdict, and an ordinary request changes nothing
+measurable (a descriptive point estimate, not a
+non-inferiority test, and not domination). (iii) The reported specificity is not
+conditioned on a reachability--authorization check, and its input-level
+denominator cannot resolve a scenario-level failure.
 
-On Gitea the mismatch appears only under a crawl-time reading and never live,
-locating the mechanism in \emph{time}, not visibility; and the oracle that would
-discharge the condition is readable from an owner's vantage but not a black-box
-subject's. We confirm the predicates' semantics at source and execute the
-published relations---source unmodified, build configuration and harness
-added---reproducing the false proof on a real system within the
-reachability-gated subset that fires in our run.
+On Gitea the mismatch appears only under the crawl-time reading, never live: the
+mechanism is time, not visibility. The oracle that would discharge the condition
+is readable from an owner's vantage but never a black-box subject's, and
+executing the published relations reproduces the false proof within the
+reachability-gated subset that fires.
 \end{abstract}
 
 \begin{keywords}
@@ -129,6 +128,7 @@ BOLA/BFLA \sep specificity measurement \sep false proof
 \input{sections/04_synthetic}
 \input{sections/05_realsystem}
 \input{sections/06_boundaries}
+\input{sections/06b_support}
 \input{sections/07_threats}
 \input{sections/08_related}
 \input{sections/09_conclusion}

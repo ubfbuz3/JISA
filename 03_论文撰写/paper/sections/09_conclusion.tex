@@ -3,33 +3,40 @@
 
 For object-level authorization, \mbox{MST-wi}'s predicates do not know whether
 the acting subject is entitled to the object; they know what the interface, as
-crawled, permitted. Instantiating them as defined produced three boundaries. As
-designed, the adjudication false-proofs on legitimately granted access,
-deterministically (\ResObsOobVtwoFpRate{} constructed; \ResRsMrBookkeepingFpRate{}
-Gitea), because an out-of-band grant fits only the wrong one of the predicate's
-two representations. The natural repair---a readable, sound authorization
-oracle---works, and in that regime the evaluated metamorphic step adds no
-adjudication information the oracle and the request do not already carry: this is
+crawled, permitted. Instantiating them as defined produced three findings
+(Section~\ref{sec:findings}).
+
+\paragraph{Finding 1 (temporal)} As designed, the adjudication false-proofs on
+legitimately granted access, deterministically (\ResObsOobVtwoFpRate{}
+constructed; \ResRsMrBookkeepingFpRate{} Gitea), because an out-of-band grant fits
+only the wrong one of the predicate's two representations. On the real system the
+mismatch appears only under the crawl-time reading
+(\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\ \ResRsMismatchLive{} live),
+with an endogenous control holding final visibility fixed: the responsible
+variable is time, not visibility.
+
+\paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
+authorization oracle---works, and in that regime the evaluated metamorphic step
+adds no adjudication information the oracle and the request do not already carry:
 a necessary condition (Lemma~\ref{lem:oracle-suff}), whose empirical face is that
 a single ordinary request yields the same false-proof count (false proofs
-\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{})
-and the same recall (difference \ResAbRecallDiff{}, CI
-$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$; descriptive, no margin
-pre-specified); the one surviving difference is on recall, where on all
-\ResAbDisagreementN{} disagreeing records the MR-based method fails. On Gitea the
-comparison is limited to false-proof behaviour, because no vulnerability was
-present on the tested surface. On the real system the mismatch appears only under
-the crawl-time reading (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\
-\ResRsMismatchLive{} live), with an endogenous control holding final visibility
-fixed: the responsible variable is time, not visibility. And the reported
-specificity of \ResLitReportedSpecPct{}\% is not conditioned on an explicit
-check that the reachability model equals the authorization state, and is computed
-in units that cannot resolve a scenario-uniform failure. Reading the
-implementation confirmed the semantics and added the mechanism: the crawl model
-is frozen by a cache never invalidated, and a missing crawl defaults to
-``unreachable''. The positive control closes the loop: on a seeded vulnerable
-target the oracle-gated adjudicator detects all planted instances with zero false
-positives.
+\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}) and the same recall (difference
+\ResAbRecallDiff{}, CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$;
+descriptive, no margin pre-specified); the one surviving difference is on recall,
+where on all \ResAbDisagreementN{} disagreeing records the MR-based method fails.
+On Gitea the comparison is limited to false-proof behaviour, because no
+vulnerability was present on the tested surface.
+
+\paragraph{Finding 3 (measurement)} The reported specificity of
+\ResLitReportedSpecPct{}\% is not conditioned on an explicit check that the
+reachability model equals the authorization state, and is computed in units that
+cannot resolve a scenario-uniform failure.
+
+Support evidence: reading the implementation confirmed the semantics and added
+the mechanism---the crawl model is frozen by a cache never invalidated, and a
+missing crawl defaults to ``unreachable''---and the positive control closes the
+loop: on a seeded vulnerable target the oracle-gated adjudicator detects all
+planted instances with zero false positives.
 
 \paragraph{What we do not claim} We do not claim that \mbox{MST-wi} is wrong or
 say anything about its accuracy as a detector; the native run establishes a

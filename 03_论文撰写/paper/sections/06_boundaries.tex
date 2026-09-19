@@ -1,7 +1,18 @@
-\section{Three boundaries, confirmed at source, and executed}
+\section{Three findings}
 \label{sec:boundaries}
+\label{sec:findings}
 
-\subsection{Boundary 1 (RQ1): deterministic false proofs as designed}
+The contribution is three findings, each a boundary on what the published
+relations can establish about object-level authorization, and each carried by
+the studies of Sections~\ref{sec:synthetic}--\ref{sec:realsystem}: a
+\emph{temporal} boundary, an \emph{oracle} boundary, and a
+\emph{measurement} boundary. The confirmations the findings rest
+on---the predicates read at source, the published relations executed on a real
+system, and an independent implementation of the same
+predicates---introduce no further claim and are collected as support evidence in
+Section~\ref{sec:support}.
+
+\subsection{Finding 1 (RQ1): deterministic false proofs---the temporal boundary}
 
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
 exceptions---the adjudication reports a legitimate access granted out of band
@@ -10,19 +21,22 @@ constructed system, rate \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of
 \ResObsOobFalseAlarm{} alarms) against \ResObsFwVtwoFalseProof{} for the same
 share created in band; on Gitea, \ResRsMrBookkeepingFp{} false proofs on
 \ResRsAuthorizedCells{} authorized cells (\ResRsMrBookkeepingFpRate{}) under the
-crawl-time reading, against \ResRsMrBookkeepingAlarmsLive{} alarms live---the
-error is a property of the \emph{reading}, not of the system. The direction is
+crawl-time reading, against \ResRsMrBookkeepingAlarmsLive{} alarms under the live
+reading---same objects, same entitlements, same predicates, so the error is a
+property of the \emph{reading}, not of the system (Table~\ref{tab:rs-m4}). The
+endogenous control (Table~\ref{tab:rs-endo}) holds final visibility fixed and
+isolates the moment at which the model was read. The direction is
 forced: the predicate has exactly two representations, and a grant created
 outside the crawled interface has no representation but ``cannot reach''. The
 predecessor attributes its residual false alarms to crawler
 coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
-\emph{when} the model was read, which is what makes the Boundary-2 repair
+\emph{when} the model was read, which is what makes the Finding-2 repair
 available---and empty.
 
-\subsection{Boundary 2 (RQ2): with a sound, readable oracle, the metamorphic step adds no adjudication information}
+\subsection{Finding 2 (RQ2): with a sound, readable oracle, the metamorphic step adds no adjudication information}
 \label{sec:boundary2}
 
-\emph{If the false proofs of Boundary~1 are removed by consulting a readable
+\emph{If the false proofs of Finding~1 are removed by consulting a readable
 introspection surface, it is the oracle that carries the work: for the
 authorization relations and scenarios evaluated here, replacing the entire
 metamorphic step with a single ordinary request---one that consumes the same
@@ -56,7 +70,7 @@ quantity---the crawl-time reachability model $M$---so the empirical question is
 whether $M$ carries authorization information that a readable, sound $O$ does not
 already supply. For such an $O$, $M$ is either concordant with the true state, in
 which case it adds no information $O$ lacks, or discordant, in which case it is
-false by construction (Boundary~1). Source inspection confirms the two relations
+false by construction (Finding~1). Source inspection confirms the two relations
 read only $M$ and the response (Section~\ref{sec:impl}); the experiment confirms
 the consequence.
 
@@ -67,126 +81,34 @@ proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win), recall
 test; no margin was fixed in advance. Gitea independently reproduces the
 zero-false-proof result (\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}), but does
 not provide a recall comparison because the tested surface contains no seeded
-vulnerability. Two qualifications are part of the claim: the surviving
+vulnerability; the cross-vendor systems (\S\ref{sec:gogs}) and the seeded control
+(\S\ref{sec:seeded}) complete the evidence. Two qualifications are part of the
+claim: the surviving
 difference is on recall alone, and there the MR-based method fails on all
 \ResAbDisagreementN{} disagreements; and the control is \emph{constructed}, not
 discovered---\texttt{direct\_observe} instantiates exactly the $D$ of the lemma,
 so the tie is the empirical face of the necessary condition, a statement about
 the definitions, not a coincidental measurement.
 
-\subsection{Boundary 3 (RQ3): the reported specificity is not conditioned on a reachability--authorization check, and uses a low-resolution denominator}
+\subsection{Finding 3 (RQ3): the reported specificity lacks scenario-level resolution}
 
 \emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
 generated inputs; it is not conditioned on an explicit validation that the
-reachability model coincides with the true authorization state.} The omission:
+reachability model coincides with the true authorization state, and its
+denominator cannot register a scenario-uniform failure.} The omission:
 adjudication is a function of the
 reachability model, so where model and true state diverge---the out-of-band case
-of Boundary~1---the figure measures agreement with the tool's own crawler; the
+of Finding~1---the figure measures agreement with the tool's own crawler; the
 authors concede the mapping is ``not always
 available''~\cite{Chaleshtari2022Metamorphic}, but the number is reported
 without the condition. The denominator: a failure uniform across a scenario
 class contributes only as many false positives as that class emits inputs, and
-is diluted by the rest of the run (Proposition below). We are not saying the
-figure is false or the false positives misdiagnosed; the claim is that such a
+is diluted by the rest of the run (Proposition~\ref{prop:resolution}: in our
+approximation the configuration that misreports a whole class of legitimate
+access still scores \ResSpecRowOneSpecPct{}\%; Corollary~\ref{cor:resolution}:
+no fixed threshold can guarantee detection of such a class). We are not saying
+the figure is false or the false positives misdiagnosed; the claim is that such a
 metric cannot discharge its own premise nor see a class-uniform failure.
-
-\subsection{Implementation-level confirmation}
-\label{sec:impl}
-
-Definitions can be read generously, so we checked the predicates at source in
-the public library~\cite{Chaleshtari2022Metamorphic}. It ships \ResArtMrTotal{}
-relations, \ResArtAuthzMrTotal{} authorization relations,
-\ResArtAuthzGatedEither{} gating on the two predicates analysed. Four
-implementation-level properties not made explicit in the main presentation:
-(i)~\emph{the freeze is hard-coded}---%
-\texttt{cannotReachThroughGUI} is set-membership over the crawl inputs, issues
-no request, and is cached in a field written once and never invalidated
-(\texttt{userCanRetrieveContent} likewise reads a crawl-produced store loaded
-once); (ii)~\emph{the clause that could have caught it is inert}---the
-``absent across all users'' set is built by stopping each recorded sequence at
-the first login action, so it is always empty; (iii)~\emph{missing data defaults
-to an alarm}---with an empty or null crawl argument the predicate returns
-``cannot reach'', so an empty crawl \emph{satisfies} the precondition: the
-mechanism behind Boundary~1's deterministic direction; (iv)~\emph{the role
-relation is configuration, not state}---the supervisor guard reads a static
-configuration file and reports true for identical accounts, so it cannot reflect
-a later grant.
-
-\subsection{Executing the published relations}
-\label{sec:native-run}
-
-The library ships relations but no execution environment; we supplied the system
-configuration and crawl snapshot and ran the relations---source unmodified,
-build configuration (\texttt{pom.xml}) and an external harness added
-(\NtUpstreamModified{} changed upstream file, \NtUpstreamJavaModified{} changed
-Java sources, two added classes totalling \NtHarnessLines{} lines)---against
-Gitea \NtGiteaVersion{} (Table~\ref{tab:native-facts}). \NtMrExecuted{} of \NtMrTotal{} authorization relations
-executed; \NtMrFired{} returned failures, \NtAlarms{} alarms in all---the
-engine's own \texttt{getFailures()} value (Table~\ref{tab:native}). What the run
-establishes is scoped to the \emph{reachability-gated subset that fires here},
-not a full replay of the catalogue: one relation aborts on an engine-side defect,
-most issue no request because their own guards are unsatisfied, and the content
-predicate is never invoked. Almost none
-of the \NtElapsedS{} seconds is analysis: each leaf evaluation invokes a
-browser-cleanup hook costing minutes, a cost of the missing environment that
-bounds any reproduction.
-
-\begin{table}[t]
-\centering
-\caption{Execution facts for the native run of the published relations
-(Section~\ref{sec:native-run}). All values are emitted by
-\texttt{ingest\_native\_engine.py} from the run record; upstream Java sources are
-unchanged apart from the build configuration.}
-\label{tab:native-facts}
-\small
-\begin{tabular}{@{}p{0.66\columnwidth}r@{}}
-\toprule
-item & value \\
-\midrule
-authorization relations: catalogue / executed / fired & \NtMrTotal{} / \NtMrExecuted{} / \NtMrFired{} \\
-engine alarms (the engine's own return value) & \NtAlarms{} \\
-HTTP requests attributed to observing relations & \NtHttpCalls{} \\
-changed upstream Java sources & \NtUpstreamJavaModified{} \\
-build/config changes (one \texttt{pom.xml} line) & \NtUpstreamBuildModified{} \\
-added harness classes / added lines & two / \NtHarnessLines{} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The load-bearing cell: the subject \NtKeyGrantee{} holds a legitimate
-entitlement to \NtKeyRepo{}, granted out of band after the crawl. There the
-published \texttt{cannotReachThroughGUI} answers ``cannot reach''---the answer
-it is \emph{defined} to give, since the subject's crawl record has no entry for
-the repository; across the run it answered so \NtCrtgTrue{} of \NtCrtgCalls{}
-invocations (\NtCrtgTruePct{}\%), \NtKeyCrtgTrue{} on this cell, and
-\NtKeyMrFired{} relations (\NtKeyMrNames{}) report a failure there. The access
-is authorized: all \NtByteCells{} granted cells were re-probed, and the
-grantee's response hashes identically to the owner's while a third account is
-refused. The \NtAlarms{} alarms fall on \NtAlarmCells{} cells, all post-crawl
-grants\ifnum\NtAlarmsOffGrant=0, none on a non-entitled object.\else, plus
-\NtAlarmsOffGrant{} on a non-entitled object.\fi{} Limits: the harness's HTTP
-observation channel is exact for the reachability predicate (set-membership, no
-request) but unexercised for the content predicate (\NtUcrcCalls{} invocations;
-supervisor guard \NtSupCalls{}, \NtSupTrue{} true); not all gated relations fire,
-for reasons inside their own guards, and \NtMrErrored{} abort on an engine-side
-defect---so the reproduced false proof is that of the reachability-gated subset
-that fires, not a full-replay count of the published relations. And Gitea, on
-the tested surface, enforces the expected decisions, so the run can only exhibit
-false proofs.
-
-\begin{table*}[t]
-\centering
-\caption{The published authorization relations executed against Gitea
-\NtGiteaVersion{}. Each row is the applicability chain from the catalogue to the
-outcome: \emph{status} is the engine's per-relation result (\NtMrExecuted{} of
-\NtMrTotal{} evaluated, \NtMrErrored{} aborted on an engine-side defect),
-\emph{alarms} its own \texttt{getFailures()} return (\NtMrFired{} relations,
-\NtAlarms{} in all), and \emph{requests} (\NtHttpCalls{} total) attributed to the
-relation observing them first.}
-\label{tab:native}
-\small
-\input{native_engine_table.tex}
-\end{table*}
 
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}
@@ -211,9 +133,9 @@ spots into \GgFpVthree{} and \GlFpVthree{} false proofs). Where the condition
 holds, the honest method consumes the oracle directly and drops the relation;
 where it does not, the honest method abstains---as v3 does on the unreadable
 stratum, where the aggregate table would have ranked it best, a ranking that
-reflects abstention rather than improved detection. Each boundary would fall as
-follows: Boundary~1, if the predicates were defined over live rather than
-recorded reachability; Boundary~2, by an authorization MR needing an observable
-that a succeeding request plus a readable oracle cannot produce; Boundary~3, by
+reflects abstention rather than improved detection. Each finding would fall as
+follows: Finding~1, if the predicates were defined over live rather than
+recorded reachability; Finding~2, by an authorization MR needing an observable
+that a succeeding request plus a readable oracle cannot produce; Finding~3, by
 a specificity in scenario units, or with the condition explicit, that still fails
 to separate the configurations studied here.

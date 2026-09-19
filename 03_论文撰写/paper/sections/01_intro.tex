@@ -17,7 +17,7 @@ object-level authorization. The predicates do not express entitlement; they
 express what their authors call reachability---what ``the functionality exposed
 by the user interface'' permits---with the role-to-resource mapping
 ``\textbf{not always available}''~\cite{Chaleshtari2022Metamorphic}. We take
-that sentence as premise, not finding. Delegating adjudication to a reachability
+that sentence as premise, not discovery. Delegating adjudication to a reachability
 model makes the moment the model was read part of the specification, so we
 instantiate the predicates \emph{as defined}---over a model recorded at crawl
 time---and drive the system through three phases: crawl, change authorization
@@ -28,13 +28,18 @@ We ran a \ResSynRecords{}-record scenario/configuration study on a constructed
 system and a controlled study on Gitea \ResRsVersion{}, replicated on Gogs
 \GgVersion{} and GitLab \GlVersion{}. We propose no mechanism; an earlier
 iteration of this work
-did, and our own ablation removed it. What survives is a characterisation as
-three boundaries (Section~\ref{sec:boundaries}): (i)~the adjudication as
-designed produces \emph{deterministic false proofs}---a legitimate access
-granted out of band after the crawl is reported as a proven violation, at rate
+did, and our own ablation removed it. What survives is three findings
+(Section~\ref{sec:findings}), one per research question:
+
+\emph{Finding~1 (RQ1, temporal).} The adjudication as designed produces
+\emph{deterministic false proofs}---a legitimate access granted out of band
+after the crawl is reported as a proven violation, at rate
 \ResObsOobVtwoFpRate{} on the constructed system and \ResRsMrBookkeepingFpRate{}
 on Gitea, because the predicate's two representations cannot describe an
-out-of-band grant; (ii)~when a sound, readable authorization oracle is
+out-of-band grant; the error is a property of the \emph{reading}, not of the
+system.
+
+\emph{Finding~2 (RQ2, oracle).} When a sound, readable authorization oracle is
 available, the metamorphic step carries no adjudication information the
 oracle-plus-request pair does not---a necessary condition
 (Lemma~\ref{lem:oracle-suff}), not an empirical surprise, whose empirical face
@@ -43,14 +48,17 @@ measurable (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}, recall
 \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a descriptive, point-estimate
 comparison, not a formal hypothesis test, no margin pre-specified, not
 domination), and on all \ResAbDisagreementN{} disagreeing records the MR-based
-method errs; (iii)~the reported specificity is not conditioned on an explicit
-check that the reachability model coincides with the authorization state, and is
-computed in units insensitive to scenario-uniform failure. These are organised
-as RQ1 (temporal), RQ2 (oracle), RQ3 (measurement); the native execution, the
-seeded target and the second implementation are support evidence for them, not
-further headline findings.
+method errs.
 
-The boundaries are not a claim that \mbox{MST-wi} is wrong: the reachability
+\emph{Finding~3 (RQ3, measurement).} The reported specificity is not conditioned
+on an explicit check that the reachability model coincides with the authorization
+state, and is computed in units insensitive to scenario-uniform failure.
+
+The native execution, the seeded target and the second implementation are support
+evidence for these findings, not further headline findings
+(Section~\ref{sec:support}).
+
+The findings are not a claim that \mbox{MST-wi} is wrong: the reachability
 stand-in is announced by its authors, and the predecessor design attributes its
 residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}. Our
 contribution is to locate the failure mechanically---in \emph{when} the model
@@ -60,6 +68,6 @@ reported metric: a three-phase instantiation with internal controls
 (Section~\ref{sec:synthetic}); the Gitea study with an endogenous control, a
 seeded-vulnerability positive control, and a native execution of the library's
 own relations attributing the false proof to the published code
-(Section~\ref{sec:realsystem}); and the boundaries with an admissibility
+(Section~\ref{sec:realsystem}); and the findings, with an admissibility
 condition and a formal statement of the metric's resolution
-(Section~\ref{sec:boundaries}).
+(Section~\ref{sec:findings}).

@@ -1,6 +1,9 @@
 \section{Synthetic study: where the adjudication goes}
 \label{sec:synthetic}
 
+This study supplies the evidence for Findings~1 and~3, and the ablation behind
+Finding~2; the findings themselves are stated in Section~\ref{sec:findings}.
+
 \subsection{Definitions}
 \label{sec:metrics}
 
@@ -170,16 +173,7 @@ respect to a scenario-uniform failure---adding unaffected inputs drives it
 toward $1$ without touching the failure---so it lacks stable scenario-level
 resolution.
 
-\paragraph{Second implementation}
-An independently written implementation of the same predicates was compared with
-the main one on a subset fixed before the comparison, not sampled after it: the
-in-band scenarios on which a second reading is defined, holding the
-exception-policy variant at the representative level and the reachability reading
-at the one each relation uses (MR-002 blind, MR-004 aware). This yields
-\ResAltPoints{} (configuration, scenario) points; MR-002 is defined on
-\ResAltMrTwoPoints{} of the resulting relation comparisons and MR-004 on the
-remaining \ResAltMrFourPoints{}, giving \ResAltCompared{} in all. The two agreed
-on \ResAltAgree{} of them (\ResAltAgreeRate{}; Wilson 95\% CI
-$[\ResAltAgreeRateLo{}, \ResAltAgreeRateHi{}]$). Both were written from the same
-reading of the semantics, so this bounds implementation accident only; it does
-not bound a shared blind spot, and we do not present it as corroboration.
+\paragraph{Implementation robustness}
+An independently written implementation of the same predicates was compared on a
+subset fixed in advance; it bounds implementation accident only, and is reported
+with the confirmations in Section~\ref{sec:secondimpl}.

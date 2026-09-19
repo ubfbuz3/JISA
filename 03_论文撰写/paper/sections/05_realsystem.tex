@@ -1,11 +1,16 @@
 \section{Real systems: Gitea, Gogs, GitLab, and a seeded control}
 \label{sec:realsystem}
 
+This section supplies the real-system evidence for Findings~1 and~2: the Gitea
+study with its endogenous control, the cross-vendor replication, and the seeded
+positive control (support evidence, Section~\ref{sec:support}).
+
 A synthetic system cannot tell us whether the crawl-time reading we identified is
 an artefact of our construction, so we repeated the essential comparison on real
 systems. We chose Gitea \ResRsVersion{} for genuine object-level sharing with
 per-object visibility, a machine-readable sharing surface, and a documented
-administrative grant path. Three boundaries on the experiment's conclusions,
+administrative grant path. Three scope conditions on the experiment's
+conclusions,
 stated before the numbers. First, on the endpoints and authorization transitions
 exercised in this study, Gitea enforced the expected decisions: no instance of
 the studied vulnerability was found, so the experiment measures only the
@@ -178,7 +183,7 @@ reading recovers everything (\GlMismatchLive{} remain)---a second,
 vendor-specific failure of the snapshot premise, in the crawl model rather than
 the oracle.
 
-\subsection{A positive control with a seeded vulnerability}
+\subsection{Support evidence: a positive control with a seeded vulnerability}
 \label{sec:seeded}
 
 On the tested endpoints and transitions the three real systems enforce the
