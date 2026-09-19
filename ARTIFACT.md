@@ -50,12 +50,14 @@ This regenerates `results/*.tex` from the shipped raw records and then builds
 `main.pdf`. Every scalar in the paper is emitted by `compute_all.py`; nothing
 is hand-typed in the body.
 
-The regeneration is reproducible: the generated `results/*.tex` and
-`metrics.json` come out **byte-for-byte identical** to the shipped copies, and
-the two vector diagrams are byte-reproducible too (`make_diagrams.py` normalises
-SVG line endings and pins reportlab's `invariant` PDF mode, so the `sha256`
-values in `provenance/DIAGRAMS_PROVENANCE.json` are stable across runs and
-machines). The only file whose bytes differ between runs is
+The regeneration is reproducible. The generated `results/*.tex` and
+`metrics.json` come out **byte-for-byte identical** to the shipped copies; the
+two vector diagrams are byte-reproducible too (`make_diagrams.py` normalises SVG
+line endings and pins reportlab's `invariant` PDF mode, so the `sha256` values in
+`provenance/DIAGRAMS_PROVENANCE.json` are stable across runs and machines); and
+`main.pdf` is byte-identical as well (`build.sh` fixes `SOURCE_DATE_EPOCH` and
+`main.tex` omits the PDF date fields, so the trailer `/ID` is deterministic). The
+only file whose bytes can differ between runs is
 `experiments/real_system/results/seeded.json`, and only in the wall-clock
 `elapsed_s` field it records; no ingest script reads that field, so no table or
 number in the paper depends on it. The other raw records---including the

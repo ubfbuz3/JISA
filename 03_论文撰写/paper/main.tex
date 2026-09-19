@@ -37,6 +37,11 @@
 % 双栏窄列下允许更宽的词间弹性，避免长 hyphen/等宽 token 造成 overfull hbox
 \setlength{\emergencystretch}{2.5em}
 
+% 可复现构建：省略 PDF 的 CreationDate/ModDate 以及嵌入的本地路径信息，
+% 使同一份源码每次编译得到字节一致的 main.pdf（这些原语仅在 pdfTeX 下存在）。
+\ifdefined\pdfinfoomitdate\pdfinfoomitdate=1\fi
+\ifdefined\pdfsuppressptexinfo\pdfsuppressptexinfo=-1\fi
+
 \newcommand{\ttt}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
 

@@ -88,6 +88,10 @@ echo "   装配清单:"
 
 echo "== [3/5] 编译（$ENGINE -> bibtex -> $ENGINE x2）=="
 cd "$BUILD"
+# 可复现构建：固定构建时间戳，使 pdfTeX 生成确定的 trailer /ID（否则每次编译都
+# 不同）。main.tex 已用 \pdfinfoomitdate 省略 PDF 的日期字段，故该取值不出现在
+# 产物里，同一份源码在任何机器上都能得到字节一致的 main.pdf。
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1704067200}"
 run() { "$ENGINE" -interaction=nonstopmode -halt-on-error main.tex >"$1.log" 2>&1; echo $?; }
 
 rc=$(run pass1); [ "$rc" = "0" ] || { echo "!! 第一遍 $ENGINE 失败"; grep -n -m 15 '^! ' pass1.log || true; exit 1; }
