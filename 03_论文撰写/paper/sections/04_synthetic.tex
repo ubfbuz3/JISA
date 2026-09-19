@@ -139,24 +139,30 @@ and $S_{\mathrm{scenario}} = 1 - N_{\mathrm{failed}} / N_{\mathrm{scenarios}}$,
 where $\mathit{FP}_{\mathrm{inputs}}$ counts false alarms over all generated
 inputs and $N_{\mathrm{failed}}$ the scenarios in which the failure is uniform.
 
-\noindent\textbf{Proposition.} Fix $f \ge 1$ failed scenarios, each producing a
+\begin{proposition}
+\label{prop:resolution}
+Fix $f \ge 1$ failed scenarios, each producing a
 fixed number $a \ge 1$ of false-alarm inputs, and $s \ge 1$ successful
 scenarios each contributing $m$ additional, alarm-free inputs. Then
 $S_{\mathrm{input}} = 1 - (f a) / (f a + s m)$, which tends to $1$ as
 $m \to \infty$, while $S_{\mathrm{scenario}} = 1 - f / (f + s)$ is independent
 of $m$ and strictly less than $1$.
+\end{proposition}
 
-\noindent\textbf{Proof.} $N_{\mathrm{inputs}} = f a + s m$ and
+\begin{proof}
+$N_{\mathrm{inputs}} = f a + s m$ and
 $\mathit{FP}_{\mathrm{inputs}} = f a$; substitution gives
 $S_{\mathrm{input}} = 1 - (f a) / (f a + s m) \to 1$ as $m \to \infty$, whereas
 the scenario-level figure depends only on the fixed counts $f$ and $s$.
-\hfill $\square$
+\end{proof}
 
-\smallskip
-\noindent\textbf{Corollary.} No fixed input-level specificity threshold
+\begin{corollary}
+\label{cor:resolution}
+No fixed input-level specificity threshold
 $t < 1$ can guarantee detection of a scenario-uniform failure class: choosing
 $m > (\mathit{fa}/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
-the $f$ failing scenarios remain failing. \hfill $\square$
+the $f$ failing scenarios remain failing.
+\end{corollary}
 
 \smallskip
 The metric is therefore not merely imprecise: it is arbitrarily dilutable with
@@ -165,8 +171,15 @@ toward $1$ without touching the failure---so it lacks stable scenario-level
 resolution.
 
 \paragraph{Second implementation}
-An independently written implementation of the same predicates agreed on
-\ResAltAgree{} of \ResAltCompared{} records (\ResAltAgreeRate{}; Wilson 95\% CI
+An independently written implementation of the same predicates was compared with
+the main one on a subset fixed before the comparison, not sampled after it: the
+in-band scenarios on which a second reading is defined, holding the
+exception-policy variant at the representative level and the reachability reading
+at the one each relation uses (MR-002 blind, MR-004 aware). This yields
+\ResAltPoints{} (configuration, scenario) points; MR-002 is defined on
+\ResAltMrTwoPoints{} of the resulting relation comparisons and MR-004 on the
+remaining \ResAltMrFourPoints{}, giving \ResAltCompared{} in all. The two agreed
+on \ResAltAgree{} of them (\ResAltAgreeRate{}; Wilson 95\% CI
 $[\ResAltAgreeRateLo{}, \ResAltAgreeRateHi{}]$). Both were written from the same
 reading of the semantics, so this bounds implementation accident only; it does
 not bound a shared blind spot, and we do not present it as corroboration.

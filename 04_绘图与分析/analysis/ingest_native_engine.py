@@ -418,15 +418,16 @@ def main() -> int:
     # 主导（每个叶子 2 次 taskkill / waitFor），既非 SUT 亦非关系本身的属性；
     # 放进表里只会诱导"harness 空转"的误读。该事实改由正文一句说明。
     tl = ["% 由 analysis/ingest_native_engine.py 自动生成 —— 请勿手改",
-          "% 逐条 MR 结果：告警数由引擎自己 getFailures() 返回，非本工作判读",
-          "\\begin{tabular}{lrr}", "\\toprule",
-          "MR & alarms & requests \\\\", "\\midrule"]
+          "% 逐条 MR 结果：status 为引擎返回的执行结果，告警数由引擎自己 getFailures() 返回，非本工作判读",
+          "\\begin{tabular}{llrr}", "\\toprule",
+          "MR & status & alarms & requests \\\\", "\\midrule"]
     for m in e["rows"]:
         nm = esc(m.get("mr", "?").split(".")[-1])
-        if m.get("status") != "executed":
-            tl.append(f"{nm} & \\multicolumn{{2}}{{c}}{{{esc(m.get('status'))}}} \\\\")
+        st = m.get("status")
+        if st != "executed":
+            tl.append(f"{nm} & {esc(st)} & -- & -- \\\\")
         else:
-            tl.append(f"{nm} & {m.get('fired', 0)} & {m.get('http_calls', 0)} \\\\")
+            tl.append(f"{nm} & executed & {m.get('fired', 0)} & {m.get('http_calls', 0)} \\\\")
     tl += ["\\bottomrule", "\\end{tabular}"]
     (RESULTS / "native_engine_table.tex").write_text("\n".join(tl) + "\n", encoding="utf-8")
 

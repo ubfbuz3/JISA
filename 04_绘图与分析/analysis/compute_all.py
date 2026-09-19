@@ -592,6 +592,8 @@ def main():
     if alt_p.exists():
         alt = [r for r in load_jsonl(alt_p) if "error" not in r]
         ag = di = 0
+        pts_two = pts_four = 0
+        cells_seen = set()
         mism = []
         for r in alt:
             lab, sc = r["config"]["label"], r["scenario"]
@@ -603,6 +605,11 @@ def main():
                        and x["mr"] == mr_id and x["precond_variant"] == REP_PV and x["gui_mode"] == gm]
                 if not sel:
                     continue
+                if mr_id == "MR-002":
+                    pts_two += 1
+                else:
+                    pts_four += 1
+                cells_seen.add((lab, sc))
                 mv = sel[0]["mr_result"]["triggered"]
                 if mv == av:
                     ag += 1
@@ -611,6 +618,8 @@ def main():
                     mism.append({"config": lab, "scenario": sc, "mr": mr_id,
                                  "main": mv, "alt": av})
         M["m5_second_implementation"] = {"compared": ag + di, "agree": ag, "disagree": di,
+                                         "mr002_points": pts_two, "mr004_points": pts_four,
+                                         "points": len(cells_seen),
                                          "agreement_rate": ratio(ag, ag + di),
                                          "agreement_ci": list(wilson(ag, ag + di)),
                                          "mismatches": mism,
@@ -1041,6 +1050,9 @@ def build_tex(M: dict) -> str:
         cmd("AltCompared", m5["compared"])
         cmd("AltAgree", m5["agree"])
         cmd("AltDisagree", m5["disagree"])
+        cmd("AltPoints", m5["points"])
+        cmd("AltMrTwoPoints", m5["mr002_points"])
+        cmd("AltMrFourPoints", m5["mr004_points"])
         cmd("AltAgreeRate", _f(m5["agreement_rate"]))
         cmd("AltAgreeRateLo", f"{m5['agreement_ci'][1]:.3f}")   # lo (lower bound)
         cmd("AltAgreeRateHi", f"{m5['agreement_ci'][2]:.3f}")    # hi (upper bound)

@@ -742,6 +742,9 @@
     "compared": 54,
     "agree": 54,
     "disagree": 0,
+    "mr002_points": 30,
+    "mr004_points": 24,
+    "points": 30,
     "agreement_rate": 1.0,
     "agreement_ci": [
       1.0,

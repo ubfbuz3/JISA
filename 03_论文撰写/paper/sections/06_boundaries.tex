@@ -19,14 +19,48 @@ coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
 \emph{when} the model was read, which is what makes the Boundary-2 repair
 available---and empty.
 
-\subsection{Boundary 2 (RQ2): with a sound, readable oracle, the metamorphic step provides no additional detection benefit}
+\subsection{Boundary 2 (RQ2): with a sound, readable oracle, the metamorphic step adds no adjudication information}
+\label{sec:boundary2}
 
 \emph{If the false proofs of Boundary~1 are removed by consulting a readable
 introspection surface, it is the oracle that carries the work: for the
 authorization relations and scenarios evaluated here, replacing the entire
 metamorphic step with a single ordinary request---one that consumes the same
 readable oracle and access outcome---provides no additional measurable detection
-benefit.} Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
+benefit.}
+
+We state the reason rather than present it as a discovered effect, because it is
+a necessary condition on the claim, not an empirical regularity.
+
+\begin{lemma}[oracle-sufficient adjudication]
+\label{lem:oracle-suff}
+Let $O$ be an authorization oracle that is \emph{readable} (its answer can be
+obtained) and \emph{sound} (its answer equals the true permission), and let $R$
+be the observed outcome of an ordinary request. Any adjudicator whose verdict is
+a function $V = f(O,R)$ of $O$ and $R$ alone is extensionally equal to the
+direct consumer $D := f(O,R)$: the two return the same verdict on every input.
+Consequently a metamorphic step can be \emph{shown} to be necessary only by
+exhibiting an observable it consumes that the direct consumer does not.
+\end{lemma}
+
+\begin{proof}
+An adjudicator of the stated form and $D$ are the same
+function applied to the same pair of arguments, so they agree pointwise; the
+last sentence is the contrapositive.
+\end{proof}
+
+The lemma is a requirement on \emph{claims}, not a verdict on metamorphic
+testing: it says only that a verdict computable from $(O,R)$ cannot be shown to
+beat the direct consumer of $(O,R)$. The evaluated relations do consult a third
+quantity---the crawl-time reachability model $M$---so the empirical question is
+whether $M$ carries authorization information that a readable, sound $O$ does not
+already supply. For such an $O$, $M$ is either concordant with the true state, in
+which case it adds no information $O$ lacks, or discordant, in which case it is
+false by construction (Boundary~1). Source inspection confirms the two relations
+read only $M$ and the response (Section~\ref{sec:impl}); the experiment confirms
+the consequence.
+
+Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
 proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win), recall
 \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}, difference \ResAbRecallDiff{},
 95\% CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$---descriptive, not a
@@ -36,16 +70,16 @@ not provide a recall comparison because the tested surface contains no seeded
 vulnerability. Two qualifications are part of the claim: the surviving
 difference is on recall alone, and there the MR-based method fails on all
 \ResAbDisagreementN{} disagreements; and the control is \emph{constructed}, not
-discovered---\texttt{direct\_observe} consumes definitionally the quantities
-that define the ground truth, so the comparison is a statement about the
-definitions: when the same sound authorization oracle and access outcome are
-available, the metamorphic step provides no additional adjudication information.
+discovered---\texttt{direct\_observe} instantiates exactly the $D$ of the lemma,
+so the tie is the empirical face of the necessary condition, a statement about
+the definitions, not a coincidental measurement.
 
-\subsection{Boundary 3 (RQ3): the reported specificity rests on an undeclared premise and a low-resolution denominator}
+\subsection{Boundary 3 (RQ3): the reported specificity is not conditioned on a reachability--authorization check, and uses a low-resolution denominator}
 
 \emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
-generated inputs under the assumption that the reachability model coincides with
-the true authorization state.} The premise: adjudication is a function of the
+generated inputs; it is not conditioned on an explicit validation that the
+reachability model coincides with the true authorization state.} The omission:
+adjudication is a function of the
 reachability model, so where model and true state diverge---the out-of-band case
 of Boundary~1---the figure measures agreement with the tool's own crawler; the
 authors concede the mapping is ``not always
@@ -88,7 +122,11 @@ build configuration (\texttt{pom.xml}) and an external harness added
 Java sources, two added classes totalling \NtHarnessLines{} lines)---against
 Gitea \NtGiteaVersion{} (Table~\ref{tab:native-facts}). \NtMrExecuted{} of \NtMrTotal{} authorization relations
 executed; \NtMrFired{} returned failures, \NtAlarms{} alarms in all---the
-engine's own \texttt{getFailures()} value (Table~\ref{tab:native}). Almost none
+engine's own \texttt{getFailures()} value (Table~\ref{tab:native}). What the run
+establishes is scoped to the \emph{reachability-gated subset that fires here},
+not a full replay of the catalogue: one relation aborts on an engine-side defect,
+most issue no request because their own guards are unsatisfied, and the content
+predicate is never invoked. Almost none
 of the \NtElapsedS{} seconds is analysis: each leaf evaluation invokes a
 browser-cleanup hook costing minutes, a cost of the missing environment that
 bounds any reproduction.
@@ -131,15 +169,20 @@ observation channel is exact for the reachability predicate (set-membership, no
 request) but unexercised for the content predicate (\NtUcrcCalls{} invocations;
 supervisor guard \NtSupCalls{}, \NtSupTrue{} true); not all gated relations fire,
 for reasons inside their own guards, and \NtMrErrored{} abort on an engine-side
-defect---so we read the alarms as originating in the gate, not as a full-replay
-count. And Gitea, on the tested surface, enforces the expected decisions, so the
-run can only exhibit false proofs.
+defect---so the reproduced false proof is that of the reachability-gated subset
+that fires, not a full-replay count of the published relations. And Gitea, on
+the tested surface, enforces the expected decisions, so the run can only exhibit
+false proofs.
 
 \begin{table*}[t]
 \centering
 \caption{The published authorization relations executed against Gitea
-\NtGiteaVersion{}. Alarms are the engine's own return value; requests
-(\NtHttpCalls{} total) are attributed to the relation observing them first.}
+\NtGiteaVersion{}. Each row is the applicability chain from the catalogue to the
+outcome: \emph{status} is the engine's per-relation result (\NtMrExecuted{} of
+\NtMrTotal{} evaluated, \NtMrErrored{} aborted on an engine-side defect),
+\emph{alarms} its own \texttt{getFailures()} return (\NtMrFired{} relations,
+\NtAlarms{} in all), and \emph{requests} (\NtHttpCalls{} total) attributed to the
+relation observing them first.}
 \label{tab:native}
 \small
 \input{native_engine_table.tex}
@@ -148,11 +191,21 @@ run can only exhibit false proofs.
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}
 
-An adjudicator may promote a verdict to \texttt{violation-proven} on a readable
-introspection surface only when (1)~the surface is readable and (2)~one can give
-a reason that it is not of the same kind as the defect under test---not itself a
+Three properties must be kept apart. A surface is \emph{readable} when its answer
+can be obtained from the vantage in question; \emph{sound} when its answer equals
+the true authorization state; and \emph{admissible}, for promotion to
+\texttt{violation-proven}, when it is readable \emph{and} one can give a reason
+that it is not of the same kind as the defect under test---not itself a
 reachability artefact whose blind spot correlates with the blindness tested.
-Clause~2 is a per-system judgement and not automatable; the cross-vendor results
+Readability is what makes soundness usable, but it neither implies soundness nor
+confers admissibility: the owner-vantage surface is readable on every cell in
+each system (\ResRsCellsSnapshot{} Gitea, \GgCells{} Gogs, \GlCells{} GitLab),
+yet sound on Gitea alone---it agrees with actual access on \GtOracleAgree{},
+\GgOracleAgree{} and \GlOracleAgree{} of those cells respectively. The
+cross-vendor systems are therefore not cases of ``no oracle'': a readable
+membership surface exists on both, but it is unsound for the authorization
+channels exercised here, so it fails clause~(2). Clause~2 is a per-system
+judgement and not automatable from readability alone; the cross-vendor results
 make it concrete (Gogs and GitLab fail it; their adjudicators convert the blind
 spots into \GgFpVthree{} and \GlFpVthree{} false proofs). Where the condition
 holds, the honest method consumes the oracle directly and drops the relation;
@@ -162,5 +215,5 @@ reflects abstention rather than improved detection. Each boundary would fall as
 follows: Boundary~1, if the predicates were defined over live rather than
 recorded reachability; Boundary~2, by an authorization MR needing an observable
 that a succeeding request plus a readable oracle cannot produce; Boundary~3, by
-a specificity in scenario units, or with the premise explicit, that still fails
+a specificity in scenario units, or with the condition explicit, that still fails
 to separate the configurations studied here.

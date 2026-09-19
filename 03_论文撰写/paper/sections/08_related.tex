@@ -43,12 +43,9 @@ property of the technique rather than of a system.
 
 \paragraph{LLMs and the oracle problem} LLMs are used for vulnerability detection
 and specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can};
-we use none in the detection loop---our negative result argues for keeping the
-decision in a deterministic component explicit about what it can observe, and an
-LLM-driven extension would still face Boundary~1. Studies asking where a
-technique's assumptions break, rather than proposing improvements, are rarer than
-they should be; the transferable condition this paper exposes is that any claim
-of necessity must be tested against a fair substitute.
+we use none in the detection loop. The transferable condition this paper exposes
+is that any claim of necessity must be tested against a fair substitute that
+consumes the same observable quantity as the ground truth.
 
 \paragraph{Measurement and evaluation} Our contribution is finally a measurement,
 and it connects to work on the quality of the artefacts security studies are
@@ -58,6 +55,6 @@ them~\cite{Croft2023Data}. The artefact we report is of the same family but
 inside a study rather than a dataset: a specificity figure whose
 \emph{denominator} is structurally unable to register a whole class of failure,
 and whose operating point silently assumes a reachability model equals the
-authorization state. Reading a testing technique's own reported metric as a
-measurement instrument---with an explicit statement of what its denominator can
-and cannot resolve---is the habit we would like this paper to encourage.
+authorization state. We therefore read a testing technique's own reported metric
+as a measurement instrument, stating explicitly what its denominator can and
+cannot resolve.

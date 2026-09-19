@@ -35,16 +35,20 @@ granted out of band after the crawl is reported as a proven violation, at rate
 \ResObsOobVtwoFpRate{} on the constructed system and \ResRsMrBookkeepingFpRate{}
 on Gitea, because the predicate's two representations cannot describe an
 out-of-band grant; (ii)~when a sound, readable authorization oracle is
-available, the metamorphic step is not empirically necessary in our evaluated
-scenarios---replacing it with a single ordinary request changes nothing
+available, the metamorphic step carries no adjudication information the
+oracle-plus-request pair does not---a necessary condition
+(Lemma~\ref{lem:oracle-suff}), not an empirical surprise, whose empirical face
+is that replacing the step with a single ordinary request changes nothing
 measurable (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}, recall
 \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a descriptive, point-estimate
 comparison, not a formal hypothesis test, no margin pre-specified, not
 domination), and on all \ResAbDisagreementN{} disagreeing records the MR-based
-method errs; (iii)~the reported specificity rests on an undeclared premise
-(reachability model $=$ authorization state) and an input-level denominator
-insensitive to scenario-uniform failure. These are organised as RQ1 (temporal),
-RQ2 (oracle), RQ3 (measurement).
+method errs; (iii)~the reported specificity is not conditioned on an explicit
+check that the reachability model coincides with the authorization state, and is
+computed in units insensitive to scenario-uniform failure. These are organised
+as RQ1 (temporal), RQ2 (oracle), RQ3 (measurement); the native execution, the
+seeded target and the second implementation are support evidence for them, not
+further headline findings.
 
 The boundaries are not a claim that \mbox{MST-wi} is wrong: the reachability
 stand-in is announced by its authors, and the predecessor design attributes its

@@ -7,10 +7,12 @@ crawled, permitted. Instantiating them as defined produced three boundaries. As
 designed, the adjudication false-proofs on legitimately granted access,
 deterministically (\ResObsOobVtwoFpRate{} constructed; \ResRsMrBookkeepingFpRate{}
 Gitea), because an out-of-band grant fits only the wrong one of the predicate's
-two representations. The natural repair---a readable authorization oracle---works, and in that regime
-the evaluated metamorphic step provides no additional detection benefit over a
-direct request consuming the same oracle: a single ordinary request yields the
-same false-proof count (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{})
+two representations. The natural repair---a readable, sound authorization
+oracle---works, and in that regime the evaluated metamorphic step adds no
+adjudication information the oracle and the request do not already carry: this is
+a necessary condition (Lemma~\ref{lem:oracle-suff}), whose empirical face is that
+a single ordinary request yields the same false-proof count (false proofs
+\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{})
 and the same recall (difference \ResAbRecallDiff{}, CI
 $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$; descriptive, no margin
 pre-specified); the one surviving difference is on recall, where on all
@@ -20,8 +22,9 @@ present on the tested surface. On the real system the mismatch appears only unde
 the crawl-time reading (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\
 \ResRsMismatchLive{} live), with an endogenous control holding final visibility
 fixed: the responsible variable is time, not visibility. And the reported
-specificity of \ResLitReportedSpecPct{}\% is conditional on an unstated premise
-and computed in units that cannot resolve a scenario-uniform failure. Reading the
+specificity of \ResLitReportedSpecPct{}\% is not conditioned on an explicit
+check that the reachability model equals the authorization state, and is computed
+in units that cannot resolve a scenario-uniform failure. Reading the
 implementation confirmed the semantics and added the mechanism: the crawl model
 is frozen by a cache never invalidated, and a missing crawl defaults to
 ``unreachable''. The positive control closes the loop: on a seeded vulnerable
@@ -39,7 +42,8 @@ ceiling on everything we say; and we have not found a better detector.
 stronger needs, first, a real system that \emph{contains} the flaw, so detection
 can be measured; and second, relations whose gate is not the absence of
 evidence---checkable against a subject's entitlements without pretending that
-entitlements are reachable facts. The transferable condition is the one that
-killed our own mechanism: a component's necessity must be tested against a
-substitute that consumes the \emph{same} observable quantity as the ground truth;
-a substitute that consumes less does not establish incremental value.
+entitlements are reachable facts. The transferable condition---we call it the
+\emph{same-observable necessity criterion}---is the one that killed our own
+mechanism: a component's necessity must be tested against a substitute that
+consumes the \emph{same} observable quantity as the ground truth; a substitute
+that consumes less does not establish incremental value.
