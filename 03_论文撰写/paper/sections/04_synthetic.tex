@@ -4,278 +4,85 @@
 \subsection{Definitions}
 \label{sec:metrics}
 
-The confusions in this paper are defined over the \emph{verdict}, not over the
-MR's trigger, because the trigger is evidence and the verdict is what a
-developer is told.
+Confusions are defined over the \emph{verdict}: a \emph{false proof} is the
+strict subset of false alarms promoted to \texttt{violation-proven}---an error
+the tool asserts as established. We also report the \emph{detection-keep rate}
+(share of fired true violations still alarmed) and count only abstentions
+justified by an unreadable oracle.
 
-\begin{center}
-\begin{tabular}{lll}
-\toprule
-ground truth & verdict & counted as \\
-\midrule
-violation & \texttt{violation-proven} & true positive \\
-violation & not \texttt{violation-proven} (including abstention) & false negative \\
-correct & \texttt{violation-proven} & \textbf{false proof} (FP) \\
-correct & not \texttt{violation-proven} & true negative \\
-\bottomrule
-\end{tabular}
-\end{center}
+\subsection{What the constructed system shows}
 
-A \emph{false proof} is therefore the strict subset of false alarms that have
-been promoted to \texttt{violation-proven}: an error the tool asserts as
-established. We also report two rates that this table does not capture. The
-\emph{detection-keep rate} is the share of true violations on which the MR
-fired and the method still alarmed; its denominator is restricted to
-true violations on which the MR fired, so that it measures whether a correction
-\emph{discarded} a success rather than whether detection was possible. The
-\emph{abstention count} counts only abstentions justified by an unreadable
-oracle, not cases where the MR simply did not fire.
+\paragraph{Attribution is clean} On the anchored configuration the false-proof
+rate is \ResFpEthreeHits{}/\ResFpEthreeTotal{} = \ResFpEthreePct{}\%
+($[\ResFpEthreeLo{}\%, \ResFpEthreeHi{}\%]$); with the legitimate-sharing
+exception absent the rate is \ResBaseFpRate{}
+(\ResBaseFpHits{}/\ResBaseFpTotal{}), and with the channel listed it is
+\ResListedCtlFpRate{} (\ResListedCtlFpHits{}/\ResListedCtlFpTotal{}). The
+phenomenon is therefore attributable to a legitimate sharing exception the MR
+cannot know about, not to execution itself. A $2{\times}2$ grid over channel
+visibility and enforcement correctness tells the same story from the other
+side: on unlisted cells the false-proof rate is
+\ResBEThreevulnZerounlistedFpPct{}\% with no false negatives; on listed cells it
+drops to \ResBEThreevulnZerolistedFpPct{}\% but false negatives appear
+(\ResBEThreevulnOnelistedFn{} of \ResBEThreevulnOnelistedTp{}+\ResBEThreevulnOnelistedFn{}
+on the violating cell). Avoiding false proofs and keeping detection are
+controlled by one switch, and the switch cannot be thrown both ways at once.
 
-\subsection{The switch that cannot be thrown both ways}
+\paragraph{Filtering exceptions does not help}
+The exception ladder---raw, one exception level, two---leaves the anchored rate
+at \ResLadderrawRate{}, \ResLaddereOneRate{}, \ResLaddereOneeTwoRate{}: it does
+not move. The exception levels we can express are themselves functions of the
+same reachability model, so they inherit its blind spot.
 
-Table~\ref{tab:grid} crosses the visibility of the sharing channel against the
-correctness of the application's authorization, on the representative slice.
+\paragraph{The framework cannot see the channel that matters}
+When a legitimate share was created through the framework's facility, its log
+holds \ResObsFwLogRecords{} records and v2 produces \ResObsFwVtwoFalseProof{}
+false proofs (rate \ResObsFwVtwoFpRate{}); when the same share was created out
+of band, the log holds \ResObsOobLogRecords{} records---no evidence the share
+exists---and v2's false proofs rise to \ResObsOobVtwoFalseProof{} of
+\ResObsOobFalseAlarm{} alarms (rate \ResObsOobVtwoFpRate{}), every one promoted
+to \texttt{violation-proven}. The MR cannot distinguish ``this share does not
+exist'' from ``this share exists but was not crawled''; its only representation
+of the first is the second. On S7, where a genuine violation \emph{does} sit
+behind the out-of-band share, the same blindness makes the alarm right for the
+wrong reason (\ResObsOobBolaVtwoProvenBola{} of \ResObsOobBolaBolaTotal{}
+reached)---and the coincidence of alarms with violations there is exactly what
+an input-level metric cannot unpack. The same tension appears within a single
+MR: for S3 (must not alarm) vs S5 (must alarm), no configuration in the family
+is correct on both---the choice of switch is a choice of \emph{which} error to
+make.
 
-\begin{table}[t]
-\centering
-\caption{The 2$\times$2 grid on the representative slice. FP~=~false proofs,
-FN~=~false negatives; each cell has \ResBEThreevulnZerounlistedCases{} records
-over \ResDesignCells{} design cells. Intervals are Wilson 95\% and, per
-Section~\ref{sec:stats}, are conventional rather than sampling-based.}
-\label{tab:grid}
-\begin{tabular}{llrrr}
-\toprule
-channel & application & FP & FN & FP rate [95\% CI] \\
-\midrule
-unlisted & correct   & \ResBEThreevulnZerounlistedFp{} & \ResBEThreevulnZerounlistedFn{}
-         & \ResBEThreevulnZerounlistedFpPct{}\% [\ResBEThreevulnZerounlistedFpLo{}, \ResBEThreevulnZerounlistedFpHi{}] \\
-listed   & correct   & \ResBEThreevulnZerolistedFp{} & \ResBEThreevulnZerolistedFn{}
-         & \ResBEThreevulnZerolistedFpPct{}\% [\ResBEThreevulnZerolistedFpLo{}, \ResBEThreevulnZerolistedFpHi{}] \\
-unlisted & violating & \ResBEThreevulnOneunlistedFp{} & \ResBEThreevulnOneunlistedFn{}
-         & \ResBEThreevulnOneunlistedFpPct{}\% [\ResBEThreevulnOneunlistedFpLo{}, \ResBEThreevulnOneunlistedFpHi{}] \\
-listed   & violating & \ResBEThreevulnOnelistedFp{} & \ResBEThreevulnOnelistedFn{}
-         & \ResBEThreevulnOnelistedFpPct{}\% [\ResBEThreevulnOnelistedFpLo{}, \ResBEThreevulnOnelistedFpHi{}] \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Three of the four cells contain an error
-(\ResGridCellsWithError{}/\ResGridCellsTotal{}). One cell is clean---
-listed$\times$correct, with no error at all---but it is clean for a trivial
-reason, and we say so: on that cell the MR never fires, so there is nothing for
-the adjudicator to get wrong, and there is no true violation to miss either. The
-same switch that makes it clean makes the paired
-listed$\times$violating cell err in the other direction, where the MR fails to
-fire on a genuine violation and produces \ResBEThreevulnOnelistedFn{} false
-negatives out of \ResBEThreevulnOnelistedTp{}+\ResBEThreevulnOnelistedFn{}.
-
-The substantive reading of Table~\ref{tab:grid} is therefore not ``cells are
-error-free'' but: \emph{avoiding false proofs and keeping detection are
-controlled by one switch, and the switch cannot be thrown both ways at once}.
-On unlisted cells the false-proof rate is
-\ResBEThreevulnZerounlistedFpPct{}\% with no false negatives; on listed cells the
-false-proof rate is \ResBEThreevulnZerolistedFpPct{}\% with false negatives
-appearing. Section~\ref{sec:synthetic-dilemma} shows the same tension at the
-level of individual scenarios.
-
-\subsection{Attribution is clean, and the anchor is small}
-
-On the anchored configuration the false-proof rate is
-\ResFpEthreeHits{}/\ResFpEthreeTotal{} = \ResFpEthreePct{}\%, and this paper will
-never quote it without its interval, which is
-$[\ResFpEthreeLo{}\%, \ResFpEthreeHi{}\%]$. The two controls that isolate
-attribution are clean: with the legitimate-sharing exception absent the rate is
-\ResBaseFpRate{} (\ResBaseFpHits{}/\ResBaseFpTotal{}), and with the channel
-listed the rate is \ResListedCtlFpRate{}
-(\ResListedCtlFpHits{}/\ResListedCtlFpTotal{}). The phenomenon is therefore
-attributable to the presence of a legitimate sharing exception that the MR
-cannot know about, not to the MR merely being executed. Recall on the unlisted
-violation scenarios S2, S4 and S5 is \ResRecallSTwo{},
-\ResRecallSFour{} and \ResRecallSFive{} respectively.
-
-Because \ResFpEthreeTotal{} is two cases, we lead elsewhere with the larger
-counts: the per-cell \ResBEThreevulnZerounlistedFpPct{}\% of
-Table~\ref{tab:grid} and, in Section~\ref{sec:synthetic-ablation}, a
-\ResSynRecords{}-record panel.
-
-\subsection{Filtering exceptions does not help}
-\label{sec:synthetic-ladder}
-
-One natural repair is to add exception predicates: recognise legitimate sharing
-and filter it. We evaluated the exception ladder---raw, then one exception
-level, then two---on the anchored false-proof rate. The rate is
-\ResLadderrawRate{}, \ResLaddereOneRate{} and \ResLaddereOneeTwoRate{}: it does
-not move. This is a constructive result rather than a disappointing one: the
-exception levels we can express are themselves functions of the same
-reachability model, so they inherit its blind spot. Adding predicates from the
-same family cannot repair a failure caused by that family.
-
-\subsection{The framework cannot see the channel that matters}
-\label{sec:synthetic-observability}
-
-Table~\ref{tab:obs} separates the two channels. When the legitimate share was
-created through the framework's own facility, the framework's log holds
-\ResObsFwLogRecords{} records on the scenario, and the exception-aware
-adjudicator v2 produces \ResObsFwVtwoFalseProof{} false proofs
-(rate \ResObsFwVtwoFpRate{}). When the same legitimate share was created
-\emph{out of band}, the framework's log holds \ResObsOobLogRecords{} records,
-and v2's false-proof count rises to \ResObsOobVtwoFalseProof{} of
-\ResObsOobFalseAlarm{} alarms, i.e.\ a rate of \ResObsOobVtwoFpRate{}, with
-every one of them promoted to \texttt{violation-proven}.
-
-\begin{table}[t]
-\centering
-\caption{Observability of the sharing channel. Each scenario has
-\ResObsOobFalseAlarm{} alarms over \ResDesignCells{} design cells. A log record
-count of \ResObsOobLogRecords{} means the framework has no evidence that the
-share exists.}
-\label{tab:obs}
-\begin{tabular}{lrrrr}
-\toprule
-scenario & framework log records & alarms & v2 false proofs & v2 rate \\
-\midrule
-framework-created legitimate share (S3) & \ResObsFwLogRecords{} & \ResObsFwFalseAlarm{} & \ResObsFwVtwoFalseProof{} & \ResObsFwVtwoFpRate{} \\
-out-of-band legitimate share (S6)       & \ResObsOobLogRecords{} & \ResObsOobFalseAlarm{} & \ResObsOobVtwoFalseProof{} & \ResObsOobVtwoFpRate{} \\
-out-of-band share with a real violation (S7) & \ResObsOobBolaLogRecords{} & \ResObsOobBolaFalseAlarm{} & \ResObsOobBolaVtwoFalseProof{} & \ResObsOobBolaVtwoFpRate{} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-This is boundary 1 in its sharpest form.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.98\linewidth]{fig2_scenarios.pdf}
-\caption{Errors are scenario-structured. The bookkeeping adjudicator's false
-positives concentrate on the out-of-band legitimate-share scenario (S6), where
-the framework has no log record of the share, and the state-calibrated
-adjudicator's false negatives concentrate where its reachability precondition
-blocks a detection. Every one of the \ResAbDisagreementN{} records on which
-\texttt{direct\_observe} and v3 disagree is of the second kind.}
-\label{fig:scenarios}
-\end{figure}
-
-The MR cannot distinguish ``this
-share does not exist'' from ``this share exists but was not created through the
-interface I crawled''. Its only available representation of the first statement
-is the second, so an out-of-band grant is reported as a proven violation. Note
-also that on S7---where there \emph{is} a genuine violation behind the
-out-of-band share---the same blindness would make the alarm right for the wrong
-reason: of the \ResObsOobBolaBolaTotal{} true violations on that scenario, the
-exception-aware method reaches \ResObsOobBolaVtwoProvenBola{} and the
-state-calibrated method \ResObsOobBolaVthreeProvenBola{}. Being right by
-accident is not detection, and we do not count it as such. Note also that on
-S7 the alarms and the true violations coincide numerically, which is exactly
-what makes the accident invisible to an input-level metric.
-
-\subsection{One switch, two scenarios}
-\label{sec:synthetic-dilemma}
-
-The grid's tension can be exhibited inside a single MR, with no change other
-than the channel-visibility switch. Consider S3, where the correct behaviour is
-\emph{not} to alarm (there is a legitimate share and no violation), and S5,
-where the correct behaviour \emph{is} to alarm (a read-only share must not
-authorise a write). Under the unlisted configuration the MR is correct on S5
-but wrong on S3; under the listed configuration it is correct on S3 but wrong on
-S5. Writing $c_x(S)$ for ``configuration $x$ is correct on scenario $S$'': we
-obtain $c_{\text{unlisted}}(\text{S3}) = \ResSthreeSfiveRowZeroSthreeOk{}$,
-$c_{\text{unlisted}}(\text{S5}) = \ResSthreeSfiveRowZeroSfiveOk{}$,
-$c_{\text{listed}}(\text{S3}) = \ResSthreeSfiveRowOneSthreeOk{}$ and
-$c_{\text{listed}}(\text{S5}) = \ResSthreeSfiveRowOneSfiveOk{}$, so no
-configuration in this family is correct on both---the disjunction over
-configurations is \ResSthreeSfiveAnyCorrect{}. For this MR the choice of switch
-is a choice of \emph{which} error to make, not whether to make one.
-
-\subsection{The aggregation hides the regime change}
-
-Table~\ref{tab:aggregate} aggregates verdict quality over all configurations,
-using the recovery rate (share of raw alarms the method resolves correctly) and
-the detection-keep rate.
-
-\begin{table}[t]
-\centering
-\caption{Verdict quality over all configurations. ``Recovery'' is the share of
-raw alarms resolved correctly; ``keep'' is the share of fired true violations
-that still alarm. \texttt{degrade\_all} is the floor that abstains on
-everything.}
-\label{tab:aggregate}
-\begin{tabular}{lrrr}
-\toprule
-method & false alarms & recovery & keep \\
-\midrule
-v1 (raw)                 & \ResVdVOneFalseAlarm{}       & \ResVdVOneRecoveryRate{}       & \ResVdVOneKeepRate{} \\
-v2 (exception-aware)     & \ResVdVTwoFalseAlarm{}       & \ResVdVTwoRecoveryRate{}       & \ResVdVTwoKeepRate{} \\
-v3 (state-calibrated)    & \ResVdVThreeFalseAlarm{}     & \ResVdVThreeRecoveryRate{}     & \ResVdVThreeKeepRate{} \\
-\texttt{degrade\_all}    & \ResVdDegradeallFalseAlarm{} & \ResVdDegradeallRecoveryRate{} & \ResVdDegradeallKeepRate{} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Read naively, v3 looks like the best method in the table: it recovers
-\ResVdVThreeRecoveryRate{} of raw alarms while \texttt{degrade\_all} keeps
-\ResVdDegradeallKeepRate{}. That reading is wrong, and the way to see that it is
-wrong is to stratify. v3's behaviour changes regime depending on whether an
-authorization introspection surface is readable, and the aggregate averages two
-different regimes:
-
-\begin{center}
-\begin{tabular}{lrrrr}
-\toprule
-stratum & records & false proofs & keep & abstentions \\
-\midrule
-introspection readable & \ResIntroOnN{}  & \ResIntroOnVthreeFpN{} & \ResIntroOnVthreeKeepRate{} & \ResIntroOnAbstain{} \\
-introspection absent   & \ResIntroOffN{} & \ResIntroOffVthreeFpN{} & \ResIntroOffVthreeKeepRate{} & \ResIntroOffAbstain{} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-On the readable stratum v3 is genuinely good: it removes the false proofs the
-exception-aware method still produces (\ResIntroOnVthreeFpN{} against v2's
-\ResIntroOnVtwoFpN{}) and still alarms on all \ResIntroOnVthreeProvenBola{}
-fired true violations. On the absent stratum its keep rate is
-\ResIntroOffVthreeKeepRate{}: it alarms on none of the
-\ResIntroOffVtwoProvenBola{} true violations the exception-aware method still
-alarms on, and it abstains \ResIntroOffAbstain{} times. The aggregate reports
-this as the best row in the table. It is not better; it is a different thing. A
-method that abstains on everything is not accurate, and any report that pools
-these two strata turns honest abstention into apparent performance. We therefore
-state, as a reporting rule, that v3's numbers may appear only stratified.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.98\linewidth]{fig3_strata.pdf}
-\caption{The same method, two regimes. Stratified by readability of the
-authorization introspection surface, v3's false proofs vanish only on the
-stratum where it can still keep its detections; on the other stratum the zero
-false-proof count coincides with a keep rate of
-\ResIntroOffVthreeKeepRate{}. Pooling the two strata (Table~\ref{tab:aggregate})
-converts abstention into apparent performance.}
-\label{fig:strata}
-\end{figure}
+\paragraph{Stratification, not aggregation}
+Aggregated, v3 looks best (recovery \ResVdVThreeRecoveryRate{} against
+\texttt{degrade\_all}'s keep rate \ResVdDegradeallKeepRate{}); the reading is
+wrong, because v3 changes regime with oracle readability. Stratified: on the
+readable stratum (\ResIntroOnN{} records) it removes v2's false proofs
+(\ResIntroOnVthreeFpN{} vs.~\ResIntroOnVtwoFpN{}) while still alarming on all
+\ResIntroOnVthreeProvenBola{} fired true violations; on the absent stratum
+(\ResIntroOffN{}) it alarms on none of the \ResIntroOffVtwoProvenBola{} true
+violations v2 still alarms on, abstaining \ResIntroOffAbstain{} times. Pooling
+converts honest abstention into apparent performance, so v3's numbers may appear
+only stratified.
 
 \subsection{The decisive ablation: does the metamorphic step carry work?}
 \label{sec:synthetic-ablation}
 
-Our earlier iteration proposed v3 as a mechanism, and the claim it rested on was
-that the metamorphic step was necessary to it. We tested that claim by removing
-the metamorphic step and replacing it with the most naive thing that consumes
-the same observable quantity.
-
-The distinction matters. A first control, \texttt{direct\_only}, consults the
-readable authorization surface but ignores whether the access succeeded; it is a
-straw man, and it shows: \ResAbDirectOnlyFP{} false proofs against v3's
-\ResAbVThreeFP{}, precision \ResAbDirectOnlyPrec{}. Rejecting \texttt{direct\_only}
-proves nothing, because it discards half of the available evidence. The control
-that is actually fair is \texttt{direct\_observe}: an ordinary request that
-succeeds, together with the same readable authorization surface. It consumes
-exactly what the MR-based adjudicator consumes.
+Our earlier iteration proposed v3 as a mechanism, resting on the claim that the
+metamorphic step was necessary. We tested that claim by removing the step and
+substituting the most naive consumer of the same observable. The distinction
+matters: \texttt{direct\_only}---oracle yes, access outcome
+ignored---produces \ResAbDirectOnlyFP{} false proofs against v3's
+\ResAbVThreeFP{} (precision \ResAbDirectOnlyPrec{}), and rejecting it proves
+nothing because it discards half the evidence. The fair control is
+\texttt{direct\_observe}: a succeeding ordinary request plus the same readable
+surface, consuming exactly what the MR-based adjudicator consumes.
 
 \begin{table}[t]
 \centering
 \caption{End-to-end confusion matrix over all \ResSynRecords{} records
 (\ResAbNBola{} true violations, \ResAbNNormal{} correct cases). Intervals are
-Wilson 95\% and are conventional (Section~\ref{sec:stats}).
-\texttt{direct\_only} is a deliberately unfair control and is shown to make that
+Wilson 95\% and are descriptive (Section~\ref{sec:stats}).
+\texttt{direct\_only} is a deliberately unfair control, shown to make that
 point.}
 \label{tab:ablation}
 \begin{tabular}{lrrrrrrl}
@@ -292,88 +99,41 @@ v3 (state-calibrated) & \ResAbVThreeTP{} & \ResAbVThreeFP{} & \ResAbVThreeFN{} &
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:ablation} is the result that closes this line of work.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.98\linewidth]{fig4_methods.pdf}
-\caption{The MR trigger does not carry the work. Left: the deliberately unfair
-control \texttt{direct\_only} compares badly, and rejecting it proves nothing.
-Right: the fair control \texttt{direct\_observe}, which consumes the same
-observable quantity as the true label, attains the same point-estimate precision
-with \ResAbDirectObserveFP{} false proofs and a recall difference of
-\ResAbRecallDiff{} (95\% CI
-$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$, includes zero).}
-\label{fig:methods}
-\end{figure}
-
-\texttt{direct\_observe} has \ResAbDirectObserveFP{} false proofs against v3's
-\ResAbVThreeFP{}, with the same point-estimate precision
-(\ResAbDirectObservePrec{}), and its recall is \ResAbDirectObserveRec{} against
-v3's \ResAbVThreeRec{}. The recall difference of \ResAbRecallDiff{} is not
+Table~\ref{tab:ablation} closes this line of work. \texttt{direct\_observe} has
+\ResAbDirectObserveFP{} false proofs against v3's \ResAbVThreeFP{}---a tie at
+zero, not a win---with the same point-estimate precision
+(\ResAbDirectObservePrec{}), and recall \ResAbDirectObserveRec{} against
+\ResAbVThreeRec{}. The recall difference of \ResAbRecallDiff{} is not
 distinguishable from zero (95\% CI
-$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$), so the correct description is
-a \emph{descriptive, point-estimate} comparison, not domination; because no
-margin was pre-specified, no formal hypothesis-test claim attaches to it, and
-the descriptive
-comparison is already enough to answer the question, because the two methods
-disagree on only
-\ResAbDisagreementN{} of the records. On every one of those, v3 does not fire
-the MR and \texttt{direct\_observe} alarms on a genuine violation: the
-reachability precondition blocked a detection that a plain request finds.
-
-We also report what a selective presentation would have hidden. v3's precision
-of \ResAbVThreePrec{} is real, and it was bought with
-\ResAbVThreeFN{} false negatives; its F1 is \ResAbVThreeFone{}. Quoting the
-precision alone, as our earlier iteration did, would have described a method
-that exchanges \ResAbVOneFP{} false alarms for \ResAbVThreeFN{} missed
-violations as though it were an improvement. It is not, and it is not a
-mechanism that carries work: the metamorphic step adds nothing here that a
-single ordinary request does not already provide.
+$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$): a descriptive, point-estimate
+comparison, not domination; no margin was pre-specified, so no formal
+hypothesis-test claim attaches to it. We found no measurable advantage of the
+metamorphic step over direct observation in these oracle-available scenarios,
+and that absence is decisive: the step would have to be better at something the
+plain request cannot do, yet on every one of the \ResAbDisagreementN{}
+disagreeing records it is v3 that fails, its reachability precondition blocking
+a detection the plain request makes. Selective presentation would have hidden
+the cost: v3's precision of \ResAbVThreePrec{} was bought with
+\ResAbVThreeFN{} false negatives (F1 \ResAbVThreeFone{}), an exchange of
+\ResAbVOneFP{} false alarms for missed violations dressed as an improvement.
 
 \subsection{Reproducing the reported specificity, and why it cannot see this}
 
-The reported specificity has the form $1 - \text{false alarms} / \text{follow-up
-inputs}$. We cannot reproduce the engine's exact input count, so we approximate
-the denominator as two follow-up inputs per case; this is enough to show the
-denominator's resolution, which is the only point we wish to make.
-Table~\ref{tab:spec} gives the result.
-
-\begin{table}[t]
-\centering
-\caption{The reported specificity convention, approximated. The denominator is
-an input count, not a scenario count.}
-\label{tab:spec}
-\begin{tabular}{lrrr}
-\toprule
-configuration & cases & false alarms & specificity \\
-\midrule
-no legitimate-sharing exception & \ResSpecRowZeroCases{} & \ResSpecRowZeroFa{} & \ResSpecRowZeroSpec{} \\
-exception, unlisted channel     & \ResSpecRowOneCases{}  & \ResSpecRowOneFa{}  & \ResSpecRowOneSpec{} \\
-exception, listed channel       & \ResSpecRowTwoCases{}  & \ResSpecRowTwoFa{}  & \ResSpecRowTwoSpec{} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The unlisted configuration---the one where a whole class of legitimate access is
-misreported---still yields a specificity of \ResSpecRowOneSpec{}
-(\ResSpecRowOneSpecPct{}\%). A denominator that counts generated inputs is
-divided by the number of requests the generator emitted, so a failure that is
-\emph{uniform across a scenario class} is diluted by every other input in the
-run. This is boundary 3: the metric is not wrong, it is
-\emph{low-resolution} with respect to the failure mode. It is also not our
-finding: the predecessor design attributes its own residual false alarms to
-crawler coverage of ``all URLs for all users''~\cite{Mai2019Metamorphic}, and
-\emph{that} is the same reachability-blindness we are describing, reported at a
-  grain at which it cannot be seen.
+The reported specificity has the form $1 - \text{false alarms} / \text{inputs}$.
+We cannot reproduce the engine's exact input count, so we approximate two
+follow-up inputs per case---enough to exhibit the denominator's resolution, the
+only point at issue. In that approximation the configuration in which a whole
+class of legitimate access is misreported still yields a specificity of
+\ResSpecRowOneSpec{} (\ResSpecRowOneSpecPct{}\%). A failure uniform across a
+scenario class is diluted by every other input in the run, and the predecessor
+design says the same of itself, attributing its residual false alarms to crawler
+coverage of ``all URLs for all users''~\cite{Mai2019Metamorphic}.
 
 \paragraph{A proposition on the metric's resolution}
-The dilution above is not incidental; it is structural. Define the
-input-level specificity $S_{\mathrm{input}} = 1 - \mathit{FP}_{\mathrm{inputs}} / N_{\mathrm{inputs}}$
-and the scenario-level specificity
-$S_{\mathrm{scenario}} = 1 - N_{\mathrm{failed}} / N_{\mathrm{scenarios}}$, where
-$\mathit{FP}_{\mathrm{inputs}}$ counts false alarms across all generated inputs
-and $N_{\mathrm{failed}}$ counts the scenarios in which the failure is uniform.
+Define $S_{\mathrm{input}} = 1 - \mathit{FP}_{\mathrm{inputs}} / N_{\mathrm{inputs}}$
+and $S_{\mathrm{scenario}} = 1 - N_{\mathrm{failed}} / N_{\mathrm{scenarios}}$,
+where $\mathit{FP}_{\mathrm{inputs}}$ counts false alarms over all generated
+inputs and $N_{\mathrm{failed}}$ the scenarios in which the failure is uniform.
 
 \noindent\textbf{Proposition.} Fix $f \ge 1$ failed scenarios, each producing a
 fixed number $a \ge 1$ of false-alarm inputs, and $s \ge 1$ successful
@@ -382,12 +142,11 @@ $S_{\mathrm{input}} = 1 - (f a) / (f a + s m)$, which tends to $1$ as
 $m \to \infty$, while $S_{\mathrm{scenario}} = 1 - f / (f + s)$ is independent
 of $m$ and strictly less than $1$.
 
-\noindent\textbf{Proof.} The total input count is
-$N_{\mathrm{inputs}} = f a + s m$ and the false-alarm count is
+\noindent\textbf{Proof.} $N_{\mathrm{inputs}} = f a + s m$ and
 $\mathit{FP}_{\mathrm{inputs}} = f a$; substitution gives
-$S_{\mathrm{input}} = 1 - (f a) / (f a + s m)$. As $m \to \infty$ the fraction
-tends to $0$, so $S_{\mathrm{input}} \to 1$, whereas the scenario-level figure
-depends only on the fixed counts $f$ and $s$. \hfill $\square$
+$S_{\mathrm{input}} = 1 - (f a) / (f a + s m) \to 1$ as $m \to \infty$, whereas
+the scenario-level figure depends only on the fixed counts $f$ and $s$.
+\hfill $\square$
 
 \smallskip
 \noindent\textbf{Corollary.} No fixed input-level specificity threshold
@@ -395,18 +154,15 @@ $t < 1$ can guarantee detection of a scenario-uniform failure class: choosing
 $m > (\mathit{fa}/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
 the $f$ failing scenarios remain failing. \hfill $\square$
 
-The metric is therefore not merely imprecise: it is arbitrarily dilutable
-with respect to a failure mode that is uniform across a scenario class---adding
-unaffected inputs drives it toward $1$ without touching the failure---so it
-lacks stable scenario-level resolution.
+\smallskip
+The metric is therefore not merely imprecise: it is arbitrarily dilutable with
+respect to a scenario-uniform failure---adding unaffected inputs drives it
+toward $1$ without touching the failure---so it lacks stable scenario-level
+resolution.
 
-\subsection{Second implementation}
-
-A second, independently written implementation of the same predicates agreed
-with the first on \ResAltAgree{} of \ResAltCompared{} records
-(\ResAltAgreeRate{}; Wilson 95\% CI
-$[\ResAltAgreeRateLo{}, \ResAltAgreeRateHi{}]$). This bounds
-implementation accident only. It does not bound a shared blind spot in the
-predicate semantics, because both implementations were written from the same
-reading of those semantics, and we say so rather than presenting the agreement
-as corroboration.
+\paragraph{Second implementation}
+An independently written implementation of the same predicates agreed on
+\ResAltAgree{} of \ResAltCompared{} records (\ResAltAgreeRate{}; Wilson 95\% CI
+$[\ResAltAgreeRateLo{}, \ResAltAgreeRateHi{}]$). Both were written from the same
+reading of the semantics, so this bounds implementation accident only; it does
+not bound a shared blind spot, and we do not present it as corroboration.

@@ -1,123 +1,42 @@
 \section{Threats to validity}
 \label{sec:threats}
 
-\paragraph{We inspected the implementation, and then executed it} Two
-limitations are easily conflated, so we separate them.
+\paragraph{Source versus execution} We read the predicates at source (built
+under JDK~8 and Maven; Section~\ref{sec:impl}) and then executed the relations,
+unmodified apart from the build configuration and our harness
+(Section~\ref{sec:native-run}). The harness substitutes an HTTP observation
+channel---exact for the reachability predicate, not exercised for the content
+predicate, whose invocation count we report rather than claim cleanliness we did
+not demonstrate. The run converts one class of claim (the false proof is produced
+by the \emph{published} relations on a real system); it does not convert the
+rest: the factorial and cell studies remain statements about our instantiation,
+our exception vocabulary belongs to the same predicate family, and we report no
+sensitivity or specificity attributable to \mbox{MST-wi}.
 
-\emph{Source.} The realisation of \mbox{MST-wi} is
-public~\cite{Chaleshtari2022Metamorphic}. We obtained it, read the predicates at
-source (Section~\ref{sec:impl}), and built it under JDK~8 and Maven together with
-its \ResArtAuthzMrTotal{} authorization relations, which load. Where we describe a
-predicate's semantics we cite the code rather than the prose.
+\paragraph{Metric and statistics} The specificity approximation uses two
+follow-up inputs per case---not the engine's count; the conclusion about the
+denominator's resolution does not depend on the exact value. Records within a
+design cell are not independent (Section~\ref{sec:stats}), so all intervals are
+descriptive and no result rests on statistical significance.
 
-\emph{Execution.} We then ran those relations---their source unmodified---against
-a real system; the only additions were the build configuration
-(\texttt{pom.xml}) and an external harness/driver that the upstream artifact
-does not ship
-(Section~\ref{sec:native-run}). This was not free: the library does not ship the
-per-system configuration and crawl data that its own demonstrations reference;
-\ifnum\ResArtFactFSixupstreampomdeclaresmrsourceroot=0
-nor does its build configuration compile the relations themselves, which live in a
-source directory the build file does not declare---a declaration we had to add,
-and Section~\ref{sec:native-run} reports that one-line diff along with the rest
-of our footprint;\fi{}
-executing a relation therefore required assembling a subject system, a system
-configuration and a crawl, which is what we did. The harness is ours, and its
-cost must be stated rather than assumed away: we execute without a browser,
-substituting the HTTP observation channel while leaving the relations, the
-predicates and the loaded crawl records untouched. That separation is exact for
-the reachability predicate, which is set-membership over loaded records and issues
-no request; it is \emph{not} exact for the content predicate, which consumes the
-observed output, and that predicate happens not to be exercised by our data. We
-report its invocation count rather than claim a cleanliness we did not
-demonstrate.
+\paragraph{Two MRs, one family} We instantiated \ResDesignMrs{} MRs of one
+family---relations gated on the absence of evidence. The native run lifts the
+count to \NtMrExecuted{} of \ResArtAuthzMrTotal{} catalog authorization
+relations but not the family: only the reachability-gated ones alarm in our run.
+This is the paper's single most important limitation; raising it requires
+relations gated otherwise, a different experiment.
 
-\emph{What the run buys, and what it does not.} It converts one class of claim:
-we can now say that a false proof is produced by the \emph{published} relations
-under the \emph{published} predicates on a real system, and not only by our
-reading of them. It does not convert the rest. The \ResSynRecords{}-record
-factorial and the cell study remain statements about our instantiation, because
-the harness is ours and because our exception vocabulary is drawn from the same
-predicate family: where we approximate an exception semantics we say so, and our
-result there is a statement about that family's expressive limit, not a
-measurement of the engine's false-positive rate. We still do not report a
-sensitivity or a specificity attributable to \mbox{MST-wi}, and we still do not
-assert that it fails.
+\paragraph{Real systems} Three systems (one lineage pair, one independent),
+chosen for accessibility, none vulnerable on the tested surface---so only the
+false-proof side is measured, within one domain, the git forge. Channel
+proportions are topology design parameters, not field prevalence. Constructed
+scenarios with construction-defined ground truth are why the real-system section
+exists; three systems tested once each are still not a population.
 
-\paragraph{Metric convention} The specificity of
-Section~\ref{sec:synthetic-ablation} uses two follow-up inputs per case as a
-stand-in for the engine's input count. That approximation is not the engine's
-number, and we use it only to exhibit the denominator's resolution. The
-conclusion we draw---that an input-unit denominator cannot see a
-scenario-uniform failure---does not depend on the exact count.
-
-\paragraph{The independent unit is the design cell, not the record} As set out
-in Section~\ref{sec:stats}, the \ResSynRecords{} records expand
-\ResDesignCells{} cells by \ResDesignMrs{} MRs and by two switches that we throw
-deliberately. Records inside a cell are not independent. All intervals in this
-paper are therefore reported \emph{descriptively}: because records within a
-design cell are not independent, they do not support a formal hypothesis-test
-reading, and the recall difference in Boundary~2 in particular is not a test
-outcome. The paper's conclusions do not rest on statistical significance.
-
-\paragraph{Two MRs, and a catalog of one family} We instantiated
-\ResDesignMrs{} MRs, both from the same family---authorization relations whose
-gate is the absence of evidence. The native run of Section~\ref{sec:native-run}
-executes \NtMrExecuted{} of the catalog's \ResArtAuthzMrTotal{} authorization
-relations, which lifts the count but not the family: \ResArtAuthzGatedCrtg{} of
-them gate on the reachability predicate and \ResArtAuthzGatedUcrc{} on the
-content predicate, and only the former produce alarms in our run, so the boundary
-we report remains a property of that gate. What the run
-broadens is the illustration of the boundary, not the evidence that the boundary
-is where we say. The ceiling on any generalization to ``\mbox{MST-wi}'s MRs''
-therefore stands, and we do not generalize. This remains the single most
-important limitation of the paper, and it is the one we would address first with
-more work: raising it requires relations whose gate is \emph{not} of this family,
-which is a different experiment from the one reported here.
-
-\paragraph{Second implementation, shared blind spot} The second implementation
-agreed with the first on \ResAltAgree{} of \ResAltCompared{} records
-(\ResAltAgreeRate{}; Wilson 95\% CI
-$[\ResAltAgreeRateLo{}, \ResAltAgreeRateHi{}]$). Both were written from the same
-reading of the predicate semantics, so this bounds implementation accident only.
-It does not bound a shared misreading, and we do not present it as
-corroboration.
-
-\paragraph{Real systems, none vulnerable on the tested surface} The real-system study
-spans three systems---Gitea \ResRsVersion{}, Gogs \GgVersion{} (lineage-related:
-Gitea forked from Gogs in 2016), and GitLab \GlVersion{}
-(no lineage)---chosen for accessibility rather than for representativeness, and
-on the endpoints and authorization transitions exercised, none presented an
-object-level authorization vulnerability. The experiment
-therefore measures only the false-proof side and cannot speak to detection on a
-vulnerable real system. The replication is across git forges, one domain; it is
-not a sample of web applications at large.
-
-\paragraph{Channel proportions are a design parameter} The breakdown of
-Table~\ref{tab:rs-m6}---including the \ResRsChannelNotObservableRate{} share of
-authorized access that the framework's log cannot see---reflects the topology we
-constructed to exercise the mechanism. It is not a field prevalence, and it must
-not be quoted as one. The instance-independent measurements in this paper are the
-grant-endpoint census (Table~\ref{tab:rs-m1}) and the predicate counts over the
-public artifact (Section~\ref{sec:background}).
-
-\paragraph{Our own earlier claims are among the casualties} An earlier iteration
-of this work proposed the state-calibrated adjudicator v3 as a mechanism and
-reported its precision of \ResAbVThreePrec{}. Two things were wrong with that.
-The precision was bought with \ResAbVThreeFN{} false negatives, so its F1 is
-\ResAbVThreeFone{} and quoting the precision alone was a selective presentation;
-and the control that we had used to argue for the mechanism's necessity
-(\texttt{direct\_only}, \ResAbDirectOnlyPrec{} precision) was a straw man because
-it discarded the access result. Replacing it with a fair control
-(\texttt{direct\_observe}) is what produced the negative result of
-Section~\ref{sec:synthetic-ablation}. We record this because it defines the
-condition under which our own claim would have been wrong, and a reader should
-demand that condition of any similar claim: a control that consumes the same
-observable quantity as the true label.
-
-\paragraph{Constructed scenarios} The synthetic system is ours, its scenarios
-are designed to separate causes, and its ground truth is defined by
-construction. Section~\ref{sec:realsystem} exists precisely to test whether the
-result survives outside that construction, and it does, in the direction and
-with the endogenous control we report; but three systems, two of them related by
-lineage, tested once each, are still not a population.
+\paragraph{Our own earlier claims} An earlier iteration proposed v3 as a
+mechanism on the strength of its precision (\ResAbVThreePrec{}), which was
+bought with \ResAbVThreeFN{} false negatives, and a control
+(\texttt{direct\_only}, precision \ResAbDirectOnlyPrec{}) that discarded the
+access result. Replacing it with a fair control produced the negative result. We
+record this as the condition any similar claim must meet: a control consuming the
+same observable quantity as the ground truth.
