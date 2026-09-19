@@ -106,6 +106,10 @@ def render_svg(spec: dict, stem: str) -> Path:
                        capture_output=True, text=True, encoding="utf-8")
     if r.returncode != 0:
         raise SystemExit(f"渲染失败 {stem}:\n{r.stdout}\n{r.stderr}")
+    # The renderer writes platform line endings (CRLF on Windows); normalise to
+    # LF so the SVG bytes---and the sha256 recorded in provenance---do not
+    # depend on the machine that regenerated them.
+    out.write_bytes(out.read_bytes().replace(b"\r\n", b"\n"))
     print(f"  [svg] {out.name} ({out.stat().st_size}B)")
     return out
 
@@ -113,6 +117,10 @@ def render_svg(spec: dict, stem: str) -> Path:
 def svg_to_pdf(svg: Path) -> Path:
     from svglib.svglib import svg2rlg
     from reportlab.graphics import renderPDF
+    from reportlab import rl_config
+    # Reproducible output: reportlab otherwise embeds a time/random-derived
+    # document ID, so identical SVGs yield byte-different PDFs across runs.
+    rl_config.invariant = 1
     pdf = svg.with_suffix(".pdf")
     drawing = svg2rlg(str(svg))
     renderPDF.drawToFile(drawing, str(pdf), autoSize=1)

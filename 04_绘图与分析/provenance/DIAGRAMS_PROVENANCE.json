@@ -2,15 +2,15 @@
   "fig1_protocol": {
     "spec": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\04_绘图与分析\\figures\\specs\\fig1_protocol.json",
     "renderer": "C:\\Users\\Administrator\\.workbuddy\\skills\\figure-spec\\scripts\\figure_renderer.py",
-    "svg_sha256": "06133254e3a8d8d2",
-    "pdf_sha256": "35fc5fa05d1bd77d",
+    "svg_sha256": "7f6da028a3864f77",
+    "pdf_sha256": "1b89d2693dc21507",
     "pixels_generated_by_model": false
   },
   "fig7_boundaries": {
     "spec": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\04_绘图与分析\\figures\\specs\\fig7_boundaries.json",
     "renderer": "C:\\Users\\Administrator\\.workbuddy\\skills\\figure-spec\\scripts\\figure_renderer.py",
-    "svg_sha256": "e2b8dce6c80ca2f2",
-    "pdf_sha256": "efbd6a3ba478ab48",
+    "svg_sha256": "b71bc4f2f806ab6c",
+    "pdf_sha256": "724769316ec39581",
     "pixels_generated_by_model": false
   }
 }

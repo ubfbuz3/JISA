@@ -19,23 +19,27 @@ coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
 \emph{when} the model was read, which is what makes the Boundary-2 repair
 available---and empty.
 
-\subsection{Boundary 2 (RQ2): with a sound, readable oracle, the metamorphic step is not empirically necessary}
+\subsection{Boundary 2 (RQ2): with a sound, readable oracle, the metamorphic step provides no additional detection benefit}
 
 \emph{If the false proofs of Boundary~1 are removed by consulting a readable
-introspection surface, it is the oracle that carries the work: replacing the
-entire metamorphic step with a single ordinary request changes nothing
-measurable.} Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
+introspection surface, it is the oracle that carries the work: for the
+authorization relations and scenarios evaluated here, replacing the entire
+metamorphic step with a single ordinary request---one that consumes the same
+readable oracle and access outcome---provides no additional measurable detection
+benefit.} Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
 proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win), recall
 \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}, difference \ResAbRecallDiff{},
 95\% CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$---descriptive, not a
-test; no margin was fixed in advance. Gitea reproduces the ordering
-(\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}). Two qualifications are part of
-the claim: the surviving difference is on recall alone, and there the MR-based
-method fails on all \ResAbDisagreementN{} disagreements; and the control is
-\emph{constructed}, not discovered---\texttt{direct\_observe} consumes
-definitionally the quantities that define the ground truth, so the comparison is
-a statement about the definitions: when the oracle is readable, the relation has
-nothing left to compute.
+test; no margin was fixed in advance. Gitea independently reproduces the
+zero-false-proof result (\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}), but does
+not provide a recall comparison because the tested surface contains no seeded
+vulnerability. Two qualifications are part of the claim: the surviving
+difference is on recall alone, and there the MR-based method fails on all
+\ResAbDisagreementN{} disagreements; and the control is \emph{constructed}, not
+discovered---\texttt{direct\_observe} consumes definitionally the quantities
+that define the ground truth, so the comparison is a statement about the
+definitions: when the same sound authorization oracle and access outcome are
+available, the metamorphic step provides no additional adjudication information.
 
 \subsection{Boundary 3 (RQ3): the reported specificity rests on an undeclared premise and a low-resolution denominator}
 
@@ -58,8 +62,9 @@ metric cannot discharge its own premise nor see a class-uniform failure.
 Definitions can be read generously, so we checked the predicates at source in
 the public library~\cite{Chaleshtari2022Metamorphic}. It ships \ResArtMrTotal{}
 relations, \ResArtAuthzMrTotal{} authorization relations,
-\ResArtAuthzGatedEither{} gating on the two predicates analysed. Four facts the
-published text does not state: (i)~\emph{the freeze is hard-coded}---%
+\ResArtAuthzGatedEither{} gating on the two predicates analysed. Four
+implementation-level properties not made explicit in the main presentation:
+(i)~\emph{the freeze is hard-coded}---%
 \texttt{cannotReachThroughGUI} is set-membership over the crawl inputs, issues
 no request, and is cached in a field written once and never invalidated
 (\texttt{userCanRetrieveContent} likewise reads a crawl-produced store loaded
@@ -81,12 +86,34 @@ configuration and crawl snapshot and ran the relations---source unmodified,
 build configuration (\texttt{pom.xml}) and an external harness added
 (\NtUpstreamModified{} changed upstream file, \NtUpstreamJavaModified{} changed
 Java sources, two added classes totalling \NtHarnessLines{} lines)---against
-Gitea \NtGiteaVersion{}. \NtMrExecuted{} of \NtMrTotal{} authorization relations
+Gitea \NtGiteaVersion{} (Table~\ref{tab:native-facts}). \NtMrExecuted{} of \NtMrTotal{} authorization relations
 executed; \NtMrFired{} returned failures, \NtAlarms{} alarms in all---the
 engine's own \texttt{getFailures()} value (Table~\ref{tab:native}). Almost none
 of the \NtElapsedS{} seconds is analysis: each leaf evaluation invokes a
 browser-cleanup hook costing minutes, a cost of the missing environment that
 bounds any reproduction.
+
+\begin{table}[t]
+\centering
+\caption{Execution facts for the native run of the published relations
+(Section~\ref{sec:native-run}). All values are emitted by
+\texttt{ingest\_native\_engine.py} from the run record; upstream Java sources are
+unchanged apart from the build configuration.}
+\label{tab:native-facts}
+\small
+\begin{tabular}{@{}p{0.66\columnwidth}r@{}}
+\toprule
+item & value \\
+\midrule
+authorization relations: catalogue / executed / fired & \NtMrTotal{} / \NtMrExecuted{} / \NtMrFired{} \\
+engine alarms (the engine's own return value) & \NtAlarms{} \\
+HTTP requests attributed to observing relations & \NtHttpCalls{} \\
+changed upstream Java sources & \NtUpstreamJavaModified{} \\
+build/config changes (one \texttt{pom.xml} line) & \NtUpstreamBuildModified{} \\
+added harness classes / added lines & two / \NtHarnessLines{} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The load-bearing cell: the subject \NtKeyGrantee{} holds a legitimate
 entitlement to \NtKeyRepo{}, granted out of band after the crawl. There the

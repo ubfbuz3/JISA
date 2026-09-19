@@ -44,15 +44,37 @@ revocation endpoints & \ResRsRevokeEndpoints{} \\
 \end{table}
 
 \paragraph{Is the oracle readable, and from where?}
-From the owner/administrator vantage the sharing surface is readable on
+The oracle's readability depends entirely on the vantage, so the counts below use
+different populations and must not be read as one denominator. From the
+owner/administrator vantage the sharing surface is readable on
 \ResRsOwnerReadable{} of \ResRsOwnerReadableTotal{} attempts: complete. From a
 black-box subject's own vantage---the vantage a black-box tool occupies---it is
-readable on \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never.
-(An intermediate count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from
+readable on \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An
+intermediate count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from
 subjects who happen to be owners or administrators, and does not constrain the
-mechanism.) On \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable
+mechanism; it is therefore not synonymous with ``an arbitrary black-box subject
+can read the oracle''. Table~\ref{tab:oracle-readable} collects these
+populations. On \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable
 cells the credential-substitution check confirmed that our model agrees with the
 system's behaviour.
+
+\begin{table}[t]
+\centering
+\caption{Oracle-readability sampling protocol on Gitea. Each row is a distinct
+population and denominator, so the rows are not comparable: both the vantage and
+the unit of the denominator differ.}
+\label{tab:oracle-readable}
+\small
+\begin{tabular}{@{}p{0.44\columnwidth}rr@{}}
+\toprule
+vantage & attempts & readable \\
+\midrule
+owner / administrator & \ResRsOwnerReadableTotal{} & \ResRsOwnerReadable{} \\
+arbitrary subject (black box) & \ResRsBlackboxSelfCells{} & \ResRsBlackboxSelfReadable{} \\
+subject also owner/admin (representative grid) & \ResRsSelfTotal{} & \ResRsSelfReadable{} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{The mismatch is in time, not in visibility}
 Table~\ref{tab:rs-m4} is the load-bearing result: the adjudication departs from
@@ -169,10 +191,12 @@ contract the engine consumes, with a correct internal authorization model and
 not in fault location; Table~\ref{tab:seeded} is therefore evidence about this
 fault pattern, not three independent defect discoveries. Two design points: the
 target deliberately exposes its authorization state to the subject-side harness
-(mirroring the admissibility condition), which production Gitea does not---hence
-subject-vantage rows readable here and unobservable there
-(\ResRsSelfReadable{}/\ResRsSelfTotal{} vs.\
-\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}); and the introspection surface
+(mirroring the admissibility condition), which production Gitea does not---on the
+seeded target the subject-side harness can read the authorization state of every
+cell by design, whereas on production Gitea the oracle is readable from the
+owner/admin vantage (\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}) but from an
+arbitrary subject's vantage it is not (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{});
+and the introspection surface
 reports the \emph{correct} \texttt{none} permission, so the oracle stays sound
 and the defect is visible only as a discrepancy between oracle and request. We
 drove it with the same topology, mutation, crawl, introspection and adjudication
@@ -203,9 +227,12 @@ The observation-gated adjudicator behaves exactly as the negative result predict
 (Table~\ref{tab:seeded}): \texttt{direct\_observe} and \texttt{v3} catch all
 \SeedBolaN{} planted instances with zero false positives; \texttt{direct\_only}
 again over-claims (\SeedFPDirectOnly{} false positives on cells where the oracle
-says \texttt{none} but no access succeeds). The central claim now has both
-halves: when no vulnerability is present the metamorphic step adds nothing, and
-when one is present the right adjudicator detects it without inventing others.
+says \texttt{none} but no access succeeds). The control narrows the claim to this
+fault pattern: when a sound oracle is available, the metamorphic step is not
+necessary for detection here---both \texttt{direct\_observe} and \texttt{v3}
+catch all \SeedBolaN{} instances, while \texttt{direct\_only} again over-claims.
+It does not generalise beyond one fault pattern, and the seeded BFLA defect
+(below) remains outside the read-oriented logic's coverage.
 The control also delimits the detector: we seeded one BFLA defect (non-privileged
 \SeedBflaActor{} succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP
 \SeedBflaStatus{}), which the read-oriented logic does not cover---a known

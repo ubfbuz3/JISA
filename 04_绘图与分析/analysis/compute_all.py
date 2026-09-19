@@ -132,9 +132,19 @@ def main():
     pvs = sorted({r["precond_variant"] for r in recs})
     gms = sorted({r["gui_mode"] for r in recs})
     per_cell = _c.Counter(cell_key(r) for r in recs)
+    # 每格适用的 MR 数：绝大多数格 MR-002 与 MR-004 都适用（2），
+    # S5 的全部格仅 MR-002 适用（1）——这是 576 公式中乘子不一致的根因。
+    cell_mrs = _c.defaultdict(set)
+    for r in recs:
+        cell_mrs[cell_key(r)].add(r["mr"])
+    n_two = sum(1 for v in cell_mrs.values() if len(v) == 2)
+    n_one = sum(1 for v in cell_mrs.values() if len(v) == 1)
     M["design_structure"] = {
         "records": len(recs),
         "design_cells": len(cells),
+        "cells_with_two_mrs": n_two,
+        "cells_with_one_mr": n_one,
+        "cells_with_one_mr_scenario": sorted({k[0] for k, v in cell_mrs.items() if len(v) == 1}),
         "mrs": sorted(mrs),
         "n_mrs": len(mrs),
         "precond_variants": pvs,
@@ -864,6 +874,8 @@ def build_tex(M: dict) -> str:
         a("% ---- 设计结构（有效独立单元；区间解读的前置约束） ----")
         cmd("DesignCells", ds["design_cells"])
         cmd("DesignMrs", ds["n_mrs"])
+        cmd("DesignCellsTwoMr", ds["cells_with_two_mrs"])
+        cmd("DesignCellsOneMr", ds["cells_with_one_mr"])
         cmd("DesignPrecondVariants", len(ds["precond_variants"]))
         cmd("DesignGuiModes", len(ds["gui_modes"]))
         cmd("DesignScenarios", ds["n_scenarios"])

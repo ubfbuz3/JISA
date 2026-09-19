@@ -31,26 +31,41 @@ deliberately unfair control); and \texttt{direct\_observe} (a succeeding plain
 request checked against the same readable surface). The last consumes the same
 observable quantity as the MR family and decides the negative result.
 
-\paragraph{Scenarios}
+\paragraph{Scenarios and design cells}
 Seven scenarios separate the reasons an MR can misfire: no shared object (S1,
 S2); an in-band legitimate share visible in the framework log (S3); an unshared
 plain violation (S4); a read-only share plus a write violation (S5); an
 out-of-band share invisible to the framework log (S6); an out-of-band share plus
-a genuine violation (S7). Crossed with instantiation mode, enforcement
-correctness, channel visibility and introspection availability, this yields
-\ResSynRecords{} records (\ResSynErrors{} errors) over \ResSynConfigs{}
-configurations.
+a genuine violation (S7). They are crossed with \ResSynConfigs{} configurations
+defined by instantiation mode, enforcement correctness, channel visibility and
+introspection availability. The nominal cross is $7\times 8 = 56$ combinations,
+but four are inadmissible: the two no-exception configurations
+(\texttt{V-noE3-vuln0}, \texttt{V-noE3-vuln1}) are undefined under the two
+out-of-band scenarios (S6, S7), where the legitimate-sharing exception does not
+apply. This leaves \ResDesignCells{} admissible design cells.
 
 \paragraph{Statistical treatment}
 \label{sec:stats}
-The \ResSynRecords{} records are not independent observations: they
-deterministically expand \ResDesignCells{} design cells crossed with
-\ResDesignMrs{} MRs and two deliberately thrown switches. All intervals (Wilson,
-or Newcombe for differences; our own implementation in \texttt{compute\_all.py})
-are therefore \emph{descriptive}---magnitude and direction only, no formal
-hypothesis-test reading---and no conclusion rests on statistical significance.
-The replication ceiling is explicit: one constructed system, \ResDesignCells{}
-cells, \ResDesignMrs{} MRs, three real systems. Where a headline count has a
-small denominator (the anchored rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is
-wide by construction) we lead with the larger-denominator count of the same
-phenomenon and never quote a small-denominator rate without its interval.
+The \ResSynRecords{} records are not independent observations. Each admissible
+cell is expanded deterministically by the factors that are actually varied:
+\ResDesignMrs{} metamorphic relations (MR-002, MR-004), \ResDesignPrecondVariants{}
+exception-policy variants (raw, one level, two levels---the first deliberately
+thrown switch), and \ResDesignGuiModes{} reachability readings of the frozen
+model (crawl-time blind, crawl-time aware---the second deliberately thrown
+switch). The two relations do not both apply to every cell: only MR-002 applies
+under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while
+the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
+\[
+\ResSynRecords{} = \ResDesignCellsTwoMr{}\cdot(\ResDesignMrs{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{})
++ \ResDesignCellsOneMr{}\cdot(1\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}),
+\]
+a designed study, not a balanced factorial---the per-cell multiplier differs by
+scenario. All intervals (Wilson, or Newcombe for differences; our own
+implementation in \texttt{compute\_all.py}) are therefore \emph{descriptive}---
+magnitude and direction only, no formal hypothesis-test reading---and no
+conclusion rests on statistical significance. The replication ceiling is
+explicit: one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs,
+three real systems. Where a headline count has a small denominator (the anchored
+rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is wide by construction) we lead
+with the larger-denominator count of the same phenomenon and never quote a
+small-denominator rate without its interval.

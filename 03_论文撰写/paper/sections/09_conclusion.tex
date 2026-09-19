@@ -7,13 +7,17 @@ crawled, permitted. Instantiating them as defined produced three boundaries. As
 designed, the adjudication false-proofs on legitimately granted access,
 deterministically (\ResObsOobVtwoFpRate{} constructed; \ResRsMrBookkeepingFpRate{}
 Gitea), because an out-of-band grant fits only the wrong one of the predicate's
-two representations. The natural repair---a readable authorization oracle---works,
-and in that regime makes the metamorphic step unnecessary in our evaluated
-scenarios: a single ordinary request changes nothing measurable (false proofs
-\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}; recall difference \ResAbRecallDiff{},
-CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$; descriptive, no margin
-pre-specified). On the real system the mismatch appears only under the crawl-time
-reading (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\
+two representations. The natural repair---a readable authorization oracle---works, and in that regime
+the evaluated metamorphic step provides no additional detection benefit over a
+direct request consuming the same oracle: a single ordinary request yields the
+same false-proof count (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{})
+and the same recall (difference \ResAbRecallDiff{}, CI
+$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$; descriptive, no margin
+pre-specified); the one surviving difference is on recall, where on all
+\ResAbDisagreementN{} disagreeing records the MR-based method fails. On Gitea the
+comparison is limited to false-proof behaviour, because no vulnerability was
+present on the tested surface. On the real system the mismatch appears only under
+the crawl-time reading (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\
 \ResRsMismatchLive{} live), with an endogenous control holding final visibility
 fixed: the responsible variable is time, not visibility. And the reported
 specificity of \ResLitReportedSpecPct{}\% is conditional on an unstated premise

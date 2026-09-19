@@ -1,0 +1,17 @@
+# ---------------------------------------------------------------------------
+# Git line-ending / binary policy.
+#
+# With core.autocrlf=true (as on this Windows box) Git treats PDFs, images and
+# archives as text and rewrites LF<->CRLF inside them.  That changes their
+# bytes, invalidates the sha256 digests recorded in provenance/*.json, and can
+# corrupt the files on the next checkout.  Mark every binary asset as binary so
+# Git never touches its bytes, and pin the SVG sources (whose sha256 is
+# recorded in provenance) to LF.
+# ---------------------------------------------------------------------------
+*.pdf    binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.zip    binary
+*.xlsx   binary
+*.svg    text eol=lf

@@ -24,9 +24,10 @@ time---and drive the system through three phases: crawl, change authorization
 out of band, execute. The middle phase is the one the original evaluation does
 not exercise.
 
-We ran a \ResSynRecords{}-record factorial study on a constructed system and a
-controlled study on Gitea \ResRsVersion{}, replicated on Gogs \GgVersion{} and
-GitLab \GlVersion{}. We propose no mechanism; an earlier iteration of this work
+We ran a \ResSynRecords{}-record scenario/configuration study on a constructed
+system and a controlled study on Gitea \ResRsVersion{}, replicated on Gogs
+\GgVersion{} and GitLab \GlVersion{}. We propose no mechanism; an earlier
+iteration of this work
 did, and our own ablation removed it. What survives is a characterisation as
 three boundaries (Section~\ref{sec:boundaries}): (i)~the adjudication as
 designed produces \emph{deterministic false proofs}---a legitimate access
@@ -51,7 +52,7 @@ residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}. Our
 contribution is to locate the failure mechanically---in \emph{when} the model
 was read, not \emph{which} objects are visible---and to attach it to the
 reported metric: a three-phase instantiation with internal controls
-(Section~\ref{sec:protocol}); the factorial study
+(Section~\ref{sec:protocol}); the scenario/configuration study
 (Section~\ref{sec:synthetic}); the Gitea study with an endogenous control, a
 seeded-vulnerability positive control, and a native execution of the library's
 own relations attributing the false proof to the published code

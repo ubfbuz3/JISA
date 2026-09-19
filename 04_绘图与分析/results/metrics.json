@@ -42,6 +42,11 @@
   "design_structure": {
     "records": 576,
     "design_cells": 52,
+    "cells_with_two_mrs": 44,
+    "cells_with_one_mr": 8,
+    "cells_with_one_mr_scenario": [
+      "S5"
+    ],
     "mrs": [
       "MR-002",
       "MR-004"
