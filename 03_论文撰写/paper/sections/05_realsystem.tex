@@ -59,7 +59,7 @@ readable on \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An
 intermediate count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from
 subjects who happen to be owners or administrators, and does not constrain the
 mechanism; it is therefore not synonymous with ``an arbitrary black-box subject
-can read the surface''. Table~\ref{tab:oracle-readable} collects these
+can read the surface''. Table~\ref{tab:introspection-readable} collects these
 populations. On \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable
 cells the credential-substitution check confirmed that our model agrees with the
 system's behaviour.
@@ -69,7 +69,7 @@ system's behaviour.
 \caption{Authorization-introspection readability protocol on Gitea. Each row is a
 distinct population and denominator, so the rows are not comparable: both the
 vantage and the unit of the denominator differ.}
-\label{tab:oracle-readable}
+\label{tab:introspection-readable}
 \small
 \begin{tabular}{@{}p{0.44\columnwidth}rr@{}}
 \toprule
@@ -158,7 +158,8 @@ replication across implementations, GitLab across vendors within one domain.
 
 \input{gogs_cross_table}
 
-The replication changes one thing and confirms two. What it changes concerns the
+The replication introduces a primary methodological variation: the
+authorization-introspection surface. What it varies concerns the
 surface: \emph{readability does not imply soundness}. Gitea's owner-vantage
 surface is readable and sound (agrees with effective access on all \GtOracleAgree{}
 cells). Gogs's collaborator-membership endpoint is equally readable

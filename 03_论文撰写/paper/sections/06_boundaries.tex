@@ -36,7 +36,7 @@ coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
 available, but shows no incremental adjudication benefit from the metamorphic
 step (Finding~2).
 
-\subsection{Finding 2 (RQ2): with a sound, readable oracle, the metamorphic step adds no adjudication information}
+\subsection{Finding 2 (RQ2): with a sound, readable oracle that fully resolves the proposition, the metamorphic step provides no observed incremental adjudication benefit in the evaluated scenarios}
 \label{sec:boundary2}
 
 \emph{If the false proofs of Finding~1 are removed by consulting a readable
@@ -44,7 +44,7 @@ introspection surface, it is the oracle that carries the work: for the
 authorization relations and scenarios evaluated here, once the oracle fully
 resolves the authorization proposition under test, replacing the entire
 metamorphic step with a single ordinary request---one that consumes the same
-readable oracle and access outcome---provides no additional measurable
+readable oracle and access outcome---provides no observed incremental
 adjudication benefit.}
 
 We state the reason rather than present it as a discovered effect, because it is
@@ -97,8 +97,9 @@ vs.~\ResRsVThreeFp{}), but does not provide the same comparison because the
 tested surface contains no seeded vulnerability; the cross-vendor systems
 (\S\ref{sec:gogs}) and the seeded control (\S\ref{sec:seeded}) complete the
 evidence. One qualification is part of the claim: the control is
-\emph{constructed}, not discovered---\texttt{direct\_observe} instantiates exactly
-the $D$ of the lemma, so the tie is the empirical face of the necessary
+\emph{constructed}, not discovered---\texttt{direct\_observe} instantiates the direct-consumer construction $D$ of
+Lemma~\ref{lem:oracle-suff} for the evaluated authorization proposition, so the
+tie is the empirical face of the necessary
 condition, a statement about the definitions, not a coincidental measurement.
 
 \subsection{Finding 3 (RQ3): the reported specificity lacks scenario-level resolution}

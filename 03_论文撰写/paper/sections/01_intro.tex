@@ -37,16 +37,14 @@ on Gitea, because the predicate's two representations cannot describe an
 out-of-band grant; the error is a property of the \emph{reading}, not of the
 system.
 
-\emph{Finding~2 (RQ2, oracle).} When a sound, readable authorization oracle is
-available, the metamorphic step carries no adjudication information the
-oracle-plus-request pair does not---a necessary condition
-(Lemma~\ref{lem:oracle-suff}), not an empirical surprise, whose empirical face
-is that replacing the step with a single ordinary request changes nothing
-measurable (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}, recall
-\ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a descriptive, point-estimate
-comparison, not a formal hypothesis test, no margin pre-specified, not
-domination), and on all \ResAbDisagreementN{} disagreeing records the MR-based
-method errs.
+\emph{Finding~2 (RQ2, oracle).} When a sound, readable authorization oracle fully
+resolves the proposition under test, the metamorphic step carries no additional
+decision-relevant information beyond what the oracle-plus-request pair already
+determines---a necessary condition (Lemma~\ref{lem:oracle-suff}), not an empirical
+surprise. Its empirical face, within the evaluated scenarios, is that a single
+ordinary request provides no observed incremental adjudication benefit over the
+MR step: the paired methods disagree on only \ResAbDisagreementN{} records, all
+favoring \texttt{direct\_observe} (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}, recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a descriptive, point-estimate comparison, not a formal hypothesis test, no margin pre-specified, not domination).
 
 \emph{Finding~3 (RQ3, measurement).} The reported specificity is not conditioned
 on an explicit check that the reachability model coincides with the authorization

@@ -100,11 +100,11 @@ scenario/configuration study, and a Gitea \ResRsVersion{} study replicated on
 Gogs \GgVersion{} and GitLab \GlVersion{}. (i) Access legitimately granted out of band after the crawl is reported as a \emph{proven}
 violation---a \emph{false proof}---because one of its two representations is
 unavailable. (ii) Repairing this with a readable, sound oracle that fully
-resolves the proposition leaves the MR step adding no adjudication
-information: a
-necessary condition, since a direct consumer of the same oracle and outcome
-reproduces the verdict, and an ordinary request changes nothing
-measurable (a descriptive point estimate, not a
+resolves the proposition leaves the MR step providing no observed incremental
+adjudication benefit over a direct consumer of the same oracle and outcome: a
+necessary condition, since that consumer reproduces the verdict, and the paired
+methods disagree on only \ResAbDisagreementN{} records, all favoring
+\texttt{direct\_observe} (a descriptive point estimate, not a
 non-inferiority test, and not domination). (iii) The reported specificity is not
 conditioned on a reachability--authorization check, and its input-level
 denominator cannot resolve a scenario-level failure. The study instantiates
