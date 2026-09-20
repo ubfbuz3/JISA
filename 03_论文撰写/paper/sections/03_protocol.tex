@@ -31,6 +31,14 @@ deliberately unfair control); and \texttt{direct\_observe} (a succeeding plain
 request checked against the same readable surface). The last consumes the same
 observable quantity as the MR family and decides the negative result.
 
+\paragraph{Ground truth}
+Every quantitative result names its ground-truth source, and it is never the
+detector under test: construction state for the constructed system and the
+scenario/configuration study; re-probed live authorization (the grantee's
+response hash matched against the owner's, with a third account refused) for
+Gitea and the cross-vendor systems; the pinned route tables for the grant census;
+and the seed list for the seeded target.
+
 \paragraph{Scenarios and design cells}
 Seven scenarios separate the reasons an MR can misfire: no shared object (S1,
 S2); an in-band legitimate share visible in the framework log (S3); an unshared
@@ -60,15 +68,17 @@ the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
 + \ResDesignCellsOneMr{}\cdot(1\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}),
 \]
 a deliberately unbalanced design---the per-cell multiplier differs by
-scenario. All intervals (Wilson, or Newcombe for differences; our own
-implementation in \texttt{compute\_all.py}) are therefore \emph{descriptive}---
-magnitude and direction only, no formal hypothesis-test reading---and no
-conclusion rests on statistical significance. The replication ceiling is
+scenario. The records are therefore a fixed enumeration, not a sample: we report
+counts, rates and design-cell denominators, and we attach no inferential
+interval to any of them. Where a headline count has a small denominator we say
+so explicitly (the anchored rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is
+unstable by construction) and lead with the larger-denominator count of the same
+phenomenon. No conclusion rests on statistical significance. Where a comparison
+is paired---the ablation of Section~\ref{sec:synthetic-ablation}---we report
+discordant-pair counts rather than an interval over a difference. The
+replication ceiling is
 explicit: one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs,
-three real systems. Where a headline count has a small denominator (the anchored
-rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is wide by construction) we lead
-with the larger-denominator count of the same phenomenon and never quote a
-small-denominator rate without its interval.
+three real systems.
 
 \paragraph{Tooling and code provenance}
 Development of the analysis scripts was assisted by an AI coding assistant

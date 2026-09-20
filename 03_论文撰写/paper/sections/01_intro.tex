@@ -61,14 +61,20 @@ evidence for these findings, not further headline findings
 The findings are not a claim that \mbox{MST-wi} is wrong: the reachability
 stand-in is announced by its authors, and the predecessor design attributes its
 residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}. Our
-contribution is to locate the failure mechanically---in \emph{when} the model
-was read, not \emph{which} objects are visible---and to attach it to the
-reported metric: a three-phase instantiation with internal controls
-(Section~\ref{sec:protocol}); the scenario/configuration study
-(Section~\ref{sec:synthetic}); the Gitea study with an endogenous control and a
-seeded-vulnerability positive control (Section~\ref{sec:realsystem}); the source
-reading, the native execution of the library's own relations that attributes the
-false proof to the published code, and the second implementation, as support
-evidence (Section~\ref{sec:support}); and the findings, with an admissibility
-condition and a formal statement of the metric's resolution
-(Section~\ref{sec:findings}).
+contribution is therefore a \emph{methodological characterisation}, not a new
+detector, and has three layers: (i)~\emph{mechanistic characterisation}---we
+locate the false-proof failure structurally, in \emph{when} the reachability
+model was read rather than which objects are visible (Finding~1);
+(ii)~\emph{fair-control ablation}---under a readable, sound authorization oracle,
+the metamorphic step adds no measurable adjudication information beyond the
+oracle and the request outcome, established by a same-observable direct
+adjudicator (Lemma~\ref{lem:oracle-suff}, Finding~2); and (iii)~\emph{metric
+characterisation}---we formalise the input-level specificity denominator's
+resolution limit for a scenario-uniform failure (Finding~3,
+Proposition~\ref{prop:resolution}). The evidence---the three-phase instantiation
+with internal controls (Section~\ref{sec:protocol}), the scenario/configuration
+study (Section~\ref{sec:synthetic}), the Gitea study with an endogenous control
+and a seeded-vulnerability positive control (Section~\ref{sec:realsystem}), the
+source reading, the native execution of the library's own relations, and the
+second implementation (Section~\ref{sec:support})---supports these layers rather
+than standing as further headline claims.

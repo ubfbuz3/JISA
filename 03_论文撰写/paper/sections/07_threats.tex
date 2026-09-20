@@ -17,8 +17,10 @@ sensitivity or specificity attributable to \mbox{MST-wi}.
 \paragraph{Metric and statistics} The specificity approximation uses two
 follow-up inputs per case---not the engine's count; the conclusion about the
 denominator's resolution does not depend on the exact value. Records within a
-design cell are not independent (Section~\ref{sec:stats}), so all intervals are
-descriptive and no result rests on statistical significance.
+design cell are not independent (Section~\ref{sec:stats}) and the records are a
+fixed enumeration, so we report counts and rates rather than inferential
+intervals, and no result rests on statistical significance. The RQ2 ablation is
+paired and is reported as a discordance count.
 
 \paragraph{Two MRs, one family} We instantiated \ResDesignMrs{} MRs of one
 family---relations gated on the absence of evidence. The native run lifts the

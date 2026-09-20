@@ -16,7 +16,8 @@ Section~\ref{sec:support}.
 
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
 exceptions---the adjudication reports a legitimate access granted out of band
-after the crawl as an already-established violation, in one direction.} On the
+after the crawl as an already-established violation, in the direction forced by
+the two-valued predicate encoding.} On the
 constructed system, rate \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of
 \ResObsOobFalseAlarm{} alarms) against \ResObsFwVtwoFalseProof{} for the same
 share created in band; on Gitea, \ResRsMrBookkeepingFp{} false proofs on
@@ -31,18 +32,20 @@ forced: the predicate has exactly two representations, and a grant created
 outside the crawled interface has no representation but ``cannot reach''. The
 predecessor attributes its residual false alarms to crawler
 coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
-\emph{when} the model was read, which is what makes the Finding-2 repair
-available---and empty.
+\emph{when} the model was read, which makes the natural oracle-based repair
+available, but shows no incremental adjudication benefit from the metamorphic
+step (Finding~2).
 
 \subsection{Finding 2 (RQ2): with a sound, readable oracle, the metamorphic step adds no adjudication information}
 \label{sec:boundary2}
 
 \emph{If the false proofs of Finding~1 are removed by consulting a readable
 introspection surface, it is the oracle that carries the work: for the
-authorization relations and scenarios evaluated here, replacing the entire
+authorization relations and scenarios evaluated here, once the oracle fully
+resolves the authorization proposition under test, replacing the entire
 metamorphic step with a single ordinary request---one that consumes the same
-readable oracle and access outcome---provides no additional measurable detection
-benefit.}
+readable oracle and access outcome---provides no additional measurable
+adjudication benefit.}
 
 We state the reason rather than present it as a discovered effect, because it is
 a necessary condition on the claim, not an empirical regularity.
@@ -73,34 +76,38 @@ testing: it says only that a verdict computable from $(O,R)$ cannot be shown to
 beat the direct consumer of $(O,R)$. The evaluated relations do consult a third
 quantity---the crawl-time reachability model $M$---so the empirical question is
 whether $M$ carries authorization information that a readable, sound $O$ does not
-already supply. For such an $O$, $M$ is either concordant with the true state, in
-which case it adds no information $O$ lacks, or discordant, in which case it is
-false by construction (Finding~1). Source inspection confirms the two relations
+already supply. For the authorization proposition under test, once $O$ is
+readable, sound, and complete, $M$ cannot supply additional decision-relevant
+information: agreement with the true state is redundant, while disagreement makes
+the resulting authorization verdict unsound (Finding~1). Source inspection
+confirms the two relations
 read only $M$ and the response (Section~\ref{sec:impl}); the experiment confirms
 the consequence.
 
 Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
-proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win), recall
-\ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}, difference \ResAbRecallDiff{},
-95\% CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$---descriptive, not a
-test; no margin was fixed in advance. Gitea independently reproduces the
-zero-false-proof result (\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}), but does
-not provide a recall comparison because the tested surface contains no seeded
-vulnerability; the cross-vendor systems (\S\ref{sec:gogs}) and the seeded control
-(\S\ref{sec:seeded}) complete the evidence. Two qualifications are part of the
-claim: the surviving
-difference is on recall alone, and there the MR-based method fails on all
-\ResAbDisagreementN{} disagreements; and the control is \emph{constructed}, not
-discovered---\texttt{direct\_observe} instantiates exactly the $D$ of the lemma,
-so the tie is the empirical face of the necessary condition, a statement about
-the definitions, not a coincidental measurement.
+proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win) over the
+\ResAbNBola{} true-violation records. The comparison is paired, so we report the
+discordance rather than an inferential interval: the two methods disagree on
+\ResAbDisagreementN{} records, and on every one of them
+\texttt{direct\_observe} is right---the aggregate recalls
+\ResAbDirectObserveRec{} and \ResAbVThreeRec{} restate that asymmetry rather than
+measure a difference, and no margin was fixed in advance. Gitea independently
+reproduces the zero-false-proof result (\ResRsDirectObserveFp{}
+vs.~\ResRsVThreeFp{}), but does not provide the same comparison because the
+tested surface contains no seeded vulnerability; the cross-vendor systems
+(\S\ref{sec:gogs}) and the seeded control (\S\ref{sec:seeded}) complete the
+evidence. One qualification is part of the claim: the control is
+\emph{constructed}, not discovered---\texttt{direct\_observe} instantiates exactly
+the $D$ of the lemma, so the tie is the empirical face of the necessary
+condition, a statement about the definitions, not a coincidental measurement.
 
 \subsection{Finding 3 (RQ3): the reported specificity lacks scenario-level resolution}
 
 \emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
 generated inputs; it is not conditioned on an explicit check that the
 reachability model coincides with the true authorization state, and its
-denominator cannot register a scenario-uniform failure.} The omission:
+input-level denominator cannot provide stable scenario-level resolution for a
+scenario-uniform failure.} The omission:
 adjudication is a function of the
 reachability model, so where model and true state diverge---the out-of-band case
 of Finding~1---the figure measures agreement with the tool's own crawler; the
@@ -111,9 +118,11 @@ class contributes only as many false positives as that class emits inputs, and
 is diluted by the rest of the run (Proposition~\ref{prop:resolution}: in our
 approximation the configuration that misreports a whole class of legitimate
 access still scores \ResSpecRowOneSpecPct{}\%; Corollary~\ref{cor:resolution}:
-no fixed threshold can guarantee detection of such a class). We are not saying
+no fixed threshold can guarantee that such a class forces the metric below it).
+We are not saying
 the figure is false or the false positives misdiagnosed; the claim is that such a
-metric cannot discharge its own premise nor see a class-uniform failure.
+metric cannot discharge its own premise, and that a class-uniform failure can be
+held above any fixed threshold by unaffected inputs.
 
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}

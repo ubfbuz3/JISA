@@ -17,27 +17,29 @@ design the only manipulated explanatory variable is when the model was read, not
 what was visible.
 
 \paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
-authorization oracle---works, and in that regime the evaluated metamorphic step
+authorization oracle that fully resolves the proposition under test---works, and
+in that regime the evaluated metamorphic step
 adds no adjudication information the oracle and the request do not already carry:
 a necessary condition (Lemma~\ref{lem:oracle-suff}), whose empirical face is that
 a single ordinary request yields the same false-proof count (false proofs
-\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}) and the same recall (difference
-\ResAbRecallDiff{}, CI $[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$;
-descriptive, no margin pre-specified); the one surviving difference is on recall,
-where on all \ResAbDisagreementN{} disagreeing records the MR-based method fails.
+\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
+true-violation records the paired comparison disagrees on only
+\ResAbDisagreementN{}, each time in favour of the plain request; no margin was
+pre-specified, so no inferential claim attaches.
 On Gitea the comparison is limited to false-proof behaviour, because no
 vulnerability was present on the tested surface.
 
 \paragraph{Finding 3 (measurement)} The reported specificity of
 \ResLitReportedSpecPct{}\% is not conditioned on an explicit check that the
-reachability model equals the authorization state, and is computed in units that
-cannot resolve a scenario-uniform failure.
+reachability model equals the authorization state, and its input-level
+denominator cannot provide stable scenario-level resolution for a
+scenario-uniform failure.
 
 Support evidence: reading the implementation confirmed the semantics and added
 the mechanism---the crawl model is frozen by a cache never invalidated, and a
-missing crawl defaults to ``unreachable''---and the positive control closes the
-loop: on a seeded vulnerable target the oracle-gated adjudicator detects all
-planted instances with zero false positives.
+missing crawl defaults to ``unreachable''---and the positive control is a sanity check that closes the loop: on a seeded
+vulnerable target, for one fault pattern, the surface-gated adjudicator detects
+all planted instances with zero false positives.
 
 \paragraph{What we do not claim} We do not claim that \mbox{MST-wi} is wrong or
 say anything about its accuracy as a detector; the native run establishes a

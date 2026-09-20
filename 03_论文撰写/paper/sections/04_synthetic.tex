@@ -16,8 +16,9 @@ justified by an unreadable oracle.
 \subsection{What the constructed system shows}
 
 \paragraph{Attribution is clean} On the anchored configuration the false-proof
-rate is \ResFpEthreeHits{}/\ResFpEthreeTotal{} = \ResFpEthreePct{}\%
-($[\ResFpEthreeLo{}\%, \ResFpEthreeHi{}\%]$); with the legitimate-sharing
+rate is \ResFpEthreeHits{}/\ResFpEthreeTotal{} = \ResFpEthreePct{}\%, but the
+denominator is \ResFpEthreeTotal{}, so the rate is unstable by construction and
+we do not attach an interval to it. With the legitimate-sharing
 exception absent the rate is \ResBaseFpRate{}
 (\ResBaseFpHits{}/\ResBaseFpTotal{}), and with the channel listed it is
 \ResListedCtlFpRate{} (\ResListedCtlFpHits{}/\ResListedCtlFpTotal{}). The
@@ -49,8 +50,8 @@ exist'' from ``this share exists but was not crawled''; its only representation
 of the first is the second. On S7, where a genuine violation \emph{does} sit
 behind the out-of-band share, the same blindness makes the alarm right for the
 wrong reason (\ResObsOobBolaVtwoProvenBola{} of \ResObsOobBolaBolaTotal{}
-reached)---and the coincidence of alarms with violations there is exactly what
-an input-level metric cannot unpack. The same tension appears within a single
+reached)---and that coincidence of alarms with violations is what an
+input-level metric cannot unpack. The same tension appears within a single
 MR: for S3 (must not alarm) vs S5 (must alarm), no configuration in the family
 is correct on both---the choice of switch is a choice of \emph{which} error to
 make.
@@ -83,10 +84,11 @@ surface, consuming exactly what the MR-based adjudicator consumes.
 \begin{table*}[t]
 \centering
 \caption{End-to-end confusion matrix over all \ResSynRecords{} records
-(\ResAbNBola{} true violations, \ResAbNNormal{} correct cases). Intervals are
-Wilson 95\% and are descriptive (Section~\ref{sec:stats}).
-\texttt{direct\_only} is a deliberately unfair control, shown to make that
-point.}
+(\ResAbNBola{} true violations, \ResAbNNormal{} correct cases). The records are
+a fixed enumeration, not a sample (Section~\ref{sec:stats}), so no inferential
+interval is attached; where a denominator is small we say so rather than
+interval it. \texttt{direct\_only} is a deliberately unfair control, shown to
+make that point.}
 \label{tab:ablation}
 \begin{tabular}{lrrrrrrl}
 \toprule
@@ -104,26 +106,23 @@ v3 (state-calibrated) & \ResAbVThreeTP{} & \ResAbVThreeFP{} & \ResAbVThreeFN{} &
 
 Table~\ref{tab:ablation} closes this line of work. \texttt{direct\_observe} has
 \ResAbDirectObserveFP{} false proofs against v3's \ResAbVThreeFP{}---a tie at
-zero, not a win---with the same point-estimate precision
-(\ResAbDirectObservePrec{}), and recall \ResAbDirectObserveRec{} against
-\ResAbVThreeRec{}. The recall difference of \ResAbRecallDiff{} is not
-distinguishable from zero (95\% CI
-$[\ResAbRecallDiffLo{}, \ResAbRecallDiffHi{}]$): a descriptive, point-estimate
-comparison, not domination; no margin was pre-specified, so no formal
-hypothesis-test claim attaches to it. We found no measurable advantage of the
-metamorphic step over direct observation in these oracle-available scenarios,
-and that absence is decisive: the step would have to be better at something the
-plain request cannot do, yet on every one of the \ResAbDisagreementN{}
-disagreeing records it is v3 that fails, its reachability precondition blocking
-a detection the plain request makes. The comparison is therefore a descriptive,
-paired one: only three records differ, and all three favour
-\texttt{direct\_observe}---on each, v3 abstains or misses while the plain
-request raises the correct alarm. Selective presentation would have hidden
-the cost: v3's precision of \ResAbVThreePrec{} was bought with
-\ResAbVThreeFN{} false negatives (F1 \ResAbVThreeFone{}), an exchange of
-\ResAbVOneFP{} false alarms for missed violations dressed as an improvement.
+zero, not a win. The comparison is paired, so we report the discordance rather
+than an inferential interval: over the \ResAbNBola{} true-violation records the
+two methods disagree on \ResAbDisagreementN{}, and on every one of them
+\texttt{direct\_observe} is right---it detects a violation that v3 misses or
+abstains on, its reachability precondition blocking a detection the plain
+request makes. The aggregate recalls \ResAbDirectObserveRec{} and
+\ResAbVThreeRec{} restate that asymmetry rather than measure a difference, and
+no margin was pre-specified, so no formal hypothesis-test claim attaches. We
+found no incremental adjudication advantage of the metamorphic step over direct
+observation in these oracle-available scenarios, and that absence is decisive:
+the step would have to be better at something the plain request cannot do.
+Selective presentation would have hidden the cost: v3's precision of
+\ResAbVThreePrec{} was bought with \ResAbVThreeFN{} false negatives (F1
+\ResAbVThreeFone{}), an exchange of \ResAbVOneFP{} false alarms for missed
+violations dressed as an improvement.
 
-\subsection{Reproducing the reported specificity, and why it cannot see this}
+\subsection{Input-level specificity and scenario-level resolution}
 
 Under the input-level specificity convention used by
 \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic}, the reported specificity has the
@@ -143,6 +142,9 @@ Define $S_{\mathrm{input}} = 1 - \mathit{FP}_{\mathrm{inputs}} / N_{\mathrm{inpu
 and $S_{\mathrm{scenario}} = 1 - N_{\mathrm{failed}} / N_{\mathrm{scenarios}}$,
 where $\mathit{FP}_{\mathrm{inputs}}$ counts false alarms over all generated
 inputs and $N_{\mathrm{failed}}$ the scenarios in which the failure is uniform.
+$S_{\mathrm{scenario}}$ is introduced only as an analytical construct for
+characterising resolution; it is not proposed as a replacement evaluation
+metric.
 
 \begin{proposition}
 \label{prop:resolution}
@@ -163,8 +165,8 @@ the scenario-level figure depends only on the fixed counts $f$ and $s$.
 
 \begin{corollary}
 \label{cor:resolution}
-No fixed input-level specificity threshold
-$t < 1$ can guarantee detection of a scenario-uniform failure class: choosing
+No fixed input-level specificity threshold $t < 1$ can guarantee that a
+scenario-uniform failure will push the metric below it: choosing
 $m > (\mathit{fa}/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
 the $f$ failing scenarios remain failing.
 \end{corollary}

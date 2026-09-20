@@ -49,8 +49,8 @@ revocation endpoints & \ResRsRevokeEndpoints{} \\
 \end{tabular}
 \end{table}
 
-\paragraph{Is the oracle readable, and from where?}
-The oracle's readability depends entirely on the vantage, so the counts below use
+\paragraph{Is the authorization surface readable, and from where?}
+Readability depends entirely on the vantage, so the counts below use
 different populations and must not be read as one denominator. From the
 owner/administrator vantage the sharing surface is readable on
 \ResRsOwnerReadable{} of \ResRsOwnerReadableTotal{} attempts: complete. From a
@@ -59,23 +59,23 @@ readable on \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An
 intermediate count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from
 subjects who happen to be owners or administrators, and does not constrain the
 mechanism; it is therefore not synonymous with ``an arbitrary black-box subject
-can read the oracle''. Table~\ref{tab:oracle-readable} collects these
+can read the surface''. Table~\ref{tab:oracle-readable} collects these
 populations. On \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable
 cells the credential-substitution check confirmed that our model agrees with the
 system's behaviour.
 
 \begin{table}[t]
 \centering
-\caption{Oracle-readability sampling protocol on Gitea. Each row is a distinct
-population and denominator, so the rows are not comparable: both the vantage and
-the unit of the denominator differ.}
+\caption{Authorization-introspection readability protocol on Gitea. Each row is a
+distinct population and denominator, so the rows are not comparable: both the
+vantage and the unit of the denominator differ.}
 \label{tab:oracle-readable}
 \small
 \begin{tabular}{@{}p{0.44\columnwidth}rr@{}}
 \toprule
 vantage & attempts & readable \\
 \midrule
-owner / administrator & \ResRsOwnerReadableTotal{} & \ResRsOwnerReadable{} \\
+owner-vantage authorization-introspection surface & \ResRsOwnerReadableTotal{} & \ResRsOwnerReadable{} \\
 arbitrary subject (black box) & \ResRsBlackboxSelfCells{} & \ResRsBlackboxSelfReadable{} \\
 subject also owner/admin (representative grid) & \ResRsSelfTotal{} & \ResRsSelfReadable{} \\
 \bottomrule
@@ -92,10 +92,14 @@ changed. Under
 the crawl-time reading, a bookkeeping adjudication produces
 \ResRsMrBookkeepingFp{} false proofs on the \ResRsAuthorizedCells{} authorized
 cells (rate \ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{}
-alarms under the live reading; v3 produces \ResRsVThreeFp{} false proofs, and of
-the controls \texttt{direct\_only} again over-claims (\ResRsDirectOnlyFp{} false
-proofs from \ResRsDirectOnlyAlarms{} alarms) while \texttt{direct\_observe}
-emits \ResRsDirectObserveFp{}. Channel provenance of the authorized access
+alarms under the live reading; v3 produces \ResRsVThreeFp{} false proofs, and
+\texttt{direct\_observe} emits \ResRsDirectObserveFp{}. The unfair control
+\texttt{direct\_only} raises \ResRsDirectOnlyAlarms{} alarms, more than any other
+adjudicator, simply because it ignores the request outcome; on this system none
+of them is promoted to \texttt{violation-proven} under our strict false-proof
+definition (\ResRsDirectOnlyFp{} false proofs), so the alarm count and the
+false-proof count must not be read as the same quantity. Channel provenance of
+the authorized access
 (\ResRsChannelNotObservable{} of \ResRsChannelAuthorizedTotal{} not observable
 by the framework log, \ResRsChannelNotObservableRate{}) is a property of our
 topology---a design parameter, not a field prevalence.
@@ -155,7 +159,7 @@ replication across implementations, GitLab across vendors within one domain.
 \input{gogs_cross_table}
 
 The replication changes one thing and confirms two. What it changes concerns the
-oracle: \emph{readability does not imply soundness}. Gitea's owner-vantage
+surface: \emph{readability does not imply soundness}. Gitea's owner-vantage
 surface is readable and sound (agrees with actual access on all \GtOracleAgree{}
 cells). Gogs's collaborator-membership endpoint is equally readable
 (\GgOracleReadable{}/\GgCells{}) but unsound---wrong on \GgOracleWrong{} cells
@@ -164,16 +168,16 @@ membership: site administration (\GgFnSiteAdmin{}), public visibility
 (\GgFnPublic{}), out-of-band grants (\GgFnOob{}). GitLab's
 \texttt{members/all/\{u\}} resolves inherited membership but public visibility
 and site administration confer no membership: \GlOracleWrong{} false negatives
-(\GlOracleWrongPct\%). What the oracle cannot see is predictable from what the
-surface measures---why clause~2 of the admissibility condition
+(\GlOracleWrongPct\%). What the surface cannot see is predictable from what it
+measures---why clause~2 of the admissibility condition
 (Section~\ref{sec:admissibility}) cannot be automated from readability alone.
-The consequence is measurable: on Gitea the oracle-gated adjudicators produced no
+The consequence is measurable: on Gitea the surface-gated adjudicators produced no
 false proofs (\GtFpVthree{} v3, \GtFpDirectObserve{} direct-observe), while on
 Gogs they manufacture them (\GgFpVthree{} snapshot, \GgFpVthreeLive{} live,
 \GgFpDirectObserve{} direct-observe) and on GitLab again (\GlFpVthree{},
 \GlFpDirectObserve{}), every v3 false proof falling on a visibility-channel
-cell. A readable oracle with a blind spot converts its own blind spot into
-confirmed violations; no admissible oracle was available from the tested
+cell. A readable membership surface with a blind spot converts that blind spot
+into confirmed violations; no admissible oracle was available from the tested
 introspection surfaces on Gogs or GitLab, so the honest adjudicator abstains on
 the stratum where those surfaces would license a promotion.
 
@@ -233,14 +237,16 @@ method & TP & FN & FP & TN \\
 \end{tabular}
 \end{table}
 
-The observation-gated adjudicator behaves exactly as the negative result predicts
-(Table~\ref{tab:seeded}): \texttt{direct\_observe} and \texttt{v3} catch all
-\SeedBolaN{} planted instances with zero false positives; \texttt{direct\_only}
-again over-claims (\SeedFPDirectOnly{} false positives on cells where the oracle
-says \texttt{none} but no access succeeds). The control narrows the claim to this
-fault pattern: when a sound oracle is available, the metamorphic step is not
-necessary for detection here---both \texttt{direct\_observe} and \texttt{v3}
-catch all \SeedBolaN{} instances, while \texttt{direct\_only} again over-claims.
+The observation-gated adjudicator is consistent with the negative result in this
+controlled fault pattern (Table~\ref{tab:seeded}): \texttt{direct\_observe} and
+\texttt{v3} catch all \SeedBolaN{} planted instances with zero false positives;
+\texttt{direct\_only}, which ignores the request outcome, raises
+\SeedFPDirectOnly{} alarms on cells where the surface says \texttt{none} and no
+access succeeds---alarms our strict definition does not promote. The control
+narrows the claim to this fault pattern: when a surface that fully resolves the
+authorization question is available, the metamorphic step is not necessary for
+detection here, because both \texttt{direct\_observe} and \texttt{v3} catch all
+\SeedBolaN{} instances.
 It does not generalise beyond one fault pattern, and the seeded BFLA defect
 (below) remains outside the read-oriented logic's coverage.
 The control also delimits the detector: we seeded one BFLA defect (non-privileged
@@ -249,6 +255,7 @@ The control also delimits the detector: we seeded one BFLA defect (non-privilege
 boundary, reported as such rather than as a detection failure. This is a
 controlled research artefact, not production Gitea; it is a sanity check on the
 detector's logic, not a validation of detection effectiveness on a population,
-and not a statement about Gitea's CVE posture. Its source, seed list and run script are in the
+and not a statement about Gitea's CVE posture. Its source, seed list and run
+script are in the
 reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
 \texttt{artifact-v1}).
