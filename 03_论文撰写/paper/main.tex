@@ -42,6 +42,43 @@
 % 双栏窄列下允许更宽的词间弹性，避免长 hyphen/等宽 token 造成 overfull hbox
 \setlength{\emergencystretch}{2.5em}
 
+% ---- 版面收紧（投稿页数控制）----
+% 只压缩浮动体/公式/表格周围的**垂直留白**，不改字号、不改行距、不改栏宽，
+% 因此不影响可读性，也不改变任何正文内容。
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{3pt plus 1pt minus 1pt}
+\setlength{\belowcaptionskip}{0pt}
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{2pt plus 1pt}
+\setlength{\belowdisplayshortskip}{2pt plus 1pt}
+\renewcommand{\arraystretch}{0.95}
+
+% 标题前后的垂直留白同样收紧（论文有 41 个 \paragraph 小标题，累计可观）
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+    {12pt \@plus 3\p@ \@minus 3\p@}{3\p@}%
+    {\sectionfont\raggedright\hst[13pt]}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+    {8pt \@plus 3\p@ \@minus 2\p@}{.1\p@}%
+    {\ssectionfont\raggedright}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+    {8pt \@plus 1\p@ \@minus .3\p@}{.1\p@}%
+    {\sssectionfont\raggedright}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\parindent}%
+    {6pt \@plus0.01pt \@minus0.01pt}{-6pt}%
+    {\ssssparaindent\ssssectionfont\itshape\raggedright}}
+\makeatother
+
+% 表格与图题降为 \footnotesize（Elsevier 的表格/图题惯例即 8pt），压缩浮动体高度
+\usepackage{etoolbox}
+\AtBeginEnvironment{table}{\footnotesize}
+\AtBeginEnvironment{table*}{\footnotesize}
+\AtBeginEnvironment{figure}{\footnotesize}
+\AtBeginEnvironment{figure*}{\footnotesize}
+
 % 可复现构建：省略 PDF 的 CreationDate/ModDate 以及嵌入的本地路径信息，
 % 使同一份源码每次编译得到字节一致的 main.pdf（这些原语仅在 pdfTeX 下存在）。
 \ifdefined\pdfinfoomitdate\pdfinfoomitdate=1\fi
@@ -94,15 +131,15 @@ object-level-authorization relations we study, the predicates delegate the
 verdict to a \emph{GUI-reachability model}---what the interface, as crawled,
 permits---a \emph{crawl-time snapshot}. We instantiate the published relations as
 defined and drive constructed and real systems through crawl, out-of-band change,
-and execution. Three findings follow. (i)~Access granted out of band after the
+and execution. Three findings follow. (1)~Access granted out of band after the
 crawl is reported as a \emph{proven} violation---a \emph{false proof}---in
 \ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} constructed alarms, because
 an out-of-band grant fits only the wrong one of the predicate's two
-representations. (ii)~Repairing this with a readable, sound oracle that fully
+representations. (2)~Repairing this with a readable, sound oracle that fully
 resolves the proposition leaves the metamorphic step adding no observed
 adjudication benefit over the direct consumer of the same oracle and outcome; the
 paired methods disagree on only \ResAbDisagreementN{} of \ResAbNBola{}
-true-violation records, all favouring the plain request. (iii)~The reported
+true-violation records, all favouring the plain request. (3)~The reported
 specificity of \ResLitReportedSpecPct{}\% is not conditioned on a check that the
 reachability model equals the authorization state, and its denominator cannot
 register a scenario-uniform failure.

@@ -2,15 +2,13 @@
 \label{sec:boundaries}
 \label{sec:findings}
 
-The contribution is three findings, each a boundary on what the published
-relations can establish about object-level authorization, and each carried by
-the studies of Sections~\ref{sec:synthetic}--\ref{sec:realsystem}: a
-\emph{temporal} boundary, an \emph{oracle} boundary, and a
-\emph{measurement} boundary. The confirmations the findings rest
-on---the predicates read at source, the published relations executed on a real
-system, and an independent implementation of the same
-predicates---introduce no further claim and are collected as support evidence in
-Section~\ref{sec:support}.
+Each finding is a boundary on what the published relations can establish about
+object-level authorization---\emph{temporal}, \emph{oracle} and
+\emph{measurement}---carried by the studies of
+Sections~\ref{sec:synthetic}--\ref{sec:realsystem}. The confirmations they rest
+on (the predicates read at source, the published relations executed on a real
+system, an independent implementation of the same predicates) introduce no
+further claim and are collected as support evidence in Section~\ref{sec:support}.
 
 \subsection{Finding 1 (RQ1): deterministic false proofs---the temporal boundary}
 \label{sec:boundary1}
@@ -18,23 +16,21 @@ Section~\ref{sec:support}.
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
 exceptions---the adjudication reports a legitimate access granted out of band
 after the crawl as an already-established violation, in the direction forced by
-the two-valued predicate encoding.} On the
-constructed system, rate \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of
-\ResObsOobFalseAlarm{} alarms) against \ResObsFwVtwoFalseProof{} for the same
-share created in band; on Gitea, \ResRsMrBookkeepingFp{} false proofs on
-\ResRsAuthorizedCells{} authorized cells (\ResRsMrBookkeepingFpRate{}) under the
-crawl-time reading, against \ResRsMrBookkeepingAlarmsLive{} alarms under the live
-reading---objects, entitlements and predicates held fixed, only the reading time
-changed---so the error is a
-property of the \emph{reading}, not of the system (Table~\ref{tab:rs-m4}). The
-endogenous control (Table~\ref{tab:rs-endo}) holds final visibility fixed and
-isolates the moment at which the model was read. The direction is
-forced: the predicate has exactly two representations, and a grant created
-outside the crawled interface has no representation but ``cannot reach''. The
-predecessor attributes its residual false alarms to crawler
+the two-valued predicate encoding.} On the constructed system, rate
+\ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{}
+alarms) against \ResObsFwVtwoFalseProof{} for the same share created in band; on
+Gitea, \ResRsMrBookkeepingFp{} false proofs on \ResRsAuthorizedCells{} authorized
+cells (\ResRsMrBookkeepingFpRate{}) under the crawl-time reading, against
+\ResRsMrBookkeepingAlarmsLive{} alarms live---objects, entitlements and predicates
+held fixed, only the reading time changed---so the error is a property of the
+\emph{reading}, not of the system; the endogenous control
+(Table~\ref{tab:rs-endo}) holds final visibility fixed and isolates that moment.
+The direction is forced: the predicate has exactly two representations, and a
+grant created outside the crawled interface has no representation but ``cannot
+reach''. The predecessor attributes its residual false alarms to crawler
 coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
 \emph{when} the model was read, which makes the natural oracle-based repair
-available, but shows no incremental adjudication benefit from the metamorphic
+available while showing no incremental adjudication benefit from the metamorphic
 step (Finding~2).
 
 \subsection{Finding 2 (RQ2): with a sound, readable oracle that fully resolves the proposition, the metamorphic step provides no observed incremental adjudication benefit in the evaluated scenarios}
@@ -46,10 +42,9 @@ authorization relations and scenarios evaluated here, once the oracle fully
 resolves the authorization proposition under test, replacing the entire
 metamorphic step with a single ordinary request---one that consumes the same
 readable oracle and access outcome---provides no observed incremental
-adjudication benefit.}
-
-We state the reason rather than present it as a discovered effect: its burden is
-an empirical premise about the evaluated relations, not an algebraic identity.
+adjudication benefit.} We state the
+reason rather than present it as a discovered effect: its burden is an empirical
+premise about the evaluated relations, not an algebraic identity.
 
 \begin{proposition}[adjudication of the evaluated relations is oracle-determined]
 \label{lem:oracle-suff}
@@ -101,23 +96,22 @@ that advantage is exactly coextensive with what the crawl-derived model can see.
 Finding~2 is a claim about the regime its antecedent describes; it does not say
 the relations are worthless outside it.
 
-Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
-proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win) over the
-\ResAbNBola{} true-violation records. The comparison is paired, so we report the
-discordance rather than an inferential interval: the two methods disagree on
-\ResAbDisagreementN{} records, and on every one of them
-\texttt{direct\_observe} is right---the aggregate recalls
-\ResAbDirectObserveRec{} and \ResAbVThreeRec{} restate that asymmetry rather than
-measure a difference, and no margin was fixed in advance. Gitea independently
-reproduces the zero-false-proof result (\ResRsDirectObserveFp{}
-vs.~\ResRsVThreeFp{}), but does not provide the same comparison because the
-tested surface contains no seeded vulnerability; the cross-vendor systems
-(Section~\ref{sec:gogs}) and the seeded control (Section~\ref{sec:seeded}) complete the
-evidence. One qualification is part of the claim: the control is
-\emph{constructed}, not discovered---\texttt{direct\_observe} instantiates the direct-consumer construction $D$ of
-Proposition~\ref{lem:oracle-suff} for the evaluated authorization proposition, so the
-tie is the empirical face of the necessary
-condition, a statement about the definitions, not a coincidental measurement.
+Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false proofs
+vs.~\ResAbVThreeFP{} (a tie at zero, not a win) over the \ResAbNBola{}
+true-violation records. The comparison is paired, so we report the discordance
+rather than an inferential interval: the two methods disagree on
+\ResAbDisagreementN{} records, and on every one \texttt{direct\_observe} is
+right---the aggregate recalls \ResAbDirectObserveRec{} and \ResAbVThreeRec{}
+restate that asymmetry rather than measure a difference, and no margin was fixed
+in advance. Gitea independently reproduces the zero-false-proof result
+(\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}), but not the same comparison,
+because the tested surface contains no seeded vulnerability; the cross-vendor
+systems (Section~\ref{sec:gogs}) and the seeded control (Section~\ref{sec:seeded})
+complete the evidence. One qualification is part of the claim: the control is
+\emph{constructed}, not discovered---\texttt{direct\_observe} instantiates the
+direct-consumer construction $D$ of Proposition~\ref{lem:oracle-suff}, so the tie
+is the empirical face of the necessary condition, a statement about the
+definitions rather than a coincidental measurement.
 
 \subsection{Finding 3 (RQ3): the reported specificity is not conditioned on the correspondence it assumes}
 

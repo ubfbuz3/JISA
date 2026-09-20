@@ -20,16 +20,16 @@ the public library~\cite{Chaleshtari2022Metamorphic}. It ships \ResArtMrTotal{}
 relations, \ResArtAuthzMrTotal{} authorization relations,
 \ResArtAuthzGatedEither{} gating on the two predicates analysed. Four
 implementation-level properties not made explicit in the main presentation:
-(i)~\emph{the freeze is hard-coded}---%
+(1)~\emph{the freeze is hard-coded}---%
 \texttt{cannotReachThroughGUI} is set-membership over the crawl inputs, issues
 no request, and is cached in a field written once and never invalidated
 (\texttt{userCanRetrieveContent} likewise reads a crawl-produced store loaded
-once); (ii)~\emph{the clause that could have caught it is inert}---the
+once); (2)~\emph{the clause that could have caught it is inert}---the
 ``absent across all users'' set is built by stopping each recorded sequence at
-the first login action, so it is always empty; (iii)~\emph{missing data defaults
+the first login action, so it is always empty; (3)~\emph{missing data defaults
 to an alarm}---with an empty or null crawl argument the predicate returns
 ``cannot reach'', so an empty crawl \emph{satisfies} the precondition: the
-mechanism behind Finding~1's deterministic direction; (iv)~\emph{the role
+mechanism behind Finding~1's deterministic direction; (4)~\emph{the role
 relation is configuration, not state}---the supervisor guard reads a static
 configuration file and reports true for identical accounts, so it cannot reflect
 a later grant.

@@ -14,6 +14,7 @@ result macros, and the compiled .bbl from the build dir. Writes:
 from __future__ import annotations
 
 import hashlib
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -39,7 +40,27 @@ RESULT_TEX = [
     "seeded_table.tex",
     "m2_stratum.tex",
 ]
-FIG_PDF = sorted(p.name for p in FIGURES.glob("*.pdf"))
+# Only ship the figure PDFs the manuscript actually \includegraphics{...}es, so
+# the package cannot carry orphaned (or superseded) artwork. Extracted from the
+# sources, never hand-maintained.
+_INCLUDE = re.compile(r"\\includegraphics\s*\[[^\]]*\]\s*\{([^}]+)\}")
+
+
+def referenced_figures() -> list[str]:
+    sources = [PAPER / "main.tex"] + sorted((PAPER / "sections").glob("*.tex"))
+    names: set[str] = set()
+    for src in sources:
+        for m in _INCLUDE.finditer(src.read_text(encoding="utf-8", errors="ignore")):
+            n = m.group(1).strip()
+            if n.lower().endswith(".pdf"):
+                names.add(n)
+    for n in sorted(names):
+        if not (FIGURES / n).is_file():
+            raise SystemExit(f"referenced figure not found: {FIGURES / n}")
+    return sorted(names)
+
+
+FIG_PDF = referenced_figures()
 THUMBS = sorted(p.name for p in (PAPER / "thumbnails").glob("*.jpeg"))
 
 

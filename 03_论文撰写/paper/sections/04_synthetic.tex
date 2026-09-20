@@ -59,7 +59,7 @@ make.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.9\textwidth]{fig2_scenarios.pdf}
+\includegraphics[width=0.78\textwidth]{fig2_scenarios.pdf}
 \caption{The errors are scenario-structured. The bookkeeping oracle's false proofs
 concentrate on~S6, the legitimate share created out of band and so invisible to
 the framework's own log, while the state-calibrated v3 abstains exactly where its
@@ -115,18 +115,6 @@ v3 (state-calibrated) & \ResAbVThreeTP{} & \ResAbVThreeFP{} & \ResAbVThreeFN{} &
 \bottomrule
 \end{tabular}
 \end{table*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.95\textwidth]{fig4_methods.pdf}
-\caption{The same comparison as Table~\ref{tab:ablation}, pooled over all
-\ResSynRecords{} records (Section~\ref{sec:stratum} splits it by oracle
-readability). The metamorphic step does not carry the detection load:
-\texttt{direct\_observe} matches v3's false-proof count and recovers every
-violation v3 misses, while v3's precision is bought with false negatives. Bars are
-TP/FP/FN.}
-\label{fig:methods}
-\end{figure*}
 
 Table~\ref{tab:ablation} concludes the ablation. \texttt{direct\_observe} has
 \ResAbDirectObserveFP{} false proofs against v3's \ResAbVThreeFP{}---a tie at

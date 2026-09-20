@@ -13,35 +13,32 @@ the recorded model directly (\texttt{cannotReachThroughGUI},
 \texttt{userCanRetrieveContent}) or static subject properties; we call a
 predicate \emph{GUI-derived} when its value is a function of the crawl.
 
-\paragraph{Why the false proof is a design consequence, not a bug} A single
-example makes the mechanism concrete. Suppose a subject can reach an object at
-crawl time, so the record stores that object as reachable. Afterwards an
-administrator grants the same subject access to a \emph{further} object through
-a channel---an administrative endpoint or a share link---that a crawl of the
-subject's own interface never traverses. At execution the guard still reads the
-frozen record, finds the new object absent from it, and concludes the subject
-cannot reach that object; the relation then treats the successful response as a
-violation. Every step is exactly as specified, so no implemented guard is at
-fault and no individual relation is miswritten. The false proof is structural:
-the predicate's two representations---``reachable as recorded'' and ``not
-reachable as recorded''---cannot express ``reachable, but only after the record
-was taken''. More crawling does not remove it, because the grant need not be
-visible through the subject's interface at all; and the reported specificity
-never registers it, because the error is a property of the adjudication's
-\emph{reading moment} rather than of any single generated input. This is the
-mechanism the rest of the paper measures, and the reason we speak of a boundary
-of the specification rather than a defect of an implementation.
+\paragraph{Why the false proof is a design consequence, not a bug} Suppose a
+subject can reach an object at crawl time, so the record stores it as reachable.
+Afterwards an administrator grants the same subject access to a \emph{further}
+object through a channel---an administrative endpoint or a share link---that a
+crawl of the subject's own interface never traverses. At execution the guard
+still reads the frozen record, finds the new object absent, and concludes the
+subject cannot reach it; the relation then treats the successful response as a
+violation. Every step is exactly as specified, so no guard is miswritten: the
+predicate's two representations---``reachable as recorded'' and ``not reachable
+as recorded''---cannot express ``reachable, but only after the record was
+taken''. More crawling does not remove the false proof, because the grant need
+not be visible through the subject's interface at all, and the reported
+specificity never registers it, because the error is a property of the
+adjudication's \emph{reading moment} rather than of any single generated input.
+This is the mechanism the rest of the paper measures, and the reason we speak of
+a boundary of the specification rather than a defect of an implementation.
 
 Two mechanical counts frame what follows. Over the \ResCatalogMrTotal{} catalog
 MRs, \ResCatalogGuiDerived{} (\ResCatalogGuiDerivedPct{}\%) gate on a
 GUI-derived or identity predicate, and only \ResCatalogUnion{}
 (\ResCatalogUnionPct{}\%) are authorization-relevant by name or action---an
-upper bound, reported as a caveat. And a full-text search for predicates reading
-the \emph{state of an authorization artifact} (ownership, permission record,
-share) finds \ResCatalogAuthzStateHits{} occurrences. Within the examined predicate vocabulary, the authorization MRs therefore
-have no explicit authorization-artifact state observable on which to base the
-decision, and the reading moment enters the specification: if an entitlement
+upper bound, reported as a caveat; a full-text search for predicates reading the
+\emph{state of an authorization artifact} (ownership, permission record, share)
+finds \ResCatalogAuthzStateHits{} occurrences. Within the examined vocabulary,
+then, the authorization MRs have no authorization-artifact state observable to
+decide on, and the reading moment enters the specification: if an entitlement
 changes after the crawl, the MR evaluates reachability against a world that no
-longer exists. This is a statement about
-what the relations \emph{mean}; our experiments are built so that the crawl-time
-and live readings can be told apart.
+longer exists. This is a statement about what the relations \emph{mean}; our
+experiments are built so that the crawl-time and live readings can be told apart.

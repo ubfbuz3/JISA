@@ -27,67 +27,57 @@ not exercise.
 We ran a \ResSynRecords{}-record scenario/configuration study on a constructed
 system and a controlled study on Gitea \ResRsVersion{}, extended, with a
 methodological variation, to Gogs
-\GgVersion{} and GitLab \GlVersion{}. We propose no mechanism. What survives is three findings
-(Section~\ref{sec:findings}), one per research question:
+\GgVersion{} and GitLab \GlVersion{}. We propose no mechanism. What survives is
+three findings, one per research question (Section~\ref{sec:findings}).
 
-\emph{Finding~1 (RQ1, temporal).} The adjudication as designed produces
-\emph{deterministic false proofs}---a legitimate access granted out of band
-after the crawl is reported as a proven violation, at rate
-\ResObsOobVtwoFpRate{} on the constructed system and \ResRsMrBookkeepingFpRate{}
-on Gitea, because the predicate's two representations cannot describe an
-out-of-band grant; the error is a property of the \emph{reading}, not of the
-system.
-
-\emph{Finding~2 (RQ2, oracle).} When a sound, readable authorization oracle fully
-resolves the proposition under test, the metamorphic step carries no additional
+\paragraph{Research questions and findings}
+(1)~\emph{Temporal (RQ1).} Does the crawl-time reachability model remain sound
+for authorization decisions after an out-of-band authorization change? No: the
+adjudication as designed produces \emph{deterministic false proofs}---a legitimate
+access granted out of band after the crawl is reported as a proven violation, at
+rate \ResObsOobVtwoFpRate{} on the constructed system and
+\ResRsMrBookkeepingFpRate{} on Gitea, because the predicate's two representations
+cannot describe an out-of-band grant. The error is a property of the
+\emph{reading}, not of the system.
+(2)~\emph{Oracle (RQ2).} When a readable, sound authorization oracle fully
+resolves the proposition under test, does the metamorphic step add incremental
+adjudication information beyond the oracle and the request outcome? Not
+observably, within the evaluated scenarios: the step carries no additional
 decision-relevant information beyond what the oracle-plus-request pair already
-determines---a necessary condition (Proposition~\ref{lem:oracle-suff}). Empirically,
-within the evaluated scenarios, a single
-ordinary request provides no observed incremental adjudication benefit over the
-MR step: the paired methods disagree on only \ResAbDisagreementN{} records, all
-favoring \texttt{direct\_observe} (false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}, recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a descriptive, point-estimate comparison, not a formal hypothesis test, no margin pre-specified, not domination).
-
-\emph{Finding~3 (RQ3, measurement).} The reported specificity is not conditioned
-on an explicit check that the reachability model coincides with the authorization
-state, and is computed in units insensitive to scenario-uniform failure.
+determines---a necessary condition (Proposition~\ref{lem:oracle-suff})---and the
+paired methods disagree on only \ResAbDisagreementN{} records, all favoring
+\texttt{direct\_observe} (false proofs \ResAbDirectObserveFP{}
+vs.~\ResAbVThreeFP{}, recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a
+descriptive, point-estimate comparison, not a formal hypothesis test, no margin
+pre-specified, not domination).
+(3)~\emph{Measurement (RQ3).} Can an input-level specificity metric provide
+stable scenario-level resolution for a scenario-uniform failure? No: the reported
+specificity is not conditioned on an explicit check that the reachability model
+coincides with the authorization state, and its input-level denominator cannot
+register a class-uniform failure, which unaffected inputs can dilute arbitrarily
+(Proposition~\ref{prop:resolution}).
 
 The native execution, the seeded target and the second implementation are support
 evidence for these findings, not further headline findings
 (Section~\ref{sec:support}).
 
-\paragraph{Research questions}
-The three findings answer one question each:
-\begin{itemize}
-\item \textbf{RQ1 (temporal).} Does the crawl-time reachability model remain
-sound for authorization decisions after an out-of-band authorization change?
-\item \textbf{RQ2 (oracle).} When a readable, sound authorization oracle fully
-resolves the proposition under test, does the metamorphic step add incremental
-adjudication information beyond the oracle and the request outcome?
-\item \textbf{RQ3 (measurement).} Can an input-level specificity metric provide
-stable scenario-level resolution for a scenario-uniform failure, or can the
-failure be arbitrarily diluted by unaffected inputs?
-\end{itemize}
-Section~\ref{sec:findings} answers each in turn.
-
 The findings are not a claim that \mbox{MST-wi} is wrong: the reachability
-stand-in is announced by its authors, and the predecessor design attributes its
+stand-in is announced by its authors and the predecessor design attributes its
 residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}. Our
-contribution is therefore a \emph{methodological characterisation}, not a new
-detector, and has three layers: (i)~\emph{mechanistic characterisation}---we
-locate the false-proof failure structurally, in \emph{when} the reachability
-model was read rather than which objects are visible (Finding~1);
-(ii)~\emph{fair-control ablation}---under a readable, sound authorization oracle,
-the metamorphic step adds no measurable adjudication information beyond the
-oracle and the request outcome, established by a same-observable direct
-adjudicator (Proposition~\ref{lem:oracle-suff}, Finding~2); and (iii)~\emph{metric
-characterisation}---we identify a specific failure mode in a published
-specificity figure: it is not conditioned on the
-reachability--authorization correspondence its interpretation assumes, and its
-input-level denominator cannot register a class-uniform failure (Finding~3,
-Proposition~\ref{prop:resolution}). The evidence---the three-phase instantiation
-with internal controls (Section~\ref{sec:protocol}), the scenario/configuration
-study (Section~\ref{sec:synthetic}), the Gitea study with an endogenous control
-and a seeded-vulnerability positive control (Section~\ref{sec:realsystem}), the
-source reading, the native execution of the library's own relations, and the
+contribution is a \emph{methodological characterisation}, not a new detector,
+with three layers: (1)~\emph{mechanistic}---the false-proof failure is located
+structurally, in \emph{when} the reachability model was read rather than which
+objects are visible; (2)~\emph{fair-control ablation}---under a readable, sound
+oracle, a same-observable direct adjudicator shows the metamorphic step adds no
+measurable adjudication information beyond the oracle and the request outcome;
+and (3)~\emph{metric characterisation}---a specific failure mode is identified in
+a published specificity figure, which is not conditioned on the
+reachability--authorization correspondence its interpretation assumes and whose
+input-level denominator cannot register a class-uniform failure. The
+evidence---the three-phase instantiation with internal controls
+(Section~\ref{sec:protocol}), the scenario/configuration study
+(Section~\ref{sec:synthetic}), the Gitea study with an endogenous control and a
+seeded-vulnerability positive control (Section~\ref{sec:realsystem}), and the
+source reading, the native execution of the library's own relations and the
 second implementation (Section~\ref{sec:support})---supports these layers rather
 than standing as further headline claims.

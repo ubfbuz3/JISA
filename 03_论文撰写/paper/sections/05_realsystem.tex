@@ -5,26 +5,24 @@ This section supplies the real-system evidence for Findings~1 and~2: the Gitea
 study with its endogenous control, the cross-vendor replication, and the seeded
 positive control (support evidence, Section~\ref{sec:support}).
 
-A synthetic system cannot tell us whether the crawl-time reading we identified is
-an artefact of our construction, so we repeated the essential comparison on real
-systems. We chose Gitea \ResRsVersion{} for genuine object-level sharing with
-per-object visibility, a machine-readable sharing surface, and a documented
-administrative grant path. Three scope conditions on the experiment's
-conclusions,
-stated before the numbers. First, on the endpoints and authorization transitions
-exercised in this study, Gitea enforced the expected decisions: no instance of
-the studied vulnerability was found, so the experiment measures only the
-false-proof side. Second, the cell study uses our instantiation of the
-predicates, not the engine; the engine's own relations are executed separately in
-Section~\ref{sec:native-run}. Third, the reachability model is reported under
-\emph{both} readings---crawl-time snapshot (what the definitions presuppose) and
-the live execution-time state---so the explanatory variable, the time at which
-the model was read, can be isolated. The
-experiment produces \ResRsCells{} cells, \ResRsCellsSnapshot{} per reading.
+A synthetic system cannot tell us whether the crawl-time reading is an artefact
+of our construction, so we repeated the essential comparison on real systems. We
+chose Gitea \ResRsVersion{} for genuine object-level sharing with per-object
+visibility, a machine-readable sharing surface, and a documented administrative
+grant path. Three scope conditions, stated before the numbers. First, on the
+endpoints and authorization transitions exercised here, Gitea enforced the
+expected decisions: no instance of the studied vulnerability was found, so the
+experiment measures only the false-proof side. Second, the cell study uses our
+instantiation of the predicates, not the engine; the engine's own relations are
+executed separately in Section~\ref{sec:native-run}. Third, the reachability
+model is reported under \emph{both} readings---crawl-time snapshot (what the
+definitions presuppose) and the live execution-time state---so the time at which
+the model was read can be isolated as the explanatory variable. The experiment
+produces \ResRsCells{} cells, \ResRsCellsSnapshot{} per reading.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{fig5_real_system.pdf}
+\includegraphics[width=0.86\textwidth]{fig5_real_system.pdf}
 \caption{Gitea \ResRsVersion{}. (a)~the grant-API space; (b)~authorization-surface
 readability, complete from the owner/admin vantage
 (\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}) and never from a black-box
@@ -64,19 +62,19 @@ revocation endpoints & \ResRsRevokeEndpoints{} \\
 \end{table}
 
 \paragraph{Is the authorization surface readable, and from where?}
-Readability depends entirely on the vantage, so the counts below use
-different populations and must not be read as one denominator. From the
-owner/administrator vantage the sharing surface is readable on
-\ResRsOwnerReadable{} of \ResRsOwnerReadableTotal{} attempts: complete. From a
-black-box subject's own vantage---the vantage a black-box tool occupies---it is
-readable on \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An
-intermediate count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from
-subjects who happen to be owners or administrators, and does not constrain the
-mechanism; it is therefore not synonymous with ``an arbitrary black-box subject
-can read the surface''. Table~\ref{tab:introspection-readable} collects these
-populations. On \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable
-cells the credential-substitution check confirmed that our model agrees with the
-system's behaviour.
+Readability depends entirely on the vantage, so the counts below are different
+populations and must not be read as one denominator. From the owner/administrator
+vantage the sharing surface is readable on \ResRsOwnerReadable{} of
+\ResRsOwnerReadableTotal{} attempts: complete. From a black-box subject's own
+vantage---the vantage a black-box tool occupies---it is readable on
+\ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An intermediate
+count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from subjects who
+happen to be owners or administrators and does not constrain the mechanism; it is
+not synonymous with ``an arbitrary black-box subject can read the surface''.
+Table~\ref{tab:introspection-readable} collects these populations. On
+\ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable cells the
+credential-substitution check confirmed that our model agrees with the system's
+behaviour.
 
 \begin{table}[t]
 \centering
@@ -100,38 +98,36 @@ subject also owner/admin (representative grid) & \ResRsSelfTotal{} & \ResRsSelfR
 Table~\ref{tab:rs-m4} is the load-bearing result: the adjudication departs from
 the real authorization state on \ResRsMismatchSnapshot{} of \ResRsMismatchDenom{}
 cells under the crawl-time reading and \ResRsMismatchLive{} of the same cells
-under the live reading. The system state and the tested authorization relation
-were held fixed; only the time at which the reachability model was read was
-changed. Under
-the crawl-time reading, a bookkeeping adjudication produces
-\ResRsMrBookkeepingFp{} false proofs on the \ResRsAuthorizedCells{} authorized
-cells (rate \ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{}
-alarms under the live reading; v3 produces \ResRsVThreeFp{} false proofs, and
-\texttt{direct\_observe} emits \ResRsDirectObserveFp{}. The unfair control
-\texttt{direct\_only} raises \ResRsDirectOnlyAlarms{} alarms, more than any other
-adjudicator, simply because it ignores the request outcome; on this system none
-of them is promoted to \texttt{violation-proven} under our strict false-proof
-definition (\ResRsDirectOnlyFp{} false proofs), so the alarm count and the
-false-proof count must not be read as the same quantity. Channel provenance of
-the authorized access
+under the live reading. System state and tested relation were held fixed; only
+the time at which the reachability model was read changed. Under the crawl-time
+reading a bookkeeping adjudication produces \ResRsMrBookkeepingFp{} false proofs
+on the \ResRsAuthorizedCells{} authorized cells (rate
+\ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{} alarms
+live; v3 produces \ResRsVThreeFp{} false proofs, and \texttt{direct\_observe}
+emits \ResRsDirectObserveFp{}. The unfair control \texttt{direct\_only} raises
+\ResRsDirectOnlyAlarms{} alarms, more than any other adjudicator, simply because
+it ignores the request outcome; on this system none is promoted to
+\texttt{violation-proven} under our strict false-proof definition
+(\ResRsDirectOnlyFp{} false proofs), so alarm count and false-proof count are not
+the same quantity. Channel provenance of the authorized access
 (\ResRsChannelNotObservable{} of \ResRsChannelAuthorizedTotal{} not observable
 by the framework log, \ResRsChannelNotObservableRate{}) is a property of our
 topology---a design parameter, not a field prevalence.
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{Departure from the real authorization state, per reading of the
 reachability model.}
 \label{tab:rs-m4}
-\begin{tabular}{lrr}
+\begin{tabular}{@{}p{0.56\columnwidth}rr@{}}
 \toprule
-reading of the reachability model & mismatches & cells \\
+reading of the reachability model & mismatch & cells \\
 \midrule
 crawl-time snapshot (as the definitions presuppose) & \ResRsMismatchSnapshot{} & \ResRsMismatchDenom{} \\
 live execution-time state & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 \paragraph{An endogenous control}
 The most serious alternative explanation is that public objects are simply harder
@@ -141,23 +137,22 @@ the predicate reports unreachability on \ResRsEndoAfterCrawlReach{} of
 \ResRsEndoAfterCrawlCells{} cells only for the object made public after the
 crawl, and on \ResRsEndoFromStartReach{} for the object public throughout, with
 the MR firing correspondingly (\ResRsEndoAfterCrawlFires{}
-vs.~\ResRsEndoFromStartFires{}). Final visibility is identical; within this
-controlled design, the only manipulated explanatory variable is when the model
-was read.
+vs.~\ResRsEndoFromStartFires{}). Final visibility is identical, so within this
+design the only manipulated explanatory variable is when the model was read.
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{Endogenous control: two objects that are both public at the end.}
 \label{tab:rs-endo}
-\begin{tabular}{lrrr}
+\begin{tabular}{@{}p{0.40\columnwidth}rrr@{}}
 \toprule
-object & cells & \texttt{cannotReach} true & MR fires \\
+object & cells & \texttt{cannotReach} & MR fires \\
 \midrule
 public before the crawl & \ResRsEndoFromStartCells{} & \ResRsEndoFromStartReach{} & \ResRsEndoFromStartFires{} \\
 public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawlReach{} & \ResRsEndoAfterCrawlFires{} \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 \subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}
@@ -173,17 +168,17 @@ replication across implementations, GitLab across vendors within one domain.
 \input{gogs_cross_table}
 
 The replication introduces a primary methodological variation: the
-authorization-introspection surface. What it varies concerns the
-surface: \emph{readability does not imply soundness}. Gitea's owner-vantage
+authorization-introspection surface, which shows that \emph{readability does not
+imply soundness}. Gitea's owner-vantage
 surface is readable and sound (agrees with effective access on all \GtOracleAgree{}
 cells). Gogs's collaborator-membership endpoint is equally readable
 (\GgOracleReadable{}/\GgCells{}) but unsound---wrong on \GgOracleWrong{} cells
 (\GgOracleWrongPct\%), exactly the authorizations arising outside direct
 membership: site administration (\GgFnSiteAdmin{}), public visibility
 (\GgFnPublic{}), out-of-band grants (\GgFnOob{}). GitLab's
-\texttt{members/all/\{u\}} resolves inherited membership but public visibility
-and site administration confer no membership: \GlOracleWrong{} false negatives
-(\GlOracleWrongPct\%). What the surface cannot see is predictable from what it
+\texttt{members/all/\{u\}} resolves inherited membership, but public visibility
+and site administration confer none: \GlOracleWrong{} false negatives
+(\GlOracleWrongPct\%). What a surface cannot see is predictable from what it
 measures---why clause~2 of the admissibility condition
 (Section~\ref{sec:admissibility}) cannot be automated from readability alone.
 The consequence is measurable: on Gitea the surface-gated adjudicators produced no
@@ -218,16 +213,15 @@ contract the engine consumes, with a correct internal authorization model and
 (a none-entitlement subject served the object at
 \texttt{GET /api/v1/repos/\{owner\}/\{repo\}}), differing in subject and object,
 not in fault location; Table~\ref{tab:seeded} is therefore evidence about this
-fault pattern, not three independent defect discoveries. Two design points: the
+fault pattern, not three independent defect discoveries. Two design points. The
 target deliberately exposes its authorization state to the subject-side harness
-(mirroring the admissibility condition), which production Gitea does not---on the
-seeded target the subject-side harness can read the authorization state of every
-cell by design, whereas on production Gitea the oracle is readable from the
-owner/admin vantage (\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}) but from an
-arbitrary subject's vantage it is not (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{});
-and the introspection surface
-reports the \emph{correct} \texttt{none} permission, so the oracle stays sound
-and the defect is visible only as a discrepancy between oracle and request. We
+(mirroring the admissibility condition), which production Gitea does not---there
+the oracle is readable from the owner/admin vantage
+(\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}) but not from an arbitrary
+subject's (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{})---and its
+introspection surface reports the \emph{correct} \texttt{none} permission, so the
+oracle stays sound and the defect is visible only as a discrepancy between oracle
+and request. We
 drove it with the same topology, mutation, crawl, introspection and adjudication
 code as above, differing only in the system under test; ground truth comes from
 the seed list, not from the detector.
@@ -252,25 +246,21 @@ method & TP & FN & FP & TN \\
 \end{tabular}
 \end{table}
 
-The observation-gated adjudicator is consistent with the negative result in this
-controlled fault pattern (Table~\ref{tab:seeded}): \texttt{direct\_observe} and
-\texttt{v3} catch all \SeedBolaN{} planted instances with zero false positives;
+Table~\ref{tab:seeded} is consistent with the negative result of the ablation in
+this controlled fault pattern: \texttt{direct\_observe} and \texttt{v3} catch all
+\SeedBolaN{} planted instances with zero false positives, while
 \texttt{direct\_only}, which ignores the request outcome, raises
 \SeedFPDirectOnly{} alarms on cells where the surface says \texttt{none} and no
-access succeeds---alarms our strict definition does not promote. The control
-narrows the claim to this fault pattern: when a surface that fully resolves the
+access succeeds---alarms our strict definition does not promote. The control thus
+narrows the claim to one fault pattern: when a surface that fully resolves the
 authorization question is available, the metamorphic step is not necessary for
-detection here, because both \texttt{direct\_observe} and \texttt{v3} catch all
-\SeedBolaN{} instances.
-It does not generalise beyond one fault pattern, and the seeded BFLA defect
-(below) remains outside the read-oriented logic's coverage.
-The control also delimits the detector: we seeded one BFLA defect (non-privileged
-\SeedBflaActor{} succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP
-\SeedBflaStatus{}), which the read-oriented logic does not cover---a known
-boundary, reported as such rather than as a detection failure. This is a
-controlled research artefact, not production Gitea; it is a sanity check on the
-detector's logic, not a validation of detection effectiveness on a population,
-and not a statement about Gitea's CVE posture. Its source, seed list and run
-script are in the
+detection here. It does not generalise beyond that pattern, and it also delimits
+the detector: we seeded one BFLA defect (non-privileged \SeedBflaActor{}
+succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP \SeedBflaStatus{}),
+which the read-oriented logic does not cover---a known boundary, reported as such
+rather than as a detection failure. This is a controlled research artefact, not
+production Gitea; a sanity check on the detector's logic, not a validation of
+detection effectiveness on a population, and not a statement about Gitea's CVE
+posture. Its source, seed list and run script are in the
 reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
 \texttt{artifact-v1}).
