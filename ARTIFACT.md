@@ -129,3 +129,25 @@ commit hash, the raw JSON records and their SHA-256 checksums (§1) must be
 recorded in the camera-ready's artifact footnote. `gh` CLI / a push token was
 not available on the build host at artifact-freeze time, so the push itself
 is performed by the corresponding author.
+
+## 6. One-command self-check (clean-environment + reproducibility)
+
+`verify_artifact.sh` asserts, in a single command, that the artifact is intact
+and reproducible:
+
+- `bash verify_artifact.sh`  (or `bash reproduce.sh check`) — pre-flight of the
+  toolchain (Python + svglib/reportlab/matplotlib/pandas, pdflatex, bibtex;
+  Docker is noted as optional for re-running the live labs); SHA-256 of all 12 raw
+  records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 10
+  byte-reproducible outputs (every number-bearing `.tex`, `metrics.json`, and the
+  two vector diagrams) vs `provenance/OUTPUTS_SHA256.json`; plus a git
+  working-tree status note.
+- `bash verify_artifact.sh repro` — extracts the *committed* tree with
+  `git archive HEAD` into a throw-away copy, re-runs the full analysis pipeline,
+  and confirms every output regenerates byte-for-byte. The working tree is never
+  touched.
+
+The manifests are produced by `04_绘图与分析/analysis/make_manifests.py`
+(`bash verify_artifact.sh gen-manifest`) and committed alongside the data;
+refresh them only after a legitimate change to the raw records or a generation
+script, and commit the refreshed manifest together with that change.

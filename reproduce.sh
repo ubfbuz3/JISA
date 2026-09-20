@@ -15,6 +15,14 @@
 # =====================================================================
 set -euo pipefail
 
+# Self-check shortcut: `bash reproduce.sh check` runs the clean-environment
+# + reproducibility self-check without regenerating anything (delegates to
+# verify_artifact.sh).  Use `bash reproduce.sh` (no arg) for the full rebuild.
+case "${1:-}" in
+  check|--check|verify)
+    exec bash "$(dirname "${BASH_SOURCE[0]}")/verify_artifact.sh" check ;;
+esac
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ANA="$ROOT/04_绘图与分析/analysis"
 PAPER="$ROOT/03_论文撰写/paper"

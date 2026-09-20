@@ -1,0 +1,55 @@
+{
+  "generated_by": "make_manifests.py",
+  "files": [
+    {
+      "path": "04_绘图与分析/results/numbers.tex",
+      "sha256": "b0bd6cd5491c32000f87ea8301d5cfe79a209438b6a48498c3ac141ab43e5028",
+      "bytes": 16270
+    },
+    {
+      "path": "04_绘图与分析/results/native_engine_numbers.tex",
+      "sha256": "a342d609a18ae75cee4c70821cc4afff94c3c9d70813854eb3610a372521e2fc",
+      "bytes": 1379
+    },
+    {
+      "path": "04_绘图与分析/results/native_engine_table.tex",
+      "sha256": "4090e8b3732bd2c701c4a57175a405ec58a9a94b2f1447c1c3b7f97129e1f042",
+      "bytes": 747
+    },
+    {
+      "path": "04_绘图与分析/results/gogs_numbers.tex",
+      "sha256": "1097f9f6b08a1a7a5a4d6f673c733c73fb7b19bf89ad7f857e89b9b868156752",
+      "bytes": 1755
+    },
+    {
+      "path": "04_绘图与分析/results/gogs_cross_table.tex",
+      "sha256": "9f613765c77590f52f265cd7586f9a9eaf465226696ce539fe87bde8c332cc06",
+      "bytes": 2054
+    },
+    {
+      "path": "04_绘图与分析/results/gitlab_numbers.tex",
+      "sha256": "c097889aa5c4ac062715f44e7a63c5f5c867080c38eaec03ed6fd50746ec0b38",
+      "bytes": 1206
+    },
+    {
+      "path": "04_绘图与分析/results/seeded_table.tex",
+      "sha256": "ec25827f3bffa3948ba9df0c980453e48cc85fd753351cbdeb8489773a6b535d",
+      "bytes": 1288
+    },
+    {
+      "path": "04_绘图与分析/results/metrics.json",
+      "sha256": "cdc40f496a124757f57f4bda77cdcf2b41168fddef226604897d47fd2ad630b9",
+      "bytes": 28314
+    },
+    {
+      "path": "04_绘图与分析/figures/fig1_protocol.pdf",
+      "sha256": "1b89d2693dc21507ab0363d45400e3a7e9052160ad23c90506f50d8bb067c6b0",
+      "bytes": 3320
+    },
+    {
+      "path": "04_绘图与分析/figures/fig7_boundaries.pdf",
+      "sha256": "724769316ec395812533f30032e0940c5008ce049b47170ded9efc9a374831c6",
+      "bytes": 2477
+    }
+  ]
+}

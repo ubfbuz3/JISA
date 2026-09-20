@@ -1,0 +1,36 @@
+{
+  "title": "Artifact for \"Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution\"",
+  "upload_type": "software",
+  "description": "Reproducibility artifact accompanying the JISA submission. It contains (i) the raw experimental records (scenario/configuration study, real-system cell study across Gitea 1.22.6 / Gogs 0.14.3 / GitLab 17.11.7, execution of the published relations on the native engine, and a seeded positive control); (ii) the analysis pipeline that recomputes every number, table and figure in the paper from those records; and (iii) the LaTeX manuscript source. Running `bash reproduce.sh` regenerates all outputs and the PDF; `bash verify_artifact.sh` asserts SHA-256 integrity of every raw record and byte-reproducible output. No number in the paper is hand-typed; all figures are vector (no AI-generated pixels).",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "version": "artifact-v1",
+  "creators": [
+    {
+      "name": "Lin, Qiulong",
+      "affiliation": "Yango University, Fuzhou, China"
+    },
+    {
+      "name": "Chen, Nanlei",
+      "affiliation": "Yango University, Fuzhou, China"
+    }
+  ],
+  "keywords": [
+    "metamorphic testing",
+    "oracle problem",
+    "object-level authorization",
+    "BOLA",
+    "BFLA",
+    "Web security",
+    "specificity measurement",
+    "reproducible research"
+  ],
+  "notes": "The tag `artifact-v1` is re-anchored to the camera-ready / submission commit. The DOI minted by Zenodo should be cited in the paper's Data availability statement. Licence is adjustable by the authors (see ZENODO_GUIDE.md).",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ubfbuz3/JISA/tree/artifact-v1",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "generated_by": "make_manifests.py",
+  "files": [
+    {
+      "path": "experiments/results/raw_matrix.jsonl",
+      "sha256": "c72a3083975f24cf5d51f68e813670e55f7ea511b62f33acee612d216ab47e6c",
+      "bytes": 1654743
+    },
+    {
+      "path": "experiments/results/ablation_direct.json",
+      "sha256": "a09c09b0afe360f0916c7da42eda51b60059133b6aba1e19467a4528519e16c0",
+      "bytes": 8396
+    },
+    {
+      "path": "experiments/results/ablation_direct_observe.json",
+      "sha256": "408027b3f4abaf4c419000813edfdde4040e9b8ab63568dd1cf7d7b8f534152e",
+      "bytes": 2664
+    },
+    {
+      "path": "experiments/results/alt_matrix.jsonl",
+      "sha256": "a2def1b450a5929f5e804f4a97f438822c4d49f3c4f2d8559d01831c89f1fdcc",
+      "bytes": 10823
+    },
+    {
+      "path": "experiments/real_system/results/real_system.json",
+      "sha256": "db9669436bfb4eacc5836f11128cde68239a7fd6ae6b48c398e190e51efa6c68",
+      "bytes": 137132
+    },
+    {
+      "path": "experiments/native_engine/results/native_engine.json",
+      "sha256": "6324fe360d47d3eefd32939df9998f57834709335094c6ea2b19e47952cfb145",
+      "bytes": 43054
+    },
+    {
+      "path": "experiments/native_engine/results/seedcheck.json",
+      "sha256": "bab0a4c0f4cdda26e2dda77e14a69fb4c5cd36240185d3a848f274e11aea9cca",
+      "bytes": 6413
+    },
+    {
+      "path": "experiments/native_engine/results/channel_bytes.json",
+      "sha256": "9e04b9dece2e7bdb257f02e687c04a200da329408857b84c4eba81bf0d057990",
+      "bytes": 3016
+    },
+    {
+      "path": "experiments/real_system/results/gogs_real_system.json",
+      "sha256": "c0ac40c988e5a169f6b14410c7a5ee953425e63e145b8444c00ca3dbb7583579",
+      "bytes": 151991
+    },
+    {
+      "path": "experiments/real_system/results/m1_matched_gitea.json",
+      "sha256": "a0637e50a885dada30e2019398dbf8fb361df96eba5a26a26bba261e8b9e4a6d",
+      "bytes": 5034
+    },
+    {
+      "path": "experiments/real_system/results/gitlab_real_system.json",
+      "sha256": "8e8d00ea253693b1c44a87db0654373a03de638df98ffeac680e8643ae849a80",
+      "bytes": 145243
+    },
+    {
+      "path": "experiments/real_system/results/seeded.json",
+      "sha256": "53f12da4ceaf42d72379b4480c426213239a4ef3545af51ce6bb9b42d9603d11",
+      "bytes": 45300
+    }
+  ]
+}

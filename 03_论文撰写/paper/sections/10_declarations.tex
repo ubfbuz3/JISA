@@ -12,14 +12,26 @@
 
 \subsection*{Data availability}
 
-The raw records of the studies reported here---the scenario/configuration
-study, the real-system cell study, the execution of the published relations, and the
-seeded positive control---together with the scripts that compute every number
-in this paper from those records, are publicly available at
-\url{https://github.com/ubfbuz3/JISA} (tag \texttt{artifact-v1}, which pins
-the artifact and is re-anchored to the submission commit). The manuscript
-source is in the same repository. Running \texttt{bash reproduce.sh} regenerates
-all figures, tables and the paper PDF from the raw records.
+The raw records of the studies reported here are publicly available under the
+version-pinned snapshot \texttt{artifact-v1} of the companion repository
+\url{https://github.com/ubfbuz3/JISA} (re-anchored to the submission commit;
+a byte-for-byte identical copy is archived at Zenodo,
+DOI:~\texttt{10.5281/zenodo.XXXXXXX})% TODO: replace with the real DOI after minting
+:
+(i)~the scenario/configuration study
+(\texttt{experiments/results/raw\_matrix.jsonl},
+\texttt{ablation\_direct*.json}, \texttt{alt\_matrix.jsonl});
+(ii)~the real-system cell study across Gitea~1.22.6, Gogs~0.14.3 and
+GitLab~17.11.7 (\texttt{experiments/real\_system/results/*.json});
+(iii)~the execution of the published relations on the native engine
+(\texttt{experiments/native\_engine/results/*.json});
+(iv)~the seeded positive control (\texttt{seeded.json}).
+The analysis pipeline (\texttt{analysis/*.py}: \texttt{compute\_all.py} and the
+ingest scripts) recomputes every number, table and figure in this paper from those
+records; running \texttt{bash reproduce.sh} regenerates all outputs and the PDF, and
+\texttt{bash verify\_artifact.sh} asserts the SHA-256 integrity of every raw record
+and byte-reproducible output. The manuscript \LaTeX{} source ships in the same
+repository.
 
 \subsection*{Competing interests}
 
