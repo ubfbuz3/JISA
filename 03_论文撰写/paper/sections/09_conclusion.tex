@@ -12,8 +12,9 @@ constructed; \ResRsMrBookkeepingFpRate{} Gitea), because an out-of-band grant fi
 only the wrong one of the predicate's two representations. On the real system the
 mismatch appears only under the crawl-time reading
 (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\ \ResRsMismatchLive{} live),
-with an endogenous control holding final visibility fixed: the responsible
-variable is time, not visibility.
+with an endogenous control holding final visibility fixed: within this controlled
+design the only manipulated explanatory variable is when the model was read, not
+what was visible.
 
 \paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
 authorization oracle---works, and in that regime the evaluated metamorphic step
@@ -53,4 +54,8 @@ entitlements are reachable facts. The transferable condition---we call it the
 \emph{same-observable necessity criterion}---is the one that killed our own
 mechanism: a component's necessity must be tested against a substitute that
 consumes the \emph{same} observable quantity as the ground truth; a substitute
-that consumes less does not establish incremental value.
+that consumes less does not establish incremental value. The \mbox{MST-wi} case
+study is an instance of that criterion, not its scope: a component's necessity is
+not established unless a fair control that lacks the component but consumes the
+same decision-relevant observables is empirically or formally shown to be
+weaker.

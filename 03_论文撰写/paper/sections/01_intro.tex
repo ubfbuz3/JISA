@@ -5,11 +5,11 @@ Broken object-level authorization (BOLA), first in the OWASP API Security
 Top~10~\cite{OWASP2023API1}, is the failure to enforce, per object, that the
 authenticated subject is entitled to the object touched. Detecting it is an
 \emph{oracle} problem: vulnerable and correct systems answer with the same
-success status. The standard answer is metamorphic testing, and
-\mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic} is its most developed instance
-for Web systems: \ResLitMrCatalog{} system-agnostic relations (MRs) over
-\ResLitSmrlFunctions{} Web-specific predicates, reported to detect
-\ResLitReportedDetection{}\% of vulnerabilities with specificity
+success status. Metamorphic testing is an established approach to that oracle
+problem, and \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic} is a substantial
+system-agnostic instance for Web systems: \ResLitMrCatalog{} system-agnostic
+relations (MRs) over \ResLitSmrlFunctions{} Web-specific predicates, reported to
+detect \ResLitReportedDetection{}\% of vulnerabilities with specificity
 \ResLitReportedSpecPct{}\%.
 
 This paper asks what happens to that claim when the asserted property is
@@ -65,9 +65,10 @@ contribution is to locate the failure mechanically---in \emph{when} the model
 was read, not \emph{which} objects are visible---and to attach it to the
 reported metric: a three-phase instantiation with internal controls
 (Section~\ref{sec:protocol}); the scenario/configuration study
-(Section~\ref{sec:synthetic}); the Gitea study with an endogenous control, a
-seeded-vulnerability positive control, and a native execution of the library's
-own relations attributing the false proof to the published code
-(Section~\ref{sec:realsystem}); and the findings, with an admissibility
+(Section~\ref{sec:synthetic}); the Gitea study with an endogenous control and a
+seeded-vulnerability positive control (Section~\ref{sec:realsystem}); the source
+reading, the native execution of the library's own relations that attributes the
+false proof to the published code, and the second implementation, as support
+evidence (Section~\ref{sec:support}); and the findings, with an admissibility
 condition and a formal statement of the metric's resolution
 (Section~\ref{sec:findings}).

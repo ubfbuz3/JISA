@@ -41,6 +41,19 @@ existing oracle-substituting technique \emph{decides} when the entitlement
 information it needs is not among its observables, and we make that a measurable
 property of the technique rather than of a system.
 
+\paragraph{Direct authorization oracles, and what is at stake here} Comparing
+responses across principals or privilege states is an established way to obtain
+an authorization oracle when the ground-truth relation is available, and the
+black-box and white-box lines above are instances of it. We propose no new
+direct oracle, and we do not claim that direct authorization comparison is
+novel. Our subject is a different question: what an existing
+oracle-substituting technique \emph{decides} when it substitutes reachability
+for entitlement. The direct oracle enters our design in exactly one
+role---as the fair, same-observable control that a necessity claim about the
+metamorphic step must face. Without such a control, a substitution can appear
+necessary only because the alternative it is compared against was not allowed to
+consume the same decision-relevant observables.
+
 \paragraph{LLMs and the oracle problem} LLMs are used for vulnerability detection
 and specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can};
 we use none in the detection loop. The transferable condition this paper exposes

@@ -50,16 +50,16 @@ The \ResSynRecords{} records are not independent observations. Each admissible
 cell is expanded deterministically by the factors that are actually varied:
 \ResDesignMrs{} metamorphic relations (MR-002, MR-004), \ResDesignPrecondVariants{}
 exception-policy variants (raw, one level, two levels---the first deliberately
-thrown switch), and \ResDesignGuiModes{} reachability readings of the frozen
-model (crawl-time blind, crawl-time aware---the second deliberately thrown
-switch). The two relations do not both apply to every cell: only MR-002 applies
+thrown switch), and \ResDesignGuiModes{} readings of the frozen model (the
+crawl-time snapshot and the live execution-time state---the second deliberately
+thrown switch). The two relations do not both apply to every cell: only MR-002 applies
 under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while
 the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
 \[
 \ResSynRecords{} = \ResDesignCellsTwoMr{}\cdot(\ResDesignMrs{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{})
 + \ResDesignCellsOneMr{}\cdot(1\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}),
 \]
-a designed study, not a balanced factorial---the per-cell multiplier differs by
+a deliberately unbalanced design---the per-cell multiplier differs by
 scenario. All intervals (Wilson, or Newcombe for differences; our own
 implementation in \texttt{compute\_all.py}) are therefore \emph{descriptive}---
 magnitude and direction only, no formal hypothesis-test reading---and no

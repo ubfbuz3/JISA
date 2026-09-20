@@ -22,7 +22,8 @@ constructed system, rate \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of
 share created in band; on Gitea, \ResRsMrBookkeepingFp{} false proofs on
 \ResRsAuthorizedCells{} authorized cells (\ResRsMrBookkeepingFpRate{}) under the
 crawl-time reading, against \ResRsMrBookkeepingAlarmsLive{} alarms under the live
-reading---same objects, same entitlements, same predicates, so the error is a
+reading---objects, entitlements and predicates held fixed, only the reading time
+changed---so the error is a
 property of the \emph{reading}, not of the system (Table~\ref{tab:rs-m4}). The
 endogenous control (Table~\ref{tab:rs-endo}) holds final visibility fixed and
 isolates the moment at which the model was read. The direction is
@@ -63,7 +64,11 @@ function applied to the same pair of arguments, so they agree pointwise; the
 last sentence is the contrapositive.
 \end{proof}
 
-The lemma is a requirement on \emph{claims}, not a verdict on metamorphic
+The lemma concerns \emph{adjudication} information only. It does not imply that a
+metamorphic relation cannot improve input generation, search-space reduction, or
+execution efficiency: a relation may guide which requests are issued, or which
+gated subset is exercised, while carrying no verdict information beyond
+$(O,R)$. It is a requirement on \emph{claims}, not a verdict on metamorphic
 testing: it says only that a verdict computable from $(O,R)$ cannot be shown to
 beat the direct consumer of $(O,R)$. The evaluated relations do consult a third
 quantity---the crawl-time reachability model $M$---so the empirical question is
@@ -93,7 +98,7 @@ the definitions, not a coincidental measurement.
 \subsection{Finding 3 (RQ3): the reported specificity lacks scenario-level resolution}
 
 \emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
-generated inputs; it is not conditioned on an explicit validation that the
+generated inputs; it is not conditioned on an explicit check that the
 reachability model coincides with the true authorization state, and its
 denominator cannot register a scenario-uniform failure.} The omission:
 adjudication is a function of the

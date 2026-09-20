@@ -1,5 +1,6 @@
 % =====================================================================
-%  Limits of Metamorphic Testing for Object-Level Authorization
+%  Limits of Metamorphic Testing for Object-Level Authorization:
+%  Temporal Reachability, Oracle Admissibility, Measurement Resolution
 %  Elsevier CAS double-column template (cas-dc) / JISA
 % ---------------------------------------------------------------------
 %  硬规则:
@@ -68,7 +69,7 @@
 \shortauthors{Q.~Lin and N.~Chen}
 
 % Main title of the paper
-\title[mode = title]{Limits of Metamorphic Testing for Object-Level Authorization: False Proofs, Oracle Readability, and Measurement Resolution}
+\title[mode = title]{Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution}
 
 \author[a,b]{Qiulong Lin}
 
@@ -84,35 +85,36 @@
 \cortext[1]{Corresponding author.}
 
 \begin{abstract}
-Metamorphic testing is the standard answer to the Web-security oracle problem:
-\mbox{MST-wi} defines \ResLitMrCatalog{} system-agnostic metamorphic relations
-(MRs) over a Web-specific domain language and reports
-\ResLitReportedSpecPct{}\% specificity. We show that, for object-level
-authorization, these
-relations delegate adjudication to a \emph{GUI-reachability model} that is a
-\emph{crawl-time snapshot}, and that the delegation fails deterministically, in
-one direction.
+Metamorphic testing is an established approach to the Web-security oracle
+problem: \mbox{MST-wi} defines \ResLitMrCatalog{} system-agnostic
+relations (MRs) over a Web-specific domain language, reporting
+\ResLitReportedSpecPct{}\% specificity. For the reachability-gated authorization
+relations examined here, the predicates delegate adjudication to a
+\emph{GUI-reachability model} that is a \emph{crawl-time snapshot}, and that
+delegation fails deterministically, in one direction.
 
 From a three-phase instantiation of the predicates as defined---crawl,
 out-of-band authorization change, execute---a \ResSynRecords{}-record
 scenario/configuration study, and a Gitea \ResRsVersion{} study replicated on
 Gogs \GgVersion{} and GitLab \GlVersion{}, yield three findings. (i) An access
 legitimately granted out of band after the crawl is reported as a \emph{proven}
-violation---a \emph{false proof}---because one of the predicate's two
-representations is unavailable. (ii) Repairing this with a readable, sound
+violation---a \emph{false proof}---because one of its two representations is
+unavailable. (ii) Repairing this with a readable, sound
 authorization oracle leaves the MR step adding no adjudication information: a
 necessary condition, since a direct adjudicator consuming the same oracle and
 request outcome reproduces the verdict, and an ordinary request changes nothing
 measurable (a descriptive point estimate, not a
 non-inferiority test, and not domination). (iii) The reported specificity is not
 conditioned on a reachability--authorization check, and its input-level
-denominator cannot resolve a scenario-level failure.
+denominator cannot resolve a scenario-level failure. The study instantiates
+\ResDesignMrs{} reachability-gated relations; the wider catalogue is support
+evidence.
 
-On Gitea the mismatch appears only under the crawl-time reading, never live: the
-mechanism is time, not visibility. The oracle that would discharge the condition
-is readable from an owner's vantage but never a black-box subject's, and
-executing the published relations reproduces the false proof within the
-reachability-gated subset that fires.
+On Gitea the mismatch appears only under the crawl-time reading, never live: it
+tracks when the model was read, not visibility. The oracle that would discharge
+the condition is readable from an owner's vantage but never a black-box
+subject's, and executing the published relations reproduces the false proof
+within the reachability-gated subset that fires.
 \end{abstract}
 
 \begin{keywords}

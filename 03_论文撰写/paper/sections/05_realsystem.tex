@@ -18,7 +18,8 @@ false-proof side. Second, the cell study uses our instantiation of the
 predicates, not the engine; the engine's own relations are executed separately in
 Section~\ref{sec:native-run}. Third, the reachability model is reported under
 \emph{both} readings---crawl-time snapshot (what the definitions presuppose) and
-live at execution time---so the responsible variable can be identified. The
+the live execution-time state---so the explanatory variable, the time at which
+the model was read, can be isolated. The
 experiment produces \ResRsCells{} cells, \ResRsCellsSnapshot{} per reading.
 
 \paragraph{Grant surface}
@@ -85,7 +86,9 @@ subject also owner/admin (representative grid) & \ResRsSelfTotal{} & \ResRsSelfR
 Table~\ref{tab:rs-m4} is the load-bearing result: the adjudication departs from
 the real authorization state on \ResRsMismatchSnapshot{} of \ResRsMismatchDenom{}
 cells under the crawl-time reading and \ResRsMismatchLive{} of the same cells
-under the live reading---same objects, same entitlements, same predicates. Under
+under the live reading. The system state and the tested authorization relation
+were held fixed; only the time at which the reachability model was read was
+changed. Under
 the crawl-time reading, a bookkeeping adjudication produces
 \ResRsMrBookkeepingFp{} false proofs on the \ResRsAuthorizedCells{} authorized
 cells (rate \ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{}
@@ -107,7 +110,7 @@ reachability model.}
 reading of the reachability model & mismatches & cells \\
 \midrule
 crawl-time snapshot (as the definitions presuppose) & \ResRsMismatchSnapshot{} & \ResRsMismatchDenom{} \\
-live at execution time & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
+live execution-time state & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -120,8 +123,9 @@ the predicate reports unreachability on \ResRsEndoAfterCrawlReach{} of
 \ResRsEndoAfterCrawlCells{} cells only for the object made public after the
 crawl, and on \ResRsEndoFromStartReach{} for the object public throughout, with
 the MR firing correspondingly (\ResRsEndoAfterCrawlFires{}
-vs.~\ResRsEndoFromStartFires{}). Final visibility is identical; the responsible
-variable is when the model was read.
+vs.~\ResRsEndoFromStartFires{}). Final visibility is identical; within this
+controlled design, the only manipulated explanatory variable is when the model
+was read.
 
 \begin{table*}[t]
 \centering
@@ -243,7 +247,8 @@ The control also delimits the detector: we seeded one BFLA defect (non-privilege
 \SeedBflaActor{} succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP
 \SeedBflaStatus{}), which the read-oriented logic does not cover---a known
 boundary, reported as such rather than as a detection failure. This is a
-controlled research artefact, not production Gitea; it validates the detector's
-logic, not Gitea's CVE posture. Its source, seed list and run script are in the
+controlled research artefact, not production Gitea; it is a sanity check on the
+detector's logic, not a validation of detection effectiveness on a population,
+and not a statement about Gitea's CVE posture. Its source, seed list and run script are in the
 reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
 \texttt{artifact-v1}).

@@ -125,7 +125,9 @@ the cost: v3's precision of \ResAbVThreePrec{} was bought with
 
 \subsection{Reproducing the reported specificity, and why it cannot see this}
 
-The reported specificity has the form
+Under the input-level specificity convention used by
+\mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic}, the reported specificity has the
+form
 \[ S_{\text{input}} = 1 - \frac{\text{false alarms}}{\text{inputs}}. \]
 We cannot reproduce the engine's exact input count, so we approximate two
 follow-up inputs per case---enough to exhibit the denominator's resolution, the
