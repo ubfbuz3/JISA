@@ -121,7 +121,8 @@ access still scores \ResSpecRowOneSpecPct{}\%; Corollary~\ref{cor:resolution}:
 no fixed threshold can guarantee that such a class forces the metric below it).
 We are not saying
 the figure is false or the false positives misdiagnosed; the claim is that such a
-metric cannot discharge its own premise, and that a class-uniform failure can be
+metric does not itself validate the reachability-to-authorization correspondence
+on which its interpretation depends, and that a class-uniform failure can be
 held above any fixed threshold by unaffected inputs.
 
 \subsection{Admissibility, and falsification}
@@ -134,10 +135,11 @@ the true authorization state; and \emph{admissible}, for promotion to
 that it is not of the same kind as the defect under test---not itself a
 reachability artefact whose blind spot correlates with the blindness tested.
 Readability is what makes soundness usable, but it neither implies soundness nor
-confers admissibility: the owner-vantage surface is readable on every cell in
-each system (\ResRsCellsSnapshot{} Gitea, \GgCells{} Gogs, \GlCells{} GitLab),
-yet sound on Gitea alone---it agrees with actual access on \GtOracleAgree{},
-\GgOracleAgree{} and \GlOracleAgree{} of those cells respectively. The
+confers admissibility: the owner-vantage authorization-introspection surface is
+readable on every cell in each system (\ResRsCellsSnapshot{} Gitea, \GgCells{}
+Gogs, \GlCells{} GitLab), yet sound on Gitea alone---it agrees with effective
+access on \GtOracleAgree{}, \GgOracleAgree{} and \GlOracleAgree{} of those
+cells respectively. The
 cross-vendor systems are therefore not cases of ``no oracle'': a readable
 membership surface exists on both, but it is unsound for the authorization
 channels exercised here, so it fails clause~(2). Clause~2 is a per-system

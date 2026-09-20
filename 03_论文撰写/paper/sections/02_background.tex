@@ -38,9 +38,10 @@ GUI-derived or identity predicate, and only \ResCatalogUnion{}
 (\ResCatalogUnionPct{}\%) are authorization-relevant by name or action---an
 upper bound, reported as a caveat. And a full-text search for predicates reading
 the \emph{state of an authorization artifact} (ownership, permission record,
-share) finds \ResCatalogAuthzStateHits{} occurrences. The delegation to
-reachability is therefore unavoidable, and the reading moment enters the
-specification: if an entitlement changes after the crawl, the MR evaluates
-reachability against a world that no longer exists. This is a statement about
+share) finds \ResCatalogAuthzStateHits{} occurrences. Within the examined predicate vocabulary, the authorization MRs therefore
+have no explicit authorization-artifact state observable on which to base the
+decision, and the reading moment enters the specification: if an entitlement
+changes after the crawl, the MR evaluates reachability against a world that no
+longer exists. This is a statement about
 what the relations \emph{mean}; our experiments are built so that the crawl-time
 and live readings can be told apart.

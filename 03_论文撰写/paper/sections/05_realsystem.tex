@@ -148,7 +148,7 @@ public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawl
 \subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}
 
-We repeated the identical protocol on two further systems
+We repeated the same three-phase protocol and 48-cell design on two further systems
 (Table~\ref{tab:gogs-cross}): \textbf{Gogs} \GgVersion{}, the project Gitea
 forked from in 2016 (related lineage, independently evolved code; census from its
 pinned route table, \GgRoutePaths{} paths), and \textbf{GitLab} \GlVersion{}
@@ -160,7 +160,7 @@ replication across implementations, GitLab across vendors within one domain.
 
 The replication changes one thing and confirms two. What it changes concerns the
 surface: \emph{readability does not imply soundness}. Gitea's owner-vantage
-surface is readable and sound (agrees with actual access on all \GtOracleAgree{}
+surface is readable and sound (agrees with effective access on all \GtOracleAgree{}
 cells). Gogs's collaborator-membership endpoint is equally readable
 (\GgOracleReadable{}/\GgCells{}) but unsound---wrong on \GgOracleWrong{} cells
 (\GgOracleWrongPct\%), exactly the authorizations arising outside direct

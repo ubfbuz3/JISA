@@ -27,9 +27,9 @@ cannot know about, not to execution itself. A $2{\times}2$ grid over channel
 visibility and enforcement correctness tells the same story from the other
 side: on unlisted cells the false-proof rate is
 \ResBEThreevulnZerounlistedFpPct{}\% with no false negatives; on listed cells it
-drops to \ResBEThreevulnZerolistedFpPct{}\% but false negatives appear
-(\ResBEThreevulnOnelistedFn{} of \ResBEThreevulnOnelistedTp{}+\ResBEThreevulnOnelistedFn{}
-on the violating cell). Avoiding false proofs and keeping detection are
+drops to \ResBEThreevulnZerolistedFpPct{}\% but a false negative appears among
+the five violating records (\ResBEThreevulnOnelistedFn{} of
+\ResBEThreevulnOnelistedTp{}+\ResBEThreevulnOnelistedFn{}). Avoiding false proofs and keeping detection are
 controlled by one switch, and the switch cannot be thrown both ways at once.
 
 \paragraph{Filtering exceptions does not help}
@@ -115,7 +115,8 @@ request makes. The aggregate recalls \ResAbDirectObserveRec{} and
 \ResAbVThreeRec{} restate that asymmetry rather than measure a difference, and
 no margin was pre-specified, so no formal hypothesis-test claim attaches. We
 found no incremental adjudication advantage of the metamorphic step over direct
-observation in these oracle-available scenarios, and that absence is decisive:
+observation in these oracle-available scenarios, and that absence provides no
+support for an incremental adjudication benefit in these scenarios:
 the step would have to be better at something the plain request cannot do.
 Selective presentation would have hidden the cost: v3's precision of
 \ResAbVThreePrec{} was bought with \ResAbVThreeFN{} false negatives (F1

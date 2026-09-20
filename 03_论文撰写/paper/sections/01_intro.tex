@@ -26,9 +26,7 @@ not exercise.
 
 We ran a \ResSynRecords{}-record scenario/configuration study on a constructed
 system and a controlled study on Gitea \ResRsVersion{}, replicated on Gogs
-\GgVersion{} and GitLab \GlVersion{}. We propose no mechanism; an earlier
-iteration of this work
-did, and our own ablation removed it. What survives is three findings
+\GgVersion{} and GitLab \GlVersion{}. We propose no mechanism. What survives is three findings
 (Section~\ref{sec:findings}), one per research question:
 
 \emph{Finding~1 (RQ1, temporal).} The adjudication as designed produces
@@ -57,6 +55,20 @@ state, and is computed in units insensitive to scenario-uniform failure.
 The native execution, the seeded target and the second implementation are support
 evidence for these findings, not further headline findings
 (Section~\ref{sec:support}).
+
+\paragraph{Research questions}
+The three findings answer one question each:
+\begin{itemize}
+\item \textbf{RQ1 (temporal).} Does the crawl-time reachability model remain
+sound for authorization decisions after an out-of-band authorization change?
+\item \textbf{RQ2 (oracle).} When a readable, sound authorization oracle fully
+resolves the proposition under test, does the metamorphic step add incremental
+adjudication information beyond the oracle and the request outcome?
+\item \textbf{RQ3 (measurement).} Can an input-level specificity metric provide
+stable scenario-level resolution for a scenario-uniform failure, or can the
+failure be arbitrarily diluted by unaffected inputs?
+\end{itemize}
+Section~\ref{sec:findings} answers each in turn.
 
 The findings are not a claim that \mbox{MST-wi} is wrong: the reachability
 stand-in is announced by its authors, and the predecessor design attributes its
