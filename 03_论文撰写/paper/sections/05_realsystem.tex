@@ -22,6 +22,20 @@ the live execution-time state---so the explanatory variable, the time at which
 the model was read, can be isolated. The
 experiment produces \ResRsCells{} cells, \ResRsCellsSnapshot{} per reading.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig5_real_system.pdf}
+\caption{Gitea \ResRsVersion{}. (a)~the grant-API space; (b)~authorization-surface
+readability, complete from the owner/admin vantage
+(\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}) and never from a black-box
+subject's (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{}); (c)~the
+departure from the real authorization state is present under the crawl-time
+reading (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}) and absent live; (d)
+alarms versus false proofs per adjudicator. All counts are recomputed from the
+run records by the analysis pipeline.}
+\label{fig:real-system}
+\end{figure*}
+
 \paragraph{Grant surface}
 Table~\ref{tab:rs-m1} counts an endpoint as grant-capable if, without modifying
 the system, a request can move a (subject, object) pair from not-entitled to

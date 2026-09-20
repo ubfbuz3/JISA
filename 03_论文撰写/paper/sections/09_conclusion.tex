@@ -20,7 +20,7 @@ what was visible.
 authorization oracle that fully resolves the proposition under test---works, and
 in that regime the evaluated metamorphic step
 provides no observed incremental adjudication benefit over a direct consumer of the same oracle and outcome:
-a necessary condition (Lemma~\ref{lem:oracle-suff}), whose empirical face is that
+a necessary condition (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
 a single ordinary request yields the same false-proof count (false proofs
 \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
 true-violation records the paired comparison disagrees on only
@@ -30,10 +30,10 @@ On Gitea the comparison is limited to false-proof behaviour, because no
 vulnerability was present on the tested surface.
 
 \paragraph{Finding 3 (measurement)} The reported specificity of
-\ResLitReportedSpecPct{}\% is not conditioned on an explicit check that the
-reachability model equals the authorization state, and its input-level
-denominator cannot provide stable scenario-level resolution for a
-scenario-uniform failure.
+\ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is not
+conditioned on an explicit check that the reachability model equals the
+authorization state, and its input-level denominator cannot register a
+class-uniform failure.
 
 Support evidence: reading the implementation confirmed the semantics and added
 the mechanism---the crawl model is frozen by a cache never invalidated, and a
@@ -41,12 +41,36 @@ missing crawl defaults to ``unreachable''---and the positive control is a sanity
 vulnerable target, for one fault pattern, the surface-gated adjudicator detects
 all planted instances with zero false positives.
 
-\paragraph{What we do not claim} We do not claim that \mbox{MST-wi} is wrong or
-say anything about its accuracy as a detector; the native run establishes a
-qualitative outcome, for one gate family, on one real system that on the tested
-endpoints and transitions enforces the expected decisions. Channel proportions
-are design parameters; our two MRs are two, of one family, and that is the
-ceiling on everything we say.
+\paragraph{What we do not claim, and how far the claims reach} We do not claim
+that \mbox{MST-wi} is wrong or say anything about its accuracy as a detector; the
+native run establishes a qualitative outcome, for one gate family, on one real
+system that on the tested endpoints and transitions enforces the expected
+decisions. Three ceilings stack and bound everything above. First, our two
+relations are two of a catalogue of \ResLitMrCatalog{}, and both belong to one
+reachability-gated family. Second, even the execution of the published relations
+on the native engine reaches only that family: \NtMrFired{} of the \NtMrTotal{}
+authorization relations fire (\NtKeyMrNames{}), and the content predicate
+\texttt{userCanRetrieveContent} is never invoked (\NtUcrcCalls{} calls), so that
+evidence is bounded the same way. Third, the real-system study exercises the
+\emph{false-proof} face on a single constructed fault pattern, not the detection
+face against a population of real flaws, and the Gitea channel proportions are
+topology design parameters, not field prevalence. Together these fix the ceiling
+on what a practitioner may transfer.
+
+\paragraph{What a practitioner should do differently} Three operational
+consequences follow, each bounded by what was measured. Do not read a
+reachability-gated relation's alarm as proof: because the reading time is part of
+the specification, an alarm raised against a crawl-time snapshot---rather than
+against live state---cannot be promoted to \texttt{violation-proven} on the
+relation's word alone. If a readable, sound authorization oracle is in fact
+available to the analyst, consult it directly and drop the relation: for the
+relations studied it adds no adjudication information once that antecedent holds
+(Proposition~\ref{lem:oracle-suff}, Section~\ref{sec:stratum}). And treat a
+reported input-level specificity as a corpus statistic rather than a guarantee of
+scenario-level resolution: it can sit near one while a whole class of legitimate
+access is misreported (Finding~3). These are not a claim that metamorphic testing
+is worthless; they locate its contribution where no oracle exists, and bound it
+by what the reachability reading can see.
 
 \paragraph{What remains expensive} Moving from characterisation to something
 stronger needs, first, a real system that \emph{contains} the flaw, so detection

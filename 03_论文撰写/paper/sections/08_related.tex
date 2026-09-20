@@ -7,7 +7,7 @@ patterns---authentication, authorization, session---as metamorphic relations so
 that faults can be exposed without an oracle. The line matured into
 \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic}, whose \ResLitMrCatalog{}
 system-agnostic relations over a Web-specific domain language are the object of
-our study. We propose no new relation and no better detector; we take the
+our study. We take the
 technique's own admission that the role-to-resource mapping is ``not always
 available'' at face value and follow it to its consequence for what the
 adjudication can decide. A relation whose guard reads a crawl-time model is
@@ -19,7 +19,10 @@ detects access-control flaws directly, and it is worth separating the oracles it
 relies on. Black-box probing drives requests with and without the rights of
 another subject and looks for a missing refusal~\cite{Liu2025BACScan,Dharmaadi2025BACFuzz},
 a line that runs back to AUTHSCOPE~\cite{Zuo2017AUTHSCOPE} and that has been
-extended to deployed systems under ethical constraints~\cite{Chehade2025Forbidden}.
+extended to deployed systems under ethical constraints~\cite{Chehade2025Forbidden};
+where an API description is available, the oracle itself can be synthesised, for
+instance by transforming an OpenAPI specification into a coloured Petri net that
+predicts per-object access~\cite{Filho2025Automated}.
 A complementary, white-box line recovers the \emph{enforced} policy from the
 implementation---by reverse-engineering RBAC policies~\cite{Le2021Automated}, by
 statically extracting authorization policies~\cite{Berger2020Static} or database
@@ -27,14 +30,19 @@ access-control rules~\cite{Zhang2024Extracting}, or by locating the permission
 checks themselves~\cite{Shi2025Facilitating}---and then flags violations against
 that recovered model: BOLA in database-backed applications~\cite{Huang2024Detecting},
 missing-owner-check and function-level flaws in Java web
-applications~\cite{Liu2025MOCGuard,Feng2025JAuthGuard}, and privilege escalation
-in polyglot microservices~\cite{Li2026Detecting}. Specification-driven API
+applications~\cite{Liu2025MOCGuard,Feng2025JAuthGuard}, function- and object-level
+access-control flaws across web applications~\cite{Schlaubitz2025A}, and privilege
+escalation in polyglot microservices~\cite{Li2026Detecting}. Specification-driven API
 fuzzers generate the requests well but inherit the same oracle
 difficulty~\cite{Atlidakis2019RESTler,Arcuri2024Advanced,Seran2025Handling};
 adding explicit access-policy violation checks~\cite{Sahin2026Enhancing} moves
 them toward the detection problem but does not remove the need for a ground
 truth, and a recent turn delegates generation or probing to language
-models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. Our question is
+models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. A concurrent line
+reframes BOLA under a zero-trust model, in which each request must carry an
+explicit authorization decision rather than one inferred from endpoint
+reachability~\cite{Wu2026Rethinking}; our question sits at that decision level,
+asking what an oracle-substituting technique can establish about it. Our question is
 orthogonal to all of these. Each reports detections against an oracle it holds
 privately---a policy, a seeded defect, a differential response; we ask what an
 existing oracle-substituting technique \emph{decides} when the entitlement
@@ -55,8 +63,10 @@ necessary only because the alternative it is compared against was not allowed to
 consume the same decision-relevant observables.
 
 \paragraph{LLMs and the oracle problem} LLMs are used for vulnerability detection
-and specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can};
-we use none in the detection loop. The transferable condition this paper exposes
+and specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can},
+including lightweight models over hybrid code features~\cite{Liu2024Enhancing} and
+federated, explainable detectors~\cite{Senanayake2024Defendroid}; we use none in the
+detection loop. The transferable condition this paper exposes
 is that any claim of necessity must be tested against a fair substitute that
 consumes the same observable quantity as the ground truth.
 

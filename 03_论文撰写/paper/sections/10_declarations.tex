@@ -25,7 +25,13 @@ GitLab~17.11.7 (\texttt{experiments/real\_system/results/*.json});
 (iv)~the seeded positive control (\texttt{seeded.json}).
 The analysis pipeline (\texttt{analysis/*.py}: \texttt{compute\_all.py} and the
 ingest scripts) recomputes every number, table and figure in this paper from those
-records; running \texttt{bash reproduce.sh} regenerates all outputs and the PDF, and
+records; the stratified ablation of Section~\ref{sec:stratum} adds no new
+experiment---it re-aggregates the same scenario/configuration records by whether
+the introspection surface returned a reading, and is recomputed, together with
+every macro it defines, by \texttt{ingest\_m2\_stratum.py};
+\texttt{check\_macro\_use.py} asserts that every macro cited in the manuscript
+has exactly one definition. Running \texttt{bash reproduce.sh} regenerates all
+outputs and the PDF, and
 \texttt{bash verify\_artifact.sh} asserts the SHA-256 integrity of every raw record
 and byte-reproducible output. The manuscript \LaTeX{} source ships in the same
 repository. A persistent archival copy with a citable DOI is deposited at

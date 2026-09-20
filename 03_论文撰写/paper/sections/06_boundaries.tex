@@ -13,6 +13,7 @@ predicates---introduce no further claim and are collected as support evidence in
 Section~\ref{sec:support}.
 
 \subsection{Finding 1 (RQ1): deterministic false proofs---the temporal boundary}
+\label{sec:boundary1}
 
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
 exceptions---the adjudication reports a legitimate access granted out of band
@@ -47,42 +48,58 @@ metamorphic step with a single ordinary request---one that consumes the same
 readable oracle and access outcome---provides no observed incremental
 adjudication benefit.}
 
-We state the reason rather than present it as a discovered effect, because it is
-a necessary condition on the claim, not an empirical regularity.
+We state the reason rather than present it as a discovered effect: its burden is
+an empirical premise about the evaluated relations, not an algebraic identity.
 
-\begin{lemma}[oracle-sufficient adjudication]
+\begin{proposition}[adjudication of the evaluated relations is oracle-determined]
 \label{lem:oracle-suff}
 Let $O$ be an authorization oracle that is \emph{readable} (its answer can be
-obtained) and \emph{sound} (its answer equals the true permission), and let $R$
-be the observed outcome of an ordinary request. Any adjudicator whose verdict is
-a function $V = f(O,R)$ of $O$ and $R$ alone is extensionally equal to the
-direct consumer $D := f(O,R)$: the two return the same verdict on every input.
-Consequently a metamorphic step can be \emph{shown} to be necessary only by
-exhibiting an observable it consumes that the direct consumer does not.
-\end{lemma}
+obtained from the vantage in question) and \emph{sound} (its answer equals the
+true permission), and let $R$ be the observed outcome of an ordinary request.
+For the authorization relations and scenarios evaluated here---whose predicates
+read the crawl-time reachability model $M$ and the response, and nothing
+else---once $O$ is readable, sound and complete for the proposition under test,
+$M$ supplies no decision-relevant authorization information that $(O,R)$ does not
+already determine: agreement with the true state is redundant, and disagreement
+makes the verdict unsound (Finding~1). The verdict of the metamorphic family is
+therefore a function $f(O,R)$ of $O$ and $R$ alone, and any adjudicator of that
+form is extensionally equal to the direct consumer $D := f(O,R)$---the two are
+the same function applied to the same arguments. A metamorphic step can be
+\emph{shown} to be necessary only by exhibiting an observable it consumes that
+the direct consumer does not.
+\end{proposition}
 
 \begin{proof}
-An adjudicator of the stated form and $D$ are the same
-function applied to the same pair of arguments, so they agree pointwise; the
-last sentence is the contrapositive.
+The first clause is the empirical premise, established for these relations by
+source inspection (Section~\ref{sec:impl}) and by the ablation
+(Section~\ref{sec:synthetic-ablation}); the middle clause then follows because
+$M$ enters the verdict only through $(O,R)$, and the remainder is the observation
+that a function agrees pointwise with itself, the last sentence being its
+contrapositive.
 \end{proof}
 
-The lemma concerns \emph{adjudication} information only. It does not imply that a
-metamorphic relation cannot improve input generation, search-space reduction, or
-execution efficiency: a relation may guide which requests are issued, or which
-gated subset is exercised, while carrying no verdict information beyond
-$(O,R)$. It is a requirement on \emph{claims}, not a verdict on metamorphic
-testing: it says only that a verdict computable from $(O,R)$ cannot be shown to
-beat the direct consumer of $(O,R)$. The evaluated relations do consult a third
-quantity---the crawl-time reachability model $M$---so the empirical question is
-whether $M$ carries authorization information that a readable, sound $O$ does not
-already supply. For the authorization proposition under test, once $O$ is
-readable, sound, and complete, $M$ cannot supply additional decision-relevant
-information: agreement with the true state is redundant, while disagreement makes
-the resulting authorization verdict unsound (Finding~1). Source inspection
-confirms the two relations
-read only $M$ and the response (Section~\ref{sec:impl}); the experiment confirms
-the consequence.
+The proposition concerns \emph{adjudication} information only. It does not imply
+that a metamorphic relation cannot improve input generation, search-space
+reduction, or execution efficiency: a relation may guide which requests are
+issued, or which gated subset is exercised, while carrying no verdict information
+beyond $(O,R)$. It is a requirement on \emph{claims}, not a verdict on
+metamorphic testing: it says only that a verdict computable from $(O,R)$ cannot be
+shown to beat the direct consumer of $(O,R)$.
+
+\paragraph{Scope, quantified}
+The comparison above is pooled. Section~\ref{sec:stratum} re-runs it inside each
+stratum of effective oracle readability and thereby bounds the claim rather than
+widening it. Where the oracle is readable (\MiiNOn{} records) the conclusion is
+stronger than "no observed benefit": the plain request carries fewer false proofs
+(\MiiOnDirectObserveFP{} vs.~\MiiOnVTwoFP{}) and no fewer detections. Where it is
+not (\MiiNOff{} records) the antecedent fails---there is no oracle to consult, and
+every oracle-bearing method detects nothing by construction---so the metamorphic
+family is compared against oracle-free references instead: it retains an
+advantage over a trivial floor and over a single uninterpreted request
+(\MiiLiftVTwo{}$\times$ vs.~\MiiLiftObsSuccess{}$\times$ over the base rate), and
+that advantage is exactly coextensive with what the crawl-derived model can see.
+Finding~2 is a claim about the regime its antecedent describes; it does not say
+the relations are worthless outside it.
 
 Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false
 proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win) over the
@@ -95,14 +112,14 @@ measure a difference, and no margin was fixed in advance. Gitea independently
 reproduces the zero-false-proof result (\ResRsDirectObserveFp{}
 vs.~\ResRsVThreeFp{}), but does not provide the same comparison because the
 tested surface contains no seeded vulnerability; the cross-vendor systems
-(\S\ref{sec:gogs}) and the seeded control (\S\ref{sec:seeded}) complete the
+(Section~\ref{sec:gogs}) and the seeded control (Section~\ref{sec:seeded}) complete the
 evidence. One qualification is part of the claim: the control is
 \emph{constructed}, not discovered---\texttt{direct\_observe} instantiates the direct-consumer construction $D$ of
-Lemma~\ref{lem:oracle-suff} for the evaluated authorization proposition, so the
+Proposition~\ref{lem:oracle-suff} for the evaluated authorization proposition, so the
 tie is the empirical face of the necessary
 condition, a statement about the definitions, not a coincidental measurement.
 
-\subsection{Finding 3 (RQ3): the reported specificity lacks scenario-level resolution}
+\subsection{Finding 3 (RQ3): the reported specificity is not conditioned on the correspondence it assumes}
 
 \emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
 generated inputs; it is not conditioned on an explicit check that the
@@ -150,7 +167,21 @@ spots into \GgFpVthree{} and \GlFpVthree{} false proofs). Where the condition
 holds, the honest method consumes the oracle directly and drops the relation;
 where it does not, the honest method abstains---as v3 does on the unreadable
 stratum, where the aggregate table would have ranked it best, a ranking that
-reflects abstention rather than improved detection. Each finding would fall as
+reflects abstention rather than improved detection.
+
+Read together, the two findings bound what the technique's adjudication can yield
+for the authorization proposition studied. If the reachability stand-in is the
+only warrant and it is wrong, a legitimate access becomes a false proof
+(Finding~1). If a readable, sound oracle is instead available, the relation adds
+no adjudication over the direct consumer of that oracle and the outcome
+(Finding~2). And where no readable, admissible oracle exists---the black-box
+case---there is nothing for a sound method to consume, so it abstains rather than
+proves. Across the statuses the oracle can take, the outcomes the evaluated
+relations can yield are thus a false proof, a tie with the plain request, or an
+abstention; adjudication of a genuinely illegal access is not among them for these
+relations.
+
+Each finding would fall as
 follows: Finding~1, if the predicates were defined over live rather than
 recorded reachability; Finding~2, by an authorization MR needing an observable
 that a succeeding request plus a readable oracle cannot produce; Finding~3, by

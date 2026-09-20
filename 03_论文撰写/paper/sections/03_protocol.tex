@@ -7,8 +7,8 @@ and~\ref{sec:realsystem}; a direct execution of the library's own
 relations---source unmodified, with the build configuration and a replay harness
 added---carries one qualitative claim, that the published code produces the
 false proof we predict (Section~\ref{sec:native-run}). Neither instrument is a
-benchmark: we report no sensitivity or specificity attributable to
-\mbox{MST-wi}.
+benchmark: the standing scope and non-claims are collected in
+Section~\ref{sec:threats}, and neither yields a claim of detector accuracy.
 
 \paragraph{Three phases}
 (1)~\emph{Crawl}: record, per subject and object, whether the subject can reach
@@ -19,6 +19,18 @@ the frozen model is not updated, because the architecture has no mechanism to
 update it. (3)~\emph{Execute the MR} against the current state while the
 predicates consult the frozen model. Phase~2 is what the original evaluation
 does not exercise, and it is where the reachability stand-in can be wrong.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.84\textwidth]{fig1_protocol.pdf}
+\caption{The three-phase instantiation. The predicates consult the reachability
+model frozen in Phase~A. A Phase~B entitlement change made outside the crawled
+interface leaves that model stale, so in Phase~C a legitimately granted access
+has no representation but ``cannot reach''; the exception predicate is not
+discharged and the alarm is promoted to a proven violation---the false proof of
+Finding~1.}
+\label{fig:protocol}
+\end{figure*}
 
 \paragraph{Adjudicator variants and internal controls}
 A raw alarm becomes a verdict through an exception policy, and different policies

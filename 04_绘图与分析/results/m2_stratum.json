@@ -1,0 +1,551 @@
+{
+  "meta": {
+    "purpose": "审稿意见 M2：oracle 缺失层的检测增益分析",
+    "records_total": 576,
+    "n_on": 312,
+    "n_off": 264,
+    "stratum_variable": "config.introspection（已验证 ⟺ probe_state == unavailable）",
+    "aggregation": "detection(alarm) 口径：v1/v2/v3/degrade_all 取 violation-proven；direct_only / direct_observe 按 compute_all.py Block 9 判定",
+    "baselines": {
+      "always_alarm": "平凡地板：无条件告警（无非 vote）",
+      "obs_success": "朴素黑盒：仅凭观测到的访问成功（无 oracle、无爬取模型）"
+    },
+    "caveat-partial-isomorphism": "obs_success 与 direct_observe 均消费 app_allowed，而 truth 定义为 bola ⟺ ¬should_allow ∧ app_allowed ⇒ 二者与真值**部分同构**；绝对数值不可外推，只能读作『给定同一可观测量的增量』。"
+  },
+  "strata": {
+    "on": {
+      "v1": {
+        "TP": 96,
+        "FP": 36,
+        "FN": 12,
+        "TN": 168,
+        "precision": 0.7273,
+        "recall": 0.8889,
+        "f1": 0.8,
+        "precision_ci": [
+          0.6457,
+          0.796
+        ],
+        "recall_ci": [
+          0.8158,
+          0.9353
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "v2": {
+        "TP": 105,
+        "FP": 36,
+        "FN": 3,
+        "TN": 168,
+        "precision": 0.7447,
+        "recall": 0.9722,
+        "f1": 0.8434,
+        "precision_ci": [
+          0.6669,
+          0.8095
+        ],
+        "recall_ci": [
+          0.9215,
+          0.9905
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "v3": {
+        "TP": 105,
+        "FP": 0,
+        "FN": 3,
+        "TN": 204,
+        "precision": 1.0,
+        "recall": 0.9722,
+        "f1": 0.9859,
+        "precision_ci": [
+          0.9647,
+          1.0
+        ],
+        "recall_ci": [
+          0.9215,
+          0.9905
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "degrade_all": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 108,
+        "TN": 204,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0343
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "direct_only": {
+        "TP": 108,
+        "FP": 108,
+        "FN": 0,
+        "TN": 96,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6667,
+        "precision_ci": [
+          0.4339,
+          0.5661
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "direct_observe": {
+        "TP": 108,
+        "FP": 0,
+        "FN": 0,
+        "TN": 204,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "precision_ci": [
+          0.9657,
+          1.0
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "always_alarm": {
+        "TP": 108,
+        "FP": 204,
+        "FN": 0,
+        "TN": 0,
+        "precision": 0.3462,
+        "recall": 1.0,
+        "f1": 0.5143,
+        "precision_ci": [
+          0.2955,
+          0.4005
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      },
+      "obs_success": {
+        "TP": 108,
+        "FP": 96,
+        "FN": 0,
+        "TN": 108,
+        "precision": 0.5294,
+        "recall": 1.0,
+        "f1": 0.6923,
+        "precision_ci": [
+          0.461,
+          0.5967
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.3462,
+        "n_bola": 108,
+        "n_normal": 204,
+        "n": 312
+      }
+    },
+    "off": {
+      "v1": {
+        "TP": 102,
+        "FP": 24,
+        "FN": 6,
+        "TN": 132,
+        "precision": 0.8095,
+        "recall": 0.9444,
+        "f1": 0.8718,
+        "precision_ci": [
+          0.7322,
+          0.8685
+        ],
+        "recall_ci": [
+          0.8841,
+          0.9743
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "v2": {
+        "TP": 108,
+        "FP": 24,
+        "FN": 0,
+        "TN": 132,
+        "precision": 0.8182,
+        "recall": 1.0,
+        "f1": 0.9,
+        "precision_ci": [
+          0.7437,
+          0.8747
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "v3": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 108,
+        "TN": 156,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0343
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "degrade_all": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 108,
+        "TN": 156,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0343
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "direct_only": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 108,
+        "TN": 156,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0343
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "direct_observe": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 108,
+        "TN": 156,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0343
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "always_alarm": {
+        "TP": 108,
+        "FP": 156,
+        "FN": 0,
+        "TN": 0,
+        "precision": 0.4091,
+        "recall": 1.0,
+        "f1": 0.5807,
+        "precision_ci": [
+          0.3515,
+          0.4693
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      },
+      "obs_success": {
+        "TP": 108,
+        "FP": 48,
+        "FN": 0,
+        "TN": 108,
+        "precision": 0.6923,
+        "recall": 1.0,
+        "f1": 0.8182,
+        "precision_ci": [
+          0.616,
+          0.7594
+        ],
+        "recall_ci": [
+          0.9657,
+          1.0
+        ],
+        "prevalence": 0.4091,
+        "n_bola": 108,
+        "n_normal": 156,
+        "n": 264
+      }
+    },
+    "pooled": {
+      "v1": {
+        "TP": 198,
+        "FP": 60,
+        "FN": 18,
+        "TN": 300,
+        "precision": 0.7674,
+        "recall": 0.9167,
+        "f1": 0.8354,
+        "precision_ci": [
+          0.7122,
+          0.8148
+        ],
+        "recall_ci": [
+          0.8721,
+          0.9466
+        ],
+        "prevalence": 0.375,
+        "n_bola": 216,
+        "n_normal": 360,
+        "n": 576
+      },
+      "v2": {
+        "TP": 213,
+        "FP": 60,
+        "FN": 3,
+        "TN": 300,
+        "precision": 0.7802,
+        "recall": 0.9861,
+        "f1": 0.8711,
+        "precision_ci": [
+          0.7274,
+          0.8253
+        ],
+        "recall_ci": [
+          0.96,
+          0.9953
+        ],
+        "prevalence": 0.375,
+        "n_bola": 216,
+        "n_normal": 360,
+        "n": 576
+      },
+      "v3": {
+        "TP": 105,
+        "FP": 0,
+        "FN": 111,
+        "TN": 360,
+        "precision": 1.0,
+        "recall": 0.4861,
+        "f1": 0.6542,
+        "precision_ci": [
+          0.9647,
+          1.0
+        ],
+        "recall_ci": [
+          0.4203,
+          0.5524
+        ],
+        "prevalence": 0.375,
+        "n_bola": 216,
+        "n_normal": 360,
+        "n": 576
+      },
+      "degrade_all": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 216,
+        "TN": 360,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "precision_ci": [
+          null,
+          null
+        ],
+        "recall_ci": [
+          0.0,
+          0.0175
+        ],
+        "prevalence": 0.375,
+        "n_bola": 216,
+        "n_normal": 360,
+        "n": 576
+      },
+      "direct_only": {
+        "TP": 108,
+        "FP": 108,
+        "FN": 108,
+        "TN": 252,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "precision_ci": [
+          0.4339,
+          0.5661
+        ],
+        "recall_ci": [
+          0.4339,
+          0.5661
+        ],
+        "prevalence": 0.375,
+        "n_bola": 216,
+        "n_normal": 360,
+        "n": 576
+      },
+      "direct_observe": {
+        "TP": 108,
+        "FP": 0,
+        "FN": 108,
+        "TN": 360,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "precision_ci": [
+          0.9657,
+          1.0
+        ],
+        "recall_ci": [
+          0.4339,
+          0.5661
+        ],
+        "prevalence": 0.375,
+        "n_bola": 216,
+        "n_normal": 360,
+        "n": 576
+      }
+    }
+  },
+  "m2_core": {
+    "off_true_violations": 108,
+    "off_normal": 156,
+    "off_prevalence": 0.4091,
+    "off_v2_tp": 108,
+    "off_v2_fp": 24,
+    "off_direct_observe_tp": 0,
+    "off_always_alarm_tp": 108,
+    "off_always_alarm_fp": 156,
+    "lift_v2_over_prevalence": 2.0,
+    "lift_obs_success_over_prevalence": 1.6923,
+    "delta_tp_v2_minus_obs_success": 0,
+    "delta_fp_v2_minus_obs_success": -24,
+    "v2_recall_on": 0.9722,
+    "v2_recall_off": 1.0,
+    "direct_observe_recall_on": 1.0,
+    "direct_observe_recall_off": 0.0
+  },
+  "off_stratum_attribution": {
+    "S1": {
+      "n": 48,
+      "v2_FP": 0,
+      "obs_success_FP": 0
+    },
+    "S2": {
+      "n": 48,
+      "v2_FP": 0,
+      "obs_success_FP": 0
+    },
+    "S3": {
+      "n": 48,
+      "v2_FP": 0,
+      "obs_success_FP": 24
+    },
+    "S4": {
+      "n": 48,
+      "v2_FP": 0,
+      "obs_success_FP": 0
+    },
+    "S5": {
+      "n": 24,
+      "v2_FP": 0,
+      "obs_success_FP": 0
+    },
+    "S6": {
+      "n": 24,
+      "v2_FP": 24,
+      "obs_success_FP": 24
+    },
+    "S7": {
+      "n": 24,
+      "v2_FP": 0,
+      "obs_success_FP": 0
+    }
+  },
+  "disclosures": {
+    "config_flag_is_not_a_proxy": {
+      "records": 108,
+      "labels": [
+        "V-noE3-vuln0",
+        "V-noE3-vuln1"
+      ],
+      "note": "这些记录 config.introspection=on 但 probe 返回 unavailable；故分层变量取 probe 有效可读性，不取配置开关。"
+    },
+    "partial_isomorphism": "obs_success 与 direct_observe 均消费 app_allowed，而 truth 定义为 bola ⟺ ¬should_allow ∧ app_allowed ⇒ 二者与真值部分同构；绝对数值不可外推，只能读作『给定同一可观测量的增量』。"
+  }
+}

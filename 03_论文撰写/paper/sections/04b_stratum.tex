@@ -1,0 +1,134 @@
+% =====================================================================
+%  M2 补充分析：把池化消融表按「oracle 是否有效可读」分层
+%  重要：本节所有数字一律引用 m2_stratum.tex 的 \Mii* 宏，
+%       由 analysis/ingest_m2_stratum.py 从 raw_matrix.jsonl 重算得到。
+%       禁止手敲数字。
+% =====================================================================
+
+\subsection{What pooling hid: the ablation split by oracle readability}
+\label{sec:stratum}
+
+Table~\ref{tab:ablation} pools two populations in which the oracle-consuming
+methods behave in opposite ways, and the pool is misleading in both directions.
+The records differ in one respect that decides whether those methods can act at
+all: whether the introspection surface returns a reading for the record. We
+therefore repeat the same comparison inside each stratum, with the same methods
+and the same decision rule, and we add two references that need no oracle
+against which the metamorphic family can be scored where no oracle exists.
+
+\paragraph{Stratification variable} We stratify on the \emph{effective}
+readability of the surface---the value the probe returns for the record---not on
+the configuration switch. The distinction is not cosmetic: \MiiFlagOnButUnavailable{}
+records sit in configurations flagged \texttt{introspection=on} whose surface
+nevertheless returns nothing (the two no-exception configurations), so the
+configuration flag is not a faithful proxy for whether an oracle was available
+to the adjudicator, and using it would misclassify those records. The two strata
+partition all \MiiNTotal{} records: \MiiNOn{} readable, \MiiNOff{} unreadable.
+Both are fixed enumerations, so as elsewhere we report counts and rates and
+attach no inferential interval.
+
+\begin{table*}[t]
+\centering
+\caption{The ablation of Table~\ref{tab:ablation} re-run inside each stratum.
+The two panels are not rankings of the same population but two different
+regimes: in the readable stratum the oracle-bearing methods can act; in the
+unreadable stratum they cannot act and are structurally bound to zero
+detections. The two reference rows need no oracle and no crawl model:
+\texttt{always\_alarm} is the trivial floor, \texttt{obs\_success} alarms on the
+observed success of a plain request. All numbers are counts.}
+\label{tab:stratum}
+\begin{tabular}{llrrrrrrl}
+\toprule
+stratum & method & TP & FP & FN & TN & precision & recall & F1 \\
+\midrule
+readable (\MiiNOn)
+  & v1 (raw)                & \MiiOnVOneTP & \MiiOnVOneFP & \MiiOnVOneFN & \MiiOnVOneTN & \MiiOnVOnePrec & \MiiOnVOneRec & \MiiOnVOneFone \\
+  & v2 (exception-aware)    & \MiiOnVTwoTP & \MiiOnVTwoFP & \MiiOnVTwoFN & \MiiOnVTwoTN & \MiiOnVTwoPrec & \MiiOnVTwoRec & \MiiOnVTwoFone \\
+  & v3 (state-calibrated)   & \MiiOnVThreeTP & \MiiOnVThreeFP & \MiiOnVThreeFN & \MiiOnVThreeTN & \MiiOnVThreePrec & \MiiOnVThreeRec & \MiiOnVThreeFone \\
+  & \texttt{direct\_observe}& \MiiOnDirectObserveTP & \MiiOnDirectObserveFP & \MiiOnDirectObserveFN & \MiiOnDirectObserveTN & \MiiOnDirectObservePrec & \MiiOnDirectObserveRec & \MiiOnDirectObserveFone \\
+  & \texttt{obs\_success}   & \MiiOnObsSuccessTP & \MiiOnObsSuccessFP & \MiiOnObsSuccessFN & \MiiOnObsSuccessTN & \MiiOnObsSuccessPrec & \MiiOnObsSuccessRec & \MiiOnObsSuccessFone \\
+  & \texttt{always\_alarm}  & \MiiOnAlwaysAlarmTP & \MiiOnAlwaysAlarmFP & \MiiOnAlwaysAlarmFN & \MiiOnAlwaysAlarmTN & \MiiOnAlwaysAlarmPrec & \MiiOnAlwaysAlarmRec & \MiiOnAlwaysAlarmFone \\
+\midrule
+unreadable (\MiiNOff)
+  & v1 (raw)                & \MiiOffVOneTP & \MiiOffVOneFP & \MiiOffVOneFN & \MiiOffVOneTN & \MiiOffVOnePrec & \MiiOffVOneRec & \MiiOffVOneFone \\
+  & v2 (exception-aware)    & \MiiOffVTwoTP & \MiiOffVTwoFP & \MiiOffVTwoFN & \MiiOffVTwoTN & \MiiOffVTwoPrec & \MiiOffVTwoRec & \MiiOffVTwoFone \\
+  & v3 (state-calibrated)   & \MiiOffVThreeTP & \MiiOffVThreeFP & \MiiOffVThreeFN & \MiiOffVThreeTN & \MiiOffVThreePrec & \MiiOffVThreeRec & \MiiOffVThreeFone \\
+  & \texttt{direct\_observe}& \MiiOffDirectObserveTP & \MiiOffDirectObserveFP & \MiiOffDirectObserveFN & \MiiOffDirectObserveTN & \MiiOffDirectObservePrec & \MiiOffDirectObserveRec & \MiiOffDirectObserveFone \\
+  & \texttt{obs\_success}   & \MiiOffObsSuccessTP & \MiiOffObsSuccessFP & \MiiOffObsSuccessFN & \MiiOffObsSuccessTN & \MiiOffObsSuccessPrec & \MiiOffObsSuccessRec & \MiiOffObsSuccessFone \\
+  & \texttt{always\_alarm}  & \MiiOffAlwaysAlarmTP & \MiiOffAlwaysAlarmFP & \MiiOffAlwaysAlarmFN & \MiiOffAlwaysAlarmTN & \MiiOffAlwaysAlarmPrec & \MiiOffAlwaysAlarmRec & \MiiOffAlwaysAlarmFone \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{The readable stratum strengthens Finding~2}
+Splitting does not rescue the metamorphic step; it removes the comparison in
+which it looked best. On the \MiiNOn{} readable records
+\texttt{direct\_observe} reaches recall \MiiOnDirectObserveRec{} with
+\MiiOnDirectObserveFP{} false proofs, against v2's recall \MiiOnVTwoRec{} with
+\MiiOnVTwoFP{} false proofs, and against v3's recall \MiiOnVThreeRec{} with
+\MiiOnVThreeFP{}. The ordering is therefore not an artefact of the metric---the
+plain request is ahead on false proofs and not behind on detections---whereas
+the pooled table had let the family appear competitive on recall. We do not
+claim domination: the comparison rests on the constructed-observable argument of
+Proposition~\ref{lem:oracle-suff}, and \texttt{direct\_observe} is not an independent
+method here, since it is built from the same two quantities that define the
+reference (its second input, the access outcome, is part of how the reference
+labels a violation). What the split shows is the scope of the necessity claim:
+where an oracle resolves the proposition, there is nothing left for the relation
+to add, and the pooled numbers were flattering to the relation only because they
+mixed in records where the oracle-bearing methods could not run.
+
+\paragraph{The unreadable stratum is the relation's own regime, and it is not empty}
+The \MiiNOff{} unreadable records contain \MiiOffNBola{} true violations and
+\MiiOffNNormal{} correct cases, a violation base rate of
+\MiiOffPrevalencePct{}\%. Every oracle-bearing method---v3,
+\texttt{direct\_observe}, \texttt{direct\_only}---detects \MiiOffVThreeTP{} of
+them, not because the relations are weak but because those methods have nothing
+to consult and, by their own definition, abstain. The metamorphic family does
+not abstain: v2 reaches all \MiiOffVTwoTP{} true violations
+(recall \MiiOffVTwoRec{}) with \MiiOffVTwoFP{} false proofs, precision
+\MiiOffVTwoPrec{}, a lift of \MiiLiftVTwo{}$\times$ over the base rate. Against
+the two no-oracle references: \texttt{always\_alarm} scores precision
+\MiiOffAlwaysAlarmPrec{}, which is the base rate itself---no information at
+all---and \texttt{obs\_success}, which alarms on the observed success of a plain
+request, reaches the \emph{same} recall at precision \MiiOffObsSuccessPrec{},
+lift \MiiLiftObsSuccess{}$\times$. The net difference between the metamorphic
+family and that reference is therefore not in detections but in false alarms:
+\MiiDeltaTPVTwoMinusObsSuccess{} additional true violations and
+\MiiDeltaFPVTwoMinusObsSuccess{} false alarms, a saving of
+\MiiOffAttribSavedFPTotal{}.
+
+\paragraph{What the saving consists of}
+The attribution is one-sided and mechanical. Over the seven scenarios, every
+record of the \MiiOffAttribSavedFPTotal{}-alarm saving falls on S3, the
+legitimate share created \emph{through the framework's own facility} and hence
+recorded in its log: \MiiOffScenThreeObsSuccessFP{} false alarms for
+\texttt{obs\_success} against \MiiOffScenThreeVTwoFP{} for v2 on the
+\MiiOffScenThreeN{} records of that scenario. On S6, the same share created out
+of band, the two agree exactly (\MiiOffScenSixObsSuccessFP{} vs.\
+\MiiOffScenSixVTwoFP{} false alarms on \MiiOffScenSixN{} records), and both for the reason developed in
+Section~\ref{sec:boundary1}---the predicate has no representation for a grant the
+crawl did not see. So the incremental detection
+information the metamorphic step carries where no oracle exists is exactly the
+information the crawl-derived reachability model can see: it suppresses what was
+logged, and it reproduces Finding~1 on what was not. This bounds Finding~2
+rather than overturning it. Finding~2's antecedent---a readable, sound oracle
+that fully resolves the proposition---fails on this stratum by construction, and
+where it fails the relation is not worthless but worth precisely the reachability
+model it reads: above a trivial floor, above a single uninterpreted request, and
+below any method that can consult the entitlement.
+
+\paragraph{Limits of the comparison}
+Two references are deliberately weak, and we do not present them as the frontier
+of oracle-free detection: \texttt{obs\_success} uses one request and no model,
+and a differential prober that compares several accounts against one another---the
+shape taken by the black-box line reviewed in
+Section~\ref{sec:related}---consumes more than \texttt{obs\_success} does and was
+not instantiated here. The lift we measure is therefore an estimate against weak
+references, not a claim about metamorphic testing versus the best oracle-free
+detector, and we make no such claim. Both references also share an observable
+with the reference labelling (\texttt{obs\_success} alarms on the same access
+outcome that partly defines a violation), so their absolute rates carry the same
+constructiveness caveat as \texttt{direct\_observe}; only the differences are
+meant to be read. Everything here is one constructed system, one MR family, and
+one criterion (the alarm) rather than the promoted verdict.

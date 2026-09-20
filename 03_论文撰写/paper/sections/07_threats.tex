@@ -36,6 +36,19 @@ proportions are topology design parameters, not field prevalence. Constructed
 scenarios with construction-defined ground truth are why the real-system section
 exists; three systems tested once each are still not a population.
 
+\paragraph{Stratification and the references used in it} The split of
+Section~\ref{sec:stratum} is on whether the introspection surface returned a
+reading for the record, not on the configuration switch: \MiiFlagOnButUnavailable{}
+records sit in configurations that enable introspection but whose probe returns
+nothing, so the switch would misclassify them. The two oracle-free references
+there are deliberately weak---one unconditional, one guessing from a single
+request---because the point is to size the metamorphic step against methods that
+need nothing, not to identify the best oracle-free detector; a differential
+prober across accounts consumes more than those references do and was not
+instantiated. Both references share an observable with the labelling rule, as
+\texttt{direct\_observe} does, so only the differences against them---not their
+absolute rates---are meant to be read.
+
 \paragraph{Our own earlier claims} An earlier iteration proposed v3 as a
 mechanism on the strength of its precision (\ResAbVThreePrec{}), which was
 bought with \ResAbVThreeFN{} false negatives, and a control

@@ -34,6 +34,9 @@
 % ---- 受控靶机阳性对照的数字与对照表（由 analysis/ingest_seeded.py 生成） ----
 \input{seeded_table.tex}
 
+% ---- M2 补充分析：oracle 有效性分层（由 analysis/ingest_m2_stratum.py 生成） ----
+\input{m2_stratum.tex}
+
 \graphicspath{{figures/}}
 
 % 双栏窄列下允许更宽的词间弹性，避免长 hyphen/等宽 token 造成 overfull hbox
@@ -85,37 +88,31 @@
 \cortext[1]{Corresponding author.}
 
 \begin{abstract}
-Metamorphic testing is an established approach to the Web-security oracle
-problem: \mbox{MST-wi} defines \ResLitMrCatalog{} system-agnostic
-relations (MRs) over a Web-specific domain language, reporting
-\ResLitReportedSpecPct{}\% specificity. For the reachability-gated authorization
-relations examined here, the predicates delegate adjudication to a
-\emph{GUI-reachability model} that is a \emph{crawl-time snapshot}, and that
-delegation fails deterministically, in one direction.
+Metamorphic testing substitutes for the missing Web-security oracle by relating a
+system's own responses to one another instead of to a ground truth. For the
+object-level-authorization relations we study, the predicates delegate the
+verdict to a \emph{GUI-reachability model}---what the interface, as crawled,
+permits---a \emph{crawl-time snapshot}. We instantiate the published relations as
+defined and drive constructed and real systems through crawl, out-of-band change,
+and execution. Three findings follow. (i)~Access granted out of band after the
+crawl is reported as a \emph{proven} violation---a \emph{false proof}---in
+\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} constructed alarms, because
+an out-of-band grant fits only the wrong one of the predicate's two
+representations. (ii)~Repairing this with a readable, sound oracle that fully
+resolves the proposition leaves the metamorphic step adding no observed
+adjudication benefit over the direct consumer of the same oracle and outcome; the
+paired methods disagree on only \ResAbDisagreementN{} of \ResAbNBola{}
+true-violation records, all favouring the plain request. (iii)~The reported
+specificity of \ResLitReportedSpecPct{}\% is not conditioned on a check that the
+reachability model equals the authorization state, and its denominator cannot
+register a scenario-uniform failure.
 
-We obtain three findings from a three-phase instantiation of the predicates as
-defined---crawl,
-out-of-band authorization change, execute---a \ResSynRecords{}-record
-scenario/configuration study, and a Gitea \ResRsVersion{} study replicated on
-Gogs \GgVersion{} and GitLab \GlVersion{}. (i) Access legitimately granted out of band after the crawl is reported as a \emph{proven}
-violation---a \emph{false proof}---because one of its two representations is
-unavailable. (ii) Repairing this with a readable, sound oracle that fully
-resolves the proposition leaves the MR step providing no observed incremental
-adjudication benefit over a direct consumer of the same oracle and outcome: a
-necessary condition, since that consumer reproduces the verdict, and the paired
-methods disagree on only \ResAbDisagreementN{} records, all favoring
-\texttt{direct\_observe} (a descriptive point estimate, not a
-non-inferiority test, and not domination). (iii) The reported specificity is not
-conditioned on a reachability--authorization check, and its input-level
-denominator cannot resolve a scenario-level failure. The study instantiates
-\ResDesignMrs{} reachability-gated relations; the wider catalogue is support
-evidence.
-
-On Gitea the mismatch appears only under the crawl-time reading, never live: it
-tracks the reading time, not visibility. The oracle that would discharge
-the condition is readable from an owner's vantage but never a black-box
-subject's, and executing the published relations reproduces the false proof
-within the gated subset that fires.
+The findings come from a \ResSynRecords{}-record scenario/configuration study and
+a Gitea \ResRsVersion{} study extended to Gogs \GgVersion{} and GitLab
+\GlVersion{}. On Gitea the mismatch tracks the reading time, not visibility,
+appearing under the crawl-time reading and not live, with an endogenous control
+holding final visibility fixed; executing the published relations reproduces the
+false proof within the gated subset that fires.
 \end{abstract}
 
 \begin{keywords}
@@ -129,6 +126,7 @@ BOLA/BFLA \sep specificity measurement \sep false proof
 \input{sections/02_background}
 \input{sections/03_protocol}
 \input{sections/04_synthetic}
+\input{sections/04b_stratum}
 \input{sections/05_realsystem}
 \input{sections/06_boundaries}
 \input{sections/06b_support}
