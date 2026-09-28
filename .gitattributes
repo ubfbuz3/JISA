@@ -27,3 +27,7 @@
 *.sty    text eol=lf
 *.fd     text eol=lf
 *.map    text eol=lf
+
+# Shell scripts must keep LF: a CRLF checkout makes `bash build.sh` fail with
+# "\r: command not found" (build.sh / reproduce.sh / verify_artifact.sh).
+*.sh     text eol=lf
