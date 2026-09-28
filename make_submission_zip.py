@@ -61,7 +61,6 @@ def referenced_figures() -> list[str]:
 
 
 FIG_PDF = referenced_figures()
-THUMBS = sorted(p.name for p in (PAPER / "thumbnails").glob("*.jpeg"))
 
 
 def collect() -> list[tuple[str, Path]]:
@@ -78,14 +77,10 @@ def collect() -> list[tuple[str, Path]]:
     add("refs.bib", PAPER / "refs.bib")
     for n in RESULT_TEX:
         add(n, RESULTS / n)
-    for n in ("cas-dc.cls", "cas-common.sty", "cas-model2-names.bst"):
-        add(n, PAPER / n)
     for n in SECTIONS:
         add(f"sections/{n}", PAPER / "sections" / n)
     for n in FIG_PDF:
         add(f"figures/{n}", FIGURES / n)
-    for n in THUMBS:
-        add(f"thumbnails/{n}", PAPER / "thumbnails" / n)
     return items
 
 

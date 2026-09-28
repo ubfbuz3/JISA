@@ -64,8 +64,12 @@ evidence for these findings, not further headline findings
 The findings are not a claim that \mbox{MST-wi} is wrong: the reachability
 stand-in is announced by its authors and the predecessor design attributes its
 residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}. Our
-contribution is a \emph{methodological characterisation}, not a new detector,
-with three layers: (1)~\emph{mechanistic}---the false-proof failure is located
+contribution is a \emph{security-testing characterisation} of metamorphic
+testing for object-level authorization in Web/API systems, not a new detector,
+with three layers. Although the technique is general, every empirical claim is
+scoped to reachability-gated authorization relations in Web/API systems---a
+prevalent class of networked-application security flaws---and we state where the
+transfer stops. (1)~\emph{mechanistic}---the false-proof failure is located
 structurally, in \emph{when} the reachability model was read rather than which
 objects are visible; (2)~\emph{fair-control ablation}---under a readable, sound
 oracle, a same-observable direct adjudicator shows the metamorphic step adds no

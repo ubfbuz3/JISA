@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =====================================================================
-#  编译 JISA 论文。会把源码装配到纯 ASCII 工作目录再编译，
+#  编译 IEEE Access 论文（IEEEtran 模板）。会把源码装配到纯 ASCII 工作目录再编译，
 #  以避开中文路径在 MiKTeX / BibTeX 下的各类问题。
 #
 #  用法:  bash 03_论文撰写/paper/build.sh
@@ -11,7 +11,7 @@ set -uo pipefail
 
 SRC_PAPER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJ="$(cd "$SRC_PAPER/../.." && pwd)"
-BUILD="/c/Users/Administrator/WorkBuddy/jisa_paper_build"
+BUILD="/c/Users/Administrator/WorkBuddy/ieee_access_build"
 
 ENGINE="${LATEX_ENGINE:-pdflatex}"
 
@@ -29,7 +29,7 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/seeded_table.tex" \
          "$PROJ/04_绘图与分析/results/m2_stratum.tex" \
          "$SRC_PAPER/refs.bib"; do
-  [ -f "$f" ] || { echo "!! 缺少 $f，请先跑 analysis/compute_all.py ingest_native_engine.py ingest_gogs.py ingest_gitlab.py ingest_seeded.py"; exit 1; }
+  [ -f "$f" ] || { echo "!! 缺少 $f，请先跑 analysis/compute_all.py ingest_native_engine.py ingest_gogs.py ingest_gitlab.py ingest_gitlab.py ingest_seeded.py"; exit 1; }
 done
 
 # refs.bib 的**字段值**里不能有非 ASCII（BibTeX 会原样写进 .bbl，
@@ -64,12 +64,9 @@ then :; else echo "!! refs.bib 校验不通过"; exit 1; fi
 
 echo "== [2/5] 装配到纯 ASCII 目录: $BUILD =="
 rm -rf "$BUILD"
-mkdir -p "$BUILD/sections" "$BUILD/figures" "$BUILD/thumbnails"
+mkdir -p "$BUILD/sections" "$BUILD/figures"
 
 cp "$SRC_PAPER/main.tex"           "$BUILD/"
-cp "$SRC_PAPER/cas-dc.cls"         "$BUILD/"
-cp "$SRC_PAPER/cas-common.sty"     "$BUILD/"
-cp "$SRC_PAPER/cas-model2-names.bst" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/native_engine_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/native_engine_table.tex" "$BUILD/"
@@ -82,8 +79,6 @@ cp "$SRC_PAPER/refs.bib"           "$BUILD/"
 cp "$SRC_PAPER"/sections/*.tex     "$BUILD/sections/"
 # 只装配矢量 PDF 图（无 AI 生成像素；矢量可无限缩放）
 cp "$PROJ"/04_绘图与分析/figures/*.pdf "$BUILD/figures/"
-# CAS 模板的通讯图标（email/url 缩略图，模板自带资源，非 AI 像素）
-cp "$SRC_PAPER"/thumbnails/*.jpeg "$BUILD/thumbnails/"
 
 echo "   装配清单:"
 ( cd "$BUILD" && find . -type f | sort | sed 's/^/     /' )

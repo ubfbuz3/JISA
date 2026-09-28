@@ -1,7 +1,7 @@
 % =====================================================================
 %  Limits of Metamorphic Testing for Object-Level Authorization:
-%  Temporal Reachability, Oracle Admissibility, Measurement Resolution
-%  Elsevier CAS double-column template (cas-dc) / JISA
+%  Temporal Reachability, Oracle Admissibility, and Measurement Resolution
+%  IEEEtran template / IEEE Access
 % ---------------------------------------------------------------------
 %  硬规则:
 %    * 正文**不得手敲任何数字** —— 全部引用 \Res* 宏（由
@@ -11,9 +11,9 @@
 %    * 全部图为**矢量**，由 matplotlib / figure-spec 确定性生成，无 AI 生成像素。
 %  编译: bash build.sh   （会把源码装配到纯 ASCII 目录再编译，避开中文路径）
 % =====================================================================
-\documentclass[a4paper,fleqn]{cas-dc}
+\documentclass[journal]{IEEEtran}
 
-\usepackage[numbers,sort&compress]{natbib}
+\usepackage{cite}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -21,7 +21,7 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{url}
-\hypersetup{hidelinks}
+\usepackage[hidelinks]{hyperref}
 
 % ---- 图中/文中引用的全部数字（自动生成，勿手改） ----
 \input{numbers.tex}
@@ -33,18 +33,16 @@
 \input{gogs_numbers.tex}
 % ---- 受控靶机阳性对照的数字与对照表（由 analysis/ingest_seeded.py 生成） ----
 \input{seeded_table.tex}
-
 % ---- M2 补充分析：oracle 有效性分层（由 analysis/ingest_m2_stratum.py 生成） ----
 \input{m2_stratum.tex}
 
 \graphicspath{{figures/}}
 
-% 双栏窄列下允许更宽的词间弹性，避免长 hyphen/等宽 token 造成 overfull hbox
-\setlength{\emergencystretch}{2.5em}
+% 双栏窄列下允许更宽的词间弹性，避免长 token 造成 overfull hbox
+\setlength{\emergencystretch}{3em}
 
-% ---- 版面收紧（投稿页数控制）----
-% 只压缩浮动体/公式/表格周围的**垂直留白**，不改字号、不改行距、不改栏宽，
-% 因此不影响可读性，也不改变任何正文内容。
+% ---- 版面微调（控制页数，不改字号、不改行距、不改栏宽） ----
+% 只压缩浮动体/公式/表格周围的**垂直留白**，不影响可读性，也不改变任何正文内容。
 \setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
 \setlength{\floatsep}{6pt plus 2pt minus 2pt}
 \setlength{\intextsep}{6pt plus 2pt minus 2pt}
@@ -56,23 +54,7 @@
 \setlength{\belowdisplayshortskip}{2pt plus 1pt}
 \renewcommand{\arraystretch}{0.95}
 
-% 标题前后的垂直留白同样收紧（论文有 41 个 \paragraph 小标题，累计可观）
-\makeatletter
-\renewcommand\section{\@startsection{section}{1}{\z@}%
-    {12pt \@plus 3\p@ \@minus 3\p@}{3\p@}%
-    {\sectionfont\raggedright\hst[13pt]}}
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
-    {8pt \@plus 3\p@ \@minus 2\p@}{.1\p@}%
-    {\ssectionfont\raggedright}}
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-    {8pt \@plus 1\p@ \@minus .3\p@}{.1\p@}%
-    {\sssectionfont\raggedright}}
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\parindent}%
-    {6pt \@plus0.01pt \@minus0.01pt}{-6pt}%
-    {\ssssparaindent\ssssectionfont\itshape\raggedright}}
-\makeatother
-
-% 表格与图题降为 \footnotesize（Elsevier 的表格/图题惯例即 8pt），压缩浮动体高度
+% 表格与图题降为 \footnotesize，压缩浮动体高度
 \usepackage{etoolbox}
 \AtBeginEnvironment{table}{\footnotesize}
 \AtBeginEnvironment{table*}{\footnotesize}
@@ -87,52 +69,37 @@
 \newcommand{\ttt}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
 
-% 形式化结果（引理/命题/推论）——cas-dc 未提供定理环境，故在此定义；
-% 正文只引用这些环境的编号，不手敲编号。
+% 形式化结果（引理/命题/推论）
 \theoremstyle{definition}
 \newtheorem{lemma}{Lemma}
 \newtheorem{proposition}{Proposition}
 \newtheorem{corollary}{Corollary}
 
-% 作者未提供 ORCID：抑制 cas 模板自动打印的空 "orcid(s):" 字段
-\RenewDocumentCommand{\printorcid}{}{}
-
 \begin{document}
-\let\WriteBookmarks\relax
-\def\floatpagepagefraction{1}
-\def\textpagefraction{.001}
 
-% Short title
-\shorttitle{Bounds of metamorphic testing for object-level authorization}
+\title{Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution}
 
-% Short author
-\shortauthors{Q.~Lin and N.~Chen}
+\author{
+  \IEEEauthorblockN{Qiulong Lin and Nanlei Chen%
+    \thanks{Nanlei Chen is the corresponding author (e-mail: ubfbzu3@163.com).}}
+  \IEEEauthorblockA{Yango University, Fuzhou 350015, China\\
+    Sogang University, Seoul 04107, Republic of Korea}
+}
 
-% Main title of the paper
-\title[mode = title]{Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution}
+\markboth{IEEE Access}{Lin and Chen: Limits of Metamorphic Testing for Object-Level Authorization}
 
-\author[a,b]{Qiulong Lin}
-
-\author[a,b]{Nanlei Chen}
-\cormark[1]
-\ead{ubfbzu3@163.com}
-
-\affiliation[a]{organization={Yango University},
-                city={Fuzhou}, postcode={350015}, country={China}}
-\affiliation[b]{organization={Sogang University},
-                city={Seoul}, postcode={04107}, country={Republic of Korea}}
-
-\cortext[1]{Corresponding author.}
+\maketitle
 
 \begin{abstract}
-Metamorphic testing substitutes for the missing Web-security oracle by relating a
-system's own responses to one another instead of to a ground truth. For the
-object-level-authorization relations we study, the predicates delegate the
-verdict to a \emph{GUI-reachability model}---what the interface, as crawled,
-permits---a \emph{crawl-time snapshot}. We instantiate the published relations as
-defined and drive constructed and real systems through crawl, out-of-band change,
-and execution. Three findings follow. (1)~Access granted out of band after the
-crawl is reported as a \emph{proven} violation---a \emph{false proof}---in
+Broken object-level authorization (BOLA) is the top-ranked API security risk, yet
+detecting it is an oracle problem: vulnerable and correct systems answer
+identically. Metamorphic testing is a leading technique for that problem in Web
+systems; for the relations we study, the predicates delegate the verdict to a
+\emph{GUI-reachability model}---a crawl-time snapshot of what the interface
+permits. We instantiate the published relations as defined and drive constructed
+and real systems through crawl, out-of-band change, and execution. Three findings
+follow. (1)~Access granted out of band after the crawl is reported as a
+\emph{proven} violation---a \emph{false proof}---in
 \ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} constructed alarms, because
 an out-of-band grant fits only the wrong one of the predicate's two
 representations. (2)~Repairing this with a readable, sound oracle that fully
@@ -144,20 +111,15 @@ specificity of \ResLitReportedSpecPct{}\% is not conditioned on a check that the
 reachability model equals the authorization state, and its denominator cannot
 register a scenario-uniform failure.
 
-The findings come from a \ResSynRecords{}-record scenario/configuration study and
-a Gitea \ResRsVersion{} study extended to Gogs \GgVersion{} and GitLab
-\GlVersion{}. On Gitea the mismatch tracks the reading time, not visibility,
-appearing under the crawl-time reading and not live, with an endogenous control
-holding final visibility fixed; executing the published relations reproduces the
-false proof within the gated subset that fires.
+The findings come from a \ResSynRecords{}-record scenario/configuration study on
+Gitea \ResRsVersion{} extended to Gogs \GgVersion{} and GitLab \GlVersion{},
+with an endogenous control holding final visibility fixed; the published relations
+reproduce the false proof within the gated subset that fires.
 \end{abstract}
 
-\begin{keywords}
-oracle problem \sep metamorphic testing \sep object-level authorization \sep
-BOLA/BFLA \sep specificity measurement \sep false proof
-\end{keywords}
-
-\maketitle
+\begin{IEEEkeywords}
+oracle problem, metamorphic testing, object-level authorization, BOLA/BFLA, specificity measurement, false proof
+\end{IEEEkeywords}
 
 \input{sections/01_intro}
 \input{sections/02_background}
@@ -172,7 +134,7 @@ BOLA/BFLA \sep specificity measurement \sep false proof
 \input{sections/09_conclusion}
 \input{sections/10_declarations}
 
-\bibliographystyle{elsarticle-num}
+\bibliographystyle{IEEEtran}
 \bibliography{refs}
 
 \end{document}
