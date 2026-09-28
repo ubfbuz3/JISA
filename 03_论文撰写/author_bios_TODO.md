@@ -24,13 +24,17 @@ only for the HTML version, and only if you choose to supply one).
 - IEEE membership / grade: 未提供 → 简介中**省略**该句（不编造）。
 - 已插入 `main.tex` 的 `\IEEEbiographynophoto` 环境（在 `\bibliography{refs}` 之后）。
 
-## Nanlei Chen
+## Nanlei Chen  ✅ 已填（2026-09-28，作者确认）
 
-- Current position / affiliation: **TODO** (known: Sogang University, Seoul,
-  Republic of Korea — confirm title; corresponding author).
-- Degrees and institutions: **TODO**.
-- Research interests: **TODO**.
-- IEEE membership / grade: **TODO**.
+- Current position / affiliation: with Yango University, Fuzhou 350015, China
+  （阳光学院在职）; and Sogang University, Seoul 04107, Republic of Korea（在读）。
+- Degrees and institutions: **currently pursuing the M.S. degree at Sogang
+  University**（作者原话"西江大学在读，尚未毕业"；**在读未毕业**，故用
+  "is currently pursuing"，不用 "received"）。
+- Research interests: Web/API security and authorization testing（由论文主题推导）。
+- IEEE membership / grade: 未提供 → 简介中**省略**该句（不编造）。
+- 通讯作者（已见 `main.tex` 作者块脚注）。
+- 已插入 `main.tex` 的 `\IEEEbiographynophoto` 环境（在 Lin 之后）。
 
 ---
 
