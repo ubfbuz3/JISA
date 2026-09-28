@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =====================================================================
-#  编译 IEEE Access 论文（IEEEtran 模板）。会把源码装配到纯 ASCII 工作目录再编译，
-#  以避开中文路径在 MiKTeX / BibTeX 下的各类问题。
+#  编译 IEEE Access 论文（官方 ieeeaccess.cls 模板）。会把源码与模板支持文件一起
+#  装配到纯 ASCII 工作目录再编译，以避开中文路径在 MiKTeX / BibTeX 下的各类问题。
 #
 #  用法:  bash 03_论文撰写/paper/build.sh
 #  产物:  03_论文撰写/paper/main.pdf  （以及 ASCII 目录下的日志）
@@ -79,6 +79,10 @@ cp "$SRC_PAPER/refs.bib"           "$BUILD/"
 cp "$SRC_PAPER"/sections/*.tex     "$BUILD/sections/"
 # 只装配矢量 PDF 图（无 AI 生成像素；矢量可无限缩放）
 cp "$PROJ"/04_绘图与分析/figures/*.pdf "$BUILD/figures/"
+# 官方 IEEE Access 模板支持文件：ieeeaccess.cls / IEEEtran.cls / IEEEtran.bst /
+# spotcolor.sty / Formata·Times 字体(.pfb/.tfm/.fd/.map) / bullet.png 等。
+# \LoadClass{IEEEtran}、\pdfmapfile{+ t1-formata.map} 与 \EOD 的 bullet.png 都要靠它。
+cp "$SRC_PAPER"/ieeeaccess/*       "$BUILD/"
 
 echo "   装配清单:"
 ( cd "$BUILD" && find . -type f | sort | sed 's/^/     /' )

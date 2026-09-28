@@ -1,7 +1,7 @@
 % =====================================================================
 %  Limits of Metamorphic Testing for Object-Level Authorization:
 %  Temporal Reachability, Oracle Admissibility, and Measurement Resolution
-%  IEEEtran template / IEEE Access
+%  Official IEEE Access template (ieeeaccess.cls, which \LoadClass{IEEEtran})
 % ---------------------------------------------------------------------
 %  硬规则:
 %    * 正文**不得手敲任何数字** —— 全部引用 \Res* 宏（由
@@ -9,9 +9,14 @@
 %    * 参考文献**不得手敲** —— refs.bib 由
 %      04_绘图与分析/analysis/normalize_bib.py 从带 DOI 的记录规范化生成。
 %    * 全部图为**矢量**，由 matplotlib / figure-spec 确定性生成，无 AI 生成像素。
-%  编译: bash build.sh   （会把源码装配到纯 ASCII 目录再编译，避开中文路径）
+%  模板: paper/ieeeaccess/ 是官方 IEEE Access LaTeX 模板（ieeeaccess.cls +
+%        IEEEtran.cls/.bst + Formata/Times 字体 + 位图），来源
+%        ACCESS_latex_template_20260513-1-1.zip（IEEE Access 官方下载）。
+%        该类**不会**自动加载 hyperref（仅 \ifjtehm 分支加载），故此处显式加载，
+%        以支持 \orcidicon（ORCID iD 图标）与 PDF 元数据。
+%  编译: bash build.sh   （会把源码与模板支持文件装配到纯 ASCII 目录再编译）
 % =====================================================================
-\documentclass[journal]{IEEEtran}
+\documentclass{ieeeaccess}
 
 \usepackage{cite}
 \usepackage{amsmath}
@@ -19,9 +24,37 @@
 \usepackage{amsthm}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage{xcolor}
 \usepackage{url}
+\usepackage{etoolbox}
 \usepackage[hidelinks]{hyperref}
+% ORCID iD 图标：ieeeaccess.cls 把 TeX 原始量 \year 重定义成带参宏
+%   （\year#1->\gdef\theyear{#1}），而 pgf/pgfmath 加载时要读 \year 取随机种子，
+%   于是 tikz/orcidlink 会直接 Fatal error —— 二者**不可共存**。
+%   这里改用 pict2e 直接绘制绿色 iD 徽标（纯 LaTeX 代码，无外部文件、字节可复现）。
+\usepackage{pict2e}
+\definecolor{orcidgreen}{rgb}{0.65098,0.80784,0.22353}% ORCID iD 官方绿 A6CE39
+\newsavebox{\ORCIDlogo}
+\savebox{\ORCIDlogo}{%
+  \setlength{\unitlength}{\dimexpr 1em/256\relax}%
+  \begin{picture}(256,256)%
+    \color{orcidgreen}\put(128,128){\circle*{256}}%
+    \color{white}%
+    \put(78.6,199.2){\circle*{20}}%
+    \moveto(70.9,176.9)\lineto(86.3,176.9)\lineto(86.3,69.8)\lineto(70.9,69.8)%
+    \closepath\fillpath%
+    \moveto(108.9,176.9)\lineto(150.5,176.9)%
+    \curveto(190.1,176.9)(207.5,148.6)(207.5,123.3)%
+    \curveto(207.5,95.8)(186,69.7)(150.7,69.7)%
+    \lineto(108.9,69.7)\closepath\fillpath%
+    \color{orcidgreen}%
+    \moveto(124.3,83.6)\lineto(148.8,83.6)%
+    \curveto(183.7,83.6)(191.7,110.1)(191.7,123.3)%
+    \curveto(191.7,144.8)(178,163)(148,163)%
+    \lineto(124.3,163)\closepath\fillpath%
+  \end{picture}%
+}
+% 用法：\orcidicon{0009-0000-5392-4475} —— 在作者名右上渲染可点击的 iD 徽标。
+\newcommand{\orcidicon}[1]{\href{https://orcid.org/#1}{\usebox{\ORCIDlogo}}}
 \hypersetup{
   pdftitle={Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution},
   pdfauthor={Qiulong Lin and Nanlei Chen},
@@ -41,7 +74,9 @@
 % ---- M2 补充分析：oracle 有效性分层（由 analysis/ingest_m2_stratum.py 生成） ----
 \input{m2_stratum.tex}
 
-\graphicspath{{figures/}}
+% 图形搜索路径：figures/ 放正文插图；./ 供 ieeeaccess.cls 内部取 bullet.png
+% （摘要/关键词前的圆点、\EOD 结尾标记）。若只写 {figures/} 会让类找不到 ./bullet.png。
+\graphicspath{{figures/}{./}}
 
 % 双栏窄列下允许更宽的词间弹性，避免长 token 造成 overfull hbox
 \setlength{\emergencystretch}{3em}
@@ -60,7 +95,6 @@
 \renewcommand{\arraystretch}{0.95}
 
 % 表格与图题降为 \footnotesize，压缩浮动体高度
-\usepackage{etoolbox}
 \AtBeginEnvironment{table}{\footnotesize}
 \AtBeginEnvironment{table*}{\footnotesize}
 \AtBeginEnvironment{figure}{\footnotesize}
@@ -80,22 +114,41 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{corollary}{Corollary}
 
+% ---- 修复 ieeeaccess.cls 的 \paragraph 编号 ----------------------------------
+% 该类把 \paragraph 当作**带字母编号**的第四级标题（\@seccntformat 取
+% \theparagraphdis = \alph{paragraph}:），于是 "\paragraph{Ground truth}"
+% 会渲染成 "a: Ground truth"。本文用它作无编号的行内引导短语，故去掉编号，
+% 恢复为与正文同级的斜体行内标题；\section/\subsection/\subsubsection 不受影响。
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-1.1ex\@plus-0.4ex\@minus-0.2ex}{0.35ex}{\normalfont\normalsize\itshape}}
+\def\@seccntformat#1{%
+  \ifstrequal{#1}{paragraph}{}{\csname the#1dis\endcsname\hskip 0.5em\relax}}
+\makeatother
+
 \begin{document}
+
+% --- IEEE Access 首页元信息 -------------------------------------------------
+% \history（出版/版本日期）与 DOI 由 IEEE 在录用排版阶段填写。此处**留空**，
+% 不编造 DOI。注意：ieeeaccess.cls 的 \@maketitle 无条件使用 \@doi，
+% 若不调用 \doi{} 会触发 "Undefined control sequence"，故必须给出（空值）。
+\history{}
+\doi{}
 
 \title{Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution}
 
-\author{
-  \IEEEauthorblockN{Qiulong Lin%
-    \thanks{ORCID: 0009-0000-5392-4475 (https://orcid.org/0009-0000-5392-4475).}
-    and Nanlei Chen%
-    \thanks{Nanlei Chen is the corresponding author (e-mail: ubfbzu3@163.com).}}
-  \IEEEauthorblockA{Both authors are with Yango University, Fuzhou 350015, China,\\
-    and with Sogang University, Seoul 04107, Republic of Korea}
-}
+% 作者块：IEEE Access 规范为「姓名大写 + 上标单位编号」；ORCID 以 iD 图标贴在
+% 姓名右上。Lin 的 ORCID iD 由作者本人提供（2026-09-28）：0009-0000-5392-4475。
+% Chen 尚未提供 ORCID，故此处只挂 Lin 一个，不臆造。
+\author{\uppercase{Qiulong Lin}\orcidicon{0009-0000-5392-4475}\authorrefmark{1,2}
+AND \uppercase{Nanlei Chen}\authorrefmark{1,2}}
+
+\address[1]{Yango University, Fuzhou 350015, China (e-mail: ubfbzu3@163.com)}
+\address[2]{Sogang University, Seoul 04107, Republic of Korea}
 
 \markboth{IEEE Access}{Lin and Chen: Limits of Metamorphic Testing for Object-Level Authorization}
 
-\maketitle
+\corresp{Corresponding author: Nanlei Chen (e-mail: ubfbzu3@163.com).}
 
 \begin{abstract}
 Broken object-level authorization (BOLA) is the top-ranked API security risk, yet
@@ -126,9 +179,13 @@ the published relations reproduce the false proof within the gated subset that
 fires.
 \end{abstract}
 
-\begin{IEEEkeywords}
+\begin{keywords}
 BOLA/BFLA, false proof, metamorphic testing, object-level authorization, oracle problem, specificity measurement
-\end{IEEEkeywords}
+\end{keywords}
+
+\titlepgskip=-21pt
+
+\maketitle
 
 \input{sections/01_intro}
 \input{sections/02_background}
@@ -158,5 +215,8 @@ Qiulong Lin received the M.S. degree from Sogang University, Seoul, Republic of 
 \begin{IEEEbiographynophoto}{Nanlei Chen}
 Nanlei Chen is currently pursuing the M.S. degree at Sogang University, Seoul, Republic of Korea. He is with Yango University, Fuzhou, China. His research interests include Web/API security and authorization testing. He is the corresponding author of this work.
 \end{IEEEbiographynophoto}
+
+% ieeeaccess.cls 强制要求正文末尾出现 \EOD（否则告警），并借它打印结尾标记。
+\EOD
 
 \end{document}

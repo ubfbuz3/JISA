@@ -1,6 +1,9 @@
 # IEEE Access 投稿操作清单（照着点）
 
-> 状态：稿件已按 IEEEtran 模板就绪（15 页 / 双栏 / 含两位作者简介 / 含 Lin 的 ORCID 脚注）。
+> 状态：稿件已按 **IEEE Access 官方 LaTeX 模板（`ieeeaccess.cls`）** 就绪（**16 页** / 双栏 / 含两位作者简介 / ORCID 以 iD 图标挂在作者名右上）。
+>
+> **模板来源**：`03_论文撰写/paper/ieeeaccess/` 内置官方模板支持文件（`ieeeaccess.cls` + `IEEEtran.cls/.bst` + Formata/Times 字体 + `bullet.png`），原始包为 IEEE 官方下载的 `ACCESS_latex_template_20260513-1-1.zip`（同目录留存）。
+> 注：`ieeeaccess.cls` 重定义了 TeX 的 `\year`，与 tikz/pgf 不兼容，故 ORCID 图标改用 `pict2e` 矢量绘制。
 > 本清单对应 IEEE Access **官方投稿系统**：Atypon ReX。
 > 投稿入口：**https://ieee.atyponrex.com/journal/ieee-access**
 > （旧 ScholarOne 链接 `mc.manuscriptcentral.com/ieee-access` 已废弃，以 Atypon ReX 为准。）
@@ -11,7 +14,7 @@
 
 1. **ORCID 绑定**（系统侧，不是只在 PDF 里挂）
    - IEEE Access 要求**投稿人账号**必须关联一个**公开可见且资料填全**的 ORCID iD。
-   - 你（Qiulong Lin）的 ORCID = **0009-0000-5392-4475**，已在 PDF 作者块脚注里挂了；
+   - 你（Qiulong Lin）的 ORCID = **0009-0000-5392-4475**，已以绿色 **iD 图标**挂在 PDF 首页作者名右上（可点击跳转）；
      现在还要在 IEEE 投稿账号里把它**绑上并设为公开**。
    - 建议 Chen（Nanlei）也注册并绑定 ORCID（IEEE 要求所有作者都有，至少投稿人必须有）。
    - 注册免费：https://orcid.org
@@ -43,8 +46,8 @@
 
 | 门户槽位 | 传哪个文件 | 说明 |
 |---|---|---|
-| **主稿**（Manuscript，MS Word 或 LaTeX） | `03_论文撰写/paper/latex_source_files_submission.zip` | LaTeX 存档，**28 文件**：全部 .tex/.bbl/.bib/图，并含 `IEEEtran.cls`/`IEEEtran.bst`（该格要求"包括所有 LaTeX 类和软件包"） |
-| **编译后的 PDF**（随 LaTeX 主稿必传） | `03_论文撰写/paper/main.pdf` | **15 页**；已实测：解压 zip → 从零编译 → 与 `main.pdf` **逐字节相同**（md5 一致），满足"content must match exactly" |
+| **主稿**（Manuscript，MS Word 或 LaTeX） | `03_论文撰写/paper/latex_source_files_submission.zip` | LaTeX 存档，**73 文件 / 1.14 MB**：全部 .tex/.bbl/.bib/图 + 官方模板支持文件（`ieeeaccess.cls`、`IEEEtran.cls`、`IEEEtran.bst`、`spotcolor.sty`、全套字体与 `bullet.png`），全部置于存档**根目录**（该格要求"包括所有 LaTeX 类和软件包"） |
+| **编译后的 PDF**（随 LaTeX 主稿必传） | `03_论文撰写/paper/main.pdf` | **16 页**；已实测：解压 zip → 从零编译 → 与 `main.pdf` **逐字节相同**（md5 `c7a761f9…`），满足"content must match exactly" |
 | **利益冲突**（Conflict of Interest，PDF/RTF/Word，最多 1 份） | `03_论文撰写/conflict_of_interest.pdf` | **独立 1 页声明**：无利益冲突、无资助；与正文 Declarations 一致。**（此前缺，已补）** |
 | **Cover letter**（若出现该槽位） | `03_论文撰写/cover_letter_ieee_access.md`（转 PDF 或粘贴） | 说明研究契合 IEEE Access 多学科范围 |
 | **Graphical Abstract**（可选但推荐） | `04_绘图与分析/figures/fig1_protocol.pdf` | 三阶段协议图，可直接当 GA 上传 |
@@ -60,7 +63,7 @@
 
 ## 4. 填元数据（Metadata）
 - **Title**：直接复制论文标题（已存于 `main.tex`，逐字粘贴，勿加换行）。
-- **Abstract**：粘贴 `main.tex` 里的摘要正文（231 词，已 ≤250）。
+- **Abstract**：粘贴 `main.tex` 里的摘要正文（**244 词**，已 ≤250）。
 - **Keywords（系统字段，3–10 个）**：这是**投稿系统单独的必填项**，不是正文里的
   Index Terms。建议用：`metamorphic testing; object-level authorization; BOLA/BFLA;
   oracle problem; API security; false proof`（选 4–6 个最贴切的）。
@@ -105,8 +108,8 @@
 ---
 
 ## 9. 当前交付物清单（都在仓库里）
-- `03_论文撰写/paper/main.pdf` — 手稿（PDF，15 页，含作者简介与 ORCID 脚注）
-- `03_论文撰写/paper/latex_source_files_submission.zip` — LaTeX 源存档（28 文件，含 IEEEtran 类文件）
+- `03_论文撰写/paper/main.pdf` — 手稿（PDF，**16 页**，含作者简介；ORCID iD 图标在首页作者名右上）
+- `03_论文撰写/paper/latex_source_files_submission.zip` — LaTeX 源存档（**73 文件**，含 `ieeeaccess.cls` 等官方模板支持文件）
 - `03_论文撰写/conflict_of_interest.pdf`（源 `conflict_of_interest.tex`）— **独立的利益冲突声明（必传）**
 - `03_论文撰写/cover_letter_ieee_access.md` — 投稿信
 - `04_绘图与分析/figures/fig1_protocol.pdf` — 可作 Graphical Abstract

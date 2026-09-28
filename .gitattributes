@@ -14,4 +14,16 @@
 *.jpeg   binary
 *.zip    binary
 *.xlsx   binary
+*.docx   binary
 *.svg    text eol=lf
+
+# Vendor font binaries (03_论文撰写/paper/ieeeaccess/) --- CRLF rewriting would
+# corrupt them.  The official IEEE Access template text files ship LF; pin them
+# to LF so the vendored copies stay byte-identical to the upstream archive.
+*.pfb    binary
+*.tfm    binary
+*.cls    text eol=lf
+*.bst    text eol=lf
+*.sty    text eol=lf
+*.fd     text eol=lf
+*.map    text eol=lf

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the JISA submission LaTeX source files into a single zip.
+"""Package the IEEE Access submission LaTeX source files into a single zip.
 
 Deterministic: entries are sorted and given a fixed timestamp so the archive
 is byte-stable across runs on the same content. Run from the project root:
@@ -10,6 +10,12 @@ Reads the *current working tree* (not the build dir) for paper sources and
 result macros, and the compiled .bbl from the build dir. Writes:
 
     03_论文撰写/paper/latex_source_files_submission.zip
+
+The archive is self-contained: alongside main.tex / sections/ / figures/ it
+carries the official IEEE Access template support files (ieeeaccess.cls,
+IEEEtran.cls, IEEEtran.bst, spotcolor.sty, the Formata/Times fonts and the
+class bitmaps) **at the archive root**, because TeX looks for a class file in
+the same directory as main.tex --- not in a subdirectory.
 """
 from __future__ import annotations
 
@@ -23,7 +29,7 @@ ROOT = Path(__file__).resolve().parent
 PAPER = ROOT / "03_论文撰写" / "paper"
 RESULTS = ROOT / "04_绘图与分析" / "results"
 FIGURES = ROOT / "04_绘图与分析" / "figures"
-BUILD = Path("C:/Users/Administrator/WorkBuddy/jisa_paper_build")
+BUILD = Path("C:/Users/Administrator/WorkBuddy/ieee_access_build")
 OUT = PAPER / "latex_source_files_submission.zip"
 
 # Fixed timestamp for reproducible archives (2026-09-21 00:00:00).
@@ -62,13 +68,13 @@ def referenced_figures() -> list[str]:
 
 FIG_PDF = referenced_figures()
 
-# Standard IEEE Access class/bst files, so the ReX LaTeX build is self-contained
-# (the upload slot asks for "all LaTeX classes and packages"). Taken from the
-# local MiKTeX install; the bytes are fixed, so the archive stays deterministic.
-CLASS_FILES = [
-    ("IEEEtran.cls", Path("C:/Users/Administrator/AppData/Local/Programs/MiKTeX/tex/latex/ieeetran/IEEEtran.cls")),
-    ("IEEEtran.bst", Path("C:/Users/Administrator/AppData/Local/Programs/MiKTeX/bibtex/bst/ieeetran/IEEEtran.bst")),
-]
+# Official IEEE Access template support files, vendored under paper/ieeeaccess/
+# (provenance: ACCESS_latex_template_20260513-1-1.zip, downloaded from IEEE
+# Access). Placed at the archive root so \LoadClass{IEEEtran},
+# \pdfmapfile{+ t1-formata.map} and \EOD's bullet.png resolve during the ReX
+# LaTeX build. The bytes are fixed, so the archive stays deterministic.
+CLASS_DIR = PAPER / "ieeeaccess"
+CLASS_FILES = sorted(p.name for p in CLASS_DIR.iterdir() if p.is_file())
 
 
 def collect() -> list[tuple[str, Path]]:
@@ -89,8 +95,8 @@ def collect() -> list[tuple[str, Path]]:
         add(f"sections/{n}", PAPER / "sections" / n)
     for n in FIG_PDF:
         add(f"figures/{n}", FIGURES / n)
-    for arc, src in CLASS_FILES:
-        add(arc, src)
+    for n in CLASS_FILES:
+        add(n, CLASS_DIR / n)
     return items
 
 

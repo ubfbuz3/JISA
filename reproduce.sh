@@ -11,7 +11,8 @@
 #   - Python 3.13 (managed runtime used by the scripts).
 #   - Raw records already present under 04_绘图与分析/results/*.json and
 #     experiments/real_system/results/*.json (shipped with the artifact).
-#   - A TeX distribution with the elsarticle class for the final build.
+#   - A TeX distribution; the final build uses the official IEEE Access class
+#     (ieeeaccess.cls), vendored under 03_论文撰写/paper/ieeeaccess/.
 # =====================================================================
 set -euo pipefail
 

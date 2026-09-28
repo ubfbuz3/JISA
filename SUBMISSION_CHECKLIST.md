@@ -1,6 +1,6 @@
 # IEEE Access 投稿前 Checklist
 
-> **投稿目标：IEEE Access**（Elsevier→JISA 已 desk reject「范围不符」；已切换到 IEEEtran 模板）。
+> **投稿目标：IEEE Access**（Elsevier→JISA 已 desk reject「范围不符」；已切换到 IEEE Access **官方 `ieeeaccess.cls`** 模板）。
 > 逐项核对；每项标 ☑（已满足）/ ☐（待办）。配套脚本：`reproduce.sh`、`verify_artifact.sh`、
 > `04_绘图与分析/analysis/make_manifests.py`。Zenodo 步骤见 `ZENODO_GUIDE.md`。
 
@@ -55,15 +55,15 @@
 ---
 
 ## E. 通用投稿前核对（排版/合规）
-- ☑ **模板**：已切换为 **IEEEtran**（`\documentclass[journal]{IEEEtran}`），单盲（作者信息在手稿中）。
-- ☑ **页数**：当前 **15 页**（IEEEtran 双栏；IEEE Access 无硬性页数上限，建议 ≤20 页）。
-- ☑ **摘要词数** ≤ 250（当前 **231**；统计须先展开 `\Res*` 宏再计，脚本在 `AppData/Local/Temp/count_abstract*.py`）。
+- ☑ **模板**：已切换为 **IEEE Access 官方 `ieeeaccess.cls`**（`\documentclass{ieeeaccess}`）；作者块（大写姓名+上标单位号）、编号单位、`Corresponding author`、ORCID iD 图标、INDEX TERMS、文末作者简介均按官方版式。单盲（作者信息在手稿中）。
+- ☑ **页数**：当前 **16 页**（ieeeaccess.cls 双栏；IEEE Access 无硬性页数上限，建议 ≤20 页）。
+- ☑ **摘要词数** ≤ 250（当前 **244**；统计须先展开 `\Res*` 宏再计，脚本在 `AppData/Local/Temp/count_abstract*.py`）。
 - ☑ 0 undefined references / citations / control sequences（`build.sh` 第 4 步校验）。
 - ☑ 参考文献真实可溯源、无手敲（`refs.bib` 由 `normalize_bib.py` 规范化，字段值无 CJK）；bibliographystyle 已换 `IEEEtran`。
 - ☑ 图表全部矢量、无 AI 生成像素；矢量图字节可复现。
 - ☑ 标题/摘要主张只覆盖 reachability-gated relations，不泛化（红线 ⑦）。
 - ☑ 撤回清单红线全部遵守（无 sensitivity/specificity 声明、无"机制非冗余"、无 "strictly dominates"、"自省面可读"带特权视点、无 "crawl-time aware" / "responsible variable" 措辞）。
-- ☐ **作者简介**：IEEE Access 要求每位作者一段简短简介（置于参考文献后）。见 `author_bios_TODO.md`，**须填真实信息**（勿编造学历/职位）。
+- ☑ **作者简介**：两位作者的简介已内嵌正文（参考文献后，`IEEEbiographynophoto`，`main.tex`），无需单独上传。
 - ☐ **Graphical Abstract**（IEEE Access 终稿阶段通常要求）：可复用现有矢量图 `04_绘图与分析/figures/fig1_protocol.pdf` 单独上传。
 
 ---
