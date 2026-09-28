@@ -62,6 +62,14 @@ def referenced_figures() -> list[str]:
 
 FIG_PDF = referenced_figures()
 
+# Standard IEEE Access class/bst files, so the ReX LaTeX build is self-contained
+# (the upload slot asks for "all LaTeX classes and packages"). Taken from the
+# local MiKTeX install; the bytes are fixed, so the archive stays deterministic.
+CLASS_FILES = [
+    ("IEEEtran.cls", Path("C:/Users/Administrator/AppData/Local/Programs/MiKTeX/tex/latex/ieeetran/IEEEtran.cls")),
+    ("IEEEtran.bst", Path("C:/Users/Administrator/AppData/Local/Programs/MiKTeX/bibtex/bst/ieeetran/IEEEtran.bst")),
+]
+
 
 def collect() -> list[tuple[str, Path]]:
     items: list[tuple[str, Path]] = []
@@ -81,6 +89,8 @@ def collect() -> list[tuple[str, Path]]:
         add(f"sections/{n}", PAPER / "sections" / n)
     for n in FIG_PDF:
         add(f"figures/{n}", FIGURES / n)
+    for arc, src in CLASS_FILES:
+        add(arc, src)
     return items
 
 

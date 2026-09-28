@@ -35,17 +35,24 @@
 
 ---
 
-## 3. 上传文件（File Upload）
-系统要求 **同时提交源文件 + PDF，且两者内容完全一致**（文件 ≤ 40 MB）。我们已备好：
+## 3. 上传文件（File Upload / 必备文件）
+**要害规则（Atypon ReX 明文）**：主文档若是 LaTeX（.zip 存档），**必须同时上传一份由其编译出的 PDF**，
+两份**内容必须完全匹配**，且每个文件 ≤ 40 MB。
 
-| 上传项 | 选哪个文件 | 备注 |
+"必备文件"页会出现多个必传槽位，逐格对应如下：
+
+| 门户槽位 | 传哪个文件 | 说明 |
 |---|---|---|
-| **Manuscript (PDF)** | `03_论文撰写/paper/main.pdf` | 15 页，已含作者简介与 ORCID 脚注 |
-| **Source file (LaTeX)** | `03_论文撰写/paper/latex_source_files_submission.zip` | 26 文件；PDF 由它编译而来，**内容一致** |
-| **Cover letter** | `03_论文撰写/cover_letter_ieee_access.md`（转 PDF 或直接粘贴） | 说明研究契合 IEEE Access  multidisciplinary 范围 |
-| **Graphical Abstract（可选但推荐）** | `04_绘图与分析/figures/fig1_protocol.pdf` | 三阶段协议图，可直接当作 GA 上传 |
+| **主稿**（Manuscript，MS Word 或 LaTeX） | `03_论文撰写/paper/latex_source_files_submission.zip` | LaTeX 存档，**28 文件**：全部 .tex/.bbl/.bib/图，并含 `IEEEtran.cls`/`IEEEtran.bst`（该格要求"包括所有 LaTeX 类和软件包"） |
+| **编译后的 PDF**（随 LaTeX 主稿必传） | `03_论文撰写/paper/main.pdf` | **15 页**；已实测：解压 zip → 从零编译 → 与 `main.pdf` **逐字节相同**（md5 一致），满足"content must match exactly" |
+| **利益冲突**（Conflict of Interest，PDF/RTF/Word，最多 1 份） | `03_论文撰写/conflict_of_interest.pdf` | **独立 1 页声明**：无利益冲突、无资助；与正文 Declarations 一致。**（此前缺，已补）** |
+| **Cover letter**（若出现该槽位） | `03_论文撰写/cover_letter_ieee_access.md`（转 PDF 或粘贴） | 说明研究契合 IEEE Access 多学科范围 |
+| **Graphical Abstract**（可选但推荐） | `04_绘图与分析/figures/fig1_protocol.pdf` | 三阶段协议图，可直接当 GA 上传 |
 | **Author biography** | 已内嵌在 PDF/源文件里（参考文献后），**无需单独上传** | IEEE Access 要求 bios 直接放进正文，我们已做 |
 
+> ⚠️ **别只传 zip**：只传 LaTeX 存档、不传编译 PDF，会被系统判为缺件。
+> 若"主稿"格下拉里只能选一种格式，则**选 LaTeX 并传 zip**，PDF 走它自己的槽位/后续步骤。
+>
 > 注意：投稿系统会从你上传的文件里**自动抽取作者列表**。提交后务必在下一步
 > 核对抽出来的作者是 **Qiulong Lin + Nanlei Chen**、单位与邮箱无误。
 
@@ -97,9 +104,10 @@
 
 ---
 
-## 9. 当前交付物清单（都在仓库里，已提交 `930bf76`）
-- `03_论文撰写/paper/main.pdf` — 手稿（PDF）
-- `03_论文撰写/paper/latex_source_files_submission.zip` — LaTeX 源
+## 9. 当前交付物清单（都在仓库里）
+- `03_论文撰写/paper/main.pdf` — 手稿（PDF，15 页，含作者简介与 ORCID 脚注）
+- `03_论文撰写/paper/latex_source_files_submission.zip` — LaTeX 源存档（28 文件，含 IEEEtran 类文件）
+- `03_论文撰写/conflict_of_interest.pdf`（源 `conflict_of_interest.tex`）— **独立的利益冲突声明（必传）**
 - `03_论文撰写/cover_letter_ieee_access.md` — 投稿信
 - `04_绘图与分析/figures/fig1_protocol.pdf` — 可作 Graphical Abstract
 - `SUBMISSION_CHECKLIST.md` — 投前总清单
