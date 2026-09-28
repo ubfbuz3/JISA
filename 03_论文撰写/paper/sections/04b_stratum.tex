@@ -10,7 +10,10 @@
 
 Table~\ref{tab:ablation} pools two populations in which the oracle-consuming
 methods behave in opposite ways, and the pool is misleading in both directions.
-The records differ in one respect that decides whether those methods can act at
+Section~\ref{sec:synthetic} reports the comparison on a representative grid; this
+subsection, summarised in Table~\ref{tab:stratum}, repeats it over all
+\MiiNTotal{} records. The records differ in one respect that decides whether
+those methods can act at
 all: whether the introspection surface returns a reading for the record. We
 therefore repeat the same comparison inside each stratum, with the same methods
 and the same decision rule, and we add two references that need no oracle
@@ -66,7 +69,7 @@ which it looked best. On the \MiiNOn{} readable records
 \texttt{direct\_observe} reaches recall \MiiOnDirectObserveRec{} with
 \MiiOnDirectObserveFP{} false proofs, against v2's recall \MiiOnVTwoRec{} with
 \MiiOnVTwoFP{} false proofs, and against v3's recall \MiiOnVThreeRec{} with
-\MiiOnVThreeFP{}. The ordering is therefore not an artefact of the metric---the
+\MiiOnVThreeFP{}. The ordering is therefore not an artifact of the metric---the
 plain request is ahead on false proofs and not behind on detections---whereas
 the pooled table had let the family appear competitive on recall. We do not
 claim domination: the comparison rests on the constructed-observable argument of
@@ -93,10 +96,9 @@ the two no-oracle references: \texttt{always\_alarm} scores precision
 all---and \texttt{obs\_success}, which alarms on the observed success of a plain
 request, reaches the \emph{same} recall at precision \MiiOffObsSuccessPrec{},
 lift \MiiLiftObsSuccess{}$\times$. The net difference between the metamorphic
-family and that reference is therefore not in detections but in false alarms:
-\MiiDeltaTPVTwoMinusObsSuccess{} additional true violations and
-\MiiDeltaFPVTwoMinusObsSuccess{} false alarms, a saving of
-\MiiOffAttribSavedFPTotal{}.
+family and that reference is therefore not in detections
+(\MiiDeltaTPVTwoMinusObsSuccess{} additional true violations) but in false
+alarms: \MiiOffAttribSavedFPTotal{} fewer for the metamorphic family.
 
 \paragraph{What the saving consists of}
 The attribution is one-sided and mechanical. Over the seven scenarios, every

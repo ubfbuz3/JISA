@@ -44,7 +44,8 @@ resolves the proposition under test, does the metamorphic step add incremental
 adjudication information beyond the oracle and the request outcome? Not
 observably, within the evaluated scenarios: the step carries no additional
 decision-relevant information beyond what the oracle-plus-request pair already
-determines---a necessary condition (Proposition~\ref{lem:oracle-suff})---and the
+determines---an empirical premise about the evaluated relations, formalised as a
+conditional (Proposition~\ref{lem:oracle-suff})---and the
 paired methods disagree on only \ResAbDisagreementN{} records, all favoring
 \texttt{direct\_observe} (false proofs \ResAbDirectObserveFP{}
 vs.~\ResAbVThreeFP{}, recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a
@@ -64,7 +65,7 @@ evidence for these findings, not further headline findings
 The findings are not a claim that \mbox{MST-wi} is wrong: the reachability
 stand-in is announced by its authors and the predecessor design attributes its
 residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}. Our
-contribution is a \emph{security-testing characterisation} of metamorphic
+contribution is a \emph{security-testing characterization} of metamorphic
 testing for object-level authorization in Web/API systems, not a new detector,
 with three layers. Although the technique is general, every empirical claim is
 scoped to reachability-gated authorization relations in Web/API systems---a
@@ -74,7 +75,7 @@ structurally, in \emph{when} the reachability model was read rather than which
 objects are visible; (2)~\emph{fair-control ablation}---under a readable, sound
 oracle, a same-observable direct adjudicator shows the metamorphic step adds no
 measurable adjudication information beyond the oracle and the request outcome;
-and (3)~\emph{metric characterisation}---a specific failure mode is identified in
+and (3)~\emph{metric characterization}---a specific failure mode is identified in
 a published specificity figure, which is not conditioned on the
 reachability--authorization correspondence its interpretation assumes and whose
 input-level denominator cannot register a class-uniform failure. The

@@ -16,9 +16,9 @@ justified by an unreadable oracle.
 \subsection{What the constructed system shows}
 
 \paragraph{Attribution is clean} On the anchored configuration the false-proof
-rate is \ResFpEthreeHits{}/\ResFpEthreeTotal{}. The
-denominator is \ResFpEthreeTotal{}, so the rate is unstable by construction and
-we do not attach an interval to it---nor a percentage, which would travel out of
+rate is \ResFpEthreeHits{}/\ResFpEthreeTotal{}. With that denominator the rate is
+unstable by construction, so we attach to it no interval---nor a percentage,
+which would travel out of
 context. With the legitimate-sharing
 exception absent the rate is \ResBaseFpRate{}
 (\ResBaseFpHits{}/\ResBaseFpTotal{}), and with the channel listed it is
@@ -28,9 +28,9 @@ cannot know about, not to execution itself. A $2{\times}2$ grid over channel
 visibility and enforcement correctness tells the same story from the other
 side: on unlisted cells the false-proof rate is
 \ResBEThreevulnZerounlistedFpPct{}\% with no false negatives; on listed cells it
-drops to \ResBEThreevulnZerolistedFpPct{}\% but a false negative appears among
-the five violating records (\ResBEThreevulnOnelistedFn{} of
-\ResBEThreevulnOnelistedTp{}+\ResBEThreevulnOnelistedFn{}). Avoiding false proofs and keeping detection are
+drops to \ResBEThreevulnZerolistedFpPct{}\% but one of the five violating records
+in that cell is a false negative (\ResBEThreevulnOnelistedTp{} detected,
+\ResBEThreevulnOnelistedFn{} missed). Avoiding false proofs and keeping detection are
 controlled by one switch, and the switch cannot be thrown both ways at once.
 
 \paragraph{Filtering exceptions does not help}
@@ -55,7 +55,7 @@ reached)---and that coincidence of alarms with violations is what an
 input-level metric cannot unpack. The same tension appears within a single
 MR: for S3 (must not alarm) vs S5 (must alarm), no configuration in the family
 is correct on both---the choice of switch is a choice of \emph{which} error to
-make.
+make (Fig.~\ref{fig:scenarios}).
 
 \begin{figure*}[t]
 \centering
@@ -71,10 +71,12 @@ Table~\ref{tab:ablation}.}
 \paragraph{Stratification, not aggregation}
 Aggregated, v3 looks best (recovery \ResVdVThreeRecoveryRate{} against
 \texttt{degrade\_all}'s keep rate \ResVdDegradeallKeepRate{}); the reading is
-wrong, because v3 changes regime with oracle readability. Stratified: on the
-readable stratum (\ResIntroOnN{} records) it removes v2's false proofs
+wrong, because v3 changes regime with oracle readability. Stratified over the
+\ResIntroOnN{}-record readable grid and its \ResIntroOffN{}-record absent grid (a
+representative grid; Section~\ref{sec:stratum} re-runs the same comparison over
+all \ResSynRecords{} records): on the readable grid it removes v2's false proofs
 (\ResIntroOnVthreeFpN{} vs.~\ResIntroOnVtwoFpN{}) while still alarming on all
-\ResIntroOnVthreeProvenBola{} fired true violations; on the absent stratum
+\ResIntroOnVthreeProvenBola{} fired true violations; on the absent grid
 (\ResIntroOffN{}) it alarms on none of the \ResIntroOffVtwoProvenBola{} true
 violations v2 still alarms on, abstaining \ResIntroOffAbstain{} times. Pooling
 converts honest abstention into apparent performance, so v3's numbers may appear
@@ -97,7 +99,8 @@ surface, consuming exactly what the MR-based adjudicator consumes.
 \centering
 \caption{End-to-end confusion matrix over all \ResSynRecords{} records
 (\ResAbNBola{} true violations, \ResAbNNormal{} correct cases). The records are
-a fixed enumeration, not a sample (Section~\ref{sec:stats}), so no inferential
+a fixed enumeration, not a sample (Section~\ref{sec:protocol}, statistical
+treatment), so no inferential
 interval is attached; where a denominator is small we say so rather than
 interval it. \texttt{direct\_only} is a deliberately unfair control, shown to
 make that point.}
@@ -109,7 +112,7 @@ method & TP & FP & FN & TN & precision & recall & F1 \\
 v1 (raw)              & \ResAbVOneTP{} & \ResAbVOneFP{} & \ResAbVOneFN{} & \ResAbVOneTN{} & \ResAbVOnePrec{} & \ResAbVOneRec{} & \ResAbVOneFone{} \\
 v2 (exception-aware)  & \ResAbVTwoTP{} & \ResAbVTwoFP{} & \ResAbVTwoFN{} & \ResAbVTwoTN{} & \ResAbVTwoPrec{} & \ResAbVTwoRec{} & \ResAbVTwoFone{} \\
 v3 (state-calibrated) & \ResAbVThreeTP{} & \ResAbVThreeFP{} & \ResAbVThreeFN{} & \ResAbVThreeTN{} & \ResAbVThreePrec{} & \ResAbVThreeRec{} & \ResAbVThreeFone{} \\
-\texttt{degrade\_all}& \ResAbDegradeAllTP{} & \ResAbDegradeAllFP{} & \ResAbDegradeAllFN{} & \ResAbDegradeAllTN{} & \ResAbDegradeAllPrec{} & \ResAbDegradeAllRec{} & \ResAbDegradeAllFone{} \\
+\texttt{degrade\_all} & \ResAbDegradeAllTP{} & \ResAbDegradeAllFP{} & \ResAbDegradeAllFN{} & \ResAbDegradeAllTN{} & \ResAbDegradeAllPrec{} & \ResAbDegradeAllRec{} & \ResAbDegradeAllFone{} \\
 \texttt{direct\_only} & \ResAbDirectOnlyTP{} & \ResAbDirectOnlyFP{} & \ResAbDirectOnlyFN{} & \ResAbDirectOnlyTN{} & \ResAbDirectOnlyPrec{} & \ResAbDirectOnlyRec{} & \ResAbDirectOnlyFone{} \\
 \texttt{direct\_observe} & \ResAbDirectObserveTP{} & \ResAbDirectObserveFP{} & \ResAbDirectObserveFN{} & \ResAbDirectObserveTN{} & \ResAbDirectObservePrec{} & \ResAbDirectObserveRec{} & \ResAbDirectObserveFone{} \\
 \bottomrule
@@ -195,7 +198,7 @@ the scenario-level figure depends only on the fixed counts $f$ and $s$.
 \label{cor:resolution}
 No fixed input-level specificity threshold $t < 1$ can guarantee that a
 scenario-uniform failure will push the metric below it: choosing
-$m > (\mathit{fa}/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
+$m > (f a/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
 the $f$ failing scenarios remain failing.
 \end{corollary}
 

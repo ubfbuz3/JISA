@@ -18,7 +18,7 @@ technique can detect.
 Definitions can be read generously, so we checked the predicates at source in
 the public library~\cite{Chaleshtari2022Metamorphic}. It ships \ResArtMrTotal{}
 relations, \ResArtAuthzMrTotal{} authorization relations,
-\ResArtAuthzGatedEither{} gating on the two predicates analysed. Four
+\ResArtAuthzGatedEither{} gating on the two predicates analyzed. Four
 implementation-level properties not made explicit in the main presentation:
 (1)~\emph{the freeze is hard-coded}---%
 \texttt{cannotReachThroughGUI} is set-membership over the crawl inputs, issues
@@ -65,7 +65,7 @@ unchanged apart from the build configuration.}
 \toprule
 item & value \\
 \midrule
-authorization relations: catalogue / executed / fired & \NtMrTotal{} / \NtMrExecuted{} / \NtMrFired{} \\
+authorization relations: catalogue, executed, fired & \NtMrTotal{}, \NtMrExecuted{}, \NtMrFired{} \\
 engine alarms (the engine's own return value) & \NtAlarms{} \\
 HTTP requests attributed to observing relations & \NtHttpCalls{} \\
 changed upstream Java sources & \NtUpstreamJavaModified{} \\

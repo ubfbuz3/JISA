@@ -20,13 +20,13 @@ what was visible.
 authorization oracle that fully resolves the proposition under test---works, and
 in that regime the evaluated metamorphic step
 provides no observed incremental adjudication benefit over a direct consumer of the same oracle and outcome:
-a necessary condition (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
+an empirical premise, formalised as a conditional (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
 a single ordinary request yields the same false-proof count (false proofs
 \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
 true-violation records the paired comparison disagrees on only
-\ResAbDisagreementN{}, each time in favour of the plain request; no margin was
+\ResAbDisagreementN{}, each time in favor of the plain request; no margin was
 pre-specified, so no inferential claim attaches.
-On Gitea the comparison is limited to false-proof behaviour, because no
+On Gitea the comparison is limited to false-proof behavior, because no
 vulnerability was present on the tested surface.
 
 \paragraph{Finding 3 (measurement)} The reported specificity of
@@ -49,7 +49,7 @@ decisions. Three ceilings stack and bound everything above. First, our two
 relations are two of a catalogue of \ResLitMrCatalog{}, and both belong to one
 reachability-gated family. Second, even the execution of the published relations
 on the native engine reaches only that family: \NtMrFired{} of the \NtMrTotal{}
-authorization relations fire (\NtKeyMrNames{}), and the content predicate
+authorization relations fire (\NtMrExecuted{} executed; \NtKeyMrNames{}), and the content predicate
 \texttt{userCanRetrieveContent} is never invoked (\NtUcrcCalls{} calls), so that
 evidence is bounded the same way. Third, the real-system study exercises the
 \emph{false-proof} face on a single constructed fault pattern, not the detection
@@ -72,7 +72,7 @@ access is misreported (Finding~3). These are not a claim that metamorphic testin
 is worthless; they locate its contribution where no oracle exists, and bound it
 by what the reachability reading can see.
 
-\paragraph{What remains expensive} Moving from characterisation to something
+\paragraph{What a stronger claim would require} Moving from characterization to something
 stronger needs, first, a real system that \emph{contains} the flaw, so detection
 can be measured; and second, relations whose gate is not the absence of
 evidence---checkable against a subject's entitlements without pretending that

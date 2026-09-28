@@ -22,6 +22,11 @@
 \usepackage{xcolor}
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution},
+  pdfauthor={Qiulong Lin and Nanlei Chen},
+  pdfsubject={Metamorphic testing, object-level authorization, API security}
+}
 
 % ---- 图中/文中引用的全部数字（自动生成，勿手改） ----
 \input{numbers.tex}
@@ -84,8 +89,8 @@
     \thanks{ORCID: 0009-0000-5392-4475 (https://orcid.org/0009-0000-5392-4475).}
     and Nanlei Chen%
     \thanks{Nanlei Chen is the corresponding author (e-mail: ubfbzu3@163.com).}}
-  \IEEEauthorblockA{Yango University, Fuzhou 350015, China\\
-    Sogang University, Seoul 04107, Republic of Korea}
+  \IEEEauthorblockA{Both authors are with Yango University, Fuzhou 350015, China,\\
+    and with Sogang University, Seoul 04107, Republic of Korea}
 }
 
 \markboth{IEEE Access}{Lin and Chen: Limits of Metamorphic Testing for Object-Level Authorization}
@@ -114,13 +119,15 @@ reachability model equals the authorization state, and its denominator cannot
 register a scenario-uniform failure.
 
 The findings come from a \ResSynRecords{}-record scenario/configuration study on
-Gitea \ResRsVersion{} extended to Gogs \GgVersion{} and GitLab \GlVersion{},
-with an endogenous control holding final visibility fixed; the published relations
-reproduce the false proof within the gated subset that fires.
+a constructed system, together with a controlled cell study on Gitea
+\ResRsVersion{}, extended, with a methodological variation, to Gogs \GgVersion{}
+and GitLab \GlVersion{}; an endogenous control holds final visibility fixed, and
+the published relations reproduce the false proof within the gated subset that
+fires.
 \end{abstract}
 
 \begin{IEEEkeywords}
-oracle problem, metamorphic testing, object-level authorization, BOLA/BFLA, specificity measurement, false proof
+BOLA/BFLA, false proof, metamorphic testing, object-level authorization, oracle problem, specificity measurement
 \end{IEEEkeywords}
 
 \input{sections/01_intro}

@@ -425,7 +425,7 @@ def main() -> int:
         nm = esc(m.get("mr", "?").split(".")[-1])
         st = m.get("status")
         if st != "executed":
-            tl.append(f"{nm} & {esc(st)} & -- & -- \\\\")
+            tl.append(f"{nm} & {esc(st)} & --- & --- \\\\")
         else:
             tl.append(f"{nm} & executed & {m.get('fired', 0)} & {m.get('http_calls', 0)} \\\\")
     tl += ["\\bottomrule", "\\end{tabular}"]

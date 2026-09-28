@@ -5,7 +5,7 @@ This section supplies the real-system evidence for Findings~1 and~2: the Gitea
 study with its endogenous control, the cross-vendor replication, and the seeded
 positive control (support evidence, Section~\ref{sec:support}).
 
-A synthetic system cannot tell us whether the crawl-time reading is an artefact
+A synthetic system cannot tell us whether the crawl-time reading is an artifact
 of our construction, so we repeated the essential comparison on real systems. We
 chose Gitea \ResRsVersion{} for genuine object-level sharing with per-object
 visibility, a machine-readable sharing surface, and a documented administrative
@@ -40,7 +40,7 @@ the system, a request can move a (subject, object) pair from not-entitled to
 entitled. The \ResRsGrantNoAdmin{} endpoints drivable by a non-administrator are
 the out-of-band channel in its real form: a subject who is not an administrator
 can create an entitlement that a crawl of that subject's own interface need not
-reveal. The cross-vendor table below reports a normalised census (semantically
+reveal. The cross-vendor table below reports a normalized census (semantically
 equivalent routes merged, non-authorization grant surface excluded), which is why
 its Gitea figure (\GtGrantEndpoints{}) differs from the raw count
 (\ResRsGrantEndpoints{}) here; the two answer different questions.
@@ -55,8 +55,8 @@ quantity & count \\
 \midrule
 paths in the system's API description & \ResRsSwaggerPaths{} \\
 grant endpoints & \ResRsGrantEndpoints{} \\
-revocation endpoints & \ResRsRevokeEndpoints{} \\
 \quad of which usable without site-admin & \ResRsGrantNoAdmin{} \\
+revocation endpoints & \ResRsRevokeEndpoints{} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -65,7 +65,8 @@ revocation endpoints & \ResRsRevokeEndpoints{} \\
 Readability depends entirely on the vantage, so the counts below are different
 populations and must not be read as one denominator. From the owner/administrator
 vantage the sharing surface is readable on \ResRsOwnerReadable{} of
-\ResRsOwnerReadableTotal{} attempts: complete. From a black-box subject's own
+\ResRsOwnerReadableTotal{} owner-vantage attempts over the
+\ResRsCellsSnapshot{} cells: complete. From a black-box subject's own
 vantage---the vantage a black-box tool occupies---it is readable on
 \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An intermediate
 count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from subjects who
@@ -74,7 +75,7 @@ not synonymous with ``an arbitrary black-box subject can read the surface''.
 Table~\ref{tab:introspection-readable} collects these populations. On
 \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable cells the
 credential-substitution check confirmed that our model agrees with the system's
-behaviour.
+behavior (Fig.~\ref{fig:real-system}).
 
 \begin{table}[t]
 \centering
@@ -111,7 +112,10 @@ it ignores the request outcome; on this system none is promoted to
 (\ResRsDirectOnlyFp{} false proofs), so alarm count and false-proof count are not
 the same quantity. Channel provenance of the authorized access
 (\ResRsChannelNotObservable{} of \ResRsChannelAuthorizedTotal{} not observable
-by the framework log, \ResRsChannelNotObservableRate{}) is a property of our
+by the framework log, \ResRsChannelNotObservableRate{}; of these
+\ResRsChannelOobLiteral{} are literal out-of-band grants and
+\ResRsChannelImplicit{} implicit via site administration or public visibility) is
+a property of our
 topology---a design parameter, not a field prevalence.
 
 \begin{table}[t]
@@ -157,7 +161,7 @@ public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawl
 \subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}
 
-We repeated the same three-phase protocol and 48-cell design on two further systems
+We repeated the same three-phase protocol and \ResRsCellsSnapshot{}-cell design on two further systems
 (Table~\ref{tab:gogs-cross}): \textbf{Gogs} \GgVersion{}, the project Gitea
 forked from in 2016 (related lineage, independently evolved code; census from its
 pinned route table, \GgRoutePaths{} paths), and \textbf{GitLab} \GlVersion{}
@@ -179,29 +183,33 @@ membership: site administration (\GgFnSiteAdmin{}), public visibility
 \texttt{members/all/\{u\}} resolves inherited membership, but public visibility
 and site administration confer none: \GlOracleWrong{} false negatives
 (\GlOracleWrongPct\%). What a surface cannot see is predictable from what it
-measures---why clause~2 of the admissibility condition
+measures---why clause~(2) of the admissibility condition
 (Section~\ref{sec:admissibility}) cannot be automated from readability alone.
 The consequence is measurable: on Gitea the surface-gated adjudicators produced no
 false proofs (\GtFpVthree{} v3, \GtFpDirectObserve{} direct-observe), while on
 Gogs they manufacture them (\GgFpVthree{} snapshot, \GgFpVthreeLive{} live,
 \GgFpDirectObserve{} direct-observe) and on GitLab again (\GlFpVthree{},
-\GlFpDirectObserve{}), every v3 false proof falling on a visibility-channel
-cell. A readable membership surface with a blind spot converts that blind spot
+\GlFpDirectObserve{}), every v3 false proof falling on a cell whose authorization
+derives from site administration or public visibility (\GgImplicitSiteAdmin{} and
+\GgImplicitPublic{} such cells on Gogs; \GlImplicitSiteAdmin{} and
+\GlImplicitPublic{} on GitLab). A readable membership surface with a blind spot converts that blind spot
 into confirmed violations; no admissible oracle was available from the tested
 introspection surfaces on Gogs or GitLab, so the honest adjudicator abstains on
 the stratum where those surfaces would license a promotion.
 
 Two results replicate everywhere: bookkeeping alarms false-proof on legitimately
-granted access (\GtFpBookkeeping{}/\GgFpBookkeeping{}/\GlFpBookkeeping{} cells)
+granted access (Gitea \GtFpBookkeeping{}, Gogs \GgFpBookkeeping{}, GitLab
+\GlFpBookkeeping{} cells)
 with the same out-of-band-dominant grant profile; and the reachability mismatch
-persists (\GtMismatchSnap{}/\GgMismatchSnap{}/\GlMismatchSnap{} snapshot). On
+persists (Gitea \GtMismatchSnap{}, Gogs \GgMismatchSnap{}, GitLab
+\GlMismatchSnap{} snapshot). On
 Gogs the mismatch only partially resolves live (\GgMismatchLive{} remain---team
 or public grants never enter a subject's personal crawl); on GitLab the live
 reading recovers everything (\GlMismatchLive{} remain)---a second,
 vendor-specific failure of the snapshot premise, in the crawl model rather than
 the oracle.
 
-\subsection{Support evidence: a positive control with a seeded vulnerability}
+\subsection{A seeded positive control}
 \label{sec:seeded}
 
 On the tested endpoints and transitions the three real systems enforce the
@@ -258,7 +266,7 @@ detection here. It does not generalise beyond that pattern, and it also delimits
 the detector: we seeded one BFLA defect (non-privileged \SeedBflaActor{}
 succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP \SeedBflaStatus{}),
 which the read-oriented logic does not cover---a known boundary, reported as such
-rather than as a detection failure. This is a controlled research artefact, not
+rather than as a detection failure. This is a controlled research artifact, not
 production Gitea; a sanity check on the detector's logic, not a validation of
 detection effectiveness on a population, and not a statement about Gitea's CVE
 posture. Its source, seed list and run script are in the

@@ -21,21 +21,21 @@ another subject and looks for a missing refusal~\cite{Liu2025BACScan,Dharmaadi20
 a line that runs back to AUTHSCOPE~\cite{Zuo2017AUTHSCOPE} and that has been
 extended to deployed systems under ethical constraints~\cite{Chehade2025Forbidden};
 where an API description is available, the oracle itself can be synthesised, for
-instance by transforming an OpenAPI specification into a coloured Petri net that
+instance by transforming an OpenAPI specification into a colored Petri net that
 predicts per-object access~\cite{Filho2025Automated}.
 A complementary, white-box line recovers the \emph{enforced} policy from the
 implementation---by reverse-engineering RBAC policies~\cite{Le2021Automated}, by
 statically extracting authorization policies~\cite{Berger2020Static} or database
-access-control rules~\cite{Zhang2024Extracting}, or by locating the permission
+access-control rules~\cite{Zhang2026Extracting}, or by locating the permission
 checks themselves~\cite{Shi2025Facilitating}---and then flags violations against
 that recovered model: BOLA in database-backed applications~\cite{Huang2024Detecting},
 missing-owner-check and function-level flaws in Java web
 applications~\cite{Liu2025MOCGuard,Feng2025JAuthGuard}, function- and object-level
-access-control flaws across web applications~\cite{Schlaubitz2025A}, and privilege
+access-control flaws across Web applications~\cite{Schlaubitz2025A}, and privilege
 escalation in polyglot microservices~\cite{Li2026Detecting}. Specification-driven API
 fuzzers generate the requests well but inherit the same oracle
 difficulty~\cite{Atlidakis2019RESTler,Arcuri2024Advanced,Seran2025Handling};
-adding explicit access-policy violation checks~\cite{Sahin2026Enhancing} moves
+adding explicit access-policy violation checks~\cite{Sahin2027Enhancing} moves
 them toward the detection problem but does not remove the need for a ground
 truth, and a recent turn delegates generation or probing to language
 models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. A concurrent line
@@ -71,10 +71,10 @@ is that any claim of necessity must be tested against a fair substitute that
 consumes the same observable quantity as the ground truth.
 
 \paragraph{Measurement and evaluation} Our contribution is finally a measurement,
-and it connects to work on the quality of the artefacts security studies are
+and it connects to work on the quality of the artifacts security studies are
 built on---for instance the observation that vulnerability datasets are
-frequently mislabelled, duplicated or otherwise unfit for the claims drawn from
-them~\cite{Croft2023Data}. The artefact we report is of the same family but
+frequently mislabeled, duplicated or otherwise unfit for the claims drawn from
+them~\cite{Croft2023Data}. The artifact we report is of the same family but
 inside a study rather than a dataset: a specificity figure whose
 \emph{denominator} is structurally unable to register a whole class of failure,
 and whose operating point silently assumes a reachability model equals the

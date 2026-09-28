@@ -1041,7 +1041,7 @@ def build_tex(M: dict) -> str:
         for i, r in enumerate(M["m4_specificity_reproduction"]["rows"]):
             cmd(f"SpecRow{i}Cases", r["cases"])
             cmd(f"SpecRow{i}Fa", r["false_alarms"])
-            cmd(f"SpecRow{i}Spec", _f(r["specificity"], 6))
+            cmd(f"SpecRow{i}Spec", _f(r["specificity"], 2))
             cmd(f"SpecRow{i}SpecPct", _f(100 * r["specificity"], 2))
 
     if "m5_second_implementation" in M:
@@ -1089,16 +1089,16 @@ def build_tex(M: dict) -> str:
             tag = "".join(w.capitalize() for w in k.split("_"))
             cmd(f"Rs{tag}Alarms", d["alarms_snapshot"])
             cmd(f"Rs{tag}Fp", d["false_proofs_snapshot"])
-            cmd(f"Rs{tag}FpRate", _f(d["false_proof_rate_on_authorized"], 4))
+            cmd(f"Rs{tag}FpRate", _f(d["false_proof_rate_on_authorized"], 2))
             cmd(f"Rs{tag}AlarmsLive", d["alarms_live"])
             cmd(f"Rs{tag}FpLive", d["false_proofs_live"])
         m6 = rs["M6_channel_breakdown"]
         cmd("RsChannelAuthorizedTotal", m6["authorized_total"])
         cmd("RsChannelInBand", m6["in_band_share"])
         cmd("RsChannelNotObservable", m6["not_observable_by_framework_log"])
-        cmd("RsChannelNotObservableRate", _f(m6["not_observable_rate"], 4))
+        cmd("RsChannelNotObservableRate", _f(m6["not_observable_rate"], 2))
         cmd("RsChannelOobLiteral", m6["out_of_band_literal"])
-        cmd("RsChannelOobLiteralRate", _f(m6["out_of_band_literal_rate"], 4))
+        cmd("RsChannelOobLiteralRate", _f(m6["out_of_band_literal_rate"], 2))
         cmd("RsChannelImplicit", m6["implicit_derived"])
         for tag, k in (("FromStart", "public_from_start"), ("AfterCrawl", "public_after_crawl")):
             d = rs["endogenous_control"][k]

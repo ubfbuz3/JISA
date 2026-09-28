@@ -84,7 +84,7 @@ def check(name: str, got, want):
         print(f"  ok {name} = {got!r}")
 
 
-def fmt(x, nd: int = 4) -> str:
+def fmt(x, nd: int = 2) -> str:
     return "---" if x is None else f"{x:.{nd}f}"
 
 
