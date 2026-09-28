@@ -22,6 +22,8 @@ only for the HTML version, and only if you choose to supply one).
 - Research interests: Web/API security, vulnerability discovery, metamorphic
   testing （由论文主题推导，非编造）。
 - IEEE membership / grade: 未提供 → 简介中**省略**该句（不编造）。
+- **ORCID iD: 0009-0000-5392-4475**（作者提供，2026-09-28）。已作为作者块
+  `\thanks` 脚注挂在 Lin 名字上（见 `main.tex` 作者块），PDF 首页可见。
 - 已插入 `main.tex` 的 `\IEEEbiographynophoto` 环境（在 `\bibliography{refs}` 之后）。
 
 ## Nanlei Chen  ✅ 已填（2026-09-28，作者确认）
@@ -52,5 +54,5 @@ only for the HTML version, and only if you choose to supply one).
 
 > `IEEEbiographynophoto` omits the photo box; switch to `IEEEbiography` if you
 > supply photos. These two blocks go **after** `\bibliography{refs}` in
-> `main.tex`. They are deliberately left out of the committed manuscript until
-> the real details are known.
+> `main.tex`. Both author biographies are now embedded in the committed
+> manuscript (confirmed facts only; no invented degrees/positions/memberships).
