@@ -36,16 +36,34 @@ OUT = PAPER / "latex_source_files_submission.zip"
 FIXED_DATE = (2026, 9, 21, 0, 0, 0)
 
 SECTIONS = sorted(p.name for p in (PAPER / "sections").glob("*.tex"))
-RESULT_TEX = [
-    "numbers.tex",
-    "native_engine_numbers.tex",
-    "native_engine_table.tex",
-    "gogs_numbers.tex",
-    "gogs_cross_table.tex",
-    "gitlab_numbers.tex",
-    "seeded_table.tex",
-    "m2_stratum.tex",
-]
+_INPUT = re.compile(r"\\input\s*\{([^}]+)\}")
+_SECTION_INPUT = re.compile(r"^sections/")
+
+
+def referenced_result_tex() -> list[str]:
+    """Every \\input{...} in the manuscript that is shipped from results/.
+
+    Derived rather than hand-listed: a hand-maintained list drifted once and the
+    archive silently omitted six generated tables, so a ReX build of the package
+    would have failed. A name is a result macro if it is not a sections/ input
+    and the file exists under results/; anything else unresolved is an error.
+    """
+    sources = [PAPER / "main.tex"] + sorted((PAPER / "sections").glob("*.tex"))
+    names: set[str] = set()
+    for src in sources:
+        for m in _INPUT.finditer(src.read_text(encoding="utf-8", errors="ignore")):
+            n = m.group(1).strip()
+            if _SECTION_INPUT.match(n):
+                continue
+            fname = n if n.endswith(".tex") else n + ".tex"
+            if (RESULTS / fname).is_file():
+                names.add(fname)
+            elif not (PAPER / fname).is_file():
+                raise SystemExit(f"\\input{{{n}}} resolves to no file in results/ or paper/")
+    return sorted(names)
+
+
+RESULT_TEX = referenced_result_tex()
 # Only ship the figure PDFs the manuscript actually \includegraphics{...}es, so
 # the package cannot carry orphaned (or superseded) artwork. Extracted from the
 # sources, never hand-maintained.

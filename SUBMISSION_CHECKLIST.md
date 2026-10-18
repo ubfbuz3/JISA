@@ -59,6 +59,10 @@
 - ☑ **页数**：当前 **16 页**（ieeeaccess.cls 双栏；IEEE Access 无硬性页数上限，建议 ≤20 页）。
 - ☑ **摘要词数** ≤ 250（当前 **244**；统计须先展开 `\Res*` 宏再计，脚本在 `AppData/Local/Temp/count_abstract*.py`）。
 - ☑ 0 undefined references / citations / control sequences（`build.sh` 第 4 步校验）。
+- ☑ **投稿包自足可编译**（2026-10-19 修正）：`make_submission_zip.py` 的宏文件清单改为从正文
+  `\input{}` 自动推导——旧的硬编码清单漏了 `temporal_*`、`cve_pair_*`、`native_split_table`
+  共 6 个生成表，ReX 端会直接编译失败。现为 **79 个文件**；已验证：解压到空目录 →
+  `pdflatex ×2` 直接出 20 页 PDF，0 个未定义引用（`main.bbl` 随包）。
 - ☑ 参考文献真实可溯源、无手敲（`refs.bib` 由 `normalize_bib.py` 规范化，字段值无 CJK）；bibliographystyle 已换 `IEEEtran`。
 - ☑ 图表全部矢量、无 AI 生成像素；矢量图字节可复现。
 - ☑ 标题/摘要主张只覆盖 reachability-gated relations，不泛化（红线 ⑦）。
