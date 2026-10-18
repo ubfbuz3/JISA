@@ -1,22 +1,22 @@
 ﻿id,concern,verified_current_status,next_action,fully_closed,audience
 R1.1,R1.1 新颖性,待系统重写,结构化相关工作比较，明确已有认识和具体新增证据,no,internal
-R1.2,R1.2 完整真值定义,A已建立E/Y/A/H/T基础，部分回应,完整组合、独立来源、unknown/弃权和全篇定义一致,no,internal
-R1.3,R1.3 状态转移,Gitea 8 类转移完成（grant/revoke/继承/可见性/角色/admin），逐事件 hv 与 M0 摘要可核验；Gogs/GitLab 未复核,Gogs/GitLab 关键转移复核；并发更新另设 schedule,no,internal
-R1.4,R1.4 oracle admissibility,C 最小协议已在结果前冻结；校准 6/6；自视点仅 7/280 可读（全在 admin 授予后）,完整 C 分渠道校准与独立性检验,no,internal
-R1.5,R1.5 命题2,未完成；A不替代理论修正,实际函数、条件充分性、3条差异的解释,no,internal
+R1.2,R1.2 完整真值定义,A已建 E/Y/A/H/T；摘要已改口径：引擎只记录失败，升格是外加策略（2026-10-19）,补 5 变量（A/H/E/Y/oracle 可读性）完整真值表并与 D 逐行比对,no,internal
+R1.3,R1.3 状态转移,Gitea+GitLab 各 8 类转移完成，逐事件 hv/M0/M1 摘要可核验；A2 记录 GitLab 连带删除语义,补请求→裁决期间并发变更的处置规则（现只在讨论中说明静止窗口）,no,internal
+R1.4,R1.4 oracle admissibility,C 协议结果前冻结；A1 改主视点 4/4 闸门、A2 观察前落盘；渠道可读性已量化,补结果揭晓前可执行的独立性判据（现有闸门仍依赖同源实现）,no,internal
+R1.5,R1.5 命题2,已拆 Lemma(吸收)+Proposition(两条关系在定义域内)，并写明唯一证伪方式,缺两条关系实际判决函数与 D 的逐行真值表,no,internal
 R1.6,R1.6 枚举设计,已有52格/576记录，解释仍需修正,配置与筛选manifest，blind/aware准确描述，36/18对312/264的映射,no,internal
 R1.7,R1.7 竞争基线,未完成,D，多账户及常规差分，同预算与成本,no,internal
-R1.8,R1.8 渠道混淆,台账和多渠道标签已有,对独立E输出分渠道confusion，分离oracle漏渠道和M陈旧,no,internal
+R1.8,R1.8 渠道混淆,表 VII 已改为逐渠道四格混淆矩阵（Gitea/GitLab 双栏），oracle 错误与 stale 模型分离,—,yes,internal
 R1.9,R1.9 独立缺陷,E有1个真实配对，仍为部分,多种独立故障、实际MR结果与逐缺陷指标,no,internal
-R1.10,R1.10 live对照控制,Gitea 8 轮同权限 recrawl、只读、顺序记录、M0 摘要与版本一致性 8/8,跨厂商复核；并发窗口与原子版本仍不可得，需如实标注,no,internal
-R1.11,R1.11 specificity分母,未完成,正确引用、敏感性分析、撤掉84.62的定量背书,no,internal
-R1.12,R1.12 异质权重,未完成,用ΣFP_i/ΣN_i推广，讨论生成行为改变权重,no,internal
+R1.10,R1.10 live对照控制,双产品 8 轮同权限 recrawl、观测全 GET、event_seq/hv/M0/M1 摘要与版本一致 8/8,—,yes,internal
+R1.11,R1.11 specificity分母,已给参数化敏感性：失败类占输入比 w 时报出值在 1 与 1-w 之间；原始分母不可得已明写,—,yes,internal
+R1.12,R1.12 异质权重,异质权重已给边界式 $1-w$ 与稀释条件（§VI-C）,如需更强可补按场景等权并列数值（现有 96 条切片每场景仅 1–2 例，不宜出数）,yes,internal
 R1.13,R1.13 弃权与成本,弃权拆分已算，报告和成本待做,定义coverage/risk，分层性能，D中独立计费请求/时间,no,internal
 R1.14,R1.14 复现,native分段、配对数据和re-ingest已加入，部分,干净环境、全部生成入口、失败/未触发/未执行区分及异常日志,no,internal
-R1.15,R1.15 证据到主张,未完成全篇同步,分源码/合成/真实案例的evidence-to-claim表，删除矛盾结论,no,internal
+R1.15,R1.15 证据到主张,已加证据—主张表 tab:evidence-claim；结论逐项对应源码/构造/真实系统三类证据,—,yes,internal
 R2.1,R2.1 新颖性与recrawl,Gitea：13/13 陈旧漏列被同权限 recrawl 修好，0 残留（本拓扑计数）,跨厂商复核；写清 crawl 源与 deploy key 的边界，不作 recrawl 完备性声明,no,internal
-R2.2,R2.2 标题与范围,未完成,标题摘要收窄到实际MR/原生触发子集,no,internal
+R2.2,R2.2 标题与范围,标题、running head、摘要首句均限定两条 reachability-gated 关系,—,yes,internal
 R2.3,R2.3 命题2,未完成,与R1.5共用修订，但回复独立完整,no,internal
-R2.4,R2.4 真实检测面,E已给真实闸门阳性，部分,评价实际MR或撤销宽检测结论，不把gate TP写成MR TP,no,internal
-R2.5,R2.5 84.62,原摘要未含该数；正文仍待处理,据实说明，移去定量背书，保留明确假设的分析,no,internal
-R2.6,R2.6 构造设计与比例,E来源已改进，比例解释仍待补,分格和等权敏感性，1.00/0.44不作现场发生率,no,internal
+R2.4,R2.4 真实检测面,真实 vuln/fixed 配对已入文（E/Y 闸门），并明确它不是检测率,—,yes,internal
+R2.5,R2.5 84.62,84.62% 全文降为示例，摘要不含该数，且不再作 99.81% 的数值佐证,—,yes,internal
+R2.6,R2.6 构造设计与比例,E 来源已改进；比例对设计的依赖已有讨论,未按场景等权与原权重并列给出 1.00/0.44,no,internal
