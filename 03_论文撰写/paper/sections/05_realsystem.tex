@@ -289,3 +289,50 @@ detection effectiveness on a population, and not a statement about Gitea's CVE
 posture. Its source, seed list and run script are in the
 reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
 \texttt{artifact-v1}).
+
+\subsection{A publicly fixed defect}
+\label{sec:cvepair}
+
+The seeded control is a controlled artifact, so we also ran one defect that
+nobody here planted: Gitea \CveVulnVersion{} against \CveFixedVersion{}, the
+release whose notes record a security fix titled ``Fix comment permissions''
+(\texttt{\#28213}, backported as \texttt{\#28216}); the same defect is catalogued
+as CVE-2023-49946 for Forgejo, the fork that reported it. What is missing is
+object ownership rather than path permission: a caller entitled to the
+repository named in the URL can address an object that belongs to a different,
+private repository.
+
+Each version runs as a fresh instance, and the collision is built into the
+topology: alice owns a private repository with one issue comment, bob owns a
+public one. Bob sends \texttt{PATCH
+/api/v1/repos/bob/pub/issues/comments/\{alice's comment id\}} with a replacement
+body. On \CveVulnVersion{} the write succeeds (HTTP \CveVulnStatus{}) and
+alice's own re-read returns the replacement body, so the effect is real and not
+a status-code artifact. On \CveFixedVersion{} the same request is refused (HTTP
+\CveFixedStatus{}) and alice's re-read is unchanged (Table~\ref{tab:cvepair}).
+The ledger gives bob no write channel on alice's repository ($E$ = deny), so the
+vulnerable cell is a true positive under the definition used throughout, and
+the fixed cell raises no alarm: \CveTruePositives{} true positive and
+\CveFalseProofs{} false proofs across the pair. All \CveControls{} control
+writes behave as expected in both versions---bob's own comment is editable, the
+correct path is refused, a third user is refused, anonymous is refused, an
+absent identifier is refused---and alice's restore returns the body to the
+original in \CveRestored{} of \CveVersions{} instances.
+
+What this establishes is narrow, and worth stating plainly. It shows that the
+$E/Y$ gate can issue a correct violation claim and stops issuing it once the
+vendor fixes the defect, so the gate is not merely a false-alarm suppressor. It
+does not show that we can \emph{find} such defects: the identifier is given, the
+defect is public and already fixed, and the exercise is a positive control for
+the gate, not a discovery. Nor is it an evaluation on a population---one defect,
+one fault pattern (object versus path ownership), one product line.
+
+\begin{table}[t]
+\centering
+\caption{A publicly fixed defect (object-versus-path ownership). The verdict uses
+$E$ from the ledger and $Y$ from the owner's re-read, not the write status.}
+\label{tab:cvepair}
+\small
+\input{cve_pair_table.tex}
+\end{table}
+

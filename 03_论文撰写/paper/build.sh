@@ -24,6 +24,8 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/native_engine_numbers.tex" \
          "$PROJ/04_绘图与分析/results/native_engine_table.tex" \
          "$PROJ/04_绘图与分析/results/native_split_table.tex" \
+         "$PROJ/04_绘图与分析/results/cve_pair_numbers.tex" \
+         "$PROJ/04_绘图与分析/results/cve_pair_table.tex" \
          "$PROJ/04_绘图与分析/results/gogs_numbers.tex" \
          "$PROJ/04_绘图与分析/results/gogs_cross_table.tex" \
          "$PROJ/04_绘图与分析/results/gitlab_numbers.tex" \
@@ -72,6 +74,8 @@ cp "$PROJ/04_绘图与分析/results/numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/native_engine_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/native_engine_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/native_split_table.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/cve_pair_numbers.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/cve_pair_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_cross_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gitlab_numbers.tex" "$BUILD/"
