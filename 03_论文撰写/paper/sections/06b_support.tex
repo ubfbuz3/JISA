@@ -96,6 +96,40 @@ that fires, not a full-replay count of the published relations. And Gitea, on
 the tested surface, enforces the expected decisions, so the run can only exhibit
 false proofs.
 
+\paragraph{Which stage of that claim does the native run establish?}
+Three stages have to be kept apart, and only the third is a security finding.
+The \emph{native alarm} $A$ is what the engine itself returns:
+\texttt{getFailures()} is appended by \texttt{MR.fail()} (\texttt{MR.java}:909),
+which logs \texttt{FAILURE} together with the failing input pair and asserts
+nothing about authorization---no ledger, no expected decision, no verdict.
+Reading a fired authorization relation as a \emph{violation claim} $H$ is a
+promotion policy $P$ that we state rather than inherit: $P$ maps every fired
+\texttt{OTG\_AUTHZ} relation to ``a violation was observed'', which is the
+reading the catalogue's purpose invites but its code does not perform. Since $P$
+applies to every alarm, $H=\NtStageH$ holds by construction and carries no
+empirical content. All of it is in the independent truth $T$, computed from the
+ledger grant ($E$) and a content re-read ($Y$: the responder's bytes are
+identical to the owner's and a third account is refused): \NtStageTTrue{}
+violations are confirmed and \NtStageTFalse{} of the \NtStageA{} promoted alarms
+are contradicted, on \NtStageTCells{} cells (Table~\ref{tab:native-split}). A
+reader who declines $P$ should read the run as \NtStageA{} failed metamorphic
+relations rather than as \NtStageA{} vulnerabilities; the disagreement survives
+that reading, because the failures fall on accesses the ledger allows.
+
+\begin{table}[t]
+\centering
+\caption{The native alarms split into the three stages: $A$ (the engine's own
+\texttt{getFailures()}), $H$ (the promotion policy $P$ applied to $A$), and $T$
+(independent truth from the ledger $E$ and the content re-read $Y$). Every row
+is an alarm, so $A$ is not repeated as a column; $H$ likewise applies to every
+row. $^{\dagger}$responder bytes identical to the owner's (sha256) and a third
+account refused with 404. MR names abbreviate \texttt{OTG\_AUTHZ\_}$x$.}
+\label{tab:native-split}
+\footnotesize
+\input{native_split_table.tex}
+\end{table}
+
+
 \begin{table*}[t]
 \centering
 \caption{The published authorization relations executed against Gitea

@@ -129,19 +129,39 @@ E 模型是**我们对规则的建模**。如果模型与系统共享同一个�
   台账把 `site_admin` 当作写权限（rank 90）在 Gitea 成立、在另两个系统不成立 ⇒ 这是
   **E 模型的已知缺口**，管理员行已从 40 对主统计中排除，单列为 control，不吸收。
 
-## 7. 尚未完成
+## 6b. native 三段分离（A / H / T）
 
-1. ~~**写路径**~~ **已实现并实跑**，见 §6。vulnerable/fixed 配对可直接复用
+源码事实：`MR.fail()`（`MR.java:909`）只做两件事——写 `FAILURE` 日志、把
+`info.verboseMSG` 追加进 `failures`；**没有任何台账/期望判定**。所以引擎能直接证明的
+只有「这条变形关系不成立」，不是「存在授权违规」。
+
+于是拆成三段（`ingest_native_engine.py::stage_split`，逐条记录存
+`experiments/native_engine/results/native_split.json`）：
+
+| 段 | 含义 | 证据 | 计数 |
+|---|---|---|---:|
+| **A** | 原生报警 | 引擎 `getFailures()`（日志段数 == 汇总数，已交叉校验） | 6 |
+| **H** | 升格为「观察到一次违规」 | **本文声明的策略 P**：凡 `OTG_AUTHZ_*` 报警即按违规主张读 | 6（按构造，非测量） |
+| **T** | 独立真值 | 台账授予事件（E）+ 内容复读（Y：sha256 与拥有者相同、无权者 404） | 确认违规 **0** / 假证明 **6**，覆盖 3 格 |
+
+- T 的判定**复用** `entitlement.classify`，与真实系统实验同一份定义（避免两条路径漂移）。
+- 正文新增段 "Which stage of that claim does the native run establish?"，用
+  `\NtStageA/\NtStageH/\NtStageTTrue/\NtStageTFalse/\NtStageTCells` 五个宏 +
+  Table `tab:native-split`（6 行逐条，`native_split_table.tex` 自动生成）。
+- **如实写明**：拒绝 P 的读者只应接受「6 条变形关系失败」，不得读成 6 个漏洞；
+  但无论接不接受 P，与工具的冲突都在——这些失败落在台账允许的访问上。
+
+## 7. 尚未完成（A 包余项）
+
+1. ~~**写路径**~~ 已实现并实跑，见 §6。vulnerable/fixed 配对可直接复用
    `write_path.run(...)`；只需提供该系统的 `write_file / read_file / delete_file` 三个适配器。
-2. ~~**v1 标注**~~ **已改**：新增真正的 `raw` 裁决器（触发即确证），`v1` 改称
+2. ~~**v1 标注**~~ 已改：新增真正的 `raw` 裁决器（触发即确证），`v1` 改称
    "存在性过滤器"，`v2` 为"存在性 + 操作覆盖"。全矩阵 576 条重跑后 v1/v2/v3/degrade_all
-   计数与旧结果**逐项相同**；`raw` 比 v1 多 75 个告警（v1 把它们降级为弃权）。
-   论文 Table 1/Table 2 已加 `raw` 行并改标签；`numbers.tex` 仅新增 11 个宏，旧宏零变化。
-3. ~~**弃权拆分**~~ **已核算**：v3 共 **228** 次 indeterminate =
+   计数与旧结果**逐项相同**；`raw` 比 v1 多 75 个告警。
+3. ~~**弃权拆分**~~ 已核算：v3 共 **228** 次 indeterminate =
    **156** 次 oracle 不可读（`e3` 102 + `noe3` 54）+ **72** 次合法覆盖共享（全在 `e3`）。
-   逐记录 ID 见 `v3_abstention_breakdown.json`。**正文尚未改写**——须在重写阶段
-   把"只计不可读导致的弃权"改为全量 228 并给出两因分解。
-4. **native 分离**：`getFailures()` 证明的是原生报警，不等于工具宣称
-   `violation-proven`；需拆成 native alarm / promotion policy / 独立真值确认三段。
-5. ~~**实跑**~~ **已完成**，见 §4b。
+   逐记录 ID 见 `v3_abstention_breakdown.json`。**正文尚未改写**——留到重写阶段。
+4. ~~**native 分离**~~ 已完成，见 §6b。
+5. ~~**实跑**~~ 已完成，见 §4b。
 
+**A 包至此全部完成。**

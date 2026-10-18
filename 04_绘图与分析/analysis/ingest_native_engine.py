@@ -39,6 +39,11 @@ DEFAULT_JSON = ENGINE_RESULTS / "native_engine.json"
 
 PREFIX = "Nt"
 
+# 真值分类必须与真实系统实验**共用同一份定义**（`entitlement.classify`），否则
+# 「假证明」在两条路径上会各自漂移——这正是本工作批评过的那类错误。
+sys.path.insert(0, str(ROOT / "experiments" / "real_system"))
+from entitlement import classify as truth_classify, covers as perm_covers  # noqa: E402
+
 
 # --------------------------------------------------------------------------
 # 保真性凭据：上游仓库的改动面（机械核验，不靠自述）
@@ -316,6 +321,101 @@ def log_fail_calls(path: Path) -> dict:
             "recorded": calls - dups}
 
 
+# --------------------------------------------------------------------------
+# A / H / T 三段分离
+# --------------------------------------------------------------------------
+def alarm_units(rows: list, oob: list) -> list:
+    """(MR, 受试者, 仓库) 明细，取自产物里的 failure_samples。
+
+    日志块本身不含 MR 名（段界是 `smrl.mr.language.MR fail` 这条 logger 记录），
+    所以 MR 归属只能来自产物样本；样本每关系至多 8 条，故调用方必须与全量告警数
+    交叉校验，不允许拿样本直接当全量。
+    """
+    granted = {(g.get("repo"), g.get("grantee")) for g in (oob or [])}
+    units = []
+    for m in rows:
+        nm = m.get("mr", "?").split(".")[-1]
+        for s in (m.get("failure_samples") or []):
+            r = parse_one_alarm(s, granted, nm)
+            if r:
+                units.append(r)
+    return units
+
+
+def stage_split(detail: list, oob: list, rows: list,
+                promotion: bool = True) -> dict:
+    """把原生告警拆成三段，**每段各自说明它证明了什么**。
+
+    A（native alarm）：引擎 `getFailures()` 里确实有一条 ⇒ 上游代码层面的断言只有
+        "这条变形关系不成立"（`MR.fail()` 只写 `FAILURE` + verboseMSG，不判定安全）。
+    H（promotion）：把 A 读成"观察到一次授权违规"。这一步**不是上游代码做的**，是本
+        文声明的升格策略 P；不承认 P 的读者只应接受 A。
+    T（独立真值）：只用与引擎无关的两样证据——台账授予事件（E）与内容复读（Y，
+        `channel_bytes.json` 的 sha256 相同 + 无权者 404）。缺任一即 unobserved，
+        绝不按 allow/deny 猜。
+
+    返回逐条记录与计数。T 的判定复用 `entitlement.classify`，与真实系统实验同源。
+    """
+    grants = {(g.get("repo"), g.get("grantee")): (g.get("perm") or "read")
+              for g in (oob or [])}
+    cells = {}
+    cb = ENGINE_RESULTS / "channel_bytes.json"
+    if cb.exists():
+        doc = json.loads(cb.read_text(encoding="utf-8"))
+        for c in doc.get("cells") or []:
+            cells[(c.get("repo"), c.get("grantee"))] = c
+
+    units = alarm_units(rows, oob)
+    # MR 归属只有在样本数与全量告警数一致时才可用；否则退化为"未归属"，并如实计数。
+    attributed = len(units) == len(detail)
+    marks = units if attributed else [dict(r, mr="unattributed") for r in detail]
+
+    out = []
+    for r in marks:
+        key = (r["repo"], r["subject"])
+        perm = grants.get(key)
+        if perm is None:
+            e_val, e_basis = "unknown", "no grant event in the ledger"
+        elif perm_covers(perm, "read"):
+            e_val, e_basis = "allow", f"out-of-band {perm} grant made after the crawl"
+        else:
+            e_val, e_basis = "deny", f"grant {perm} does not cover read"
+
+        c = cells.get(key)
+        if c is None:
+            y_val = None
+        else:
+            y_val = bool((c.get("grantee_resp") or {}).get("status") == 200
+                         and c.get("owner_grantee_identical_bytes"))
+
+        if y_val is None:
+            t = {"category": "unobserved", "true_positive": False, "false_proof": False}
+            y_basis = "no independent content re-read for this cell"
+        else:
+            t = truth_classify(e_val, y_val, alarm=True, promotion=promotion)
+            y_basis = ("owner-identical bytes" if c.get("owner_grantee_identical_bytes")
+                       else "bytes differ from owner")
+        out.append(dict(r, A=True, H=bool(promotion), E=e_val, E_basis=e_basis,
+                        Y=y_val, Y_basis=y_basis,
+                        byte_identical=None if c is None else bool(c.get("owner_grantee_identical_bytes")),
+                        outsider_denied=None if c is None else bool(c.get("outsider_denied")),
+                        T=t["category"], true_positive=t["true_positive"],
+                        false_proof=t["false_proof"]))
+
+    return {
+        "rows": out,
+        "attributed": attributed,
+        "cells": sorted({(r["repo"], r["subject"]) for r in out}),
+        "A": len(out),
+        "H": sum(1 for r in out if r["H"]),
+        "T_true": sum(1 for r in out if r["true_positive"]),
+        "T_false": sum(1 for r in out if r["false_proof"]),
+        "T_unobserved": sum(1 for r in out if r["Y"] is None),
+        "T_allow": sum(1 for r in out if r["E"] == "allow" and r["Y"] is True),
+    }
+
+
+
 def main() -> int:
     p = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_JSON
     if not p.exists():
@@ -346,6 +446,8 @@ def main() -> int:
                  if k in ("subject_own", "owner_object_not_granted", "other"))
     # 告警落在多少个**不同格子**（仓库 × 受试者）上
     alarm_cells = sorted({(r["repo"], r["subject"]) for r in det_eff})
+    # A/H/T 三段分离（T 用台账 E + 内容复读 Y，与引擎无关）
+    sp = stage_split(det_eff, e["oob"], e["rows"])
 
     # ---------------- 宏 ----------------
     M = {
@@ -385,6 +487,13 @@ def main() -> int:
         "NtUpstreamJavaModified": rf["java_modified"],
         "NtUpstreamBuildModified": rf["build_modified"],
         "NtElapsedS": e["elapsed_s"],
+        # --- A / H / T 三段（A8 项④） ---
+        "NtStageA": sp["A"],
+        "NtStageH": sp["H"],
+        "NtStageTTrue": sp["T_true"],
+        "NtStageTFalse": sp["T_false"],
+        "NtStageTUnobserved": sp["T_unobserved"],
+        "NtStageTCells": len(sp["cells"]),
     }
     if e["crtg_calls"]:
         M["NtCrtgTruePct"] = f"{100.0 * e['crtg_true'] / e['crtg_calls']:.1f}"
@@ -430,6 +539,39 @@ def main() -> int:
             tl.append(f"{nm} & executed & {m.get('fired', 0)} & {m.get('http_calls', 0)} \\\\")
     tl += ["\\bottomrule", "\\end{tabular}"]
     (RESULTS / "native_engine_table.tex").write_text("\n".join(tl) + "\n", encoding="utf-8")
+
+    # ---------------- A / H / T 表 ----------------
+    # 每一行 = 一条原生告警的三个阶段。列 A 恒为 fired（表的存在前提），
+    # 故改由 caption 说明，不占列宽。T 列只在 Y 可观测时才给判定。
+    st = ["% 由 analysis/ingest_native_engine.py 自动生成 —— 请勿手改",
+          "% A=原生报警（引擎 getFailures）；H=本文声明的升格策略；"
+          "E=台账真值；Y=内容复读（sha256 与拥有者相同）；T=独立判定",
+          "\\begin{tabular}{lllccc}", "\\toprule",
+          "MR & subject & object & $E$ & $Y$ & $T$ \\\\", "\\midrule"]
+    for r in sorted(sp["rows"], key=lambda x: (x["mr"], x["repo"], x["subject"])):
+        if r["Y"] is True:
+            ylab = r"allow$^{\dagger}$"
+        elif r["Y"] is False:
+            ylab = "deny"
+        else:
+            ylab = "---"
+        tlab = {"false_proof": "false proof",
+                "true_positive": "violation confirmed",
+                "unobserved": "unobserved"}.get(r["T"], r["T"])
+        # MR 名去掉公共前缀 OTG_AUTHZ_（caption 里说明），否则单栏放不下
+        mr_short = r["mr"].replace("OTG_AUTHZ_", "")
+        st.append(f"{esc(mr_short)} & {esc(r['subject'])} & {esc(r['repo'])} & "
+                  f"{r['E']} & {ylab} & {tlab} \\\\")
+    st += ["\\bottomrule", "\\end{tabular}"]
+    (RESULTS / "native_split_table.tex").write_text("\n".join(st) + "\n", encoding="utf-8")
+
+    # 逐条记录留档，供外部按行复核
+    (ENGINE_RESULTS / "native_split.json").write_text(
+        json.dumps({"attributed_to_mr": sp["attributed"], "counts": {
+            k: sp[k] for k in ("A", "H", "T_true", "T_false", "T_unobserved")},
+            "rows": sp["rows"]}, ensure_ascii=False, indent=1),
+        encoding="utf-8")
+
 
     # ---------------- 人读小结 ----------------
     print("=" * 78)
@@ -483,6 +625,14 @@ def main() -> int:
     else:
         print(f"  [ok] 全部分类到的 {sum(cls_eff.values())} 条告警均落在带外授权对象上"
               " ⇒ 与会话语义修复一致")
+    print("\n--- A / H / T 三段分离 ---")
+    print(f"  A 原生报警（getFailures）           {sp['A']}")
+    print(f"  H 升格为违规主张（本文策略 P）       {sp['H']}")
+    print(f"  T 独立真值：确认违规 / 假证明        {sp['T_true']} / {sp['T_false']}"
+          f"   （无可观测 Y 的条数 {sp['T_unobserved']}）")
+    print(f"  覆盖格子 {len(sp['cells'])} 个；MR 归属"
+          + ("可用（样本数与全量一致）" if sp["attributed"]
+             else "不可用（样本数与全量不一致，已按未归属计）"))
     print("\n--- 保真性凭据（机械核验） ---")
     print(f"  上游 git status --porcelain 条目数 = {rf['modified_total']}")
     print(f"     其中 src* 下 .java 改动 = {rf['java_modified']}")
@@ -496,6 +646,7 @@ def main() -> int:
               "（channel_bytes.json：sha256 相同 + 无权者 404）")
     print(f"\n产出  {out_tex}")
     print(f"      {RESULTS / 'native_engine_table.tex'}")
+    print(f"      {RESULTS / 'native_split_table.tex'}")
     return 0
 
 
