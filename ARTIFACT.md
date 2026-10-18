@@ -35,6 +35,12 @@ to `reproduce.sh`.
     `40fb4f7a8f13...` and `dc0f97256de3...` (sha256, first 12 hex). The
     binaries are not shipped; `run_cve_pair.py` fetches nothing, so point
     `experiments/real_system/bin/` at them to re-run that one experiment.
+  - The temporal transition record (`experiments/real_system/results/temporal/`)
+    and the pre-registered admissibility protocol
+    (`experiments/real_system/c_protocol.json`, sha256 recorded in every run).
+    `run_temporal.py` creates its own disposable lab directory; the eight
+    `M0_*.json` / `M1_*.json` snapshots are shipped so the digests quoted in the
+    paper can be re-checked without re-running the service.
 - **Environment**: OS, JDK and Maven versions used for the native-engine run,
   Python `3.13.12`, and the `matplotlib`/`pandas` (no `scipy`) setup. The
   diagram step additionally needs `svglib` + `reportlab` (SVG -> PDF);

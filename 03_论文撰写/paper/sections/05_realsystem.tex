@@ -133,7 +133,10 @@ by the framework log, \ResRsChannelNotObservableRate{}; of these
 \ResRsChannelOobLiteral{} are literal out-of-band grants and
 \ResRsChannelImplicit{} implicit via site administration or public visibility) is
 a property of our
-topology---a design parameter, not a field prevalence.
+topology---a design parameter, not a field prevalence. This comparison uses two
+snapshots and therefore cannot separate a stale model from a channel the crawl
+never listed; the transition experiment in Section~\ref{sec:temporal} separates
+the two.
 
 \begin{table}[t]
 \centering
@@ -174,6 +177,75 @@ public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawl
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Eight committed transitions with a frozen model}
+\label{sec:temporal}
+
+The two-snapshot comparison above cannot separate two explanations: the model
+went stale, or the crawl never listed the channel in the first place. The
+transition experiment separates them by construction. On one fresh Gitea
+\TmpVersion{} instance we ran eight authorisation transitions: direct grant,
+direct revoke, attaching a repository to a team, removing a team member who
+still holds a direct grant, private$\to$public, public$\to$private, a
+read$\to$write role change, and a site-administrator grant.
+
+Each transition is a closed loop. We crawl every subject, serialise the
+per-subject reachable set, freeze it as $M_0$ and record its digest; commit one
+authorisation transaction and increment the harness version $hv$ only if the
+transaction returns 2xx; re-crawl with the \emph{same} credentials to obtain
+$M_1$; read the oracle from the owner vantage; issue the request and verify the
+effect by content; and classify against the ledger at decision time. All
+\TmpPolicyEvents{} transactions committed, all \TmpMzeroVerified{} frozen $M_0$
+digests were unchanged when re-checked immediately before probing, and all
+\TmpCycles{} cycles were version-consistent. Across \TmpCells{} cross-credential
+cells, $E$ and $Y$ agree in \TmpEeqY{}/\TmpCells{} cases, so no cell is scored
+on a modelling discrepancy.
+
+The stale model produces \TmpStaleFP{} false proofs, and a recrawl with the
+same credential removes \TmpFixed{} of them, leaving \TmpStillMiss{} still
+missed and \TmpLiveFP{} live false proofs (Table~\ref{tab:temporal}). The
+composition is informative rather than uniform: one cell for the direct grant,
+one for the team attachment, five when a repository becomes public, and six
+when a user becomes site administrator. The last two are the cases a
+single-object probe is least likely to anticipate, because the granting event
+is not about the object at all.
+
+Revocations behave differently and must not be scored as misses. The old model
+still lists \TmpOverRevoke{} cells whose access was revoked (one direct, one
+through team removal, five after a repository became private). In every one of
+them the request is refused, so no violation occurred; treating them as false
+negatives would require $E=\text{deny}$ \emph{and} $Y=\text{allow}$, which never
+happens here. The same cycle also separates channel removal from entitlement
+change: after the team member is removed, \texttt{acme/t1} remains readable
+through a direct collaboration while \texttt{acme/t2} becomes unreadable, and
+the ledger records the remaining channel. For the role change, the read cell is
+unchanged while the write probe goes from HTTP 403 with unchanged content to
+HTTP 201 with the owner re-reading the new bytes; the owner then deletes the
+probe file and observes 404, and the repository's \texttt{README} digest is
+unchanged after cleanup.
+
+The oracle column is the second result of this run. The owner vantage answers
+\TmpOracleReadable{} of \TmpCells{} cells (the remainder are anonymous, for
+which no oracle credential exists), but the subject's own vantage answers only
+\TmpOracleSelfReadable{} of \TmpCells{}---all of them after the site-admin
+grant. Outside that grant, a read collaborator receives HTTP 403 and an
+outsider HTTP 404 from the permission endpoint. A black-box tester holding only
+the subject's credential therefore cannot use this surface at all, and the
+calibration (\TmpCalChecks{}/\TmpCalChecks{} known cells) records that limit
+rather than hiding it. Because the oracle is served by the same code that
+enforces access, we report it as \emph{shared} with enforcement and never let it
+set $E$.
+
+Three scope limits are part of the result. First, \TmpStillMiss{} residual is a
+count on this surface, not a completeness claim: the crawl sources themselves
+define what can be seen, deploy keys are outside the ledger, and we did not
+construct a channel that the recrawl is known to miss. Second, $hv$ is a
+harness-maintained logical version, not an atomic server snapshot; the harness
+is single-threaded and no concurrent writer ran, which is what makes the still
+window meaningful. Third, the eight transitions are a designed set, not a
+sample of deployment changes, so none of the counts is a field rate.
+
+\input{temporal_table.tex}
 
 \subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}

@@ -1,0 +1,99 @@
+{
+  "protocol_id": "C-min-2026-10-19",
+  "frozen_at": "2026-10-19T01:00:00+08:00",
+  "status": "frozen-before-B",
+  "purpose": "Pre-register the admissibility rules for the entitlement oracle before any temporal (B) result is observed. This file is hashed into every run record; the runner aborts if the hash differs from the recorded value.",
+
+  "expected_entitlement": {
+    "source": "authorisation ledger only",
+    "inputs": [
+      "setup transactions executed by the harness (phase A), each with HTTP status",
+      "out-of-band mutation transactions (phase C), each with HTTP status and event_seq",
+      "documented inheritance rules: owner, org owner, site admin, public read, collaborator, org team"
+    ],
+    "forbidden_inputs": [
+      "any probe response body or status code",
+      "the oracle answer O",
+      "the observed effect Y"
+    ],
+    "unknown_policy": "If an object is absent from the ledger, or the ledger models no channel for the (object, subject, action) triple, E = unknown. unknown is never mapped to deny.",
+    "failed_transaction_policy": "A mutation whose HTTP status is outside 2xx does not update the ledger and does not increment policy_version; its cells are excluded from all denominators and reported as a failed transition.",
+
+    "channels": ["owner", "org_owner", "site_admin", "public", "collaborator", "team"],
+    "channel_limitations": {
+      "site_admin_read": "modelled as allow for read on every ledger object",
+      "site_admin_write": "modelled as allow, but this is a known cross-product gap (Gogs and GitLab refuse it in practice); any mismatch is reported, not absorbed",
+      "deploy_keys": "not modelled; a cell reachable only by a deploy key must surface as unknown, not deny"
+    }
+  },
+
+  "oracle": {
+    "role": "secondary cross-check only; never used to set E or to decide TP/FP",
+    "primary_vantage": "object owner credential (org repositories: the organisation owner)",
+    "secondary_vantage": "the subject's own credential (black-box vantage)",
+    "site_admin_vantage": "not used",
+    "read_only": true,
+    "independence": "shared",
+    "independence_note": "The oracle reads the product's own authorisation introspection surface, which is served by the same code base that enforces access. A defect in that surface would corrupt O. It cannot corrupt E, which is ledger-derived, so the classification stays sound; O is reported as a separate column and excluded from every denominator.",
+    "applicability": "Only the read/write/admin lattice that the product exposes on its permission endpoint, and only objects present in the ledger.",
+    "unreadable_policy": "If the oracle returns a non-200 status, an empty permission, or a transport error after retries, record oracle_answer = unknown with abstain_reason = oracle_unreadable. The cell is still scored on E and Y."
+  },
+
+  "calibration": {
+    "when": "before the first formal transition, on a throwaway object",
+    "cells": [
+      {"case": "owner_on_own_private", "vantage": "owner", "expected_oracle": "allow"},
+      {"case": "collaborator_read_on_private", "vantage": "owner", "expected_oracle": "allow"},
+      {"case": "non_collaborator_on_private", "vantage": "owner", "expected_oracle": "deny"},
+      {"case": "owner_self_vantage", "vantage": "self", "expected_oracle": "allow"},
+      {"case": "collaborator_self_vantage", "vantage": "self", "expected_oracle": "unreadable"},
+      {"case": "non_collaborator_self_vantage", "vantage": "self", "expected_oracle": "unreadable"}
+    ],
+    "pass_condition": "6 of 6 oracle answers match; otherwise abort the run with no formal cells",
+    "separation": "Calibration cells are excluded from every reported denominator.",
+    "secondary_vantage_verdict": "not admissible as an oracle: a read collaborator receives HTTP 403 and an outsider HTTP 404, so the subject's own credential can neither confirm nor deny. It is recorded as a diagnostic column only.",
+    "note": "Anonymous reads have no oracle vantage (the permission endpoint requires a credential), so anonymous cells are scored on E and Y only, with oracle_answer = unknown."
+  },
+
+  "versioning": {
+    "kind": "harness-logical",
+    "name": "hv",
+    "increment": "one per successfully committed authorisation mutation",
+    "recorded_with": ["event_seq", "mutation", "actor", "http_status", "committed_at", "hv_before", "hv_after"],
+    "honesty_note": "hv is maintained by the harness, not exported atomically by the server. It orders the committed mutation transactions that the harness itself executed; it is not a server-side snapshot identifier and must not be described as one.",
+    "consistency_rule": "E is computed at hv_e and Y observed at hv_y. A cycle is scoreable only if hv_e == hv_y and the frozen M0 digest is unchanged. Otherwise every cell in the cycle is abstained as version_mismatch or snapshot_mutated."
+  },
+
+  "abstention_rules": [
+    {"reason": "transport_error", "condition": "status 0 after 2 retries at 250 ms", "scope": "cell"},
+    {"reason": "oracle_unreadable", "condition": "oracle non-200, empty permission, or unknown", "scope": "O field only"},
+    {"reason": "snapshot_mutated", "condition": "frozen M0 digest differs when re-checked immediately before probing", "scope": "whole cycle"},
+    {"reason": "version_mismatch", "condition": "hv changed between ledger evaluation and effect observation", "scope": "whole cycle"},
+    {"reason": "mutation_failed", "condition": "mutation HTTP status outside 2xx", "scope": "whole transition"},
+    {"reason": "restore_failed", "condition": "write probe file still readable after owner delete", "scope": "write cell; the cell is reported, not silently dropped"}
+  ],
+
+  "observation": {
+    "read_effect": "status 200 AND sha256(body) == sha256(owner's read of the same path); status alone is not Y",
+    "read_path": "README.md (created by auto_init, identical for owner and subject when access is granted)",
+    "write_effect": "subject creates a uniquely named file; owner re-reads it byte-for-byte; owner deletes it and re-reads 404",
+    "side_effect_isolation": "read probes are GET only; write probes run after the read matrix and after M1 is frozen, and the repository README digest is re-checked after cleanup",
+    "order": "oracle before probe within a still window; the order is recorded per cell",
+    "still_window": "single-threaded harness; no concurrent writer; W0/W1 timestamps and hv bracket every cycle"
+  },
+
+  "reporting": {
+    "denominators": "per transition and per (subject, object) cell; never extrapolated to deployment incidence",
+    "required_separations": [
+      "stale model false proofs vs recrawl-fixed cells",
+      "recrawl residual misses (reachable but not listed) vs oracle unreadable",
+      "stale over-approximation after revoke (no real violation when enforcement refuses) vs true positive (E=deny and Y=allow and alarm)",
+      "failed transitions vs scored transitions"
+    ],
+    "no_claim": [
+      "no sensitivity or specificity estimate",
+      "no claim that recrawl repairs every invisible channel",
+      "no claim that the oracle is independent of enforcement"
+    ]
+  }
+}

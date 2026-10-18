@@ -60,6 +60,8 @@ pushd "$ANA" >/dev/null
 "$PYBIN" ingest_seeded.py
 # 真实 vulnerable/fixed 配对的数字（cve_pair.json 随包提供，不需重跑实例）
 "$PYBIN" ingest_cve_pair.py
+# 真时序实验的数字（temporal_gitea.json 随包提供，不需重跑实例）
+"$PYBIN" ingest_temporal.py
 "$PYBIN" make_diagrams.py
 popd >/dev/null
 
