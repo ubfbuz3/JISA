@@ -63,7 +63,7 @@ PRECOND_VARIANTS: dict[str, dict] = {
 }
 
 GUI_MODES = ("blind", "aware")
-ADJUDICATORS = ("v1", "v2", "v3", "degrade_all")
+ADJUDICATORS = ("raw", "v1", "v2", "v3", "degrade_all")
 
 
 # --------------------------------------------------------------------------
@@ -96,6 +96,8 @@ def run_one(cfg: Config, scenario: str, mr_id: str, pv: str, gm: str) -> dict:
                           mres["input2"]["status"])
 
         verdicts = {
+            # raw = 真正的原始 MR（触发即确证，无降级）；v1 只是"存在任意共享即降级"的过滤器
+            "raw": ba.adjudicate(mres, client, setup, version="raw").as_dict(),
             "v1": ba.adjudicate(mres, client, setup, version="v1").as_dict(),
             "v2": ba.adjudicate(mres, client, setup, version="v2").as_dict(),
             # v3: 探测数据源改为 SUT 授权自省面；面不可读时强制弃权
@@ -188,6 +190,8 @@ def main():
             "MR 为语义移植, 非 MST-wi 原生引擎（本机无 Maven）→ 见 mstwi_mrs.py 表头声明",
             "真值为动作级构造式真值: BOLA ⟺ 应用允许了本不该允许的访问",
             "E3 探测数据源为测试框架主动执行的共享操作记录（构造式真值，非政策推断）",
+            "裁决器标签：raw = 触发即确证（无降级）；v1 = 存在性过滤器（任意共享即降级）；"
+            "v2 = 存在性 + 权限覆盖；v3 = 查询 SUT 授权自省面（不可读则弃权）",
             "S6/S7 的授权为**带外种入**（app.seed_share 直接写服务端授权表），"
             "框架侧 share_log 为空 → 用于刻画修正机制的有效范围（第五轮硬条件 A1）",
         ],

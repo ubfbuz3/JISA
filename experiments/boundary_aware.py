@@ -15,6 +15,10 @@ Boundary-aware MR Execution · E3 探测与三级裁决
        (read 仅覆盖读; write 覆盖读与写)
       —— v2 用于消除 S5 类"读合法/写越权"的误降级代价
 
+另设两条不含任何例外处理的基线（论文中的标签必须与实际语义一致）:
+  raw        MR 触发即 violation-proven，**不做任何降级**（真正的"raw alarms"）
+  degrade_all 凡触发即 indeterminate（地板对照）
+
 三级裁决的语义边界（必须写进论文）:
   pass               : MR 未触发。可能是 TN, 也可能是 FN —— 裁决本身不区分。
   violation-proven   : MR 触发, 且该对象**不存在**可覆盖本次操作的 E3 授权
@@ -88,11 +92,20 @@ def adjudicate(mr_result: dict, client, setup, version: str = "v1",
     """把 MR 的触发/未触发升级为三级裁决。
 
     version="v1"/"v2" —— 探测数据源 = 框架账本（share_log）
+    version="raw"     —— **不做任何例外处理**：触发即 violation-proven
     version="v3"      —— 探测数据源 = **SUT 授权自省面**；面不可读时强制弃权
     degrade_all=True 时退化为"凡触发即降级"的对照方案 (Block 4 的消融 2)。
     """
     if not mr_result.get("triggered"):
         return Verdict("pass", "MR 未触发，无需裁决")
+
+    if version == "raw" and not degrade_all:
+        # 真正的原始 MR：触发即升级，不查任何账本、不查任何面。
+        # 论文中不得再把 v1 称作 "raw"——v1 带存在性过滤器。
+        return Verdict("violation-proven",
+                       "原始 MR：触发即确证（无任何例外谓词或降级）",
+                       witness={"probe_version": "raw",
+                                "op": setup.op, "doc_id": setup.target_doc})
 
     if degrade_all:
         return Verdict("indeterminate",

@@ -109,13 +109,13 @@ def confused(truth: str, alarm: bool) -> str:
 
 # ---------------------------------------------------------------- 逐条构造（与 Block 9 同口径）
 
-ADJ = ("v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe")
+ADJ = ("raw", "v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe")
 
 def alm(r: dict) -> dict:
     st = probe_state(r)
     obs200 = bool(r["truth"]["app_allowed"])
     a = {k: r["verdicts"][k]["verdict"] == "violation-proven"
-         for k in ("v1", "v2", "v3", "degrade_all")}
+         for k in ("raw", "v1", "v2", "v3", "degrade_all")}
     a["direct_only"] = (st == "none")
     a["direct_observe"] = (st == "none") and obs200
     if st == "unavailable":

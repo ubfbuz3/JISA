@@ -1,7 +1,7 @@
 {
   "meta": {
     "gitea_version": "1.22.6",
-    "lab_dir": "C:\\Users\\Administrator\\WorkBuddy\\gitea_lab_r2",
+    "lab_dir": "C:\\Users\\Administrator\\WorkBuddy\\gitea_lab_r8",
     "generated_by": "experiments/real_system/run_real.py",
     "phases": [
       "A 基线拓扑",
@@ -10,10 +10,11 @@
       "D 变更后爬取",
       "E MR 执行与四方法裁决",
       "F M1/M2/M3",
-      "G M6"
+      "G M6",
+      "H 写路径真值（内容级复读）"
     ],
     "honesty_boundary": "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。E（预期有效授权）由 phaseA/phaseC 的授权台账推导，绝不由被测 GET 的返回值填充；Y（实际观测效果）单独记录；假证明 = 升级 AND E=allow；真阳性 = 升级 AND E=deny AND Y=allow。",
-    "elapsed_s": 35.2
+    "elapsed_s": 773.0
   },
   "phaseA_topology": {
     "steps": [
@@ -9666,5 +9667,871 @@
       "subject": "root",
       "channel": "implicit_site_admin"
     }
-  ]
+  ],
+  "phaseH_write_path": {
+    "system": "Gitea",
+    "protocol": "create unique file as subject -> re-read as owner (byte compare) -> delete as owner -> verify 404",
+    "target": "repository file contents",
+    "marker_prefix": "wb-probe-",
+    "cells": [
+      {
+        "object": "alice/r1",
+        "subject": "alice",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "owner",
+        "expected_basis": [
+          "owner of alice/r1"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r1",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r1",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r1",
+        "subject": "dave",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r1",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r1",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r1",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r2",
+        "subject": "alice",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "owner",
+        "expected_basis": [
+          "owner of alice/r2"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r2",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r2",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r2",
+        "subject": "dave",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 0,
+        "content_changed": false,
+        "restored": false,
+        "note": "transport-error (no response; Y recorded from content, not status)"
+      },
+      {
+        "object": "alice/r2",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r2",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r2",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r3",
+        "subject": "alice",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "owner",
+        "expected_basis": [
+          "owner of alice/r3"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r3",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r3",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r3",
+        "subject": "dave",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r3",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r3",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r3",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r4",
+        "subject": "alice",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "owner",
+        "expected_basis": [
+          "owner of alice/r4"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/r4",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r4",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r4",
+        "subject": "dave",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r4",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r4",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/r4",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "alice",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "owner",
+        "expected_basis": [
+          "owner of alice/pub1"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "dave",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "alice/pub1",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "acme/t1",
+        "subject": "alice",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t1",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t1",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t1",
+        "subject": "dave",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "org_owner",
+        "expected_basis": [
+          "owner of org acme"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "acme/t1",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t1",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t1",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "acme/t2",
+        "subject": "alice",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t2",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t2",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t2",
+        "subject": "dave",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "org_owner",
+        "expected_basis": [
+          "owner of org acme"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "acme/t2",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t2",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 403,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "acme/t2",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "dave/r5",
+        "subject": "alice",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "dave/r5",
+        "subject": "bob",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "dave/r5",
+        "subject": "carol",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "dave/r5",
+        "subject": "dave",
+        "role": "owner",
+        "expected_entitlement": "allow",
+        "expected_channel": "owner",
+        "expected_basis": [
+          "owner of dave/r5"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      },
+      {
+        "object": "dave/r5",
+        "subject": "eve",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "dave/r5",
+        "subject": "frank",
+        "role": "cross",
+        "expected_entitlement": "deny",
+        "expected_channel": "none",
+        "expected_basis": [
+          "no granting channel for write"
+        ],
+        "observed_effect": "deny",
+        "write_status": 404,
+        "content_changed": false,
+        "restored": false,
+        "note": "denied"
+      },
+      {
+        "object": "dave/r5",
+        "subject": "root",
+        "role": "admin",
+        "expected_entitlement": "allow",
+        "expected_channel": "site_admin",
+        "expected_basis": [
+          "site administrator"
+        ],
+        "observed_effect": "allow",
+        "write_status": 201,
+        "content_changed": true,
+        "restored": true,
+        "note": ""
+      }
+    ],
+    "summary": {
+      "pairs": 40,
+      "e_eq_y": 40,
+      "mismatches": [],
+      "unauthorized_writes": [],
+      "status_code_disagrees_with_content": [],
+      "owner_sanity": {
+        "rows": 8,
+        "all_observed": true,
+        "all_restored": true
+      },
+      "admin_sanity": {
+        "rows": 8,
+        "all_observed": true,
+        "all_restored": true
+      },
+      "errors": []
+    }
+  }
 }

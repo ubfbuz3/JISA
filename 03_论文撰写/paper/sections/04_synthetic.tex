@@ -109,8 +109,9 @@ make that point.}
 \toprule
 method & TP & FP & FN & TN & precision & recall & F1 \\
 \midrule
-v1 (raw)              & \ResAbVOneTP{} & \ResAbVOneFP{} & \ResAbVOneFN{} & \ResAbVOneTN{} & \ResAbVOnePrec{} & \ResAbVOneRec{} & \ResAbVOneFone{} \\
-v2 (exception-aware)  & \ResAbVTwoTP{} & \ResAbVTwoFP{} & \ResAbVTwoFN{} & \ResAbVTwoTN{} & \ResAbVTwoPrec{} & \ResAbVTwoRec{} & \ResAbVTwoFone{} \\
+raw (no exception handling) & \ResAbRawTP{} & \ResAbRawFP{} & \ResAbRawFN{} & \ResAbRawTN{} & \ResAbRawPrec{} & \ResAbRawRec{} & \ResAbRawFone{} \\
+v1 (existence filter) & \ResAbVOneTP{} & \ResAbVOneFP{} & \ResAbVOneFN{} & \ResAbVOneTN{} & \ResAbVOnePrec{} & \ResAbVOneRec{} & \ResAbVOneFone{} \\
+v2 (existence + coverage) & \ResAbVTwoTP{} & \ResAbVTwoFP{} & \ResAbVTwoFN{} & \ResAbVTwoTN{} & \ResAbVTwoPrec{} & \ResAbVTwoRec{} & \ResAbVTwoFone{} \\
 v3 (state-calibrated) & \ResAbVThreeTP{} & \ResAbVThreeFP{} & \ResAbVThreeFN{} & \ResAbVThreeTN{} & \ResAbVThreePrec{} & \ResAbVThreeRec{} & \ResAbVThreeFone{} \\
 \texttt{degrade\_all} & \ResAbDegradeAllTP{} & \ResAbDegradeAllFP{} & \ResAbDegradeAllFN{} & \ResAbDegradeAllTN{} & \ResAbDegradeAllPrec{} & \ResAbDegradeAllRec{} & \ResAbDegradeAllFone{} \\
 \texttt{direct\_only} & \ResAbDirectOnlyTP{} & \ResAbDirectOnlyFP{} & \ResAbDirectOnlyFN{} & \ResAbDirectOnlyTN{} & \ResAbDirectOnlyPrec{} & \ResAbDirectOnlyRec{} & \ResAbDirectOnlyFone{} \\
@@ -119,7 +120,14 @@ v3 (state-calibrated) & \ResAbVThreeTP{} & \ResAbVThreeFP{} & \ResAbVThreeFN{} &
 \end{tabular}
 \end{table*}
 
-Table~\ref{tab:ablation} concludes the ablation. \texttt{direct\_observe} has
+Table~\ref{tab:ablation} concludes the ablation. The first three rows are a
+ladder, and they must be read in order: with no exception handling at all,
+\texttt{raw} yields \ResAbRawFP{} false proofs; the existence filter v1 cuts
+them to \ResAbVOneFP{}, but pays for it by abstaining on true violations (FN
+rises to \ResAbVOneFN{}); adding operation coverage (v2) restores the true
+violations (FN \ResAbVTwoFN{}) at the same false-proof count. Neither filter is
+therefore a free improvement, and v3's zero in the FP column is bought with the
+FN column. \texttt{direct\_observe} has
 \ResAbDirectObserveFP{} false proofs against v3's \ResAbVThreeFP{}---a tie at
 zero, not a win. The comparison is paired, so we report the discordance rather
 than an inferential interval: over the \ResAbNBola{} true-violation records the

@@ -35,6 +35,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gitlab_lab as gl
 import m1_census as mc
 from gitlab_lab import ADMIN_USER, API, BASE, Client, clients, user_ids
+import write_path as wp
 
 from entitlement import classify
 from manifests import gitlab_model
@@ -368,7 +369,7 @@ puts 'written'
     if "written" not in out:
         raise RuntimeError(f"路由枚举 runner 异常：\n{out[-2000:]}")
     rows = json.loads((gl.LAB / "wb_routes.json").read_text(encoding="utf-8"))
-    (gl.LAB / "wb_routes.json").unlink(missing_ok=True)
+    (gl.LAB / "wb_routes.json")# (left on disk: local safe-delete guard blocks deletions)
     routes, wildcards = [], 0
     for r in rows:
         p = r["path"]
@@ -422,7 +423,8 @@ def main():
         "positioning": ("非血缘厂商复核（independent-vendor replication）：GitLab 与 "
                         "Gitea/Gogs 无 fork 关系。披露：三者同为 git-forge 域模型。"),
         "phases": ["A 基线拓扑", "A2 自省面发现", "B 采集爬取", "C 带外授权变更",
-                   "D 变更后爬取", "E MR 执行与四方法裁决", "F M1/M2/M3", "G M6"],
+                   "D 变更后爬取", "E MR 执行与四方法裁决", "F M1/M2/M3", "G M6",
+                   "H 写路径真值（内容级复读）"],
         "methodological_differences_vs_gitea_gogs": [
             "M1 分母 = 钉死运行实例的 Grape 路由枚举（API::API.routes）",
             "自带 OpenAPI 规范(doc/api/openapi/openapi_v2.yaml, 819 路径)是部分规范"
@@ -661,6 +663,50 @@ def main():
                 kind = "out_of_band"
             prov.append({"cell": obj, "subject": s, "channel": kind})
     rep["M6_provenance"] = prov
+
+    # ---------------- H：写路径真值（文件内容，非状态码） ----------------
+    print("[H] 写路径真值 …", flush=True)
+    _branch: dict[str, str] = {}
+
+    def _default_branch(obj):
+        if obj not in _branch:
+            st, b = cl[PRIV_OWNER[obj]].get(f"{API}/projects/{enc(obj)}")
+            _branch[obj] = (b.get("default_branch") or "main"
+                            if isinstance(b, dict) else "main")
+        return _branch[obj]
+
+    def _fpath(path):
+        return urllib.parse.quote(path, safe="")
+
+    def _read_file(obj, subj, path):
+        st, b = cl[subj].get(
+            f"{API}/projects/{enc(obj)}/repository/files/{_fpath(path)}/raw"
+            f"?ref={_default_branch(obj)}")
+        return st, (b if isinstance(b, str) else None)
+
+    def _write_file(obj, subj, path, text):
+        st, _ = cl[subj].post(
+            f"{API}/projects/{enc(obj)}/repository/files/{_fpath(path)}",
+            {"branch": _default_branch(obj), "content": text,
+             "commit_message": "wb probe"})
+        return st
+
+    def _delete_file(obj, owner, path):
+        st, _ = cl[owner].delete(
+            f"{API}/projects/{enc(obj)}/repository/files/{_fpath(path)}"
+            f"?branch={_default_branch(obj)}&commit_message=wb+probe+cleanup")
+        st_v, _ = _read_file(obj, owner, path)
+        return st < 400 and st_v == 404
+
+    rep["phaseH_write_path"] = wp.run(
+        cl, policy, ALL_OBJS, subjects,
+        owner_cred_for=lambda o: PRIV_OWNER[o],
+        write_file=_write_file, read_file=_read_file, delete_file=_delete_file,
+        system="GitLab", admin_user=ADMIN_USER)
+    ws = rep["phaseH_write_path"]["summary"]
+    print("     写路径 E==Y %d/%d，越权写 %d，状态码与内容不符 %d，恢复失败 %d"
+          % (ws["e_eq_y"], ws["pairs"], len(ws["unauthorized_writes"]),
+             len(ws["status_code_disagrees_with_content"]), len(ws["errors"])), flush=True)
 
     rep["meta"]["elapsed_s"] = round(time.time() - t0, 1)
     out = RESULTS / "gitlab_real_system.json"

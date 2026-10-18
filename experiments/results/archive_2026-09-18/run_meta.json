@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-09-18 12:06:03",
+  "mode": "full",
+  "cases": 576,
+  "completed": 576,
+  "errors": 0,
+  "elapsed_sec": 307.14,
+  "mr_provenance": [
+    {
+      "id": "MR-002",
+      "catalog_id": "MR CWE_266_267_268_269_285_522_529_862_863_OTG_AUTHZ_002",
+      "catalog_line": 579,
+      "cwe": "CWE-266/267/268/269/285/522/529/862/863 (含 improper authorization 族)",
+      "semantics": "changeCredentials 后重放; 期望 isError(Out1) ∨ NOT(Out1.equals(Out2))",
+      "violation_condition": "NOT isError(Out1) AND Out1.equals(Out2)",
+      "gui_predicates_used": [
+        "cannotReachThroughGUI"
+      ],
+      "e2_predicate_used": "!isSupervisorOf(User(), action.user)",
+      "local_impl": "experiments/mrs/mstwi_mrs.py"
+    },
+    {
+      "id": "MR-004",
+      "catalog_id": "MR CWE_15_639_OTG_AUTHZ_004",
+      "catalog_line": 154,
+      "cwe": "CWE-639 (Authorization Bypass Through User-Controlled Key) — BOLA 的标准 CWE 定义",
+      "semantics": "参数替换为其他用户使用的值; 期望 isError ∨ userCanRetrieveContent",
+      "violation_condition": "NOT isError(Out2) AND NOT userCanRetrieveContent(user, Out2)",
+      "gui_predicates_used": [
+        "userCanRetrieveContent"
+      ],
+      "local_impl": "experiments/mrs/mstwi_mrs.py"
+    }
+  ],
+  "configs": [
+    {
+      "mode": "noe3",
+      "vulnerable": 0,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-noE3-vuln0"
+    },
+    {
+      "mode": "noe3",
+      "vulnerable": 1,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-noE3-vuln1"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 0,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-E3-vuln0-unlisted"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-E3-vuln1-unlisted"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 0,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln0-listed"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln1-listed"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 0,
+      "share_visibility": "unlisted",
+      "introspection": "off",
+      "label": "V-E3-vuln0-unlisted-nointro"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "unlisted",
+      "introspection": "off",
+      "label": "V-E3-vuln1-unlisted-nointro"
+    }
+  ],
+  "precond_variants": {
+    "raw": {},
+    "e1": {
+      "not_admin": true
+    },
+    "e1e2": {
+      "not_admin": true,
+      "not_supervisor": true
+    }
+  },
+  "gui_modes": [
+    "blind",
+    "aware"
+  ],
+  "notes": [
+    "MR 为语义移植, 非 MST-wi 原生引擎（本机无 Maven）→ 见 mstwi_mrs.py 表头声明",
+    "真值为动作级构造式真值: BOLA ⟺ 应用允许了本不该允许的访问",
+    "E3 探测数据源为测试框架主动执行的共享操作记录（构造式真值，非政策推断）",
+    "S6/S7 的授权为**带外种入**（app.seed_share 直接写服务端授权表），框架侧 share_log 为空 → 用于刻画修正机制的有效范围（第五轮硬条件 A1）"
+  ]
+}

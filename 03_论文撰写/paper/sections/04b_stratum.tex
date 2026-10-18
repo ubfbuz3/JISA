@@ -45,16 +45,18 @@ observed success of a plain request. All numbers are counts.}
 stratum & method & TP & FP & FN & TN & precision & recall & F1 \\
 \midrule
 readable (\MiiNOn)
-  & v1 (raw)                & \MiiOnVOneTP & \MiiOnVOneFP & \MiiOnVOneFN & \MiiOnVOneTN & \MiiOnVOnePrec & \MiiOnVOneRec & \MiiOnVOneFone \\
-  & v2 (exception-aware)    & \MiiOnVTwoTP & \MiiOnVTwoFP & \MiiOnVTwoFN & \MiiOnVTwoTN & \MiiOnVTwoPrec & \MiiOnVTwoRec & \MiiOnVTwoFone \\
+  & \texttt{raw}               & \MiiOnRawTP & \MiiOnRawFP & \MiiOnRawFN & \MiiOnRawTN & \MiiOnRawPrec & \MiiOnRawRec & \MiiOnRawFone \\
+  & v1 (existence filter)   & \MiiOnVOneTP & \MiiOnVOneFP & \MiiOnVOneFN & \MiiOnVOneTN & \MiiOnVOnePrec & \MiiOnVOneRec & \MiiOnVOneFone \\
+  & v2 (existence+coverage) & \MiiOnVTwoTP & \MiiOnVTwoFP & \MiiOnVTwoFN & \MiiOnVTwoTN & \MiiOnVTwoPrec & \MiiOnVTwoRec & \MiiOnVTwoFone \\
   & v3 (state-calibrated)   & \MiiOnVThreeTP & \MiiOnVThreeFP & \MiiOnVThreeFN & \MiiOnVThreeTN & \MiiOnVThreePrec & \MiiOnVThreeRec & \MiiOnVThreeFone \\
   & \texttt{direct\_observe}& \MiiOnDirectObserveTP & \MiiOnDirectObserveFP & \MiiOnDirectObserveFN & \MiiOnDirectObserveTN & \MiiOnDirectObservePrec & \MiiOnDirectObserveRec & \MiiOnDirectObserveFone \\
   & \texttt{obs\_success}   & \MiiOnObsSuccessTP & \MiiOnObsSuccessFP & \MiiOnObsSuccessFN & \MiiOnObsSuccessTN & \MiiOnObsSuccessPrec & \MiiOnObsSuccessRec & \MiiOnObsSuccessFone \\
   & \texttt{always\_alarm}  & \MiiOnAlwaysAlarmTP & \MiiOnAlwaysAlarmFP & \MiiOnAlwaysAlarmFN & \MiiOnAlwaysAlarmTN & \MiiOnAlwaysAlarmPrec & \MiiOnAlwaysAlarmRec & \MiiOnAlwaysAlarmFone \\
 \midrule
 unreadable (\MiiNOff)
-  & v1 (raw)                & \MiiOffVOneTP & \MiiOffVOneFP & \MiiOffVOneFN & \MiiOffVOneTN & \MiiOffVOnePrec & \MiiOffVOneRec & \MiiOffVOneFone \\
-  & v2 (exception-aware)    & \MiiOffVTwoTP & \MiiOffVTwoFP & \MiiOffVTwoFN & \MiiOffVTwoTN & \MiiOffVTwoPrec & \MiiOffVTwoRec & \MiiOffVTwoFone \\
+  & \texttt{raw}               & \MiiOffRawTP & \MiiOffRawFP & \MiiOffRawFN & \MiiOffRawTN & \MiiOffRawPrec & \MiiOffRawRec & \MiiOffRawFone \\
+  & v1 (existence filter)   & \MiiOffVOneTP & \MiiOffVOneFP & \MiiOffVOneFN & \MiiOffVOneTN & \MiiOffVOnePrec & \MiiOffVOneRec & \MiiOffVOneFone \\
+  & v2 (existence+coverage) & \MiiOffVTwoTP & \MiiOffVTwoFP & \MiiOffVTwoFN & \MiiOffVTwoTN & \MiiOffVTwoPrec & \MiiOffVTwoRec & \MiiOffVTwoFone \\
   & v3 (state-calibrated)   & \MiiOffVThreeTP & \MiiOffVThreeFP & \MiiOffVThreeFN & \MiiOffVThreeTN & \MiiOffVThreePrec & \MiiOffVThreeRec & \MiiOffVThreeFone \\
   & \texttt{direct\_observe}& \MiiOffDirectObserveTP & \MiiOffDirectObserveFP & \MiiOffDirectObserveFN & \MiiOffDirectObserveTN & \MiiOffDirectObservePrec & \MiiOffDirectObserveRec & \MiiOffDirectObserveFone \\
   & \texttt{obs\_success}   & \MiiOffObsSuccessTP & \MiiOffObsSuccessFP & \MiiOffObsSuccessFN & \MiiOffObsSuccessTN & \MiiOffObsSuccessPrec & \MiiOffObsSuccessRec & \MiiOffObsSuccessFone \\

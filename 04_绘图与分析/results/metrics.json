@@ -33,6 +33,7 @@
     ],
     "adjudicators": [
       "degrade_all",
+      "raw",
       "v1",
       "v2",
       "v3"
@@ -222,6 +223,17 @@
     "conclusion": "E1/E2 例外谓词对 FP_E3 无改善（1.00 → 1.00 → 1.00）——构造性结论"
   },
   "block4_verdict_quality_all": {
+    "raw": {
+      "raw_false_alarm": 16,
+      "recovered": 0,
+      "detection_kept": 35,
+      "costly_downgrade": 0,
+      "missed": 1,
+      "recovery_rate": 0.0,
+      "detection_keep_rate": 1.0,
+      "cost_rate": 0.0,
+      "fn_rate_among_bola": 0.0278
+    },
     "v1": {
       "raw_false_alarm": 16,
       "recovered": 8,
@@ -357,6 +369,17 @@
     "caveat": "源码级证据已有运行级补充：本工作在自建 harness（无浏览器，仅替换 HTTP 观测通道）下执行了上游 OTG_AUTHZ_* 关系本身；产物与消化脚本见 experiments/native_engine/results/native_engine.json 与 analysis/ingest_native_engine.py。上游 Java 源码零改动（git status 仅 pom.xml，且其改动为一行 <source> 声明）。「同一 URL 对拥有者与受让者响应逐字节相同」这条断言另有摘要级凭据：experiments/native_engine/verify_channel_bytes.py 产出 results/channel_bytes.json（sha256 逐格比对，含无权者 404 对照）。"
   },
   "block4_verdict_quality_fp_config": {
+    "raw": {
+      "raw_false_alarm": 4,
+      "recovered": 0,
+      "detection_kept": 0,
+      "costly_downgrade": 0,
+      "missed": 0,
+      "recovery_rate": 0.0,
+      "detection_keep_rate": null,
+      "cost_rate": null,
+      "fn_rate_among_bola": null
+    },
     "v1": {
       "raw_false_alarm": 4,
       "recovered": 2,
@@ -541,6 +564,25 @@
   },
   "block9_direct_observe": {
     "methods": {
+      "raw": {
+        "TP": 213,
+        "FP": 120,
+        "FN": 3,
+        "TN": 240,
+        "precision": 0.6396396396396397,
+        "recall": 0.9861111111111112,
+        "f1": 0.7759562841530054,
+        "precision_ci": [
+          0.5868,
+          0.6893
+        ],
+        "recall_ci": [
+          0.96,
+          0.9953
+        ],
+        "n_bola": 216,
+        "n_normal": 360
+      },
       "v1": {
         "TP": 198,
         "FP": 60,
@@ -757,7 +799,7 @@
   "real_system": {
     "version": "1.22.6",
     "generated_by": "experiments/real_system/run_real.py",
-    "honesty_boundary": "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。",
+    "honesty_boundary": "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。E（预期有效授权）由 phaseA/phaseC 的授权台账推导，绝不由被测 GET 的返回值填充；Y（实际观测效果）单独记录；假证明 = 升级 AND E=allow；真阳性 = 升级 AND E=deny AND Y=allow。",
     "cells_total": 96,
     "cells_per_reading": {
       "snapshot": 48,
@@ -883,6 +925,60 @@
       "not_observable_rate": 0.96,
       "out_of_band_literal_rate": 0.44,
       "caveat": "这是**构造拓扑的设计参数**，不是野外发生率。口径有二：字面 out_of_band 通道，或全部非 in_band 通道（含隐式派生）。两者必须分别标注，不得混用。"
+    }
+  },
+  "write_path": {
+    "systems": {
+      "gitea": {
+        "pairs": 40,
+        "e_eq_y": 40,
+        "unauthorized": 0,
+        "status_only_disagreements": 0,
+        "owner_rows": 8,
+        "owner_observed": 8,
+        "owner_restored": 8,
+        "admin_rows": 8,
+        "admin_observed": 8,
+        "restore_supported": true
+      },
+      "gogs": {
+        "pairs": 40,
+        "e_eq_y": 40,
+        "unauthorized": 0,
+        "status_only_disagreements": 0,
+        "owner_rows": 8,
+        "owner_observed": 8,
+        "owner_restored": 0,
+        "admin_rows": 8,
+        "admin_observed": 0,
+        "restore_supported": false
+      },
+      "gitlab": {
+        "pairs": 40,
+        "e_eq_y": 40,
+        "unauthorized": 0,
+        "status_only_disagreements": 0,
+        "owner_rows": 8,
+        "owner_observed": 8,
+        "owner_restored": 8,
+        "admin_rows": 8,
+        "admin_observed": 0,
+        "restore_supported": true
+      }
+    },
+    "totals": {
+      "systems": 3,
+      "pairs": 120,
+      "e_eq_y": 120,
+      "unauthorized": 0,
+      "owner_rows": 24,
+      "owner_observed": 24,
+      "owner_restored": 16,
+      "restore_unsupported_systems": 1,
+      "status_only_disagreements": 0,
+      "admin_rows": 24,
+      "admin_observed": 8,
+      "admin_blocked_systems": 2
     }
   },
   "literature": {

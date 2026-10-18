@@ -38,6 +38,7 @@ import re
 import sys
 import time
 from pathlib import Path
+import base64
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gogs_lab as gl
@@ -46,6 +47,7 @@ from gogs_lab import ADMIN_PASS, ADMIN_USER, Client, Server, ensure_admin, write
 
 from entitlement import classify
 from manifests import gogs_model
+import write_path as wp
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -536,7 +538,8 @@ def main():
                         "Gitea 2016 年 fork 自 Gogs ⇒ **不**声称厂商级独立，"
                         "该血缘在正文脚注中披露。"),
         "phases": ["A 基线拓扑", "A2 自省面发现", "B 采集爬取", "C 带外授权变更",
-                   "D 变更后爬取", "E MR 执行与四方法裁决", "F M1/M2/M3", "G M6"],
+                   "D 变更后爬取", "E MR 执行与四方法裁决", "F M1/M2/M3", "G M6",
+                   "H 写路径真值（内容级复读）"],
         "methodological_differences_vs_gitea": [
             "Gogs 无 /api/v1/version、无 swagger ⇒ M1 分母改为钉死版本的路由表源码条目数",
             "Gogs 受保护路由要求 access token（reqToken 查 IsTokenAuth）；query/Basic 均 401",
@@ -760,6 +763,44 @@ def main():
         # 端点可用性实测（只针对本次真实存在的对象）
         rep["api_surface_probe"] = gl.probe_api_surface(
             token=cl[ADMIN_USER].token)
+
+        # ---------------- 阶段 H：写路径真值（内容级，非状态码） ----------------
+        print("[H] 写路径真值 …", flush=True)
+
+        def _read_file(obj, subj, path):
+            # contents API 返回 base64，比 /raw（需 ref 前缀）稳
+            st, b = cl[subj].get(f"/api/v1/repos/{obj}/contents/{path}")
+            if st != 200 or not isinstance(b, dict):
+                return st, None
+            try:
+                return st, base64.b64decode(b.get("content") or "").decode("utf-8", "replace")
+            except Exception:
+                return st, None
+
+        def _write_file(obj, subj, path, text):
+            body = {"content": base64.b64encode(text.encode()).decode(),
+                    "message": "wb probe"}
+            st, _ = cl[subj].put(f"/api/v1/repos/{obj}/contents/{path}", body)
+            return st
+
+        def _delete_file(obj, owner, path):
+            st, b = cl[owner].get(f"/api/v1/repos/{obj}/contents/{path}")
+            if st != 200 or not isinstance(b, dict):
+                return False
+            std, _ = cl[owner].delete(f"/api/v1/repos/{obj}/contents/{path}",
+                                      {"sha": b.get("sha"), "message": "wb probe cleanup"})
+            st_v, _ = _read_file(obj, owner, path)
+            return std < 400 and st_v == 404
+
+        rep["phaseH_write_path"] = wp.run(
+            cl, policy, ALL_OBJS, subjects,
+            owner_cred_for=lambda o: OBJ_CREDENTIAL[o],
+            write_file=_write_file, read_file=_read_file, delete_file=_delete_file,
+            system="Gogs", admin_user=ADMIN_USER, restore_supported=False)
+        ws = rep["phaseH_write_path"]["summary"]
+        print("     写路径 E==Y %d/%d，越权写 %d，状态码与内容不符 %d，恢复失败 %d"
+              % (ws["e_eq_y"], ws["pairs"], len(ws["unauthorized_writes"]),
+                 len(ws["status_code_disagrees_with_content"]), len(ws["errors"])), flush=True)
 
     rep["meta"]["elapsed_s"] = round(time.time() - t0, 1)
     out = RESULTS / "gogs_real_system.json"

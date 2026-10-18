@@ -77,6 +77,23 @@ Table~\ref{tab:introspection-readable} collects these populations. On
 credential-substitution check confirmed that our model agrees with the system's
 behavior (Fig.~\ref{fig:real-system}).
 
+\paragraph{Is the write path verified by state rather than status?}
+A status code cannot establish that a write took effect, so the write path is
+checked by content: the subject creates a uniquely named file, the owner
+re-reads it byte-for-byte as the ground truth, and the file is deleted where the
+API allows it. Across the \ResWpSystems{} systems, \ResWpAgreeTotal{} of
+\ResWpPairsTotal{} cross-credential write attempts agree with the ledger, with
+\ResWpUnauthTotal{} unauthorized writes; no status code contradicted the content
+outcome (count: \ResWpStatusOnlyDisagreements{}). The owner control---a non-admin
+writing its own repository---changed content in \ResWpOwnerObservedTotal{} of
+\ResWpOwnerRowsTotal{} attempts. On \ResWpAdminBlockedSystems{} of the
+\ResWpSystems{} systems the site administrator could not write through the
+contents API although the ledger grants write; those \ResWpAdminRowsTotal{}
+control rows are excluded from the cross-credential denominator and reported as
+a modelling gap rather than absorbed. Restore is unavailable on
+\ResWpRestoreUnsupported{} of the \ResWpSystems{} systems, whose contents API
+exposes no delete, so its probe files remain in a disposable instance.
+
 \begin{table}[t]
 \centering
 \caption{Authorization-introspection readability protocol on Gitea. Each row is a

@@ -25,3 +25,6 @@ venv/
 # ---- OS ----
 Thumbs.db
 .DS_Store
+
+# ---- one-off readiness check output ----
+main_check.txt

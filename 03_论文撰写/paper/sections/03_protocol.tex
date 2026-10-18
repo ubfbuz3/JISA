@@ -35,8 +35,12 @@ Finding~1.}
 
 \paragraph{Adjudicator variants and internal controls}
 A raw alarm becomes a verdict through an exception policy, and different policies
-are different methods: \textbf{v1} (raw alarms proven); \textbf{v2}
-(legitimate-sharing exceptions filtered); \textbf{v3} (state-calibrated---consults
+are different methods: \texttt{raw} (the alarm itself, with no exception handling
+at all---this is the baseline any filter must be read against); \textbf{v1} (an
+\emph{existence} filter: any sharing record on the object downgrades the alarm,
+regardless of whom it names or what it permits); \textbf{v2} (existence plus
+operation coverage: the record must cover the operation the MR triggered);
+\textbf{v3} (state-calibrated---consults
 a readable authorization introspection surface, abstains when none is readable);
 \texttt{degrade\_all} (the floor: abstain on every alarm);
 \texttt{direct\_only} (authorization surface only, access outcome ignored---a

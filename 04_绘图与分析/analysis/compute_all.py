@@ -100,6 +100,25 @@ def pct(x):
 
 # ---------------------------------------------------------------- 主流程
 
+def _obs_allow(rec: dict):
+    """Y = 观测效果。None 与 False 必须区分（执行者自身没有观测）。"""
+    if "observed_effect" in rec:
+        v = rec["observed_effect"]
+    else:
+        v = rec.get("authorized")
+    if v is None:
+        return None
+    return v == "allow" if isinstance(v, str) else bool(v)
+
+
+def _exp_allow(rec: dict):
+    """E = 预期授权；旧记录无 E 时退化为 Y（须在正文声明）。"""
+    v = rec.get("expected_entitlement")
+    if v is None:
+        return _obs_allow(rec)
+    return v == "allow"
+
+
 def main():
     allrecs = load_jsonl(RES / "raw_matrix.jsonl")
     errs = [r for r in allrecs if "error" in r]
@@ -263,7 +282,7 @@ def main():
                 "fn_rate_among_bola": ratio(a.get("missed", 0), d_bola)}
 
     M["block4_verdict_quality_all"] = {a: with_rates(grades(a))
-                                       for a in ("v1", "v2", "v3", "degrade_all")}
+                                       for a in ("raw", "v1", "v2", "v3", "degrade_all")}
 
     # ================= 目录普查（MST-wi 公开制品，实例无关） =================
     import csv
@@ -402,7 +421,7 @@ def main():
 
     M["block4_verdict_quality_fp_config"] = {
         a: with_rates(grades(a, "V-E3-vuln0-unlisted"))
-        for a in ("v1", "v2", "v3", "degrade_all")}
+        for a in ("raw", "v1", "v2", "v3", "degrade_all")}
 
     # ================= Block 6 · 可观测性边界（框架 vs 带外） ==============
     def obs_stats(scen: str):
@@ -491,7 +510,7 @@ def main():
             return "TP" if alarm else "FN"
         return "FP" if alarm else "TN"
 
-    ADJ = ("v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe")
+    ADJ = ("raw", "v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe")
     tally = {a: defaultdict(int) for a in ADJ}
     per_scen = {a: defaultdict(lambda: defaultdict(int)) for a in ADJ}
     agree = defaultdict(int)
@@ -500,7 +519,8 @@ def main():
         sc = r["scenario"]
         st = probe.get(f'{r["config"]["label"]}|{sc}', {}).get(r["action"]["op"], "unavailable")
         obs200 = bool(r["truth"]["app_allowed"])
-        alarms = {a: r["verdicts"][a]["verdict"] == "violation-proven" for a in ("v1", "v2", "v3", "degrade_all")}
+        alarms = {a: r["verdicts"][a]["verdict"] == "violation-proven"
+                  for a in ("raw", "v1", "v2", "v3", "degrade_all")}
         alarms["direct_only"] = (st == "none")
         alarms["direct_observe"] = (st == "none") and obs200
         if st == "unavailable":
@@ -640,7 +660,7 @@ def main():
         l_cells = snap("live")
 
         def mismatch(cs):
-            return [c for c in cs if c["cannotReachThroughGUI"] and c["authorized"]]
+            return [c for c in cs if c["cannotReachThroughGUI"] and _obs_allow(c)]
 
         def alarms(cs, key):
             return sum(1 for c in cs if c["alarms"].get(key))
@@ -648,7 +668,7 @@ def main():
         def falseproof(cs, key):
             return sum(1 for c in cs if c.get("false_proofs", {}).get(key))
 
-        auth_cells = [c for c in s_cells if c["authorized"]]
+        auth_cells = [c for c in s_cells if _exp_allow(c)]
         methods = {}
         for k in ("mr_bookkeeping", "v3", "v3_self", "direct_only", "direct_observe",
                   "direct_observe_self"):
@@ -663,8 +683,8 @@ def main():
         ADMIN = "root"
         self_cells = [f for f in fid if not f["is_acting_credential"] and f["subject"] != ADMIN]
         self_read_bb = [f for f in self_cells if f.get("readable_self")]
-        # 一致性只在 authorized 有定义的单元格上判定（is_acting_credential 单元格不参与换凭证测试）
-        fid_valid = [f for f in fid if f.get("authorized") is not None]
+        # 一致性只在 E 有定义的单元格上判定（is_acting_credential 单元格不参与换凭证测试）
+        fid_valid = [f for f in fid if _exp_allow(f) is not None]
         M["real_system"] = {
             "version": rs["meta"]["gitea_version"],
             "generated_by": rs["meta"]["generated_by"],
@@ -694,13 +714,13 @@ def main():
             },
             "M3_fidelity": {
                 "consistent": sum(1 for f in fid_valid
-                                  if bool(f["authorized"]) == bool(f["permission"] and f["permission"] != "none")),
+                                  if _exp_allow(f) == bool(f["permission"] and f["permission"] != "none")),
                 "total": len(fid_valid),
                 "not_applicable": len(fid) - len(fid_valid),
                 "not_applicable_reason": "is_acting_credential 单元格（执行者读自己的单元格）不参与换凭证一致性判定",
                 "raw_consistent_over_all": sum(
                     1 for f in fid
-                    if bool(f["authorized"]) == bool(f["permission"] and f["permission"] != "none")),
+                    if _exp_allow(f) == bool(f["permission"] and f["permission"] != "none")),
                 "raw_total": len(fid),
             },
             "M4_snapshot_mismatch": {
@@ -710,7 +730,7 @@ def main():
             "M5_authorized_cells": len(auth_cells),
             "M6_provenance": dict(Counter(x["channel"] for x in rs["M6_provenance"])),
             "M6_authorized_out_of_band": sum(
-                1 for c in s_cells if c["authorized"] and c.get("provenance") == "out_of_band"),
+                1 for c in s_cells if _exp_allow(c) and c.get("provenance") == "out_of_band"),
             "endogenous_control": {},
         }
         # 内生对照：pub1（自始公开） vs r4（采集后转公开）
@@ -738,6 +758,55 @@ def main():
             "caveat": ("这是**构造拓扑的设计参数**，不是野外发生率。"
                        "口径有二：字面 out_of_band 通道，或全部非 in_band 通道（含隐式派生）。"
                        "两者必须分别标注，不得混用。"),
+        }
+
+    # ================= 真实系统写路径（阶段 H） ==========================
+    #  口径：Y_write 由"拥有者复读文件内容"决定，状态码只作诊断。
+    wp = {}
+    for tag, fn in (("gitea", "real_system.json"), ("gogs", "gogs_real_system.json"),
+                    ("gitlab", "gitlab_real_system.json")):
+        f = PROJ / "experiments" / "real_system" / "results" / fn
+        if not f.exists():
+            continue
+        h = json.loads(f.read_text(encoding="utf-8")).get("phaseH_write_path")
+        if not h:
+            continue
+        sm = h["summary"]
+        cells = h["cells"]
+        wp[tag] = {
+            "pairs": sm["pairs"], "e_eq_y": sm["e_eq_y"],
+            "unauthorized": len(sm["unauthorized_writes"]),
+            "status_only_disagreements": len(sm["status_code_disagrees_with_content"]),
+            "owner_rows": sum(1 for c in cells if c["role"] == "owner"),
+            "owner_observed": sum(1 for c in cells
+                                  if c["role"] == "owner" and c["observed_effect"] == "allow"),
+            "owner_restored": sum(1 for c in cells
+                                  if c["role"] == "owner" and c["restored"]),
+            "admin_rows": sum(1 for c in cells if c["role"] == "admin"),
+            "admin_observed": sum(1 for c in cells
+                                  if c["role"] == "admin" and c["observed_effect"] == "allow"),
+            "restore_supported": h.get("restore_supported", True),
+        }
+    if wp:
+        M["write_path"] = {
+            "systems": wp,
+            "totals": {
+                "systems": len(wp),
+                "pairs": sum(v["pairs"] for v in wp.values()),
+                "e_eq_y": sum(v["e_eq_y"] for v in wp.values()),
+                "unauthorized": sum(v["unauthorized"] for v in wp.values()),
+                "owner_rows": sum(v["owner_rows"] for v in wp.values()),
+                "owner_observed": sum(v["owner_observed"] for v in wp.values()),
+                "owner_restored": sum(v["owner_restored"] for v in wp.values()),
+                "restore_unsupported_systems": sum(1 for v in wp.values()
+                                                   if not v["restore_supported"]),
+                "status_only_disagreements": sum(v["status_only_disagreements"]
+                                                 for v in wp.values()),
+                "admin_rows": sum(v["admin_rows"] for v in wp.values()),
+                "admin_observed": sum(v["admin_observed"] for v in wp.values()),
+                "admin_blocked_systems": sum(1 for v in wp.values()
+                                             if v["admin_observed"] < v["admin_rows"]),
+            },
         }
 
     # ================= 文献常数（MST-wi 自报值，带逐条来源标注） ============
@@ -994,6 +1063,28 @@ def build_tex(M: dict) -> str:
                        ("LogRecords", d["framework_log_records"])):
             cmd(f"Obs{tag}{kk}", vv)
 
+    if "write_path" in M:
+        a("% ---- 真实系统写路径（阶段 H） ----")
+        tot = M["write_path"]["totals"]
+        cmd("WpSystems", tot["systems"])
+        cmd("WpPairsTotal", tot["pairs"])
+        cmd("WpAgreeTotal", tot["e_eq_y"])
+        cmd("WpUnauthTotal", tot["unauthorized"])
+        cmd("WpOwnerRowsTotal", tot["owner_rows"])
+        cmd("WpOwnerObservedTotal", tot["owner_observed"])
+        cmd("WpOwnerRestoredTotal", tot["owner_restored"])
+        cmd("WpRestoreUnsupported", tot["restore_unsupported_systems"])
+        cmd("WpStatusOnlyDisagreements", tot["status_only_disagreements"])
+        cmd("WpAdminRowsTotal", tot["admin_rows"])
+        cmd("WpAdminObservedTotal", tot["admin_observed"])
+        cmd("WpAdminBlockedSystems", tot["admin_blocked_systems"])
+        for tag, v in M["write_path"]["systems"].items():
+            tg = tag.capitalize()
+            cmd(f"Wp{tg}Pairs", v["pairs"])
+            cmd(f"Wp{tg}Agree", v["e_eq_y"])
+            cmd(f"Wp{tg}OwnerObserved", v["owner_observed"])
+            cmd(f"Wp{tg}RestoreSupported", str(v["restore_supported"]).lower())
+
     b7 = M["block7_s3_s5_dilemma"]
     cmd("SthreeSfiveAnyCorrect", str(b7["any_config_correct"]))
     for i, r in enumerate(b7["rows"]):
@@ -1018,7 +1109,7 @@ def build_tex(M: dict) -> str:
 
     b9 = M["block9_direct_observe"]["methods"]
     a("% ---- Block 9：决定性消融 ----")
-    for adj in ("v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe"):
+    for adj in ("raw", "v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe"):
         d = b9[adj]
         tag = "".join(w.capitalize() for w in adj.split("_"))
         for k in ("TP", "FP", "FN", "TN"):

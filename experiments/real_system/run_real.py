@@ -52,11 +52,13 @@ import re
 import sys
 import time
 from pathlib import Path
+import base64
 
 import gitea_lab as gl
 from entitlement import classify
 from gitea_lab import ADMIN_PASS, ADMIN_USER, Client, Server, ensure_migrated, write_config
 from manifests import gitea_model
+import write_path as wp
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -362,7 +364,8 @@ def main():
         "lab_dir": str(gl.LAB),
         "generated_by": "experiments/real_system/run_real.py",
         "phases": ["A 基线拓扑", "B 采集爬取", "C 带外授权变更", "D 变更后爬取",
-                   "E MR 执行与四方法裁决", "F M1/M2/M3", "G M6"],
+                   "E MR 执行与四方法裁决", "F M1/M2/M3", "G M6",
+                   "H 写路径真值（内容级复读）"],
         "honesty_boundary": (
             "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；"
             "不声称实验证明 MST-wi 失效（未跑其原生引擎）；"
@@ -526,6 +529,40 @@ def main():
                     kind = "out_of_band"
                 prov.append({"cell": obj, "subject": s, "channel": kind})
         rep["M6_provenance"] = prov
+
+        # ---------------- 阶段 H：写路径真值（内容级，非状态码） ----------------
+        print("[H] 写路径真值 …", flush=True)
+
+        def _read_file(obj, subj, path):
+            st, b = cl[subj].get(f"/api/v1/repos/{obj}/raw/{path}")
+            return st, (b if isinstance(b, str) else None)
+
+        def _write_file(obj, subj, path, text):
+            # Gitea 1.22: PUT /contents/{path} 只用于**更新**（要求 sha）；
+            # 新建必须走批量 POST /contents，files[].operation=create。
+            body = {"files": [{"operation": "create", "path": path,
+                               "content": base64.b64encode(text.encode()).decode()}]}
+            st, _ = cl[subj].post(f"/api/v1/repos/{obj}/contents", body)
+            return st
+
+        def _delete_file(obj, owner, path):
+            st, b = cl[owner].get(f"/api/v1/repos/{obj}/contents/{path}")
+            if st != 200 or not isinstance(b, dict):
+                return False
+            std, _ = cl[owner].delete(f"/api/v1/repos/{obj}/contents/{path}",
+                                      {"sha": b.get("sha"), "message": "wb probe cleanup"})
+            st_v, _ = _read_file(obj, owner, path)
+            return std < 400 and st_v == 404
+
+        rep["phaseH_write_path"] = wp.run(
+            cl, policy, ALL_OBJS, subjects,
+            owner_cred_for=lambda o: OBJ_CREDENTIAL[o],
+            write_file=_write_file, read_file=_read_file, delete_file=_delete_file,
+            system="Gitea", admin_user=ADMIN_USER)
+        ws = rep["phaseH_write_path"]["summary"]
+        print("     写路径 E==Y %d/%d，越权写 %d，状态码与内容不符 %d，恢复失败 %d"
+              % (ws["e_eq_y"], ws["pairs"], len(ws["unauthorized_writes"]),
+                 len(ws["status_code_disagrees_with_content"]), len(ws["errors"])), flush=True)
 
     rep["meta"]["elapsed_s"] = round(time.time() - t0, 1)
     out = RESULTS / "real_system.json"

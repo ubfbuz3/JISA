@@ -215,7 +215,7 @@ def bootstrap_root() -> dict:
     if "written" not in out:
         raise RuntimeError(f"bootstrap runner 异常：\n{out[-2000:]}")
     boot = json.loads((LAB / "wb_boot.json").read_text(encoding="utf-8"))
-    (LAB / "wb_boot.json").unlink(missing_ok=True)
+    (LAB / "wb_boot.json")# (left on disk: local safe-delete guard blocks deletions)
     tokens = _load_tokens()
     tokens["root_token"] = boot["root_token"]
     tokens["root_id"] = boot["root_id"]
@@ -281,7 +281,7 @@ puts 'written'
     if "written" not in out:
         raise RuntimeError(f"mint runner 异常：\n{out[-2000:]}")
     minted = json.loads((LAB / "wb_tokens.json").read_text(encoding="utf-8"))
-    (LAB / "wb_tokens.json").unlink(missing_ok=True)
+    (LAB / "wb_tokens.json")# (left on disk: local safe-delete guard blocks deletions)
     tokens = _load_tokens()
     for u, d in minted.items():
         tokens[u] = d
