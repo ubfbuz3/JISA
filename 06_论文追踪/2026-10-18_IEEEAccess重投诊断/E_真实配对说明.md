@@ -55,7 +55,7 @@ alice 私有仓库 `alice/secret`（含一条 issue 评论）；bob 公开仓库
 - **Y 不看状态码**：由 alice 复读正文是否变成 bob 的标记决定——与 `write_path.py` 同口径。
 - **E 来自台账**：`PolicyModel` 中 bob 对 `alice/secret` 的 `write` 无任何授予通道 ⇒ deny。
 - 判定：1.20.5 = `true_positive`；1.20.6 = `no_alarm`。
-  合计 **TP 1 / 假证明 0 / 修复版告警 0**；12 条对照全部符合预期；恢复 2/2。
+  合计 **TP 1 / 假证明 0 / 修复版告警 0**；每版 5 条对照（共 10 条）全部符合预期；恢复 2/2。
 
 ## 4. 这条证据能主张什么、不能主张什么
 

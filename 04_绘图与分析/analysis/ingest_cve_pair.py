@@ -84,7 +84,10 @@ def main() -> int:
         "CveTruePositives": sum(1 for m in (mv, mf) if m["category"] == "true_positive"),
         "CveFalseProofs": sum(1 for m in (mv, mf) if m["false_proof"]),
         "CveFixedAlarms": sum(1 for m in (mf,) if m["alarm"]),
-        "CveControls": sum(len(r["probes"]) for r in (vuln, fixed)),
+        "CveControls": sum(1 for r in (vuln, fixed)
+                            for p in r["probes"]
+                            if p["label"] != "cross_repo_object_id"),
+        "CveProbes": sum(len(r["probes"]) for r in (vuln, fixed)),
         "CveRestored": sum(1 for r in (vuln, fixed) if r["restore"]["restored"]),
         "CveVulnSha": vuln["sha256"][:12],
         "CveFixedSha": fixed["sha256"][:12],
