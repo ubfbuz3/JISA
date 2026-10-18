@@ -52,7 +52,7 @@ E 与 Y 恰好重合，所以缺陷一直没暴露。
 `expected_entitlement / expected_channel / expected_basis / observed_effect /
 observed_status / verdicts / true_positives`；`authorized` 仅作 Y 的兼容别名保留。
 
-## 4. 离线验证（未开 Docker）
+## 4. 离线验证（改造当天，Docker 尚未启动时）
 
 `validate_entitlement.py` 用历史结果回放：
 
