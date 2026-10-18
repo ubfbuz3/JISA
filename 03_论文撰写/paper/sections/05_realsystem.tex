@@ -178,16 +178,19 @@ public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawl
 \end{tabular}
 \end{table}
 
-\subsection{Eight committed transitions with a frozen model}
+\subsection{Eight committed transitions with a frozen model, on two products}
 \label{sec:temporal}
 
 The two-snapshot comparison above cannot separate two explanations: the model
 went stale, or the crawl never listed the channel in the first place. The
-transition experiment separates them by construction. On one fresh Gitea
-\TmpVersion{} instance we ran eight authorisation transitions: direct grant,
-direct revoke, attaching a repository to a team, removing a team member who
-still holds a direct grant, private$\to$public, public$\to$private, a
-read$\to$write role change, and a site-administrator grant.
+transition experiment separates them by construction. We ran eight
+authorisation transitions on one fresh Gitea \TmpVersion{} instance and repeated
+the same eight, under the same pre-registered protocol (hash \texttt{\TmpProtocol})
+and the same ledger rules, on an independent GitLab CE \TmpGVersion{} instance.
+The mechanisms differ per product---attaching a repository to a team becomes
+sharing a project with a group; removing a team member becomes removing a group
+member---so the two runs share a protocol, not a topology, and we report them
+side by side rather than pooled.
 
 Each transition is a closed loop. We crawl every subject, serialise the
 per-subject reachable set, freeze it as $M_0$ and record its digest; commit one
@@ -195,59 +198,81 @@ authorisation transaction and increment the harness version $hv$ only if the
 transaction returns 2xx; re-crawl with the \emph{same} credentials to obtain
 $M_1$; read the oracle from the owner vantage; issue the request and verify the
 effect by content; and classify against the ledger at decision time. All
-\TmpPolicyEvents{} transactions committed, all \TmpMzeroVerified{} frozen $M_0$
-digests were unchanged when re-checked immediately before probing, and all
-\TmpCycles{} cycles were version-consistent. Across \TmpCells{} cross-credential
-cells, $E$ and $Y$ agree in \TmpEeqY{}/\TmpCells{} cases, so no cell is scored
-on a modelling discrepancy.
+\TmpBothPolicyEvents{} transactions committed, all \TmpBothMzeroVerified{} frozen
+$M_0$ digests were unchanged when re-checked immediately before probing, and all
+\TmpBothVersionConsistent{} cycles were version-consistent. Across
+\TmpBothCells{} cross-credential cells (\TmpCells{} on Gitea plus \TmpGCells{} on
+GitLab), $E$ and $Y$ agree in \TmpBothEeqY{} cases, so no cell is scored on a
+modelling discrepancy.
 
-The stale model produces \TmpStaleFP{} false proofs, and a recrawl with the
-same credential removes \TmpFixed{} of them, leaving \TmpStillMiss{} still
-missed and \TmpLiveFP{} live false proofs (Table~\ref{tab:temporal}). The
-composition is informative rather than uniform: one cell for the direct grant,
-one for the team attachment, five when a repository becomes public, and six
-when a user becomes site administrator. The last two are the cases a
-single-object probe is least likely to anticipate, because the granting event
-is not about the object at all.
+The stale model produces \TmpBothStaleFP{} false proofs (\TmpStaleFP{} on Gitea,
+\TmpGStaleFP{} on GitLab), and a recrawl with the same credential removes
+\TmpBothFixed{} of them, leaving \TmpBothStillMiss{} still missed and
+\TmpBothLiveFP{} live false proofs (Table~\ref{tab:temporal}). The composition is
+informative rather than uniform, and the two products agree on its shape: one
+cell for the direct grant, one for the inherited-channel attachment, five and
+six when a repository becomes public, and six and eight when a user becomes site
+administrator. The last two are the cases a single-object probe is least likely
+to anticipate, because the granting event is not about the object at all.
 
 Revocations behave differently and must not be scored as misses. The old model
-still lists \TmpOverRevoke{} cells whose access was revoked (one direct, one
-through team removal, five after a repository became private). In every one of
-them the request is refused, so no violation occurred; treating them as false
-negatives would require $E=\text{deny}$ \emph{and} $Y=\text{allow}$, which never
-happens here. The same cycle also separates channel removal from entitlement
-change: after the team member is removed, \texttt{acme/t1} remains readable
-through a direct collaboration while \texttt{acme/t2} becomes unreadable, and
-the ledger records the remaining channel. For the role change, the read cell is
-unchanged while the write probe goes from HTTP 403 with unchanged content to
-HTTP 201 with the owner re-reading the new bytes; the owner then deletes the
-probe file and observes 404, and the repository's \texttt{README} digest is
-unchanged after cleanup.
+still lists \TmpBothOverRevoke{} cells whose access was revoked (\TmpOverRevoke{}
+on Gitea, \TmpGOverRevoke{} on GitLab). In every one of them the request is
+refused, so no violation occurred; treating them as false negatives would
+require $E=\text{deny}$ \emph{and} $Y=\text{allow}$, which never happens here.
 
-The oracle column is the second result of this run. The owner vantage answers
-\TmpOracleReadable{} of \TmpCells{} cells (the remainder are anonymous, for
-which no oracle credential exists), but the subject's own vantage answers only
-\TmpOracleSelfReadable{} of \TmpCells{}---all of them after the site-admin
-grant. Outside that grant, a read collaborator receives HTTP 403 and an
-outsider HTTP 404 from the permission endpoint. A black-box tester holding only
-the subject's credential therefore cannot use this surface at all, and the
-calibration (\TmpCalChecks{}/\TmpCalChecks{} known cells) records that limit
-rather than hiding it. Because the oracle is served by the same code that
-enforces access, we report it as \emph{shared} with enforcement and never let it
-set $E$.
+The multi-channel transition is where the products part company, and the
+difference is itself a result. On Gitea, after the team member is removed,
+\texttt{acme/t1} remains readable through a direct collaboration while
+\texttt{acme/t2} becomes unreadable, and the ledger records the remaining
+channel. On GitLab the same test has to be moved outside the group namespace:
+removing a member from a group also deletes that user's project-level
+membership in the group's projects---the project's direct-member list went from
+one entry to none---so a direct grant placed inside the group would have measured
+that product rule instead of multi-channel access. We therefore placed the
+alternative channel on a personal project, and we record the cascade as a
+product-semantics observation rather than encoding it as a ledger rule
+(amendment A2 in the protocol record). This is the kind of non-local side effect
+that makes a hand-maintained expectation model wrong in a way no single probe
+can reveal.
 
-Three scope limits are part of the result. First, \TmpStillMiss{} residual is a
-count on this surface, not a completeness claim: the crawl sources themselves
-define what can be seen, deploy keys are outside the ledger, and we did not
-construct a channel that the recrawl is known to miss. Second, $hv$ is a
-harness-maintained logical version, not an atomic server snapshot; the harness
-is single-threaded and no concurrent writer ran, which is what makes the still
+For the role change, the read cell is unchanged while the write probe goes from
+HTTP 403 with unchanged content to HTTP 201 with the owner re-reading the new
+bytes; the owner then deletes the probe branch and observes 404, and the
+repository's \texttt{README} digest is unchanged after cleanup.
+
+The oracle column separates the products more sharply than the transition
+counts. On Gitea the owner vantage answers \TmpOracleReadable{} of \TmpCells{}
+cells (the remainder are anonymous, for which no oracle credential exists), but
+the subject's own vantage answers only \TmpOracleSelfReadable{}---all of them
+after the site-admin grant; outside it, a read collaborator receives HTTP 403 and
+an outsider HTTP 404. On GitLab the owner vantage answers \TmpGOracleReadable{}
+of \TmpGCells{}, and there the subject's own credential answers
+\TmpGOracleSelfReadable{}: GitLab's member endpoint is readable by any project
+member. That readability is not soundness. The endpoint answers ``is this
+principal a member'', so it returns 404 for a public project a non-member may
+read and for a site administrator who may read everything. Measured against the
+ledger, the Gitea oracle disagrees on \TmpOracleDisagree{} cells and the GitLab
+oracle on \TmpGOracleDisagree{}, all of the latter in the public
+(\TmpGOracleDisagreePublic{}) or site-administrator (\TmpGOracleDisagreeAdmin{})
+channel. A readable oracle can therefore be systematically wrong in exactly the
+channels that are cheapest to overlook, which is why we never let it set $E$.
+The two calibration regimes record this rather than hide it: \TmpCalChecks{}
+known cells on Gitea, and on GitLab \TmpGCalGateChecks{} gated cells plus two
+recorded diagnostics for the secondary vantage (amendment A1).
+
+Three scope limits are part of the result. First, \TmpBothStillMiss{} residual is
+a count on these surfaces, not a completeness claim: the crawl sources
+themselves define what can be seen, deploy keys are outside the ledger, and we
+did not construct a channel that the recrawl is known to miss. Second, $hv$ is a
+harness-maintained logical version, not an atomic server snapshot; the harness is
+single-threaded and no concurrent writer ran, which is what makes the still
 window meaningful. Third, the eight transitions are a designed set, not a
 sample of deployment changes, so none of the counts is a field rate.
 
 \input{temporal_table.tex}
 
-\subsection{Cross-vendor replication: Gogs \GgVersion{} and GitLab \GlVersion{}}
+\subsection{Cross-vendor replication of the snapshot design: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}
 
 We repeated the same three-phase protocol and \ResRsCellsSnapshot{}-cell design on two further systems

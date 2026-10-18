@@ -1,0 +1,25 @@
+{
+  "amendment_id": "C-min-A1",
+  "applies_to": "C-min-2026-10-19",
+  "base_protocol_sha256": "d09d904707aaf8e0464192d6d54df2680a9a6c8e185d856afdd5a88469c7f2f5",
+  "written_at": "2026-10-19T02:20:00+08:00",
+  "written_before": "the first GitLab transition of the temporal replication; no GitLab calibration or probe response had been observed at the time of writing",
+  "scope": "second product only (GitLab 17.11.7); the Gitea record keeps the original 6/6 gate and the original protocol hash",
+
+  "change": {
+    "calibration_gate": "primary vantage 4 of 4 (owner_on_own_private, collaborator_read_on_private, non_collaborator_on_private, owner_self_vantage)",
+    "secondary_vantage_cells": "recorded verbatim as diagnostics; not a pass/fail condition"
+  },
+
+  "reason": [
+    "The base protocol already declares the secondary vantage inadmissible as an oracle (calibration.secondary_vantage_verdict), because a credential that cannot read the surface cannot distinguish 'no grant' from 'no visibility'.",
+    "Gating a run on a column that is excluded from every denominator conflates two different things: a product's choice of which endpoints a member may read, and a failure of the entitlement oracle.",
+    "The primary vantage carries every scored oracle answer; only it should gate the run."
+  ],
+  "not_a_weakening": "No scored field changes: oracle_answer continues to come from the primary vantage alone, and the abstention, versioning and reporting rules are untouched. The secondary vantage was never used to set E, TP or FP.",
+
+  "product_note": {
+    "why_the_two_products_differ": "Gitea exposes GET /repos/{o}/{r}/collaborators/{u}/permission, which answers only for a privileged vantage and returns 403/404 to a read collaborator or an outsider. GitLab exposes GET /projects/{id}/members/all/{uid}, whose 200/404 answer is readable by a project member but whose 404 is ambiguous for a caller who cannot see the project at all.",
+    "consequence": "The secondary vantage is expected to be one-sided on both products: a positive answer is credible, an absent answer is not a deny. This is recorded as measurement, not as an assumption used for scoring."
+  }
+}

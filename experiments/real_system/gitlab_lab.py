@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import subprocess
 import time
 import urllib.error
@@ -30,13 +31,13 @@ from pathlib import Path
 # --------------------------------------------------------------------------
 # 常量
 # --------------------------------------------------------------------------
-CONTAINER = "gitlab-lab"
+CONTAINER = os.environ.get("GL_LAB_CONTAINER", "gitlab-lab")
 IMAGE = "gitlab/gitlab-ce:17.11.7-ce.0"
-PORT = 3320
+PORT = int(os.environ.get("GL_LAB_PORT", "3320"))
 BASE = f"http://127.0.0.1:{PORT}"
 API = "/api/v4"
 
-LAB = Path(r"C:\Users\Administrator\WorkBuddy\gitlab_lab")
+LAB = Path(os.environ.get("GL_LAB_DIR", r"C:\Users\Administrator\WorkBuddy\gitlab_lab"))
 TOKENS_FILE = LAB / "tokens.json"
 GITLAB_VERSION = "17.11.7"
 

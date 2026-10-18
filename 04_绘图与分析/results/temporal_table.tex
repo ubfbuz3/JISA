@@ -1,23 +1,25 @@
 % 由 ingest_temporal.py 生成，勿手改
 \begin{table*}[t]
 \centering
-\caption{Temporal transitions on Gitea \texttt{1.22.6}. \emph{Stale FP}: the frozen pre-change model fails to list a resource that the subject may legitimately read, so the relation would report a false proof. \emph{Fixed}: the same cell is listed again by a recrawl with the same credential. \emph{Still missed}: the recrawl also fails to list it. \emph{Stale over-approx}: the old model still lists a resource whose access was revoked; enforcement refuses the request, so this is not a violation and is not scored as a miss. Every cell is scored against the ledger at the decision time.}
+\caption{Temporal transitions on two products with the same pre-registered protocol. \emph{Stale FP}: the frozen pre-change model does not list a resource the subject may legitimately read, so the relation would report a false proof. \emph{Fixed}: a recrawl with the same credential lists it again. \emph{Missed}: the recrawl also fails to list it. Each product has its own mechanism per row (team attach $\leftrightarrow$ project-group share; team member removal $\leftrightarrow$ group member removal), its own cell count (\TmpCells{} on Gitea, \TmpGCells{} on GitLab) and its own decision-time ledger; no row is pooled across products.}
 \label{tab:temporal}
 \small
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-Transition & $hv$ & Cells & Stale FP & Fixed & Still missed & Stale over-approx & Live FP \\
+ & \multicolumn{3}{c}{Gitea \TmpVersion} & \multicolumn{3}{c}{GitLab CE \TmpGVersion} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Transition & Stale FP & Fixed & Missed & Stale FP & Fixed & Missed \\
 \midrule
-direct grant & 0$\to$1 & 35 & 1 & 1 & 0 & 0 & 0 \\
-direct revoke & 1$\to$2 & 35 & 0 & 0 & 0 & 1 & 0 \\
-team attach & 2$\to$3 & 35 & 1 & 1 & 0 & 0 & 0 \\
-team member remove & 3$\to$4 & 35 & 0 & 0 & 0 & 1 & 0 \\
-private$\to$public & 4$\to$5 & 35 & 5 & 5 & 0 & 0 & 0 \\
-public$\to$private & 5$\to$6 & 35 & 0 & 0 & 0 & 5 & 0 \\
-role read$\to$write & 6$\to$7 & 35 & 0 & 0 & 0 & 0 & 0 \\
-site admin grant & 7$\to$8 & 35 & 6 & 6 & 0 & 0 & 0 \\
+direct grant & 1 & 1 & 0 & 1 & 1 & 0 \\
+direct revoke & 0 & 0 & 0 & 0 & 0 & 0 \\
+team attach & 1 & 1 & 0 & 1 & 1 & 0 \\
+team member remove & 0 & 0 & 0 & 0 & 0 & 0 \\
+private$\to$public & 5 & 5 & 0 & 6 & 6 & 0 \\
+public$\to$private & 0 & 0 & 0 & 0 & 0 & 0 \\
+role read$\to$write & 0 & 0 & 0 & 0 & 0 & 0 \\
+site admin grant & 6 & 6 & 0 & 8 & 8 & 0 \\
 \midrule
-Total & 8 & 280 & 13 & 13 & 0 & 7 & 0 \\
+Total & 13 & 13 & 0 & 16 & 16 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table*}

@@ -41,6 +41,17 @@ to `reproduce.sh`.
     `run_temporal.py` creates its own disposable lab directory; the eight
     `M0_*.json` / `M1_*.json` snapshots are shipped so the digests quoted in the
     paper can be re-checked without re-running the service.
+
+  - The same protocol on a second product: `run_temporal_gitlab.py` against a
+    disposable `gitlab/gitlab-ce:17.11.7-ce.0` container
+    (`GL_LAB_CONTAINER`/`GL_LAB_PORT`/`GL_LAB_DIR` select the instance, so the
+    shared lab is never reused). Its record is
+    `results/temporal/temporal_gitlab.json`; the pilot that exposed GitLab's
+    cascading membership deletion is kept under
+    `results/temporal/pilot_cascade/` and contributes no reported number.
+  - `c_protocol_amendment_a1.json` and `c_protocol_amendment_a2.json`: both were
+    written before the first GitLab transition and both carry the sha256 of the
+    base protocol they amend; every GitLab run records both digests.
 - **Environment**: OS, JDK and Maven versions used for the native-engine run,
   Python `3.13.12`, and the `matplotlib`/`pandas` (no `scipy`) setup. The
   diagram step additionally needs `svglib` + `reportlab` (SVG -> PDF);

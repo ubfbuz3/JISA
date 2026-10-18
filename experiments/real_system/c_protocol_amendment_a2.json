@@ -1,0 +1,38 @@
+{
+  "amendment_id": "C-min-A2",
+  "applies_to": "C-min-2026-10-19",
+  "base_protocol_sha256": "d09d904707aaf8e0464192d6d54df2680a9a6c8e185d856afdd5a88469c7f2f5",
+  "supersedes_run": "temporal_gitlab pilot of 2026-10-19T02:20 (archived, contributes no reported number)",
+  "written_at": "2026-10-19T02:32:00+08:00",
+  "written_before": "the first formal GitLab transition; the pilot is archived and none of its cells enter any denominator",
+
+  "finding_that_forces_the_change": {
+    "cell": "T4 group_member_remove, object acme/t1, subject bob, action read",
+    "pilot_result": "E=allow (ledger still held the direct project grant), Y=deny (HTTP 404 on the raw file)",
+    "state_evidence": "after the group removal, GET /projects/{acme/t1}/members returned an empty direct-member list (before: bob was listed), while GET /projects/{acme/t1}/members/all returned only dave",
+    "interpretation": "GitLab deletes a user's direct project membership in the group's projects when that user's group membership is removed. This is a non-local side effect of an out-of-band mutation: the harness never issued a project-level revoke."
+  },
+
+  "why_not_model_it_in_the_ledger": [
+    "Encoding the rule would make E depend on a behaviour we learned by observing the product, which is the exact failure mode the A-package removed (Y leaking into E).",
+    "The rule is not stated in the GitLab group-management documentation we could retrieve, so it could not be cited as a documented inheritance rule.",
+    "A ledger that silently mutates rows the harness never touched would also misrepresent what an external auditor can know."
+  ],
+
+  "change": {
+    "topology": "the alternative-channel object for T4 moves outside the group namespace: dave/r4 is a personal project with a direct grant to bob. acme/t1 keeps only the group channel.",
+    "expected_effect": "T4 now tests 'one channel removed, another channel retained' without touching any product rule about cascading membership deletion.",
+    "scored_run": "fresh container and fresh volume; all eight transitions are re-executed from an empty topology."
+  },
+
+  "side_observation_to_report": {
+    "claim": "an out-of-band group mutation removed a project-level membership that no transaction in the harness listed",
+    "evidence": "state query before/after, recorded in this file and in the pilot archive",
+    "status": "reported as a product-semantics note in the paper; not used to compute E and not counted as a violation"
+  },
+
+  "oracle_note": {
+    "expected_disagreements": "GET /projects/{id}/members/all/{uid} answers membership, not entitlement: it returns 404 for a public project a non-member may read, and for a site administrator who may read everything. O will therefore disagree with E on those cells.",
+    "handling": "O stays a reported column; it never sets E, TP or FP. The disagreement count is a measured fidelity property, reported per system."
+  }
+}
