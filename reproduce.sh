@@ -58,6 +58,8 @@ pushd "$ANA" >/dev/null
 "$PYBIN" ingest_gogs.py
 "$PYBIN" ingest_gitlab.py
 "$PYBIN" ingest_seeded.py
+# 真实 vulnerable/fixed 配对的数字（cve_pair.json 随包提供，不需重跑实例）
+"$PYBIN" ingest_cve_pair.py
 "$PYBIN" make_diagrams.py
 popd >/dev/null
 

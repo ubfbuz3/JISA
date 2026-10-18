@@ -30,6 +30,11 @@ to `reproduce.sh`.
   - Gogs `0.14.3` (single static binary; exact build/version),
   - GitLab `17.11.7` (Docker image digest to be recorded; `gitlab_lab/bootstrap.md`
     records the one-time rails-runner PAT bootstrap).
+  - Gitea `1.20.5` (vulnerable) and `1.20.6` (fixed) for the publicly fixed
+    defect in §V-D, both from `dl.gitea.com` with published digests checked:
+    `40fb4f7a8f13...` and `dc0f97256de3...` (sha256, first 12 hex). The
+    binaries are not shipped; `run_cve_pair.py` fetches nothing, so point
+    `experiments/real_system/bin/` at them to re-run that one experiment.
 - **Environment**: OS, JDK and Maven versions used for the native-engine run,
   Python `3.13.12`, and the `matplotlib`/`pandas` (no `scipy`) setup. The
   diagram step additionally needs `svglib` + `reportlab` (SVG -> PDF);
