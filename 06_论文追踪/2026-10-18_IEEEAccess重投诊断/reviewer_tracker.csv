@@ -1,22 +1,22 @@
 ﻿id,concern,severity,proposed_action,work_status,required_input_or_work,expected_output,blocks_finalization,audience
-R1.1,R1.1 新颖性,major,接受核心意见。用结构对照说明已知问题与具体机制证据，弱化一般性 claim，修正 BACFuzz 分类,PROPOSED_NOT_IMPLEMENTED,文献核对；不必为此新增系统,引言、相关工作与对照表,yes,internal/editor only
-R1.2,R1.2 假证明定义,major,接受。E 与 Y 分开；A 为 raw alarm，H 为 promotion，H⇒A；给全真值组合与独立依据,PROPOSED_NOT_IMPLEMENTED,需重建/验证真实系统真值,方法主文＋SI 真值表,yes,internal/editor only
-R1.3,R1.3 状态转移,major,接受。明确 grant/revoke、继承、public、role 和并发语义，固定 enforcement 版本,PROPOSED_NOT_IMPLEMENTED,是,方法＋时间线和日志,yes,internal/editor only
-R1.4,R1.4 admissibility,major,接受。预先冻结候选、渠道、缺陷类与共享依赖审查；不从 outcome 反选好 oracle,PROPOSED_NOT_IMPLEMENTED,是，独立校准/挑战,方法＋校准协议,yes,internal/editor only
-R1.5,R1.5 命题2,major,接受且重写。充分性与实际实现等价分开，保留3条差异，写两个 MR 的显式谓词,PROPOSED_NOT_IMPLEMENTED,已有差异可复核，新实验再验证,形式化＋ablation,yes,internal/editor only
-R1.6,R1.6 576设计,major,部分已有内容，应增强可读性；同时纠正 blind/aware 与 snapshot/live 的错配，列完整8配置,PROPOSED_NOT_IMPLEMENTED,旧枚举可复算，时序新运行,主文设计表＋SI manifest,yes,internal/editor only
-R1.7,R1.7 竞争基线,major,接受比较不足。公平多账户与常规差分，按候选和预算匹配；direct_only 移至诊断附录,PROPOSED_NOT_IMPLEMENTED,是,新对照表＋成本表,yes,internal/editor only
-R1.8,R1.8 跨厂商渠道,major,接受。按直接、继承、admin、public、带外分别报 E/O confusion 和 stale M；多来源允许多标签,PROPOSED_NOT_IMPLEMENTED,先重标真值，再缺项补跑,真实系统结果＋SI逐格表,yes,internal/editor only
-R1.9,R1.9 多种缺陷,major,接受限制。多条独立故障实现，per-defect recall，合法配对控制的FP/FPR；BFLA与BOLA分开,PROPOSED_NOT_IMPLEMENTED,是,阳性对照＋限制,yes,internal/editor only
-R1.10,R1.10 时间观测控制,major,接受。recrawl 用相同subject权限，owner oracle单独列；保存事件、policy version、token角色、只读操作,PROPOSED_NOT_IMPLEMENTED,是，现有粗日志不足,方法＋日志,yes,internal/editor only
-R1.11,R1.11 84.62及分母,major,接受。先纠正引用公式与人工核验描述；示例变参数图；不声称重现99.81,PROPOSED_NOT_IMPLEMENTED,分析即可，不需重新部署,指标方法、结果、相关批评,yes,internal/editor only
-R1.12,R1.12 异质权重,major,接受。以Σp_i/Σn_i推广，区分固定FP与生成行为内生改变情形,PROPOSED_NOT_IMPLEMENTED,不需系统运行,形式化简述＋SI证明,yes,internal/editor only
-R1.13,R1.13 弃权/成本,major,接受。228次全部弃权与156不可读弃权分开；定义pass、coverage/risk；逐法计数,PROPOSED_NOT_IMPLEMENTED,弃权可复算，成本需独立测量,指标表＋成本表,yes,internal/editor only
-R1.14,R1.14 复现与失败,major,接受可复现流程不足；原始记录1 error与意见2 failed executions须据实核对；不能把0报警当完整覆盖,PROPOSED_NOT_IMPLEMENTED,干净环境及缺内容分支需要运行,Artifact、逐MR表、日志,yes,internal/editor only
-R1.15,R1.15 结论校准,major,接受。删“真实非法访问裁决不在其中”；证据到claim表区分源码、合成、真实系统,PROPOSED_NOT_IMPLEMENTED,依赖上述验证完成,摘要、发现、讨论、结论,yes,internal/editor only
-R2.1,R2.1 新颖性/recrawl,major,接受。公开Gitea live 0 mismatch；staleness和无法枚举渠道分开，说明recrawl何时足够,PROPOSED_NOT_IMPLEMENTED,时序校准运行,引言、机制、结果,yes,internal/editor only
-R2.2,R2.2 范围/标题,major,接受。标题明确MST-wi案例，摘要写2条、同族及原生触发范围,PROPOSED_NOT_IMPLEMENTED,不需运行,标题、摘要、结论,yes,internal/editor only
-R2.3,R2.3 命题2,major,接受。删除功能自我等同包装，明确充分性前提和实际门控差异,PROPOSED_NOT_IMPLEMENTED,同R1.5任务，但回复独立完整,形式化及消融,yes,internal/editor only
-R2.4,R2.4 检测面,major,真实vulnerable/fixed案例优先；若不做，撤销一般检测结论，不能把三seed实例充当3独立漏洞,PROPOSED_NOT_IMPLEMENTED,推荐新运行,阳性评估、摘要和结论,yes,internal/editor only
-R2.5,R2.5 84.62,major,当前摘要无此数值，据实说明；正文去除定量背书，改假设性敏感性图,PROPOSED_NOT_IMPLEMENTED,分析即可,指标节、finding3,yes,internal/editor only
-R2.6,R2.6 构造真值/率,major,接受。1.00和0.44仅特定设计比例；给各格与等权敏感性，避免作真实部署发生率,PROPOSED_NOT_IMPLEMENTED,重算＋独立真值验证,方法、真实结果、讨论,yes,internal/editor only
+R1.1,R1.1 新颖性,major,接受核心意见。用结构对照说明已知问题与具体机制证据，弱化一般性 claim，修正 BACFuzz 分类,PARTIAL,文献核对；不必为此新增系统,引言、相关工作与对照表,yes,internal/editor only
+R1.2,R1.2 假证明定义,major,接受。E 与 Y 分开；A 为 raw alarm，H 为 promotion，H⇒A；给全真值组合与独立依据,PARTIAL,需重建/验证真实系统真值,方法主文＋SI 真值表,yes,internal/editor only
+R1.3,R1.3 状态转移,major,接受。明确 grant/revoke、继承、public、role 和并发语义，固定 enforcement 版本,PARTIAL,是,方法＋时间线和日志,yes,internal/editor only
+R1.4,R1.4 admissibility,major,接受。预先冻结候选、渠道、缺陷类与共享依赖审查；不从 outcome 反选好 oracle,PARTIAL,是，独立校准/挑战,方法＋校准协议,yes,internal/editor only
+R1.5,R1.5 命题2,major,接受且重写。充分性与实际实现等价分开，保留3条差异，写两个 MR 的显式谓词,PARTIAL,已有差异可复核，新实验再验证,形式化＋ablation,yes,internal/editor only
+R1.6,R1.6 576设计,major,部分已有内容，应增强可读性；同时纠正 blind/aware 与 snapshot/live 的错配，列完整8配置,PARTIAL,旧枚举可复算，时序新运行,主文设计表＋SI manifest,yes,internal/editor only
+R1.7,R1.7 竞争基线,major,接受比较不足。公平多账户与常规差分，按候选和预算匹配；direct_only 移至诊断附录,OPEN,是,新对照表＋成本表,yes,internal/editor only
+R1.8,R1.8 跨厂商渠道,major,接受。按直接、继承、admin、public、带外分别报 E/O confusion 和 stale M；多来源允许多标签,CLOSED_IN_TEXT,先重标真值，再缺项补跑,真实系统结果＋SI逐格表,yes,internal/editor only
+R1.9,R1.9 多种缺陷,major,接受限制。多条独立故障实现，per-defect recall，合法配对控制的FP/FPR；BFLA与BOLA分开,OPEN,是,阳性对照＋限制,yes,internal/editor only
+R1.10,R1.10 时间观测控制,major,接受。recrawl 用相同subject权限，owner oracle单独列；保存事件、policy version、token角色、只读操作,CLOSED,是，现有粗日志不足,方法＋日志,yes,internal/editor only
+R1.11,R1.11 84.62及分母,major,接受。先纠正引用公式与人工核验描述；示例变参数图；不声称重现99.81,PARTIAL,分析即可，不需重新部署,指标方法、结果、相关批评,yes,internal/editor only
+R1.12,R1.12 异质权重,major,接受。以Σp_i/Σn_i推广，区分固定FP与生成行为内生改变情形,CLOSED,不需系统运行,形式化简述＋SI证明,yes,internal/editor only
+R1.13,R1.13 弃权/成本,major,接受。228次全部弃权与156不可读弃权分开；定义pass、coverage/risk；逐法计数,OPEN,弃权可复算，成本需独立测量,指标表＋成本表,yes,internal/editor only
+R1.14,R1.14 复现与失败,major,接受可复现流程不足；原始记录1 error与意见2 failed executions须据实核对；不能把0报警当完整覆盖,PARTIAL,干净环境及缺内容分支需要运行,Artifact、逐MR表、日志,yes,internal/editor only
+R1.15,R1.15 结论校准,major,接受。删“真实非法访问裁决不在其中”；证据到claim表区分源码、合成、真实系统,CLOSED,依赖上述验证完成,摘要、发现、讨论、结论,yes,internal/editor only
+R2.1,R2.1 新颖性/recrawl,major,接受。公开Gitea live 0 mismatch；staleness和无法枚举渠道分开，说明recrawl何时足够,PARTIAL,时序校准运行,引言、机制、结果,yes,internal/editor only
+R2.2,R2.2 范围/标题,major,接受。标题明确MST-wi案例，摘要写2条、同族及原生触发范围,CLOSED,不需运行,标题、摘要、结论,yes,internal/editor only
+R2.3,R2.3 命题2,major,接受。删除功能自我等同包装，明确充分性前提和实际门控差异,PARTIAL,同R1.5任务，但回复独立完整,形式化及消融,yes,internal/editor only
+R2.4,R2.4 检测面,major,真实vulnerable/fixed案例优先；若不做，撤销一般检测结论，不能把三seed实例充当3独立漏洞,CLOSED,推荐新运行,阳性评估、摘要和结论,yes,internal/editor only
+R2.5,R2.5 84.62,major,当前摘要无此数值，据实说明；正文去除定量背书，改假设性敏感性图,CLOSED,分析即可,指标节、finding3,yes,internal/editor only
+R2.6,R2.6 构造真值/率,major,接受。1.00和0.44仅特定设计比例；给各格与等权敏感性，避免作真实部署发生率,PARTIAL,重算＋独立真值验证,方法、真实结果、讨论,yes,internal/editor only
