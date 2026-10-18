@@ -55,6 +55,7 @@ def channel_stats(d: dict) -> dict:
                 continue
             ch = c["expected_channel"]
             r = out.setdefault(ch, {"n": 0, "answered": 0, "correct": 0,
+                                    "allow_agree": 0, "deny_agree": 0,
                                     "false_allow": 0, "false_deny": 0})
             r["n"] += 1
             o, e = c["oracle_answer"], c["expected_entitlement"]
@@ -63,6 +64,7 @@ def channel_stats(d: dict) -> dict:
             r["answered"] += 1
             if (o == "allow") == (e == "allow"):
                 r["correct"] += 1
+                r["allow_agree" if o == "allow" else "deny_agree"] += 1
             elif o == "allow":
                 r["false_allow"] += 1
             else:
@@ -259,50 +261,62 @@ def main() -> None:
     TABLE.write_text("\n".join(tl) + "\n", encoding="utf-8")
 
     # ---------------- Table: oracle fidelity by channel ----------------
+    # Full four-cell confusion per channel, one panel per product: the reviewer
+    # asked for TP/TN/FP/FN rather than a single disagreement count.
     cg, cl = channel_stats(dg), channel_stats(dl)
+    order = [("site_admin", "site administrator"), ("public", "public visibility"),
+             ("collaborator", "direct collaborator"), ("team", "team / group"),
+             ("none", "no channel")]
+
+    def panel(st: dict, head: str) -> list[str]:
+        lines = [r"\multicolumn{7}{l}{" + head + r"}\\", r"\addlinespace[2pt]",
+                 r"Channel & cells & allow & deny & f.\ allow & f.\ deny & unans. \\",
+                 r"\addlinespace[2pt]"]
+        tot = {"n": 0, "allow_agree": 0, "deny_agree": 0,
+               "false_allow": 0, "false_deny": 0}
+        for ch, label in order:
+            r = st.get(ch)
+            if not r:
+                continue
+            un = r["n"] - r["answered"]
+            lines.append(f"{label} & {r['n']} & {r['allow_agree']} & "
+                         f"{r['deny_agree']} & {r['false_allow']} & "
+                         f"{r['false_deny']} & {un} \\\\")
+            for k in tot:
+                tot[k] += r[k]
+        un = tot["n"] - tot["allow_agree"] - tot["deny_agree"] - tot["false_allow"] - tot["false_deny"]
+        lines.append(r"\addlinespace[2pt]")
+        lines.append(f"\\emph{{total}} & {tot['n']} & {tot['allow_agree']} & "
+                     f"{tot['deny_agree']} & {tot['false_allow']} & "
+                     f"{tot['false_deny']} & {un} \\\\")
+        return lines
+
     ct = [
         "% 由 ingest_temporal.py 生成，勿手改",
         r"\begin{table*}[t]",
         r"\centering",
         r"\caption{Oracle fidelity by granting channel, over the same transition "
-        r"cells as Table~\ref{tab:temporal}. \emph{Answered} counts cells where the "
-        r"owner-vantage oracle returns a definite answer; \emph{correct} counts "
-        r"those that agree with the ledger. A cell is \emph{false deny} when the "
-        r"oracle answers deny on a legitimately readable cell. Neither product "
-        r"produces a single false allow: the membership surface errs only by "
-        r"omission. Public and site-admin cells are exactly the channels that are "
-        r"not group or repository membership.}",
+        r"cells as Table~\ref{tab:temporal}: a confusion matrix of the owner-vantage "
+        r"oracle against the ledger, per channel and per product. \emph{allow} and "
+        r"\emph{deny} count cells where the oracle agrees with the ledger; "
+        r"\emph{f.\ allow} and \emph{f.\ deny} are the two error directions; "
+        r"\emph{unans.} counts cells where the surface returns no definite answer "
+        r"(anonymous readers). A false deny is an oracle that answers deny on a "
+        r"legitimately readable cell. Neither product produces a single false "
+        r"allow: the membership surface errs only by omission, and public and "
+        r"site-admin cells are exactly the channels that are not group or "
+        r"repository membership. The ``no channel'' row is the default-deny "
+        r"stratum: no grant of any kind is recorded for those cells, so the "
+        r"ledger denies them.}",
         r"\label{tab:oracle-channel}",
         r"\small",
         r"\begin{tabular}{lrrrrrr}",
         r"\toprule",
-        r" & \multicolumn{3}{c}{Gitea \TmpVersion} & "
-        r"\multicolumn{3}{c}{GitLab CE \TmpGVersion} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}",
-        r"Channel & cells & answered & false deny & cells & answered & false deny \\",
-        r"\midrule",
     ]
-    for ch in CHANNELS:
-        a = cg.get(ch, {"n": 0, "answered": 0, "false_deny": 0})
-        b = cl.get(ch, {"n": 0, "answered": 0, "false_deny": 0})
-        label = {"site_admin": "site administrator", "public": "public visibility",
-                 "collaborator": "direct collaborator", "team": "team / group",
-                 "none": "no channel"}[ch]
-        ct.append(f"{label} & {a['n']} & {a['answered']} & {a['false_deny']} & "
-                  f"{b['n']} & {b['answered']} & {b['false_deny']} \\\\")
-    tot_g = sum(v["n"] for v in cg.values())
-    tot_l = sum(v["n"] for v in cl.values())
-    ans_g = sum(v["answered"] for v in cg.values())
-    ans_l = sum(v["answered"] for v in cl.values())
-    fd_g = sum(v["false_deny"] for v in cg.values())
-    fd_l = sum(v["false_deny"] for v in cl.values())
-    ct += [
-        r"\midrule",
-        f"Total & {tot_g} & {ans_g} & {fd_g} & {tot_l} & {ans_l} & {fd_l} \\\\",
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\end{table*}",
-    ]
+    ct += panel(cg, r"(a) Gitea \TmpVersion")
+    ct += [r"\midrule"]
+    ct += panel(cl, r"(b) GitLab CE \TmpGVersion")
+    ct += [r"\bottomrule", r"\end{tabular}", r"\end{table*}"]
     CHANNEL.write_text("\n".join(ct) + "\n", encoding="utf-8")
 
     print("=== temporal numbers ===")
