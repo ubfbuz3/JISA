@@ -54,7 +54,9 @@ import time
 from pathlib import Path
 
 import gitea_lab as gl
+from entitlement import classify
 from gitea_lab import ADMIN_PASS, ADMIN_USER, Client, Server, ensure_migrated, write_config
+from manifests import gitea_model
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -364,7 +366,10 @@ def main():
         "honesty_boundary": (
             "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；"
             "不声称实验证明 MST-wi 失效（未跑其原生引擎）；"
-            "GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。"),
+            "GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。"
+            "E（预期有效授权）由 phaseA/phaseC 的授权台账推导，绝不由被测 GET 的返回值填充；"
+            "Y（实际观测效果）单独记录；假证明 = 升级 AND E=allow；"
+            "真阳性 = 升级 AND E=deny AND Y=allow。"),
     }}
 
     cfg = write_config()
@@ -388,6 +393,9 @@ def main():
         print("[C] 带外授权变更 …", flush=True)
         rc = phaseC_mutations(cl, report_A["team_ids"])
         rep["phaseC_mutations"] = rc
+        policy = gitea_model(report_A, rc, repos=REPOS, teams=TEAMS,
+                             org=ORG, admin_user=ADMIN_USER)
+        rep["policy_manifest"] = policy.summary()
         print("     变更", len(rc["mutations"]), "失败", len(rc["failures"]), flush=True)
         for m in rc["failures"]:
             print("       ! ", m["mutation"], m["status"], m.get("error"), flush=True)
@@ -407,20 +415,23 @@ def main():
 
         subjects = list(USERS) + [ADMIN_USER]
         cells = []
-        truth_map = {}
+        truth_observed = {}    # Y -- what the request actually did
+        truth_expected = {}    # E -- what the authorisation ledger says
         for obj in ALL_OBJS:
             owner, name = obj.split("/")
             for subj in subjects:
                 if subj == OBJ_CREDENTIAL[obj]:
                     continue                       # 执行者自身不作为"换凭证"主体
                 st, b = cl[subj].get(f"/api/v1/repos/{owner}/{name}")
-                granted = st == 200
+                observed_allow = st == 200          # Y, never used as E
                 out_subj = _norm_repo(b) if isinstance(b, dict) else None
-                truth_map[f"{obj}|{subj}"] = granted
+                dec = policy.expected(obj, subj, "read")
+                truth_observed[f"{obj}|{subj}"] = observed_allow
+                truth_expected[f"{obj}|{subj}"] = dec.value
 
                 can_snap = obj not in set(snap_before[subj]["urls"])
                 can_live = obj not in set(snap_after[subj]["urls"])
-                out_equal = bool(granted and acting[obj]["granted"]
+                out_equal = bool(observed_allow and acting[obj]["granted"]
                                  and out_subj == acting[obj]["out"])
                 ins = introspect(cl, obj, subj)
                 ins_self = introspect_self(cl, obj, subj)
@@ -439,7 +450,14 @@ def main():
                         "introspection_self_status": ins_self["status"],
                         "introspection_self_permission": ins_self["permission"],
                         "introspection_self_readable": ins_self["readable"],
-                        "authorized": granted,
+                        # --- E / Y kept strictly apart -------------------
+                        "expected_entitlement": dec.value,
+                        "expected_channel": dec.channel,
+                        "expected_basis": dec.basis,
+                        "observed_effect": "allow" if observed_allow else "deny",
+                        "observed_status": st,
+                        "authorized_legacy": observed_allow,
+                        "authorized": observed_allow,   # deprecated alias of Y
                         "alarms": {
                             # 账本版：谓词来自"框架自己的动作记录"
                             "mr_bookkeeping": fires and not log_has,
@@ -450,14 +468,19 @@ def main():
                             # 只看面的稻草人对照
                             "direct_only": ins["readable"] and ins["says_none"],
                             # 第七轮的决定性对照
-                            "direct_observe": (ins["readable"] and ins["says_none"] and granted),
+                            "direct_observe": (ins["readable"] and ins["says_none"] and observed_allow),
                             "direct_observe_self": (ins_self["readable"] and ins_self["says_none"]
-                                                    and granted),
+                                                    and observed_allow),
                         },
                     })
         for c_ in cells:
-            c_["false_proofs"] = {m: bool(c_["alarms"][m] and c_["authorized"])
-                                  for m in c_["alarms"]}
+            verdicts = {m: classify(c_["expected_entitlement"],
+                                    c_["authorized"],       # Y
+                                    c_["alarms"][m], c_["alarms"][m])
+                        for m in c_["alarms"]}
+            c_["verdicts"] = verdicts
+            c_["false_proofs"] = {m: v["false_proof"] for m, v in verdicts.items()}
+            c_["true_positives"] = {m: v["true_positive"] for m, v in verdicts.items()}
         rep["phaseE_cells"] = cells
 
         # ---------------- 阶段 F：M1/M2/M3 ----------------
@@ -472,7 +495,8 @@ def main():
                 sf = introspect_self(cl, obj, s)
                 rep["M3_introspection_fidelity"].append({
                     "object": obj, "subject": s,
-                    "authorized": truth_map.get(f"{obj}|{s}"),
+                    "observed_effect": truth_observed.get(f"{obj}|{s}"),
+                    "expected_entitlement": truth_expected.get(f"{obj}|{s}"),
                     "is_acting_credential": s == OBJ_CREDENTIAL[obj],
                     "vantage_credential": o["vantage_credential"],
                     "status": o["status"], "permission": o["permission"],
@@ -488,7 +512,7 @@ def main():
             owner, name = obj.split("/")
             priv = next(r[2] for r in REPOS if f"{r[0]}/{r[1]}" == obj)
             for s in subjects:
-                if not truth_map.get(f"{obj}|{s}"):
+                if truth_expected.get(f"{obj}|{s}") != "allow":
                     kind = "none"
                 elif s == ADMIN_USER:
                     kind = "implicit_site_admin"

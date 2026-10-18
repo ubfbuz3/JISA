@@ -1,0 +1,8 @@
+{
+  "03_论文撰写/paper/main.tex": "ec1172231e88fd766fe37f5f330df96b77a17557112def9ae901845bfac201c8",
+  "03_论文撰写/paper/main.pdf": "d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c",
+  "experiments/results/raw_matrix.jsonl": "c72a3083975f24cf5d51f68e813670e55f7ea511b62f33acee612d216ab47e6c",
+  "experiments/boundary_aware.py": "ac97627e147f4cf7eabe81ca70c1d92f87c56f7d90db7a494862410296a2e4d8",
+  "experiments/run_matrix.py": "837e526cf754d818eb7545539ca9f231ec649f5ee223b2d5a2a876c2d2208400",
+  "experiments/real_system/run_real.py": "1810734f2f26e0a8f4ddd6dfb7082f112efdb401aaa1f30ac03efd7eb1037d0f"
+}

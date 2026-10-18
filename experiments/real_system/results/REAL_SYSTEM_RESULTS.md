@@ -1,9 +1,9 @@
 # 实验 B · 真实系统对照结果（Gitea 1.22.6）
 
-> 诚实边界：Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。
+> 诚实边界：Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。E（预期有效授权）由 phaseA/phaseC 的授权台账推导，绝不由被测 GET 的返回值填充；Y（实际观测效果）单独记录；假证明 = 升级 AND E=allow；真阳性 = 升级 AND E=deny AND Y=allow。
 
 阶段：A 基线拓扑 → B 采集爬取 → C 带外授权变更 → D 变更后爬取 → E MR 执行与四方法裁决 → F M1/M2/M3 → G M6
-实验台：`C:\Users\Administrator\WorkBuddy\gitea_lab\inst5`；耗时 31.1s。
+实验台：`C:\Users\Administrator\WorkBuddy\gitea_lab_r2`；耗时 35.2s。
 拓扑步骤 20，失败 0。
 带外授权变更 6 项，失败 1。
 - **失败** `admin_add_org_member:acme<-frank` status=405 

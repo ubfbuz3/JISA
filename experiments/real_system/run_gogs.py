@@ -44,6 +44,9 @@ import gogs_lab as gl
 import m1_census as mc
 from gogs_lab import ADMIN_PASS, ADMIN_USER, Client, Server, ensure_admin, write_config
 
+from entitlement import classify
+from manifests import gogs_model
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -614,6 +617,9 @@ def main():
         print("[C] 带外授权变更 …", flush=True)
         rc = phaseC_mutations(cl, report_A["team_ids"])
         rep["phaseC_mutations"] = rc
+        policy = gogs_model(rc, repos=REPOS, teams=TEAMS, org=ORG,
+                            admin_user=ADMIN_USER)
+        rep["policy_manifest"] = policy.summary()
         print("     变更", len(rc["mutations"]), "失败", len(rc["failures"]),
               "；记录到的 Gitea-有/Gogs-无 通道", len(rc["absent_channels"]), flush=True)
         for m in rc["failures"]:
@@ -635,20 +641,23 @@ def main():
 
         subjects = list(USERS) + [ADMIN_USER]
         cells = []
-        truth_map = {}
+        truth_observed = {}    # Y
+        truth_expected = {}    # E
         for obj in ALL_OBJS:
             owner, name = obj.split("/")
             for subj in subjects:
                 if subj == OBJ_CREDENTIAL[obj]:
                     continue
                 st, b = cl[subj].get(f"/api/v1/repos/{owner}/{name}")
-                granted = st == 200
+                observed_allow = st == 200          # Y, never used as E
                 out_subj = _norm_repo(b) if isinstance(b, dict) else None
-                truth_map[f"{obj}|{subj}"] = granted
+                dec = policy.expected(obj, subj, "read")
+                truth_observed[f"{obj}|{subj}"] = observed_allow
+                truth_expected[f"{obj}|{subj}"] = dec.value
 
                 can_snap = obj not in set(snap_before[subj]["urls"])
                 can_live = obj not in set(snap_after[subj]["urls"])
-                out_equal = bool(granted and acting[obj]["granted"]
+                out_equal = bool(observed_allow and acting[obj]["granted"]
                                  and out_subj == acting[obj]["out"])
                 ins = introspect(cl, obj, subj, oracle)
                 ins_self = introspect_self(cl, obj, subj, oracle)
@@ -667,20 +676,31 @@ def main():
                         "introspection_self_status": ins_self["status"],
                         "introspection_self_permission": ins_self["permission"],
                         "introspection_self_readable": ins_self["readable"],
-                        "authorized": granted,
+                        # --- E / Y kept strictly apart ---
+                        "expected_entitlement": dec.value,
+                        "expected_channel": dec.channel,
+                        "expected_basis": dec.basis,
+                        "observed_effect": "allow" if observed_allow else "deny",
+                        "observed_status": st,
+                        "authorized_legacy": observed_allow,
+                        "authorized": observed_allow,   # deprecated alias of Y
                         "alarms": {
                             "mr_bookkeeping": fires and not log_has,
                             "v3": fires and ins["readable"] and ins["says_none"],
                             "v3_self": fires and ins_self["readable"] and ins_self["says_none"],
                             "direct_only": ins["readable"] and ins["says_none"],
-                            "direct_observe": (ins["readable"] and ins["says_none"] and granted),
+                            "direct_observe": (ins["readable"] and ins["says_none"] and observed_allow),
                             "direct_observe_self": (ins_self["readable"] and ins_self["says_none"]
-                                                    and granted),
+                                                    and observed_allow),
                         },
                     })
         for c_ in cells:
-            c_["false_proofs"] = {m: bool(c_["alarms"][m] and c_["authorized"])
-                                  for m in c_["alarms"]}
+            verdicts = {m: classify(c_["expected_entitlement"], c_["authorized"],
+                                    c_["alarms"][m], c_["alarms"][m])
+                        for m in c_["alarms"]}
+            c_["verdicts"] = verdicts
+            c_["false_proofs"] = {m: v["false_proof"] for m, v in verdicts.items()}
+            c_["true_positives"] = {m: v["true_positive"] for m, v in verdicts.items()}
         rep["phaseE_cells"] = cells
 
         # ---------------- 阶段 F：M1/M2/M3 ----------------
@@ -706,7 +726,8 @@ def main():
                 sf = introspect_self(cl, obj, s, oracle)
                 rep["M3_introspection_fidelity"].append({
                     "object": obj, "subject": s,
-                    "authorized": truth_map.get(f"{obj}|{s}"),
+                    "observed_effect": truth_observed.get(f"{obj}|{s}"),
+                    "expected_entitlement": truth_expected.get(f"{obj}|{s}"),
                     "is_acting_credential": s == OBJ_CREDENTIAL[obj],
                     "vantage_credential": o["vantage_credential"],
                     "status": o["status"], "permission": o["permission"],
@@ -721,7 +742,7 @@ def main():
         for obj in ALL_OBJS:
             priv = next(r[2] for r in REPOS if f"{r[0]}/{r[1]}" == obj)
             for s in subjects:
-                if not truth_map.get(f"{obj}|{s}"):
+                if truth_expected.get(f"{obj}|{s}") != "allow":
                     kind = "none"
                 elif s == ADMIN_USER:
                     kind = "implicit_site_admin"

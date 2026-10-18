@@ -1,0 +1,5224 @@
+{
+  "meta": {
+    "system": "GitLab",
+    "gitlab_version": "17.11.7",
+    "image": "gitlab/gitlab-ce:17.11.7-ce.0",
+    "container": "gitlab-lab",
+    "generated_by": "experiments/real_system/run_gitlab.py",
+    "positioning": "非血缘厂商复核（independent-vendor replication）：GitLab 与 Gitea/Gogs 无 fork 关系。披露：三者同为 git-forge 域模型。",
+    "phases": [
+      "A 基线拓扑",
+      "A2 自省面发现",
+      "B 采集爬取",
+      "C 带外授权变更",
+      "D 变更后爬取",
+      "E MR 执行与四方法裁决",
+      "F M1/M2/M3",
+      "G M6"
+    ],
+    "methodological_differences_vs_gitea_gogs": [
+      "M1 分母 = 钉死运行实例的 Grape 路由枚举（API::API.routes）",
+      "自带 OpenAPI 规范(doc/api/openapi/openapi_v2.yaml, 819 路径)是部分规范（/admin/users 等缺失）⇒ 不作分母",
+      "站点管理员判定 = /admin 前缀 + 策展覆盖 POST /users",
+      "认证 PRIVATE-TOKEN 头；用户 PAT 经 gitlab-rails runner 重签（PAT 明文不可从存量记录恢复）",
+      "组-成员通道（POST /groups/{id}/members）存在 ⇒ Gogs 上缺席的组织级带外通道在 GitLab 存在",
+      "GitLab 的 GET /projects 体含请求者相对的 permissions 字段 ⇒ _norm_repo 指纹剔除之"
+    ],
+    "honesty_boundary": "GitLab 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效；GUI 模型的 snapshot / live 两种读法都报。",
+    "bootstrap": {
+      "ready_s": 0,
+      "users": [
+        {
+          "step": "user:alice",
+          "status": 201,
+          "id": 2,
+          "error": null
+        },
+        {
+          "step": "user:bob",
+          "status": 201,
+          "id": 3,
+          "error": null
+        },
+        {
+          "step": "user:carol",
+          "status": 201,
+          "id": 4,
+          "error": null
+        },
+        {
+          "step": "user:dave",
+          "status": 201,
+          "id": 5,
+          "error": null
+        },
+        {
+          "step": "user:eve",
+          "status": 201,
+          "id": 6,
+          "error": null
+        },
+        {
+          "step": "user:frank",
+          "status": 201,
+          "id": 7,
+          "error": null
+        }
+      ],
+      "token_minted": [
+        "alice",
+        "bob",
+        "carol",
+        "dave",
+        "eve",
+        "frank"
+      ]
+    },
+    "elapsed_s": 87.8
+  },
+  "phaseA_topology": {
+    "steps": [
+      {
+        "step": "group:acme",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r1",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r2",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r3",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/r4",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:alice/pub1",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:acme/t1",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:acme/t2",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "repo:dave/r5",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "baseline group acme <- bob(Reporter)",
+        "status": 201,
+        "error": null
+      },
+      {
+        "step": "baseline in-band share alice/r1 <- bob(Reporter)",
+        "status": 201,
+        "error": null
+      }
+    ],
+    "ids": {
+      "group:acme": 8,
+      "alice/r1": 1,
+      "alice/r2": 2,
+      "alice/r3": 3,
+      "alice/r4": 4,
+      "alice/pub1": 5,
+      "acme/t1": 6,
+      "acme/t2": 7,
+      "dave/r5": 8
+    },
+    "failures": []
+  },
+  "A2_introspection_discovery": {
+    "chosen": "members_all_get",
+    "best_effort_readable": "members_all_get",
+    "per_endpoint": {
+      "members_all_get": {
+        "probes": {
+          "alice/r1|bob": {
+            "authorized": true,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": true
+          },
+          "acme/t1|bob": {
+            "authorized": true,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": true
+          },
+          "alice/r2|carol": {
+            "authorized": false,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": true
+          },
+          "acme/t1|eve": {
+            "authorized": false,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": true
+          },
+          "dave/r5|frank": {
+            "authorized": false,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": true
+          }
+        },
+        "readable_on_all_probes": true,
+        "correct_on_all_probes": true
+      },
+      "members_get": {
+        "probes": {
+          "alice/r1|bob": {
+            "authorized": true,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": true
+          },
+          "acme/t1|bob": {
+            "authorized": true,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": false
+          },
+          "alice/r2|carol": {
+            "authorized": false,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": true
+          },
+          "acme/t1|eve": {
+            "authorized": false,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": true
+          },
+          "dave/r5|frank": {
+            "authorized": false,
+            "status": 404,
+            "readable": true,
+            "says_none": true,
+            "correct_as_oracle": true
+          }
+        },
+        "readable_on_all_probes": true,
+        "correct_on_all_probes": false
+      },
+      "object_read": {
+        "probes": {
+          "alice/r1|bob": {
+            "authorized": true,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": true
+          },
+          "acme/t1|bob": {
+            "authorized": true,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": true
+          },
+          "alice/r2|carol": {
+            "authorized": false,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": false
+          },
+          "acme/t1|eve": {
+            "authorized": false,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": false
+          },
+          "dave/r5|frank": {
+            "authorized": false,
+            "status": 200,
+            "readable": true,
+            "says_none": false,
+            "correct_as_oracle": false
+          }
+        },
+        "readable_on_all_probes": true,
+        "correct_on_all_probes": false
+      }
+    },
+    "probes": [
+      "alice/r1|bob",
+      "acme/t1|bob",
+      "alice/r2|carol",
+      "acme/t1|eve",
+      "dave/r5|frank"
+    ],
+    "truth": {
+      "alice/r1|bob": true,
+      "acme/t1|bob": true,
+      "alice/r2|carol": false,
+      "acme/t1|eve": false,
+      "dave/r5|frank": false
+    },
+    "note": "chosen 为空 = 没有候选端点能同时满足「拥有者可读」与「能区分主体」⇒ 本系统上不存在可用的授权 oracle。"
+  },
+  "A2_oracle_used": {
+    "endpoint": "members_all_get",
+    "is_correct_oracle": true,
+    "reason": "严格 oracle 可用。"
+  },
+  "phaseB_crawl_snapshot": {
+    "anonymous": {
+      "urls": [
+        "alice/pub1"
+      ],
+      "n_outputs": 1,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 404,
+        "visible_projects": 200
+      }
+    },
+    "root": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "alice/r1",
+        "alice/r2",
+        "alice/r3",
+        "alice/r4",
+        "dave/r5"
+      ],
+      "n_outputs": 8,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 200,
+        "visible_projects": 200
+      }
+    },
+    "alice": {
+      "urls": [
+        "alice/pub1",
+        "alice/r1",
+        "alice/r2",
+        "alice/r3",
+        "alice/r4"
+      ],
+      "n_outputs": 5,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 404,
+        "visible_projects": 200
+      }
+    },
+    "bob": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "alice/r1"
+      ],
+      "n_outputs": 4,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 200,
+        "visible_projects": 200
+      }
+    },
+    "carol": {
+      "urls": [
+        "alice/pub1"
+      ],
+      "n_outputs": 1,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 404,
+        "visible_projects": 200
+      }
+    },
+    "dave": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "dave/r5"
+      ],
+      "n_outputs": 4,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 200,
+        "visible_projects": 200
+      }
+    },
+    "eve": {
+      "urls": [
+        "alice/pub1"
+      ],
+      "n_outputs": 1,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 404,
+        "visible_projects": 200
+      }
+    },
+    "frank": {
+      "urls": [
+        "alice/pub1"
+      ],
+      "n_outputs": 1,
+      "sources": {
+        "membership_projects": 200,
+        "group_projects:acme": 404,
+        "visible_projects": 200
+      }
+    }
+  },
+  "phaseC_mutations": {
+    "mutations": [
+      {
+        "mutation": "admin_grant_member:alice/r2<-carol(Reporter)",
+        "executed_by": "root",
+        "status": 201,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "alice/r2",
+        "subject": "carol"
+      },
+      {
+        "mutation": "admin_grant_member:alice/r3<-eve(Reporter)",
+        "executed_by": "root",
+        "status": 201,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "alice/r3",
+        "subject": "eve"
+      },
+      {
+        "mutation": "org_owner_grant_group:acme<-frank(Reporter)",
+        "executed_by": "dave",
+        "status": 201,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "group:acme",
+        "subject": "frank"
+      },
+      {
+        "mutation": "owner_grant_member:dave/r5<-frank(Reporter)",
+        "executed_by": "dave",
+        "status": 201,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "dave/r5",
+        "subject": "frank"
+      },
+      {
+        "mutation": "visibility_flip:alice/r4->public",
+        "executed_by": "alice",
+        "status": 200,
+        "error": null,
+        "observed_by_framework_log": false,
+        "object": "alice/r4",
+        "subject": "(everyone)"
+      }
+    ],
+    "absent_channels": [],
+    "note": "GitLab 机制空间是三者最富的：组加人（M3）、可见性翻转（M5）在 Gogs 均不存在，组共享仓库（POST /projects/{id}/share）三条都存在。此处只执行与 Gogs 版变更集**语义对应**的子集，多余通道不执行以免扰动真值。",
+    "failures": []
+  },
+  "phaseD_crawl_after": {
+    "anonymous": {
+      "urls": [
+        "alice/pub1",
+        "alice/r4"
+      ]
+    },
+    "root": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "alice/r1",
+        "alice/r2",
+        "alice/r3",
+        "alice/r4",
+        "dave/r5"
+      ]
+    },
+    "alice": {
+      "urls": [
+        "alice/pub1",
+        "alice/r1",
+        "alice/r2",
+        "alice/r3",
+        "alice/r4"
+      ]
+    },
+    "bob": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "alice/r1",
+        "alice/r4"
+      ]
+    },
+    "carol": {
+      "urls": [
+        "alice/pub1",
+        "alice/r2",
+        "alice/r4"
+      ]
+    },
+    "dave": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "alice/r4",
+        "dave/r5"
+      ]
+    },
+    "eve": {
+      "urls": [
+        "alice/pub1",
+        "alice/r3",
+        "alice/r4"
+      ]
+    },
+    "frank": {
+      "urls": [
+        "acme/t1",
+        "acme/t2",
+        "alice/pub1",
+        "alice/r4",
+        "dave/r5"
+      ]
+    }
+  },
+  "phaseE_cells": [
+    {
+      "object": "alice/r1",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": true,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": true,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "dave",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "dave",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r1",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "dave",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "dave",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r2",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "dave",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "dave",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r3",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "dave",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "dave",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": true,
+        "v3_self": true,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/r4",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "dave",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "dave",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "alice",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "alice",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "acme/t1",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "alice",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "alice",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "acme/t2",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "alice",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "alice",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "bob",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "bob",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "carol",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "carol",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "eve",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "eve",
+      "reading": "live",
+      "cannotReachThroughGUI": true,
+      "output_equal": false,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": false,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "frank",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": true,
+      "output_equal": true,
+      "mr_fires": true,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": true,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "frank",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 200,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 200,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": false,
+        "direct_observe": false,
+        "direct_observe_self": false
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "root",
+      "reading": "snapshot",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    },
+    {
+      "object": "dave/r5",
+      "subject": "root",
+      "reading": "live",
+      "cannotReachThroughGUI": false,
+      "output_equal": true,
+      "mr_fires": false,
+      "framework_log_has_record": false,
+      "introspection_status": 404,
+      "introspection_permission": null,
+      "introspection_readable": true,
+      "introspection_self_status": 404,
+      "introspection_self_permission": null,
+      "introspection_self_readable": true,
+      "authorized": true,
+      "alarms": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      },
+      "false_proofs": {
+        "mr_bookkeeping": false,
+        "v3": false,
+        "v3_self": false,
+        "direct_only": true,
+        "direct_observe": true,
+        "direct_observe_self": true
+      }
+    }
+  ],
+  "M1_grant_mechanism_census": {
+    "source": "GitLab 17.11.7 · 钉死运行实例的 Grape 路由枚举 (API::API.routes；自带 OpenAPI 规范是部分规范，不可作分母)",
+    "denominator": "Grape 路由条目数（实例枚举，含只读端点；通配兜底已剔除）",
+    "denominator_entries": 919,
+    "matched_rows_total": 18,
+    "grant_endpoints_total": 18,
+    "revoke_endpoints_total": 0,
+    "grant_endpoints_without_site_admin": 17,
+    "grant_categories": {
+      "org_member": 4,
+      "repo_collaborator": 4,
+      "org_create": 1,
+      "org_share_group": 1,
+      "repo_deploy_key": 2,
+      "repo_deploy_token": 1,
+      "org_deploy_token": 1,
+      "repo_properties": 1,
+      "repo_share_group": 1,
+      "repo_transfer": 1,
+      "site_user_create": 1
+    },
+    "endpoints": [
+      {
+        "endpoint": "/groups",
+        "methods": [
+          "POST"
+        ],
+        "category": "org_create",
+        "kind": "GitLab 组织级：新建组",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/groups/{}/deploy_tokens",
+        "methods": [
+          "POST"
+        ],
+        "category": "org_deploy_token",
+        "kind": "GitLab 组织级：组级部署密钥/令牌",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/groups/{}/access_requests/{}/approve",
+        "methods": [
+          "PUT"
+        ],
+        "category": "org_member",
+        "kind": "GitLab 组织级：邀请/批准成员",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/groups/{}/invitations",
+        "methods": [
+          "POST"
+        ],
+        "category": "org_member",
+        "kind": "GitLab 组织级：邀请/批准成员",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/groups/{}/members",
+        "methods": [
+          "POST"
+        ],
+        "category": "org_member",
+        "kind": "GitLab 组织级：加组成员（组继承 = GitLab 的唯一团队机制）",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/groups/{}/members/{}",
+        "methods": [
+          "DELETE",
+          "PUT"
+        ],
+        "category": "org_member",
+        "kind": "GitLab 组织级：改/移除组成员",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/groups/{}/share",
+        "methods": [
+          "POST"
+        ],
+        "category": "org_share_group",
+        "kind": "GitLab 组织级：与另一个组共享组",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/access_requests/{}/approve",
+        "methods": [
+          "PUT"
+        ],
+        "category": "repo_collaborator",
+        "kind": "GitLab 仓库级：邀请/批准成员",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/invitations",
+        "methods": [
+          "POST"
+        ],
+        "category": "repo_collaborator",
+        "kind": "GitLab 仓库级：邀请/批准成员",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/members",
+        "methods": [
+          "POST"
+        ],
+        "category": "repo_collaborator",
+        "kind": "GitLab 仓库级：加项目成员（= 协作者）",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/members/{}",
+        "methods": [
+          "DELETE",
+          "PUT"
+        ],
+        "category": "repo_collaborator",
+        "kind": "GitLab 仓库级：改/移除项目成员、批准访问请求",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/deploy_keys",
+        "methods": [
+          "POST"
+        ],
+        "category": "repo_deploy_key",
+        "kind": "GitLab 仓库级：部署密钥（授予持有者读/写）",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/deploy_keys/{}",
+        "methods": [
+          "DELETE",
+          "PUT"
+        ],
+        "category": "repo_deploy_key",
+        "kind": "GitLab 仓库级：改/移除部署密钥",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/deploy_tokens",
+        "methods": [
+          "POST"
+        ],
+        "category": "repo_deploy_token",
+        "kind": "GitLab 仓库级：部署令牌（授予读/写）",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}",
+        "methods": [
+          "DELETE",
+          "PUT"
+        ],
+        "category": "repo_properties",
+        "kind": "GitLab 仓库级：改属性（私有→公开即向所有人授予）",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/share",
+        "methods": [
+          "POST"
+        ],
+        "category": "repo_share_group",
+        "kind": "GitLab 仓库级：与组共享（组内成员全体获得访问）",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/projects/{}/transfer",
+        "methods": [
+          "PUT"
+        ],
+        "category": "repo_transfer",
+        "kind": "GitLab 仓库级：转移所有权",
+        "direction": "grant",
+        "requires_site_admin": false
+      },
+      {
+        "endpoint": "/users",
+        "methods": [
+          "POST"
+        ],
+        "category": "site_user_create",
+        "kind": "GitLab 站点级：建用户（管理员专用）",
+        "direction": "grant",
+        "requires_site_admin": true
+      }
+    ],
+    "predicate": "端点计入当且仅当：在不修改被测系统代码的前提下，能使某 (主体, 对象) 的访问权限从否变为是；方向由该端点实际可用的 HTTP 方法推出（方法集 ⊆ {DELETE} ⇒ 撤销，不算授予）。两系统路径已归一化后用同一张模式表普查。",
+    "route_entries_raw": 1357,
+    "unique_paths": 919,
+    "admin_flag_rule": "/admin 前缀 + 策展覆盖 {POST /users: 管理员专用}；Grape 层无逐路由的 admin 谓词可静态枚举"
+  },
+  "M2_vantage_readability": {
+    "alice/r1": {
+      "object": "alice/r1",
+      "subject": "bob",
+      "vantages": {
+        "anonymous": {
+          "members_all_get": {
+            "status": 401,
+            "readable": false,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 401,
+            "readable": false,
+            "says_none": false
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "root": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": true
+          }
+        },
+        "alice": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          }
+        },
+        "bob": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          }
+        },
+        "carol": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "dave": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "eve": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "frank": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        }
+      }
+    },
+    "acme/t1": {
+      "object": "acme/t1",
+      "subject": "bob",
+      "vantages": {
+        "anonymous": {
+          "members_all_get": {
+            "status": 401,
+            "readable": false,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 401,
+            "readable": false,
+            "says_none": false
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "root": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": true
+          }
+        },
+        "alice": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "bob": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          }
+        },
+        "carol": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "dave": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          }
+        },
+        "eve": {
+          "members_all_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 404,
+            "readable": false,
+            "says_none": false
+          }
+        },
+        "frank": {
+          "members_all_get": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          },
+          "members_get": {
+            "status": 404,
+            "readable": true,
+            "says_none": true
+          },
+          "object_read": {
+            "status": 200,
+            "readable": true,
+            "says_none": false
+          }
+        }
+      }
+    }
+  },
+  "M3_introspection_fidelity": [
+    {
+      "object": "alice/r1",
+      "subject": "alice",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r1",
+      "subject": "bob",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r1",
+      "subject": "carol",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r1",
+      "subject": "dave",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r1",
+      "subject": "eve",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r1",
+      "subject": "frank",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r1",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r2",
+      "subject": "alice",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r2",
+      "subject": "bob",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r2",
+      "subject": "carol",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r2",
+      "subject": "dave",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r2",
+      "subject": "eve",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r2",
+      "subject": "frank",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r2",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r3",
+      "subject": "alice",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r3",
+      "subject": "bob",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r3",
+      "subject": "carol",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r3",
+      "subject": "dave",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r3",
+      "subject": "eve",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r3",
+      "subject": "frank",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r3",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r4",
+      "subject": "alice",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/r4",
+      "subject": "bob",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r4",
+      "subject": "carol",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r4",
+      "subject": "dave",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r4",
+      "subject": "eve",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r4",
+      "subject": "frank",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/r4",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "alice",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "alice",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "bob",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "carol",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "dave",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "eve",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "frank",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "alice/pub1",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "alice",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t1",
+      "subject": "alice",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t1",
+      "subject": "bob",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "acme/t1",
+      "subject": "carol",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t1",
+      "subject": "dave",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "acme/t1",
+      "subject": "eve",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t1",
+      "subject": "frank",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "acme/t1",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t2",
+      "subject": "alice",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t2",
+      "subject": "bob",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "acme/t2",
+      "subject": "carol",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t2",
+      "subject": "dave",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "acme/t2",
+      "subject": "eve",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "acme/t2",
+      "subject": "frank",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "acme/t2",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "dave/r5",
+      "subject": "alice",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "dave/r5",
+      "subject": "bob",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "dave/r5",
+      "subject": "carol",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "dave/r5",
+      "subject": "dave",
+      "authorized": null,
+      "is_acting_credential": true,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "dave/r5",
+      "subject": "eve",
+      "authorized": false,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    },
+    {
+      "object": "dave/r5",
+      "subject": "frank",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 200,
+      "permission": null,
+      "readable": true,
+      "says_none": false,
+      "status_self": 200,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": false
+    },
+    {
+      "object": "dave/r5",
+      "subject": "root",
+      "authorized": true,
+      "is_acting_credential": false,
+      "vantage_credential": "dave",
+      "status": 404,
+      "permission": null,
+      "readable": true,
+      "says_none": true,
+      "status_self": 404,
+      "permission_self": null,
+      "readable_self": true,
+      "says_none_self": true
+    }
+  ],
+  "M6_provenance": [
+    {
+      "cell": "alice/r1",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r1",
+      "subject": "bob",
+      "channel": "in_band_share"
+    },
+    {
+      "cell": "alice/r1",
+      "subject": "carol",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r1",
+      "subject": "dave",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r1",
+      "subject": "eve",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r1",
+      "subject": "frank",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r1",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "bob",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "carol",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "dave",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "eve",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "frank",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r2",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "bob",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "carol",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "dave",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "eve",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "frank",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r3",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "bob",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "carol",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "dave",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "eve",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "frank",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/r4",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "bob",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "carol",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "dave",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "eve",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "frank",
+      "channel": "implicit_public"
+    },
+    {
+      "cell": "alice/pub1",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "bob",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "carol",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "dave",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "eve",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "frank",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "acme/t1",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "bob",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "carol",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "dave",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "eve",
+      "channel": "none"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "frank",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "acme/t2",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "alice",
+      "channel": "none"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "bob",
+      "channel": "none"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "carol",
+      "channel": "none"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "dave",
+      "channel": "none"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "eve",
+      "channel": "none"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "frank",
+      "channel": "out_of_band"
+    },
+    {
+      "cell": "dave/r5",
+      "subject": "root",
+      "channel": "implicit_site_admin"
+    }
+  ]
+}

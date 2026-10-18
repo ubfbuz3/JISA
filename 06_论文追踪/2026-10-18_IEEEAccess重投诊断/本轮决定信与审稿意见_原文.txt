@@ -1,0 +1,116 @@
+
+仔细阅读文件下我的论文材料，然后判断怎么修改 审稿人给我的意见：
+
+18-Oct-2026
+
+Dear Mr. LIN:
+
+I am writing to you regarding manuscript # Access-2026-49387 entitled "Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution" which you submitted to IEEE Access.
+
+Your article was peer reviewed with interest but has not been recommended for publication in its current form.  We strongly encourage you to address the reviewers’ concerns, which can be found at the bottom of this letter, and resubmit your article to IEEE Access once you have updated it accordingly.
+ 
+Please note that IEEE Access has a binary peer review process. Therefore, to uphold quality to IEEE standards, an article is rejected even if it requires minor edits.
+ 
+When updating your manuscript, you should elaborate on your points and clarify with references, examples, data, etc. If you disagree with any technical points the reviewers have made, please include your counterarguments in your response to the reviewers (more information detailed below) and work this into the updated manuscript. 
+
+Also, note that if a reviewer suggested references, you should only add those that are relevant to your work if you feel they strengthen your article. Recommending references to specific publications is not appropriate for reviewers and you should report excessive cases to ieeeaccessEIC@ieee.org.  Authors are not obligated to cite articles that are recommended by the reviewers, and the final decision on the article will not be influenced by whether or not authors cite these suggested references.
+ 
+IEEE Access allows one opportunity to resubmit. If the updated manuscript is determined not to have addressed all of the previous reviewers’ concerns, or if the Associate Editor still has substantial technical concerns, the article will be rejected and no further resubmissions will be allowed.
+ 
+When you are ready to resubmit your updated article, you can do so in the IEEE Author Portal.  When you log into the IEEE Author Portal you will see the title of the rejected article and the option to “Start Resubmission”.
+
+https://ieee.atyponrex.com/submission/submissionBoard/REX-PROD-2-35ADA039-EFF8-4C4F-8D8C-46C8698353EE-49863DA0-9FE4-4717-A447-42173D59A943-86080/current?idtype=external
+ 
+Upon resubmission you will be asked to upload the following 3 files:
+
+1) A document containing your response to reviewers from the previous peer review.  The “response to reviewers” document (template attached) should have the following regarding each comment: a) Reviewer’s concern, b) your response to the concern, c) your action to remedy the concern. The document should be uploaded with your manuscript files under "Author's Response Files.”
+
+2) Your updated manuscript with all your individual changes highlighted, including grammatical changes (e.g. preferably with the yellow highlight tool within the pdf file). This file should be uploaded with your manuscript files as “Highlighted PDF.”
+
+3) A clean copy of the final manuscript (without highlighted changes) submitted as a Word or LaTeX file, and as a PDF, both submitted as the “Main Manuscript.”
+
+**IMPORTANT: Please see the attached Resubmission Checklist that details all the items listed above.  Please utilize this checklist to ensure you have made the necessary edits to your manuscript, and to ensure you have all the necessary files prepared prior to resubmission.
+
+*** AUTHOR LIST CHANGES: If your revised manuscript has an updated author list, you will need to submit a formal request to the Editor by completing the attachment labelled ‘Request for Byline Change,’ and uploading it as 'Request for byline change form.' This should include a DETAILED justification explaining each author’s contribution(s) to the work. You will also need to provide the justification for the author change during the submission process.  Change in the author list is considered rare and exceptional, and the decision to allow such changes rests with the Editor. Once the list and order of authors has been established, the list and order of authors should not be altered without permission of all living authors of that article.
+
+We sincerely hope you will update your manuscript and resubmit soon. Please contact me if you have any questions.
+
+Thank you for your interest in IEEE Access.
+
+Sincerely,
+
+Dr. Zijian Zhang
+Associate Editor, IEEE Access
+zhangzijian@bit.edu.cn
+
+Reviewers' Comments to Author:
+
+Reviewer: 1
+
+Comments:
+The paper investigates whether metamorphic testing with web-interface reachability models can reliably establish broken object-level authorization (BOLA) vulnerabilities when the crawler's snapshot may not reflect the system's actual authorization state. Through a constructed 576-record study, experiments on Gitea 1.22.6, Gogs 0.14.3, and GitLab 17.11.7, and a seeded positive control, the authors identify three limitations: stale reachability models can turn legitimate, post-crawl access grants into false proofs of violations; when a readable and sound authorization oracle is available, the evaluated metamorphic relations show no incremental adjudication benefit over a direct request-and-oracle comparison; and input-level specificity can obscure systematic failures when its denominator includes many unaffected inputs. The paper further examines oracle readability, soundness, and admissibility, distinguishes false alarms from falsely proven violations, and reports source-level inspection and reproducibility artifacts. Its main contribution is a methodological critique of how authorization-testing results are adjudicated and measured, rather than a new vulnerability-detection algorithm. The evidence is informative but remains bounded by the two reachability-gated relations examined, the constructed scenario design, the limited vulnerable fault pattern, and the absence of demonstrated detection effectiveness across a representative population of real BOLA vulnerabilities.
+1. The novelty claim needs sharper positioning against existing BOLA testing research. The paper primarily identifies limitations in reachability-based adjudication, oracle assumptions, and metric design. However, it does not sufficiently distinguish these contributions from established work on oracle problems, stateful web testing, authorization testing, and metamorphic testing. Please provide a structured comparison identifying which limitations are newly demonstrated, which are already known, and what methodological advance the paper contributes beyond applying these concepts to MST-wi.
+2. The formalization of false proofs requires a complete and unambiguous definition. The paper distinguishes alarms, false alarms, and violations proven, but the mapping between these outcomes and the ground-truth authorization state is not formalized consistently throughout the manuscript. Define the decision variables and truth conditions for every possible combination of request outcome, actual entitlement, oracle response, and detector verdict. In particular, explain how a legitimate successful request can be distinguished from unauthorized access without allowing the tested reachability model to determine its own ground truth.
+3. The system model does not sufficiently characterize authorization-state transitions. The three-phase protocol assumes that a crawl-time snapshot becomes stale after an entitlement changes, but the effects of revocation, inherited permissions, public visibility, role changes, and concurrent authorization updates are not comprehensively modeled. Specify the state-transition semantics, the timing of each observation, and the consistency assumptions under which the reported deterministic false proofs arise. Also clarify whether the conclusions hold when authorization changes between the request and adjudication stages.
+4. The admissibility condition for authorization oracles is insufficiently operationalized. Readability and soundness are distinguishable properties, but clause (2)—requiring a reason that the oracle is not affected by the same defect under investigation—remains a qualitative judgment. Please formulate a reproducible procedure for determining admissibility before examining outcomes, including how independence from the tested authorization mechanism is established. Without such a procedure, oracle admissibility risks becoming a post hoc decision that can bias adjudication.
+5. Proposition 2 risks being tautological rather than establishing a substantive theoretical result. The proposition states that a metamorphic verdict determined entirely by an oracle and an ordinary request cannot outperform a direct consumer of those same inputs. This follows from the assumed functional dependence, rather than independently demonstrating a limitation of metamorphic testing. Please distinguish the formal identity from the empirical premise that the evaluated relations consume no additional decision-relevant information. A truth-table derivation or explicit functional representation of each predicate would make the argument more rigorous and clarify its applicability beyond the particular implementation.
+6. The synthetic-study design needs a more explicit account of coverage and identifiability. The 576 records form a fixed enumeration, but the manuscript does not present a sufficiently transparent mapping from configurations and scenarios to all records. Please provide the complete factorial design, explain how each factor is varied, and demonstrate that the reported effects can be attributed to crawl timing, exception handling, and oracle readability without confounding. The earlier representative 36-record readable and 18-record unreadable grids should also be reconciled explicitly with the later 312/264-record partition.
+7. The evaluation of metamorphic relations uses baselines that do not establish superiority over competitive black-box methods. The direct_only baseline is deliberately unfair because it ignores request outcomes, while obs_success and always_alarm are intentionally weak references. The authors appropriately acknowledge these limitations, but the evidence is insufficient to characterize the practical value of the proposed testing approach. Please compare against a differential, multi-account authorization tester that probes equivalent objects under distinct privilege levels, as well as a conventional BOLA detector using request-response differentials. Report matched query budgets, execution costs, and detection outcomes.
+8. The cross-vendor experiments expose a serious oracle-validity problem but do not fully isolate its causes. Gogs and GitLab produce false proofs when their membership-introspection surfaces omit authorization obtained through other channels. Please provide a channel-by-channel confusion matrix separating direct membership, team-derived access, administrative grants, public visibility, and out-of-band sharing. Also distinguish an incorrect oracle response from a stale reachability model, since these are different failure mechanisms requiring different remedies.
+9. The reported detection results are too narrow to support broad conclusions about BOLA detection effectiveness. The three seeded vulnerable instances share one fault pattern and are explicitly not independent vulnerability discoveries. Moreover, the real-system experiments primarily evaluate false-proof behavior because no vulnerability was found on the tested surfaces. Please expand the positive-control evaluation to multiple independently implemented authorization defects, including unauthorized reads, unauthorized modifications, inherited-permission errors, and privilege-escalation paths. Report per-defect recall and false-positive rates rather than treating repeated instances of one fault pattern as evidence of general detection capability.
+10. The comparison between crawl-time and live authorization state requires stronger control of temporal and observational effects. The Gitea experiment reports 10 mismatch cells under snapshot reading and zero under live reading, but the manuscript should explain how live-state queries avoid changing the tested state, introducing additional privileges, or benefiting from information unavailable to the original detector. Please specify the ordering of crawling, entitlement mutation, oracle querying, and request execution, and provide timestamps or event logs sufficient to verify that the comparison changes only the model-reading time.
+11. The specificity analysis requires a clearer justification of its denominator and interpretation. The illustrative 84.62% specificity depends on an assumed two follow-up inputs per case, rather than the original engine's exact input count. Although the authors disclose this limitation, the example cannot establish the numerical behavior of the published 99.81% figure without the underlying denominator. Please provide the original evaluation counts if available, or present a parameterized sensitivity analysis showing how specificity changes with the number of unaffected inputs. Clearly distinguish the proposed scenario-level diagnostic from conventional specificity, and avoid implying that one alternative metric alone resolves the underlying oracle-validity problem.
+12. The mathematical treatment of scenario-level failure is correct in spirit but limited in scope. Proposition 1 assumes that each failing scenario contributes exactly \(a\) false-alarm inputs and each successful scenario contributes \(m\) alarm-free inputs. Real testing pipelines may produce unequal numbers of requests, correlated inputs, and different numbers of alarms per scenario. Please extend the result to heterogeneous scenario weights and explain whether the same dilution phenomenon holds when the number of generated inputs depends on scenario complexity or detector behavior. This would establish the generality of the measurement argument rather than only its validity under the stated construction.
+13. The reported metrics need consistent treatment of abstentions and operational cost. The state-calibrated method achieves perfect precision in the pooled table by abstaining when the oracle is unavailable, while missing 111 true violations. Precision and recall alone do not adequately characterize this selective behavior. Please report coverage, selective risk, abstention rate, and detection performance conditional on oracle availability, alongside execution time and request overhead. The discussion should also distinguish a safe abstention from a successful detection and avoid ranking methods primarily by metrics that reward non-decision.
+14. The implementation and reproducibility evidence is incomplete for independently validating the principal claims. The paper reports a public artifact, source inspection, a separate implementation, and a native-engine execution, but the native run executes only a subset of the authorization relations, and the content predicate is never invoked. Please provide a version-pinned environment, exact commands, complete configuration and seed files, machine-readable raw outputs, and scripts that regenerate every table and figure. In particular, document the two failed relation executions, the engine-side defect, and the treatment of missing or failed observations so that an independent researcher can reproduce the reported counts without relying on author-specific interpretation.
+15. The conclusions should be narrowed to match the actual evidence and the stated research questions. The paper repeatedly acknowledges that it studies two relations from one reachability-gated family, three related-domain systems, and a limited seeded fault pattern. Nevertheless, statements suggesting that adjudication of genuine violations is absent from the evaluated relations risk extending beyond the experiments. Please distinguish conclusions established by source-level functional dependence, findings demonstrated by the synthetic construction, and findings observed on real systems. A final evidence-to-claim table linking each research question to its assumptions, tested configurations, supporting results, and explicit limitations would substantially improve the paper's scientific precision and credibility.
+
+
+
+Additional Questions:
+Please confirm that you have reviewed all relevant files, including supplementary files and any author response files, which can be found in the "View Author's Response" link above (author responses will only appear for resubmissions): Yes, all files have been reviewed
+
+1) Does the paper contribute to the body of knowledge?: Yes
+
+2) Is the paper technically sound?: Yes
+
+3) Is the subject matter presented in a comprehensive manner?: Yes
+
+4) Are the references provided applicable and sufficient?: Yes
+
+5) Are there references that are not appropriate for the topic being discussed?: No
+
+5a) If yes, then please indicate which references should be removed.:
+
+
+Reviewer: 2
+
+Comments:
+Summary: The paper shows that MST-wi's reachability-based relations produce false proofs after out-of-band grants, add no benefit over a direct check when a readable oracle exists, and report a specificity figure that hides class-wide failures. The honest scoping and reproducibility package are strengths.
+
+Required corrections:
+Novelty. State what is new beyond showing that a snapshot goes stale, and whether re-crawling or live reading removes the problem. Your data show 0 mismatches under live reading on Gitea.
+Scope of claims. Only 2 of 76 relations (one reachability-gated family) were studied, and only 2 of 11 authorization relations fired on Gitea. Narrow the title and abstract to MST-wi's reachability-gated relations, or extend the evaluation.
+Proposition 2. It is close to true by definition. Separate clearly what is empirical from what is definitional.
+Detection side. No real system was vulnerable, so only false proofs were measured on real systems. Either add a real vulnerable case or remove the claim that the metamorphic step adds nothing for detection.
+The 84.62% figure. It assumes two inputs per case and is only illustrative. Keep it out of the abstract and don't present it as quantitative support.
+Constructed ground truth. Discuss how far the false-proof rates (1.00 and 0.44) reflect your scenario design, such as the per-cell multipliers, rather than the technique.
+
+Additional Questions:
+Please confirm that you have reviewed all relevant files, including supplementary files and any author response files, which can be found in the "View Author's Response" link above (author responses will only appear for resubmissions): Yes, all files have been reviewed
+
+1) Does the paper contribute to the body of knowledge?: Partly. The measurement and the metric critique are useful, but the core insight (a frozen snapshot goes stale) is not new.
+
+2) Is the paper technically sound?: Mostly yes. The method is transparent and the artifacts are public, but the evidence is narrow.
+
+3) Is the subject matter presented in a comprehensive manner?: Mostly. The related work is broad.
+
+4) Are the references provided applicable and sufficient?: yes
+
+5) Are there references that are not appropriate for the topic being discussed?: No
+
+5a) If yes, then please indicate which references should be removed.:
+
+If you have any questions, please contact article administrator: Mr. Adesh Choudhary adesh.choudhary@ieee.org
+
+

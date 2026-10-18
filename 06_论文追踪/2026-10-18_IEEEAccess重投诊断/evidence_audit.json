@@ -1,0 +1,940 @@
+{
+  "records": 576,
+  "errors": 0,
+  "configs": [
+    {
+      "mode": "noe3",
+      "vulnerable": 0,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-noE3-vuln0"
+    },
+    {
+      "mode": "noe3",
+      "vulnerable": 1,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-noE3-vuln1"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 0,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-E3-vuln0-unlisted"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "unlisted",
+      "introspection": "on",
+      "label": "V-E3-vuln1-unlisted"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 0,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln0-listed"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln1-listed"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 0,
+      "share_visibility": "unlisted",
+      "introspection": "off",
+      "label": "V-E3-vuln0-unlisted-nointro"
+    },
+    {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "unlisted",
+      "introspection": "off",
+      "label": "V-E3-vuln1-unlisted-nointro"
+    }
+  ],
+  "design_cells": 52,
+  "config_scenario_counts": [
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S6",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-listed",
+      "scenario": "S7",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S6",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted",
+      "scenario": "S7",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S6",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln0-unlisted-nointro",
+      "scenario": "S7",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S6",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-listed",
+      "scenario": "S7",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S6",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted",
+      "scenario": "S7",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S6",
+      "n": 12
+    },
+    {
+      "config": "V-E3-vuln1-unlisted-nointro",
+      "scenario": "S7",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln0",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln0",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln0",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln0",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln0",
+      "scenario": "S5",
+      "n": 6
+    },
+    {
+      "config": "V-noE3-vuln1",
+      "scenario": "S1",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln1",
+      "scenario": "S2",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln1",
+      "scenario": "S3",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln1",
+      "scenario": "S4",
+      "n": 12
+    },
+    {
+      "config": "V-noE3-vuln1",
+      "scenario": "S5",
+      "n": 6
+    }
+  ],
+  "factor_counts": {
+    "scenario": {
+      "S1": 96,
+      "S2": 96,
+      "S3": 96,
+      "S4": 96,
+      "S5": 48,
+      "S6": 72,
+      "S7": 72
+    },
+    "mr": {
+      "MR-002": 312,
+      "MR-004": 264
+    },
+    "gui_mode": {
+      "blind": 288,
+      "aware": 288
+    },
+    "precond_variant": {
+      "raw": 192,
+      "e1": 192,
+      "e1e2": 192
+    }
+  },
+  "selective_metrics": {
+    "all": {
+      "n": 576,
+      "truth_counts": {
+        "normal": 360,
+        "bola": 216
+      },
+      "verdict_counts": {
+        "pass": 243,
+        "indeterminate": 228,
+        "violation-proven": 105
+      },
+      "coverage_if_pass_is_negative": 0.6041666666666666,
+      "selective_risk_if_pass_is_negative": 0.008620689655172414,
+      "unknown_oracle_abstentions": 156,
+      "legitimate_covering_abstentions": 72
+    },
+    "unreadable": {
+      "n": 264,
+      "truth_counts": {
+        "normal": 156,
+        "bola": 108
+      },
+      "verdict_counts": {
+        "pass": 108,
+        "indeterminate": 156
+      },
+      "coverage_if_pass_is_negative": 0.4090909090909091,
+      "selective_risk_if_pass_is_negative": 0.0,
+      "unknown_oracle_abstentions": 156,
+      "legitimate_covering_abstentions": 0
+    },
+    "readable": {
+      "n": 312,
+      "truth_counts": {
+        "normal": 204,
+        "bola": 108
+      },
+      "verdict_counts": {
+        "pass": 135,
+        "indeterminate": 72,
+        "violation-proven": 105
+      },
+      "coverage_if_pass_is_negative": 0.7692307692307693,
+      "selective_risk_if_pass_is_negative": 0.0125,
+      "unknown_oracle_abstentions": 0,
+      "legitimate_covering_abstentions": 72
+    }
+  },
+  "v3_vs_direct_disagreements": 3,
+  "ablation": {
+    "note": "direct_observe = 用普通请求的 HTTP 200 作访问证据（非变形）",
+    "tally": {
+      "v3": {
+        "TN": 360,
+        "FN": 111,
+        "TP": 105,
+        "FP": 0
+      },
+      "direct_only": {
+        "TN": 252,
+        "FN": 108,
+        "FP": 108,
+        "TP": 108
+      },
+      "direct_observe": {
+        "TN": 360,
+        "FN": 108,
+        "TP": 108,
+        "FP": 0
+      }
+    },
+    "per_scenario": {
+      "v3": {
+        "S1": {
+          "TN": 48,
+          "FN": 24,
+          "TP": 24,
+          "FP": 0
+        },
+        "S2": {
+          "TN": 48,
+          "FN": 24,
+          "TP": 24,
+          "FP": 0
+        },
+        "S3": {
+          "TN": 84,
+          "FN": 12,
+          "TP": 0,
+          "FP": 0
+        },
+        "S4": {
+          "TN": 48,
+          "FN": 24,
+          "TP": 24,
+          "FP": 0
+        },
+        "S5": {
+          "TN": 24,
+          "FN": 15,
+          "TP": 9,
+          "FP": 0
+        },
+        "S6": {
+          "TN": 72,
+          "TP": 0,
+          "FP": 0,
+          "FN": 0
+        },
+        "S7": {
+          "TN": 36,
+          "TP": 24,
+          "FN": 12,
+          "FP": 0
+        }
+      },
+      "direct_only": {
+        "S1": {
+          "TN": 24,
+          "FN": 24,
+          "FP": 24,
+          "TP": 24
+        },
+        "S2": {
+          "TN": 24,
+          "FN": 24,
+          "FP": 24,
+          "TP": 24
+        },
+        "S3": {
+          "TN": 84,
+          "FN": 12,
+          "TP": 0,
+          "FP": 0
+        },
+        "S4": {
+          "TN": 24,
+          "FN": 24,
+          "FP": 24,
+          "TP": 24
+        },
+        "S5": {
+          "TN": 12,
+          "FN": 12,
+          "FP": 12,
+          "TP": 12
+        },
+        "S6": {
+          "TN": 72,
+          "TP": 0,
+          "FP": 0,
+          "FN": 0
+        },
+        "S7": {
+          "FP": 24,
+          "TP": 24,
+          "TN": 12,
+          "FN": 12
+        }
+      },
+      "direct_observe": {
+        "S1": {
+          "TN": 48,
+          "FN": 24,
+          "TP": 24,
+          "FP": 0
+        },
+        "S2": {
+          "TN": 48,
+          "FN": 24,
+          "TP": 24,
+          "FP": 0
+        },
+        "S3": {
+          "TN": 84,
+          "FN": 12,
+          "TP": 0,
+          "FP": 0
+        },
+        "S4": {
+          "TN": 48,
+          "FN": 24,
+          "TP": 24,
+          "FP": 0
+        },
+        "S5": {
+          "TN": 24,
+          "FN": 12,
+          "TP": 12,
+          "FP": 0
+        },
+        "S6": {
+          "TN": 72,
+          "TP": 0,
+          "FP": 0,
+          "FN": 0
+        },
+        "S7": {
+          "TN": 36,
+          "TP": 24,
+          "FN": 12,
+          "FP": 0
+        }
+      }
+    },
+    "agreement_v3_vs_direct_observe": {
+      "same": 573,
+      "diff": 3
+    }
+  },
+  "native": {
+    "top_keys": [
+      "users",
+      "base_target",
+      "mode",
+      "gitea",
+      "channel",
+      "data",
+      "engine",
+      "elapsed_s",
+      "log_tail"
+    ],
+    "elapsed_s": 1483.7,
+    "users": [
+      "alice",
+      "bob",
+      "carol",
+      "dave",
+      "eve",
+      "frank",
+      "grace",
+      "hugo",
+      "iris",
+      "jack",
+      "kate",
+      "leo",
+      "mallory"
+    ],
+    "gitea_keys": [
+      "base",
+      "ready_ms",
+      "version"
+    ],
+    "channel_keys": [
+      "channel",
+      "evidence"
+    ],
+    "data_keys": [
+      "base_inputs",
+      "store_files",
+      "pairing_entries",
+      "pairing_sample",
+      "snapshot_size",
+      "oob_grants",
+      "key_cell"
+    ],
+    "engine_keys": [
+      "mode",
+      "config",
+      "pairing",
+      "base_inputs",
+      "users",
+      "pairing_entries",
+      "derived_inputs",
+      "derive_failed",
+      "input_view_size",
+      "chunk_size_floor_div_160",
+      "groups_sample",
+      "mrs",
+      "counters",
+      "crtg_cells"
+    ]
+  },
+  "real_systems": {
+    "real_system.json": {
+      "keys": [
+        "meta",
+        "phaseA_topology",
+        "phaseB_crawl_snapshot",
+        "phaseC_mutations",
+        "phaseD_crawl_after",
+        "phaseE_cells",
+        "M1_grant_mechanism_census",
+        "M2_vantage_readability",
+        "M3_introspection_fidelity",
+        "M6_provenance"
+      ],
+      "cells": 96,
+      "cell_keys": [
+        "object",
+        "subject",
+        "reading",
+        "cannotReachThroughGUI",
+        "output_equal",
+        "mr_fires",
+        "framework_log_has_record",
+        "introspection_status",
+        "introspection_permission",
+        "introspection_readable",
+        "introspection_self_status",
+        "introspection_self_permission",
+        "introspection_self_readable",
+        "authorized",
+        "alarms",
+        "false_proofs"
+      ],
+      "meta": {
+        "gitea_version": "1.22.6",
+        "lab_dir": "C:\\Users\\Administrator\\WorkBuddy\\gitea_lab\\inst5",
+        "generated_by": "experiments/real_system/run_real.py",
+        "phases": [
+          "A 基线拓扑",
+          "B 采集爬取",
+          "C 带外授权变更",
+          "D 变更后爬取",
+          "E MR 执行与四方法裁决",
+          "F M1/M2/M3",
+          "G M6"
+        ],
+        "honesty_boundary": "Gitea 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效（未跑其原生引擎）；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。",
+        "elapsed_s": 31.1
+      },
+      "channels": {
+        "none": 31,
+        "in_band_share": 1,
+        "implicit_site_admin": 8,
+        "out_of_band": 11,
+        "implicit_public": 5
+      }
+    },
+    "gogs_real_system.json": {
+      "keys": [
+        "meta",
+        "phaseA_topology",
+        "A2_introspection_discovery",
+        "A2_oracle_used",
+        "phaseB_crawl_snapshot",
+        "phaseC_mutations",
+        "phaseD_crawl_after",
+        "phaseE_cells",
+        "M1_grant_mechanism_census",
+        "M1b_route_groups",
+        "M2_vantage_readability",
+        "M3_introspection_fidelity",
+        "M6_provenance",
+        "api_surface_probe"
+      ],
+      "cells": 96,
+      "cell_keys": [
+        "object",
+        "subject",
+        "reading",
+        "cannotReachThroughGUI",
+        "output_equal",
+        "mr_fires",
+        "framework_log_has_record",
+        "introspection_status",
+        "introspection_permission",
+        "introspection_readable",
+        "introspection_self_status",
+        "introspection_self_permission",
+        "introspection_self_readable",
+        "authorized",
+        "alarms",
+        "false_proofs"
+      ],
+      "meta": {
+        "system": "Gogs",
+        "gogs_version": "0.14.3",
+        "lab_dir": "C:\\Users\\Administrator\\WorkBuddy\\gogs_lab\\run7",
+        "generated_by": "experiments/real_system/run_gogs.py",
+        "route_source": "internal/route/api/v1/api.go@gogs/v0.14.3",
+        "positioning": "独立代码库复核（independent codebase replication）。Gitea 2016 年 fork 自 Gogs ⇒ **不**声称厂商级独立，该血缘在正文脚注中披露。",
+        "phases": [
+          "A 基线拓扑",
+          "A2 自省面发现",
+          "B 采集爬取",
+          "C 带外授权变更",
+          "D 变更后爬取",
+          "E MR 执行与四方法裁决",
+          "F M1/M2/M3",
+          "G M6"
+        ],
+        "methodological_differences_vs_gitea": [
+          "Gogs 无 /api/v1/version、无 swagger ⇒ M1 分母改为钉死版本的路由表源码条目数",
+          "Gogs 受保护路由要求 access token（reqToken 查 IsTokenAuth）；query/Basic 均 401",
+          "Gogs 无 PUT /orgs/{org}/members/{u}（加组织成员）",
+          "Gogs 无 PATCH /repos/{o}/{r}（改可见性）",
+          "Gogs 无 POST /orgs/{org}/teams（组织拥有者建团队）⇒ 建团队需站点管理员",
+          "Gogs 无 /repos/{o}/{r}/collaborators/{u}/permission 后缀"
+        ],
+        "honesty_boundary": "Gogs 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效；GUI 模型的 snapshot / live 两种读法都报，失效只在前者出现。",
+        "bootstrap": {
+          "rc": 0,
+          "ok": true,
+          "idempotent": false,
+          "tail": "New user \"root\" has been successfully created!",
+          "schema_tables": 38,
+          "steps": [
+            "bootstrap web 完成迁移，ready_ms=512",
+            "schema tables=38"
+          ]
+        },
+        "elapsed_s": 15.9
+      },
+      "channels": {
+        "none": 35,
+        "in_band_share": 1,
+        "implicit_site_admin": 8,
+        "out_of_band": 7,
+        "implicit_public": 5
+      }
+    },
+    "gitlab_real_system.json": {
+      "keys": [
+        "meta",
+        "phaseA_topology",
+        "A2_introspection_discovery",
+        "A2_oracle_used",
+        "phaseB_crawl_snapshot",
+        "phaseC_mutations",
+        "phaseD_crawl_after",
+        "phaseE_cells",
+        "M1_grant_mechanism_census",
+        "M2_vantage_readability",
+        "M3_introspection_fidelity",
+        "M6_provenance"
+      ],
+      "cells": 96,
+      "cell_keys": [
+        "object",
+        "subject",
+        "reading",
+        "cannotReachThroughGUI",
+        "output_equal",
+        "mr_fires",
+        "framework_log_has_record",
+        "introspection_status",
+        "introspection_permission",
+        "introspection_readable",
+        "introspection_self_status",
+        "introspection_self_permission",
+        "introspection_self_readable",
+        "authorized",
+        "alarms",
+        "false_proofs"
+      ],
+      "meta": {
+        "system": "GitLab",
+        "gitlab_version": "17.11.7",
+        "image": "gitlab/gitlab-ce:17.11.7-ce.0",
+        "container": "gitlab-lab",
+        "generated_by": "experiments/real_system/run_gitlab.py",
+        "positioning": "非血缘厂商复核（independent-vendor replication）：GitLab 与 Gitea/Gogs 无 fork 关系。披露：三者同为 git-forge 域模型。",
+        "phases": [
+          "A 基线拓扑",
+          "A2 自省面发现",
+          "B 采集爬取",
+          "C 带外授权变更",
+          "D 变更后爬取",
+          "E MR 执行与四方法裁决",
+          "F M1/M2/M3",
+          "G M6"
+        ],
+        "methodological_differences_vs_gitea_gogs": [
+          "M1 分母 = 钉死运行实例的 Grape 路由枚举（API::API.routes）",
+          "自带 OpenAPI 规范(doc/api/openapi/openapi_v2.yaml, 819 路径)是部分规范（/admin/users 等缺失）⇒ 不作分母",
+          "站点管理员判定 = /admin 前缀 + 策展覆盖 POST /users",
+          "认证 PRIVATE-TOKEN 头；用户 PAT 经 gitlab-rails runner 重签（PAT 明文不可从存量记录恢复）",
+          "组-成员通道（POST /groups/{id}/members）存在 ⇒ Gogs 上缺席的组织级带外通道在 GitLab 存在",
+          "GitLab 的 GET /projects 体含请求者相对的 permissions 字段 ⇒ _norm_repo 指纹剔除之"
+        ],
+        "honesty_boundary": "GitLab 是正确系统，不含对象级授权漏洞 ⇒ 只测假确证侧与发生率，不测检出率；不声称实验证明 MST-wi 失效；GUI 模型的 snapshot / live 两种读法都报。",
+        "bootstrap": {
+          "ready_s": 0,
+          "users": [
+            {
+              "step": "user:alice",
+              "status": 201,
+              "id": 2,
+              "error": null
+            },
+            {
+              "step": "user:bob",
+              "status": 201,
+              "id": 3,
+              "error": null
+            },
+            {
+              "step": "user:carol",
+              "status": 201,
+              "id": 4,
+              "error": null
+            },
+            {
+              "step": "user:dave",
+              "status": 201,
+              "id": 5,
+              "error": null
+            },
+            {
+              "step": "user:eve",
+              "status": 201,
+              "id": 6,
+              "error": null
+            },
+            {
+              "step": "user:frank",
+              "status": 201,
+              "id": 7,
+              "error": null
+            }
+          ],
+          "token_minted": [
+            "alice",
+            "bob",
+            "carol",
+            "dave",
+            "eve",
+            "frank"
+          ]
+        },
+        "elapsed_s": 87.8
+      },
+      "channels": {
+        "none": 30,
+        "in_band_share": 1,
+        "implicit_site_admin": 8,
+        "out_of_band": 7,
+        "implicit_public": 10
+      }
+    },
+    "seeded.json": {
+      "keys": [
+        "meta",
+        "phaseA_topology",
+        "phaseC_mutations",
+        "phaseE_cells",
+        "seeded_truth",
+        "positive_control_TP_FN_FP",
+        "bfla_probe"
+      ],
+      "cells": 48,
+      "cell_keys": [
+        "object",
+        "subject",
+        "cannotReachThroughGUI",
+        "output_equal",
+        "mr_fires",
+        "framework_log_has_record",
+        "introspection_status",
+        "introspection_permission",
+        "introspection_readable",
+        "introspection_says_none",
+        "authorized",
+        "alarms",
+        "false_proofs"
+      ],
+      "meta": {
+        "experiment": "seeded vulnerable control (positive control)",
+        "target": "seeded_target.py (faithful Gitea API emulator, NOT production Gitea)",
+        "gitea_version_emulated": "1.22.6-seeded-control",
+        "reused_code": "experiments/real_system/run_real.py (topology/mutation/crawl/introspection/adjudication)",
+        "honesty_boundary": "靶机复刻的是引擎实际消费的 API 契约；检测器在'真有越权时能否检出'被公平测量；不声称能发现 Gitea 真实 CVE。植入缺陷只影响运行期读/写绕过，列表/搜索/自省走正确模型。",
+        "elapsed_s": 1.8
+      },
+      "seeded_truth": {
+        "bola": [
+          [
+            "bob",
+            "dave/r5"
+          ],
+          [
+            "carol",
+            "acme/t2"
+          ],
+          [
+            "eve",
+            "alice/r1"
+          ]
+        ],
+        "bfla": [
+          "BFLA",
+          "bob",
+          "alice/r4"
+        ]
+      }
+    }
+  },
+  "request_count_caveat": "http_requests is a shared run total including setup and several adjudicators, not a matched per-method cost."
+}

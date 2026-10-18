@@ -1,0 +1,253 @@
+[
+  {
+    "config": {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln1-listed"
+    },
+    "scenario": "S5",
+    "mr": "MR-002",
+    "gui_mode": "aware",
+    "precond_variant": "raw",
+    "truth": {
+      "actor": "B",
+      "doc_id": "doc0001",
+      "op": "write",
+      "doc_owner": "A",
+      "should_allow": false,
+      "app_allowed": true,
+      "truth": "bola",
+      "is_own_object": false
+    },
+    "mr_result": {
+      "mr": "MR-002",
+      "catalog_line": 579,
+      "owner": "A",
+      "follower": "B",
+      "method": "PUT",
+      "path": "/doc/doc0001",
+      "input1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "input2": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "ph_notSupervisorOf": true,
+      "ph_cannotReachThroughGUI": false,
+      "ph_gui_reachable_for_follower": true,
+      "gui_mode": "aware",
+      "precondition_met": false,
+      "isError_out1": false,
+      "out1_equals_out2": true,
+      "precondition_flags": {},
+      "triggered": false
+    },
+    "verdicts": {
+      "v1": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "v2": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "v3": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "degrade_all": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      }
+    }
+  },
+  {
+    "config": {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln1-listed"
+    },
+    "scenario": "S5",
+    "mr": "MR-002",
+    "gui_mode": "aware",
+    "precond_variant": "e1",
+    "truth": {
+      "actor": "B",
+      "doc_id": "doc0001",
+      "op": "write",
+      "doc_owner": "A",
+      "should_allow": false,
+      "app_allowed": true,
+      "truth": "bola",
+      "is_own_object": false
+    },
+    "mr_result": {
+      "mr": "MR-002",
+      "catalog_line": 579,
+      "owner": "A",
+      "follower": "B",
+      "method": "PUT",
+      "path": "/doc/doc0001",
+      "input1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "input2": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "ph_notSupervisorOf": true,
+      "ph_cannotReachThroughGUI": false,
+      "ph_gui_reachable_for_follower": true,
+      "gui_mode": "aware",
+      "precondition_met": false,
+      "isError_out1": false,
+      "out1_equals_out2": true,
+      "precondition_flags": {
+        "not_admin": true
+      },
+      "triggered": false
+    },
+    "verdicts": {
+      "v1": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "v2": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "v3": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "degrade_all": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      }
+    }
+  },
+  {
+    "config": {
+      "mode": "e3",
+      "vulnerable": 1,
+      "share_visibility": "listed",
+      "introspection": "on",
+      "label": "V-E3-vuln1-listed"
+    },
+    "scenario": "S5",
+    "mr": "MR-002",
+    "gui_mode": "aware",
+    "precond_variant": "e1e2",
+    "truth": {
+      "actor": "B",
+      "doc_id": "doc0001",
+      "op": "write",
+      "doc_owner": "A",
+      "should_allow": false,
+      "app_allowed": true,
+      "truth": "bola",
+      "is_own_object": false
+    },
+    "mr_result": {
+      "mr": "MR-002",
+      "catalog_line": 579,
+      "owner": "A",
+      "follower": "B",
+      "method": "PUT",
+      "path": "/doc/doc0001",
+      "input1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "input2": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "ph_notSupervisorOf": true,
+      "ph_cannotReachThroughGUI": false,
+      "ph_gui_reachable_for_follower": true,
+      "gui_mode": "aware",
+      "precondition_met": false,
+      "isError_out1": false,
+      "out1_equals_out2": true,
+      "precondition_flags": {
+        "not_admin": true,
+        "not_supervisor": true
+      },
+      "triggered": false
+    },
+    "verdicts": {
+      "v1": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "v2": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "v3": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      },
+      "degrade_all": {
+        "verdict": "pass",
+        "reason": "MR 未触发，无需裁决",
+        "witness": null
+      }
+    }
+  }
+]

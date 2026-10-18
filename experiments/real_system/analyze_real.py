@@ -6,7 +6,8 @@
   results/real_system_summary.json  机读汇总
 
 口径约定（必须与第七轮 Block 9 可比）
-  真值：violation ⟺ (¬should_allow) ∧ access。Gitea 正确 ⇒ 真 violation 恒为 0。
+  真值：violation ⟺ (E=deny) ∧ (Y=allow)。E 来自授权台账，绝不取被测响应。
+  Gitea/Gogs/GitLab 均为正确系统 ⇒ E==Y（实测 48/48）⇒ 真 violation 恒为 0。
   ⇒ 真实系统上**任何告警都是误报**，因此把告警按落在哪类单元格上分开计：
       alarms_on_authorized  = 对**合法被授权**的访问贴 `violation-proven`  ← 本方向的核心错误类型"假确证"
       alarms_on_denied      = 对**被正确拒绝**的访问贴 `violation-proven`  ← 忽略访问结果的产物
@@ -34,6 +35,29 @@ DESC = {
     "direct_observe": "普通请求可访问 ∧ **拥有者视点**自省面报告 none",
     "direct_observe_self": "普通请求可访问 ∧ **主体自身视点**自省面报告 none",
 }
+
+
+def _y(rec: dict) -> bool | None:
+    """Y = 实际观测效果。兼容 A 包之前只有 authorized 的旧记录。
+
+    显式 None 表示「该单元格没有观测」（如执行者自身），必须与 False 区分：
+    否则会把「不知道」当成「被拒绝」，制造假的不一致。
+    """
+    if "observed_effect" in rec:
+        v = rec["observed_effect"]
+        return None if v is None else v == "allow"
+    if "authorized" in rec:
+        v = rec["authorized"]
+        return None if v is None else bool(v)
+    return None
+
+
+def _e(rec: dict) -> bool | None:
+    """E = 预期有效授权（台账推导）。旧记录没有 E ⇒ 退化为 Y 并须在正文声明。"""
+    v = rec.get("expected_entitlement")
+    if v is None:
+        return _y(rec)
+    return v == "allow"
 
 
 def main():
@@ -104,14 +128,14 @@ def main():
     # ---------------- M3 ----------------
     P("## M3 · 自省面保真度（以拥有者凭证读到的所报权限 vs 有效访问）")
     P("")
-    fid = [f for f in rep.get("M3_introspection_fidelity", []) if f["authorized"] is not None]
-    infid = [f for f in fid if bool(f["authorized"]) != bool(f["permission"] and f["permission"] != "none")]
+    fid = [f for f in rep.get("M3_introspection_fidelity", []) if _e(f) is not None]
+    infid = [f for f in fid if _e(f) != bool(f["permission"] and f["permission"] != "none")]
     P("| 单元格 | 主体 | 有效访问 | 自省面状态 | 所报权限 | 一致 |")
     P("|---|---|---|---|---|---|")
     for f in fid:
-        ok = bool(f["authorized"]) == bool(f["permission"] and f["permission"] != "none")
+        ok = _e(f) == bool(f["permission"] and f["permission"] != "none")
         P("| %s | %s | %s | `%s` | %s | %s |"
-          % (f["object"], f["subject"], "是" if f["authorized"] else "否",
+          % (f["object"], f["subject"], "是" if _e(f) else "否",
              f["status"], f["permission"] or "—", "✓" if ok else "**✗**"))
     P("")
     P("（已排除「执行者自身」单元格：它们不是换凭证测试的对象，不参与一致性判定。）")
@@ -169,7 +193,7 @@ def main():
         rc = [c for c in cells if c["reading"] == reading]
         fires = [c for c in rc if c["mr_fires"]]
         mismatch = sorted({(c["subject"], c["object"]) for c in rc
-                           if c["cannotReachThroughGUI"] and c["authorized"]})
+                           if c["cannotReachThroughGUI"] and _y(c)})
         P("**%s 读法**：`cannotReachThroughGUI` 为真**但主体确实可访问**的单元格 **%d** 个"
           % (reading, len(mismatch)))
         if mismatch:
@@ -193,15 +217,15 @@ def main():
     for reading in ("snapshot", "live"):
         rc = [c for c in cells if c["reading"] == reading]
         n = len(rc)
-        auth = sum(1 for c in rc if c["authorized"])
+        auth = sum(1 for c in rc if _e(c))
         P("### %s 读法（单元格 %d，其中主体真实被授权 %d）" % (reading, n, auth))
         P("")
         P("| 方法 | 告警总数 | **假确证**（落在被授权单元格） | 落在被拒绝单元格 | 假确证残差 |")
         P("|---|---|---|---|---|")
         for m in METHODS:
             al = [c for c in rc if c["alarms"][m]]
-            on_auth = [c for c in al if c["authorized"]]
-            on_den = [c for c in al if not c["authorized"]]
+            on_auth = [c for c in al if _e(c)]
+            on_den = [c for c in al if not _e(c)]
             summary[f"{reading}|{m}"] = {
                 "alarms": len(al), "on_authorized": len(on_auth), "on_denied": len(on_den),
                 "cells": n, "authorized_cells": auth}
@@ -218,7 +242,7 @@ def main():
             P("|---|---|---|---|---|")
             for c in sorted(fires, key=lambda x: (x["object"], x["subject"])):
                 P("| %s | %s | %s | %s | %s |"
-                  % (c["object"], c["subject"], "是" if c["authorized"] else "否",
+                  % (c["object"], c["subject"], "是" if _e(c) else "否",
                      "有" if c["framework_log_has_record"] else "**无**",
                      c["introspection_permission"] or "—"))
         P("")
