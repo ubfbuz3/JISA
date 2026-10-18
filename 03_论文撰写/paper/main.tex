@@ -155,34 +155,32 @@ AND \uppercase{Nanlei Chen}\authorrefmark{1,2}}
 \corresp{Corresponding author: Nanlei Chen (e-mail: ubfbzu3@163.com).}
 
 \begin{abstract}
-Two system-agnostic relations in MST-wi, a metamorphic security-testing framework
-for Web systems, gate their verdict on a \emph{GUI-reachability model}---a
-crawl-time snapshot of what the interface permits---so what they can establish
-about object-level authorization depends on when that model was read, and on what
-the adjudicator is allowed to consult. We
-study those two relations and tie each limit to the evidence that carries it.
-Source inspection shows that the engine's failure channel records only that a
-relation failed: promoting a failure to a \emph{proven violation} is a policy
-added on top, and we state ours explicitly. On a \ResSynRecords{}-record
-constructed study, access granted out of band after the crawl is reported as
-proven in \ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} alarms; once a
-readable, sound oracle is supplied, the relation adds no observed adjudication
-benefit over the direct consumer of the same oracle and outcome under the tested
-conditions (the paired methods disagree on \ResAbDisagreementN{} of
+Two system-agnostic relations in MST-wi, a Web-system metamorphic testing
+framework, gate their verdict on a \emph{GUI-reachability model}---a crawl-time
+snapshot of what the interface permits---so what they establish about
+object-level authorization depends on when the model was read and what the
+adjudicator may consult. We study them and tie each limit to its evidence.
+Source inspection shows the engine records only that a relation failed:
+promotion to a \emph{proven violation} is added policy, stated here explicitly.
+On a \ResSynRecords{}-record constructed study, access granted out of band after
+the crawl is reported as proven in \ResObsOobVtwoFalseProof{} of
+\ResObsOobFalseAlarm{} alarms; once a readable, sound oracle is supplied, the
+relation adds no observed adjudication benefit over the direct consumer of the
+same oracle and outcome (the paired methods disagree on \ResAbDisagreementN{} of
 \ResAbNBola{} true-violation records, each time favouring the plain request); and
 the published specificity of \ResLitReportedSpecPct{}\% is an input-level figure
 whose denominator cannot, on its own, expose a class-uniform failure.
 
-Two experiments carry these claims beyond the constructed study. A
-pre-registered temporal experiment on Gitea \ResRsVersion{} and GitLab CE
-\GlVersion{} commits \TmpBothPolicyEvents{} authorisation transitions over
-\TmpBothCells{} cross-credential cells, with entitlement and effect agreeing on
-\TmpBothEeqY{} of them: \TmpBothStaleFP{} stale false proofs appear, and a
-recrawl with the same credentials removes \TmpBothFixed{} of them. A real
-vulnerable/fixed pair (Gitea \CveVulnVersion{} to \CveFixedVersion{}) shows the
-independent entitlement/effect gate reporting \CveTruePositives{} true positive
-on the vulnerable build, \CveFalseProofs{} false proofs, and no alarm on the
-fixed build---a check of the gate, not a measure of detection effectiveness.
+Two experiments carry these claims further. A pre-registered temporal experiment
+on Gitea \ResRsVersion{} and GitLab CE \GlVersion{} commits
+\TmpBothPolicyEvents{} authorisation transitions over \TmpBothCells{}
+cross-credential cells, with entitlement and effect agreeing on \TmpBothEeqY{}:
+\TmpBothStaleFP{} stale false proofs appear, and a recrawl with the same
+credentials removes \TmpBothFixed{}. A real vulnerable/fixed pair (Gitea
+\CveVulnVersion{} to \CveFixedVersion{}) shows the independent entitlement/effect
+gate reporting \CveTruePositives{} true positive on the vulnerable build,
+\CveFalseProofs{} false proofs, and no alarm on the fixed build---a check of the
+gate, not a measure of detection effectiveness.
 \end{abstract}
 
 \begin{keywords}
