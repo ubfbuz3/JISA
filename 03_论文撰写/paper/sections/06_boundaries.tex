@@ -157,6 +157,10 @@ is diluted by the rest of the run (Proposition~\ref{prop:resolution}: in our
 approximation the configuration that misreports a whole class of legitimate
 access still scores \ResSpecRowOneSpecPct{}\%; Corollary~\ref{cor:resolution}:
 no fixed threshold can guarantee that such a class forces the metric below it).
+Nor does the report fix the weights: if a failing class supplies a share $w$ of the
+follow-up inputs, the figure moves only between $1$ and $1-w$, so telling a
+small-share class failure apart from no failure at all requires an estimate of $w$
+that the published number does not carry.
 We are not saying
 the figure is false or the false positives misdiagnosed; the claim is that such a
 metric does not itself validate the reachability-to-authorization correspondence
@@ -258,7 +262,8 @@ and the oracle shares its implementation with enforcement. \\
 The published specificity is an input-level figure whose denominator cannot, on
 its own, expose a class-uniform failure. &
 Scenario classes emit comparable numbers of inputs, so a uniform failure is
-diluted by unaffected inputs. &
+diluted by unaffected inputs; the class shares are not reported, so the
+dilution is bounded rather than estimated. &
 Proposition~\ref{prop:resolution} and its corollary; sensitivity of the example
 to the assumed inputs per case. &
 The original per-case denominators are unavailable, so the published figure is
