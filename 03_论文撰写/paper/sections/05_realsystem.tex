@@ -261,6 +261,37 @@ The two calibration regimes record this rather than hide it: \TmpCalChecks{}
 known cells on Gitea, and on GitLab \TmpGCalGateChecks{} gated cells plus two
 recorded diagnostics for the secondary vantage (amendment A1).
 
+A channel-by-channel view makes the mechanism explicit
+(Table~\ref{tab:oracle-channel}). Both products answer every direct-collaborator
+and group cell correctly, and Gitea also answers its public and site-administrator
+cells correctly. GitLab errs only by omission, and only on the two channels that
+are not membership: it answers \emph{deny} on \TmpGOracleDisagreePublic{} public
+cells that a non-member may read and on \TmpGOracleDisagreeAdmin{}
+site-administrator cells. Neither product returns a single false allow. A
+one-sided error is nevertheless sufficient to manufacture a false proof, because
+an alarm on such a cell is then adjudicated against a deny that the ledger does
+not support---which is the cross-vendor failure reported in
+Section~\ref{sec:gogs}, now located in a named channel rather than attributed to
+``the oracle'' as a whole.
+
+\input{temporal_channel_table.tex}
+
+Two properties of the run are recorded because they are what an external check can
+verify. The protocol was frozen before the first Gitea transition, and its digest
+is carried in both run records; the two amendments were written, with timestamps
+and the base-protocol digest, before the first GitLab transition, and the pilot
+that motivated the second is archived with its cells excluded from every
+denominator. Inside a run, every cell carries its event sequence number, the
+harness version before and after the transition, the $M_0$ and $M_1$ digests and
+wall-clock timestamps, so the ordering---crawl, freeze, mutate, recrawl, oracle,
+probe---can be re-checked line by line rather than trusted. Every observation in
+that loop is a GET; the only mutating calls are the transitions themselves, and
+each is recorded with its status code. Failed observations are not dropped
+silently: a transport error after two retries is recorded as such and excluded
+from the scored set, a mutation outside 2xx excludes its whole transition, and an
+unreadable oracle is recorded as \emph{unknown} with the cell still scored on $E$
+and $Y$.
+
 Three scope limits are part of the result. First, \TmpBothStillMiss{} residual is
 a count on these surfaces, not a completeness claim: the crawl sources
 themselves define what can be seen, deploy keys are outside the ledger, and we

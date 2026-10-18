@@ -27,6 +27,7 @@ SRC_G = BASE / "temporal_gitea.json"
 SRC_L = BASE / "temporal_gitlab.json"
 OUT = PROJ / "04_绘图与分析" / "results" / "temporal_numbers.tex"
 TABLE = PROJ / "04_绘图与分析" / "results" / "temporal_table.tex"
+CHANNEL = PROJ / "04_绘图与分析" / "results" / "temporal_channel_table.tex"
 
 LABEL = {
     "grant_collaborator": r"direct grant",
@@ -40,6 +41,33 @@ LABEL = {
     "role_write": r"role read$\to$write",
     "site_admin": r"site admin grant",
 }
+
+
+CHANNELS = ["site_admin", "public", "collaborator", "team", "none"]
+
+
+def channel_stats(d: dict) -> dict:
+    """每个台账通道上，oracle 与 E 的对照（只统计换凭证格）。"""
+    out: dict[str, dict] = {}
+    for cy in d["transitions"]:
+        for c in cy["cells"]:
+            if c["role"] != "cross" or c["abstain_reason"] is not None:
+                continue
+            ch = c["expected_channel"]
+            r = out.setdefault(ch, {"n": 0, "answered": 0, "correct": 0,
+                                    "false_allow": 0, "false_deny": 0})
+            r["n"] += 1
+            o, e = c["oracle_answer"], c["expected_entitlement"]
+            if o not in ("allow", "deny"):
+                continue
+            r["answered"] += 1
+            if (o == "allow") == (e == "allow"):
+                r["correct"] += 1
+            elif o == "allow":
+                r["false_allow"] += 1
+            else:
+                r["false_deny"] += 1
+    return out
 
 
 def load(path: Path) -> dict:
@@ -173,6 +201,10 @@ def main() -> None:
         "TmpBothOracleReadable": g["OracleReadable"] + l["OracleReadable"],
         "TmpBothOracleDisagree": g["OracleDisagree"] + l["OracleDisagree"],
         "TmpBothOverRevoke": g["OverRevoke"] + l["OverRevoke"],
+        "TmpGOracleFalseDeny": sum(v["false_deny"] for v in channel_stats(dl).values()),
+        "TmpOracleFalseDeny": sum(v["false_deny"] for v in channel_stats(dg).values()),
+        "TmpGOracleAnswered": sum(v["answered"] for v in channel_stats(dl).values()),
+        "TmpOracleAnswered": sum(v["answered"] for v in channel_stats(dg).values()),
     }
 
     lines = ["% 由 04_绘图与分析/analysis/ingest_temporal.py 生成，勿手改"]
@@ -226,10 +258,57 @@ def main() -> None:
     ]
     TABLE.write_text("\n".join(tl) + "\n", encoding="utf-8")
 
+    # ---------------- Table: oracle fidelity by channel ----------------
+    cg, cl = channel_stats(dg), channel_stats(dl)
+    ct = [
+        "% 由 ingest_temporal.py 生成，勿手改",
+        r"\begin{table*}[t]",
+        r"\centering",
+        r"\caption{Oracle fidelity by granting channel, over the same transition "
+        r"cells as Table~\ref{tab:temporal}. \emph{Answered} counts cells where the "
+        r"owner-vantage oracle returns a definite answer; \emph{correct} counts "
+        r"those that agree with the ledger. A cell is \emph{false deny} when the "
+        r"oracle answers deny on a legitimately readable cell. Neither product "
+        r"produces a single false allow: the membership surface errs only by "
+        r"omission. Public and site-admin cells are exactly the channels that are "
+        r"not group or repository membership.}",
+        r"\label{tab:oracle-channel}",
+        r"\small",
+        r"\begin{tabular}{lrrrrrr}",
+        r"\toprule",
+        r" & \multicolumn{3}{c}{Gitea \TmpVersion} & "
+        r"\multicolumn{3}{c}{GitLab CE \TmpGVersion} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}",
+        r"Channel & cells & answered & false deny & cells & answered & false deny \\",
+        r"\midrule",
+    ]
+    for ch in CHANNELS:
+        a = cg.get(ch, {"n": 0, "answered": 0, "false_deny": 0})
+        b = cl.get(ch, {"n": 0, "answered": 0, "false_deny": 0})
+        label = {"site_admin": "site administrator", "public": "public visibility",
+                 "collaborator": "direct collaborator", "team": "team / group",
+                 "none": "no channel"}[ch]
+        ct.append(f"{label} & {a['n']} & {a['answered']} & {a['false_deny']} & "
+                  f"{b['n']} & {b['answered']} & {b['false_deny']} \\\\")
+    tot_g = sum(v["n"] for v in cg.values())
+    tot_l = sum(v["n"] for v in cl.values())
+    ans_g = sum(v["answered"] for v in cg.values())
+    ans_l = sum(v["answered"] for v in cl.values())
+    fd_g = sum(v["false_deny"] for v in cg.values())
+    fd_l = sum(v["false_deny"] for v in cl.values())
+    ct += [
+        r"\midrule",
+        f"Total & {tot_g} & {ans_g} & {fd_g} & {tot_l} & {ans_l} & {fd_l} \\\\",
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{table*}",
+    ]
+    CHANNEL.write_text("\n".join(ct) + "\n", encoding="utf-8")
+
     print("=== temporal numbers ===")
     for k, v in M.items():
         print(f"  {k:28s} {v}")
-    print(f"\n-> {OUT}\n-> {TABLE}")
+    print(f"\n-> {OUT}\n-> {TABLE}\n-> {CHANNEL}")
 
 
 if __name__ == "__main__":

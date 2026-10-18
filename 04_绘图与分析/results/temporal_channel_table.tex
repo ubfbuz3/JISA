@@ -1,0 +1,22 @@
+% 由 ingest_temporal.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{Oracle fidelity by granting channel, over the same transition cells as Table~\ref{tab:temporal}. \emph{Answered} counts cells where the owner-vantage oracle returns a definite answer; \emph{correct} counts those that agree with the ledger. A cell is \emph{false deny} when the oracle answers deny on a legitimately readable cell. Neither product produces a single false allow: the membership surface errs only by omission. Public and site-admin cells are exactly the channels that are not group or repository membership.}
+\label{tab:oracle-channel}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+ & \multicolumn{3}{c}{Gitea \TmpVersion} & \multicolumn{3}{c}{GitLab CE \TmpGVersion} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Channel & cells & answered & false deny & cells & answered & false deny \\
+\midrule
+site administrator & 7 & 7 & 0 & 9 & 9 & 9 \\
+public visibility & 44 & 35 & 0 & 53 & 44 & 44 \\
+direct collaborator & 25 & 25 & 0 & 25 & 25 & 0 \\
+team / group & 1 & 1 & 0 & 7 & 7 & 0 \\
+no channel & 203 & 156 & 0 & 338 & 275 & 0 \\
+\midrule
+Total & 280 & 224 & 0 & 432 & 360 & 53 \\
+\bottomrule
+\end{tabular}
+\end{table*}

@@ -41,6 +41,28 @@ missing crawl defaults to ``unreachable''---and the positive control is a sanity
 vulnerable target, for one fault pattern, the surface-gated adjudicator detects
 all planted instances with zero false positives.
 
+\paragraph{What the two added experiments carry} The temporal finding is not
+confined to one product. Under the same pre-registered protocol, frozen before
+the second run was observed, GitLab CE \GlVersion{} commits \TmpGPolicyEvents{}
+transitions over \TmpGCells{} cells, with entitlement and effect agreeing on
+\TmpGEeqY{} of them: \TmpGStaleFP{} stale false proofs, all \TmpGFixed{} removed
+by a recrawl with the same credentials, \TmpGLiveFP{} live false proofs and
+\TmpGStillMiss{} residual misses. Pooled with Gitea this is \TmpBothCells{}
+cells, \TmpBothEeqY{} agreements, \TmpBothStaleFP{} stale false proofs and
+\TmpBothFixed{} fixes. The replication is of a protocol, not of a topology:
+GitLab's project-membership surface answers 200 or 404, so it errs only by
+omission---in \TmpGOracleDisagree{} cells it disagrees with the ledger, every one
+of them a false deny, concentrated in the public
+(\TmpGOracleDisagreePublic{}) and site-administration
+(\TmpGOracleDisagreeAdmin{}) channels---and both properties are read from the
+same run rather than one being derived from the other. The entitlement/effect
+gate is in turn checked against a real defect: on a publicly fixed
+object-versus-path ownership flaw, Gitea \CveVulnVersion{} yields
+\CveTruePositives{} true positive with \CveFalseProofs{} false proofs, and the
+fixed \CveFixedVersion{} yields \CveFixedAlarms{} alarms over \CveControls{}
+control probes. That is a check of the gate on one defect we located and
+supplied; it is not a detection rate.
+
 \paragraph{What we do not claim, and how far the claims reach} We do not claim
 that \mbox{MST-wi} is wrong or say anything about its accuracy as a detector; the
 native run establishes a qualitative outcome, for one gate family, on one real
@@ -73,8 +95,9 @@ is worthless; they locate its contribution where no oracle exists, and bound it
 by what the reachability reading can see.
 
 \paragraph{What a stronger claim would require} Moving from characterization to something
-stronger needs, first, a real system that \emph{contains} the flaw, so detection
-can be measured; and second, relations whose gate is not the absence of
+stronger needs, first, a population of real systems that \emph{contain} the
+flaw, so detection can be measured---the single defect of
+Section~\ref{sec:cvepair} checks the gate but cannot supply that population; and second, relations whose gate is not the absence of
 evidence---checkable against a subject's entitlements without pretending that
 entitlements are reachable facts. The transferable condition---we call it the
 \emph{same-observable condition}---is the one that killed our own

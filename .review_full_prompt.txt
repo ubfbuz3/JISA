@@ -1,0 +1,222 @@
+你是 IEEE Access 的资深副编辑，同时扮演这次拒稿的两位审稿人（R1 给了 15 条，R2 给了 6 条）。下面是完整材料，请全部读完再回答。
+
+【任务】
+A. 逐条裁决：21 条每条给 closed / partially / open，并写明"还缺的那一个具体证据或那一句表述"。复述已完成工作不算裁决。
+B. 哪 5 条在重投时最可能再次导致 reject？按"审稿人会在哪里抓住它"写。
+C. 文本级处方（只给要点与可用句式）：命题 2 的同义反复风险；specificity 分母；旧的 blind/aware 错配与"不能裁决真正违规"一类旧句；标题/摘要/结论如何按现有证据收窄。
+D. 两天计划：必须做 / 应当做 / 可以放弃，并指出哪些工作即使做完也不会改变裁决（不要做）。
+
+【约束】不要建议需要新数据集或新产品的实验；不要建议撤销已有实验；现有证据边界如实承认。中文，1800 字以内，用 A/B/C/D 标题分段。
+
+==================== 审稿意见原文 ====================
+Reviewers' Comments to Author:
+
+Reviewer: 1
+
+Comments:
+The paper investigates whether metamorphic testing with web-interface reachability models can reliably establish broken object-level authorization (BOLA) vulnerabilities when the crawler's snapshot may not reflect the system's actual authorization state. Through a constructed 576-record study, experiments on Gitea 1.22.6, Gogs 0.14.3, and GitLab 17.11.7, and a seeded positive control, the authors identify three limitations: stale reachability models can turn legitimate, post-crawl access grants into false proofs of violations; when a readable and sound authorization oracle is available, the evaluated metamorphic relations show no incremental adjudication benefit over a direct request-and-oracle comparison; and input-level specificity can obscure systematic failures when its denominator includes many unaffected inputs. The paper further examines oracle readability, soundness, and admissibility, distinguishes false alarms from falsely proven violations, and reports source-level inspection and reproducibility artifacts. Its main contribution is a methodological critique of how authorization-testing results are adjudicated and measured, rather than a new vulnerability-detection algorithm. The evidence is informative but remains bounded by the two reachability-gated relations examined, the constructed scenario design, the limited vulnerable fault pattern, and the absence of demonstrated detection effectiveness across a representative population of real BOLA vulnerabilities.
+1. The novelty claim needs sharper positioning against existing BOLA testing research. The paper primarily identifies limitations in reachability-based adjudication, oracle assumptions, and metric design. However, it does not sufficiently distinguish these contributions from established work on oracle problems, stateful web testing, authorization testing, and metamorphic testing. Please provide a structured comparison identifying which limitations are newly demonstrated, which are already known, and what methodological advance the paper contributes beyond applying these concepts to MST-wi.
+2. The formalization of false proofs requires a complete and unambiguous definition. The paper distinguishes alarms, false alarms, and violations proven, but the mapping between these outcomes and the ground-truth authorization state is not formalized consistently throughout the manuscript. Define the decision variables and truth conditions for every possible combination of request outcome, actual entitlement, oracle response, and detector verdict. In particular, explain how a legitimate successful request can be distinguished from unauthorized access without allowing the tested reachability model to determine its own ground truth.
+3. The system model does not sufficiently characterize authorization-state transitions. The three-phase protocol assumes that a crawl-time snapshot becomes stale after an entitlement changes, but the effects of revocation, inherited permissions, public visibility, role changes, and concurrent authorization updates are not comprehensively modeled. Specify the state-transition semantics, the timing of each observation, and the consistency assumptions under which the reported deterministic false proofs arise. Also clarify whether the conclusions hold when authorization changes between the request and adjudication stages.
+4. The admissibility condition for authorization oracles is insufficiently operationalized. Readability and soundness are distinguishable properties, but clause (2)—requiring a reason that the oracle is not affected by the same defect under investigation—remains a qualitative judgment. Please formulate a reproducible procedure for determining admissibility before examining outcomes, including how independence from the tested authorization mechanism is established. Without such a procedure, oracle admissibility risks becoming a post hoc decision that can bias adjudication.
+5. Proposition 2 risks being tautological rather than establishing a substantive theoretical result. The proposition states that a metamorphic verdict determined entirely by an oracle and an ordinary request cannot outperform a direct consumer of those same inputs. This follows from the assumed functional dependence, rather than independently demonstrating a limitation of metamorphic testing. Please distinguish the formal identity from the empirical premise that the evaluated relations consume no additional decision-relevant information. A truth-table derivation or explicit functional representation of each predicate would make the argument more rigorous and clarify its applicability beyond the particular implementation.
+6. The synthetic-study design needs a more explicit account of coverage and identifiability. The 576 records form a fixed enumeration, but the manuscript does not present a sufficiently transparent mapping from configurations and scenarios to all records. Please provide the complete factorial design, explain how each factor is varied, and demonstrate that the reported effects can be attributed to crawl timing, exception handling, and oracle readability without confounding. The earlier representative 36-record readable and 18-record unreadable grids should also be reconciled explicitly with the later 312/264-record partition.
+7. The evaluation of metamorphic relations uses baselines that do not establish superiority over competitive black-box methods. The direct_only baseline is deliberately unfair because it ignores request outcomes, while obs_success and always_alarm are intentionally weak references. The authors appropriately acknowledge these limitations, but the evidence is insufficient to characterize the practical value of the proposed testing approach. Please compare against a differential, multi-account authorization tester that probes equivalent objects under distinct privilege levels, as well as a conventional BOLA detector using request-response differentials. Report matched query budgets, execution costs, and detection outcomes.
+8. The cross-vendor experiments expose a serious oracle-validity problem but do not fully isolate its causes. Gogs and GitLab produce false proofs when their membership-introspection surfaces omit authorization obtained through other channels. Please provide a channel-by-channel confusion matrix separating direct membership, team-derived access, administrative grants, public visibility, and out-of-band sharing. Also distinguish an incorrect oracle response from a stale reachability model, since these are different failure mechanisms requiring different remedies.
+9. The reported detection results are too narrow to support broad conclusions about BOLA detection effectiveness. The three seeded vulnerable instances share one fault pattern and are explicitly not independent vulnerability discoveries. Moreover, the real-system experiments primarily evaluate false-proof behavior because no vulnerability was found on the tested surfaces. Please expand the positive-control evaluation to multiple independently implemented authorization defects, including unauthorized reads, unauthorized modifications, inherited-permission errors, and privilege-escalation paths. Report per-defect recall and false-positive rates rather than treating repeated instances of one fault pattern as evidence of general detection capability.
+10. The comparison between crawl-time and live authorization state requires stronger control of temporal and observational effects. The Gitea experiment reports 10 mismatch cells under snapshot reading and zero under live reading, but the manuscript should explain how live-state queries avoid changing the tested state, introducing additional privileges, or benefiting from information unavailable to the original detector. Please specify the ordering of crawling, entitlement mutation, oracle querying, and request execution, and provide timestamps or event logs sufficient to verify that the comparison changes only the model-reading time.
+11. The specificity analysis requires a clearer justification of its denominator and interpretation. The illustrative 84.62% specificity depends on an assumed two follow-up inputs per case, rather than the original engine's exact input count. Although the authors disclose this limitation, the example cannot establish the numerical behavior of the published 99.81% figure without the underlying denominator. Please provide the original evaluation counts if available, or present a parameterized sensitivity analysis showing how specificity changes with the number of unaffected inputs. Clearly distinguish the proposed scenario-level diagnostic from conventional specificity, and avoid implying that one alternative metric alone resolves the underlying oracle-validity problem.
+12. The mathematical treatment of scenario-level failure is correct in spirit but limited in scope. Proposition 1 assumes that each failing scenario contributes exactly \(a\) false-alarm inputs and each successful scenario contributes \(m\) alarm-free inputs. Real testing pipelines may produce unequal numbers of requests, correlated inputs, and different numbers of alarms per scenario. Please extend the result to heterogeneous scenario weights and explain whether the same dilution phenomenon holds when the number of generated inputs depends on scenario complexity or detector behavior. This would establish the generality of the measurement argument rather than only its validity under the stated construction.
+13. The reported metrics need consistent treatment of abstentions and operational cost. The state-calibrated method achieves perfect precision in the pooled table by abstaining when the oracle is unavailable, while missing 111 true violations. Precision and recall alone do not adequately characterize this selective behavior. Please report coverage, selective risk, abstention rate, and detection performance conditional on oracle availability, alongside execution time and request overhead. The discussion should also distinguish a safe abstention from a successful detection and avoid ranking methods primarily by metrics that reward non-decision.
+14. The implementation and reproducibility evidence is incomplete for independently validating the principal claims. The paper reports a public artifact, source inspection, a separate implementation, and a native-engine execution, but the native run executes only a subset of the authorization relations, and the content predicate is never invoked. Please provide a version-pinned environment, exact commands, complete configuration and seed files, machine-readable raw outputs, and scripts that regenerate every table and figure. In particular, document the two failed relation executions, the engine-side defect, and the treatment of missing or failed observations so that an independent researcher can reproduce the reported counts without relying on author-specific interpretation.
+15. The conclusions should be narrowed to match the actual evidence and the stated research questions. The paper repeatedly acknowledges that it studies two relations from one reachability-gated family, three related-domain systems, and a limited seeded fault pattern. Nevertheless, statements suggesting that adjudication of genuine violations is absent from the evaluated relations risk extending beyond the experiments. Please distinguish conclusions established by source-level functional dependence, findings demonstrated by the synthetic construction, and findings observed on real systems. A final evidence-to-claim table linking each research question to its assumptions, tested configurations, supporting results, and explicit limitations would substantially improve the paper's scientific precision and credibility.
+
+
+
+Additional Questions:
+Please confirm that you have reviewed all relevant files, including supplementary files and any author response files, which can be found in the "View Author's Response" link above (author responses will only appear for resubmissions): Yes, all files have been reviewed
+
+1) Does the paper contribute to the body of knowledge?: Yes
+
+2) Is the paper technically sound?: Yes
+
+3) Is the subject matter presented in a comprehensive manner?: Yes
+
+4) Are the references provided applicable and sufficient?: Yes
+
+5) Are there references that are not appropriate for the topic being discussed?: No
+
+5a) If yes, then please indicate which references should be removed.:
+
+
+Reviewer: 2
+
+Comments:
+Summary: The paper shows that MST-wi's reachability-based relations produce false proofs after out-of-band grants, add no benefit over a direct check when a readable oracle exists, and report a specificity figure that hides class-wide failures. The honest scoping and reproducibility package are strengths.
+
+Required corrections:
+Novelty. State what is new beyond showing that a snapshot goes stale, and whether re-crawling or live reading removes the problem. Your data show 0 mismatches under live reading on Gitea.
+Scope of claims. Only 2 of 76 relations (one reachability-gated family) were studied, and only 2 of 11 authorization relations fired on Gitea. Narrow the title and abstract to MST-wi's reachability-gated relations, or extend the evaluation.
+Proposition 2. It is close to true by definition. Separate clearly what is empirical from what is definitional.
+Detection side. No real system was vulnerable, so only false proofs were measured on real systems. Either add a real vulnerable case or remove the claim that the metamorphic step adds nothing for detection.
+The 84.62% figure. It assumes two inputs per case and is only illustrative. Keep it out of the abstract and don't present it as quantitative support.
+Constructed ground truth. Discuss how far the false-proof rates (1.00 and 0.44) reflect your scenario design, such as the per-cell multipliers, rather than the technique.
+
+Additional Questions:
+Please confirm that you have reviewed all relevant files, including supplementary files and any author response files, which can be found in the "View Author's Response" link above (author responses will only appear for resubmissions): Yes, all files have been reviewed
+
+1) Does the paper contribute to the body of knowledge?: Partly. The measurement and the metric critique are useful, but the core insight (a frozen snapshot goes stale) is not new.
+
+2) Is the paper technically sound?: Mostly yes. The method is transparent and the artifacts are public, but the evidence is narrow.
+
+3) Is the subject matter presented in a comprehensive manner?: Mostly. The related work is broad.
+
+4) Are the references provided applicable and sufficient?: yes
+
+5) Are there references that are not appropriate for the topic being discussed?: No
+
+5a) If yes, then please indicate which references should be removed.:
+
+If you have any questions, please contact article administrator: Mr. Adesh Choudhary adesh.choudhary@ieee.org
+
+
+
+
+==================== 已完成的工作与现有证据（作者自述，数字均可在产物中核对） ====================
+
+A 包（真值与裁决分离）
+- E（期望授权）只由台账推导：setup 事务 + 带外变更事务 + 六类继承规则（owner/org owner/site admin/public/collaborator/team），禁用任何探针响应、oracle 答案或观测效果。
+- Y（观测效果）改为内容级：读用 sha256 与拥有者复读一致；写用"主体建唯一文件 → 拥有者逐字节复读 → 拥有者删除并复读 404"。三系统（Gitea 1.22.6 / Gogs 0.14.3 / GitLab 17.11.7）共 120 个换凭证写格，E==Y 120/120，越权写 0，状态码与内容不一致 0。两条限制如实入文：Gogs contents API 无 DELETE（restore 不支持）；site_admin 在 Gogs/GitLab 实际不可写（那 24 行剔除为 control）。
+- 裁决器阶梯重排为 raw（触发即 violation-proven，无例外谓词）< v1（存在性过滤）< v2（存在性+操作覆盖）< v3 < degrade_all，另有 direct_only/direct_observe。576 条全矩阵重跑后 v1/v2/v3/degrade_all 计数与旧结果逐项相同；raw 比 v1 多 75 个告警（333 vs 258）。旧结果已归档作为同源证明。
+- v3 的 228 次弃权拆为 156 次 oracle 不可读 + 72 次合法覆盖共享。
+- native 三段分离：源码核实 MR.fail() 只写 FAILURE 日志、不做任何授权判定；拆成 A=6 原生报警 / H=6（本文升格策略，按构造）/ T=确认违规 0、假证明 6（覆盖 3 格）。
+
+E 包（真实 vulnerable/fixed 配对）
+- Gitea 1.20.5（脆弱）→ 1.20.6（修复），修复条目 "Fix comment permissions"（#28213/#28216），同缺陷在 Forgejo 侧为 CVE-2023-49946；两版二进制 sha256 与官方 .sha256 逐字节核对。
+- 缺陷是评论 edit/delete 缺"对象归属"校验：bob 借自己公开仓库的路径、传 alice 私有仓库的评论 id，1.20.5 返回 200 且拥有者复读到被改内容；1.20.6 返回 404 且内容不变。
+- 结果：TP 1 / 假证明 0 / 修复版告警 0；每版 5 条对照（共 10 条）全部符合预期；恢复 2/2。正文明确：这证明 E/Y 闸门在真缺陷上会正确主张、修复后停止主张，不证明"我们能发现这类缺陷"，不是有效性估计。
+
+B 包（真时序，双产品）
+- 预注册协议 c_protocol.json（sha256 d09d9047…），先冻结再开跑；hv 明确为 harness 逻辑版本，不是服务器原子快照。
+- Gitea 1.22.6：8 个转移、7 对象、5 用户+匿名 = 280 换凭证格。E==Y 280/280，0 弃权，8/8 事务提交、8/8 M0 摘要未变、8/8 版本一致。陈旧假确证 13（直授 1、团队继承 1、private→public 5、site-admin 6），同权限 recrawl 修好 13/13，仍漏 0，live 假确证 0，真实违规 0。撤销侧陈旧高估 7，全部被 enforcement 拒绝。oracle：owner 视点 224/280，自视点仅 7/280（全在 admin 授予后）。
+- GitLab CE 17.11.7：同协议、独立容器全新卷，8 转移、9 对象、6 用户+匿名 = 432 格。E==Y 432/432，0 弃权，8/8 事务、8/8 摘要、8/8 版本一致。陈旧假确证 16，修好 16/16，仍漏 0，live 假确证 0，真实违规 0。撤销侧陈旧高估 10。
+- 两份修正案在观察任何 GitLab 响应之前写下：A1 校准门槛改为主视点 4/4（副视点本就未被协议承认为 oracle，只作诊断列）；A2 多通道测试的替代通道从组内直授移到组外个人项目——首轮试跑发现 GitLab 在移除组成员时会连带删除该组项目的项目级成员记录（直接成员列表从 1 条变 0 条），不把这条未文档化的产品规则编码进台账。
+- oracle 保真度：GitLab 的 members/all 对任何项目成员可读，自视点可答 360/432；但它回答的是"是不是成员"，对公开仓库非成员、对站点管理员都返回 404，与台账分歧 53 格，全部落在 public（44）与 site_admin（9）通道。Gitea 端点则与台账 0 分歧。结论：可读 ≠ 可靠，admissibility 不能只靠可读性。
+
+尚未完成的已知缺口
+- 没有多种独立故障模式的阳性对照（现有 3 个 seeded 实例是同一故障模式，加上 1 个真实配对）。
+- 没有竞争性多账户差分基线（匹配预算、逐方法成本）。
+- R1.8 要求的分渠道混淆矩阵只做了部分（时序实验给出 public 44 / admin 9 两个通道的分歧计数）。
+- 命题 2 仍可能被读成同义反复。
+- specificity 分母仍是输入级。
+- 正文仍有少量旧表述与新证据不一致。
+
+==================== 当前正文（节选） ====================
+
+【摘要】
+
+Broken object-level authorization (BOLA) is the top-ranked API security risk, yet
+detecting it is an oracle problem: vulnerable and correct systems answer
+identically. Metamorphic testing is a leading technique for that problem in Web
+systems; for the relations we study, the predicates delegate the verdict to a
+\emph{GUI-reachability model}---a crawl-time snapshot of what the interface
+permits. We instantiate the published relations as defined and drive constructed
+and real systems through crawl, out-of-band change, and execution. Three findings
+follow. (1)~Access granted out of band after the crawl is reported as a
+\emph{proven} violation---a \emph{false proof}---in
+\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} constructed alarms, because
+an out-of-band grant fits only the wrong one of the predicate's two
+representations. (2)~Repairing this with a readable, sound oracle that fully
+resolves the proposition leaves the metamorphic step adding no observed
+adjudication benefit over the direct consumer of the same oracle and outcome; the
+paired methods disagree on only \ResAbDisagreementN{} of \ResAbNBola{}
+true-violation records, all favouring the plain request. (3)~The reported
+specificity of \ResLitReportedSpecPct{}\% is not conditioned on a check that the
+reachability model equals the authorization state, and its denominator cannot
+register a scenario-uniform failure.
+
+The findings come from a \ResSynRecords{}-record scenario/configuration study on
+a constructed system, together with a controlled cell study on Gitea
+\ResRsVersion{}, extended, with a methodological variation, to Gogs \GgVersion{}
+and GitLab \GlVersion{}; an endogenous control holds final visibility fixed, and
+the published relations reproduce the false proof within the gated subset that
+fires.
+
+
+【命题 2 现状】
+\begin{proposition}[adjudication of the evaluated relations is oracle-determined]
+\label{lem:oracle-suff}
+Let $O$ be an authorization oracle that is \emph{readable} (its answer can be
+obtained from the vantage in question) and \emph{sound} (its answer equals the
+true permission), and let $R$ be the observed outcome of an ordinary request.
+For the authorization relations and scenarios evaluated here---whose predicates
+read the crawl-time reachability model $M$ and the response, and nothing
+else---once $O$ is readable, sound and complete for the proposition under test,
+$M$ supplies no decision-relevant authorization information that $(O,R)$ does not
+already determine: agreement with the true state is redundant, and disagreement
+makes the verdict unsound (Finding~1). The verdict of the metamorphic family is
+therefore a function $f(O,R)$ of $O$ and $R$ alone, and any adjudicator of that
+form is extensionally equal to the direct consumer $D := f(O,R)$---the two are
+the same function applied to the same arguments. A metamorphic step can be
+\emph{shown} to be necessary only by exhibiting an observable it consumes that
+the direct consumer does not.
+\end{proposition}
+
+\begin{proof}
+The first clause is the empirical premise, established for these relations by
+source inspection (Section~\ref{sec:impl}) and by the ablation
+(Section~\ref{sec:synthetic-ablation}); the middle clause then follows because
+$M$ enters the verdict only through $(O,R)$, and the remainder is the observation
+that a function agrees pointwise with itself, the last sentence being its
+contrapositive.
+\end{proof}
+
+
+
+【结论里的旧句】
+"Across the statuses the oracle can take, the outcomes the evaluated relations can yield are thus a false proof, a result no better than the plain request (and, where the oracle is readable, worse), or an abstention; adjudication of a genuinely illegal access is not among them for these relations."
+
+【结论正文】
+\section{Conclusion}
+\label{sec:conclusion}
+
+For object-level authorization, \mbox{MST-wi}'s predicates do not know whether
+the acting subject is entitled to the object; they know what the interface, as
+crawled, permitted. Instantiating them as defined produced three findings
+(Section~\ref{sec:findings}).
+
+\paragraph{Finding 1 (temporal)} As designed, the adjudication false-proofs on
+legitimately granted access, deterministically (\ResObsOobVtwoFpRate{}
+constructed; \ResRsMrBookkeepingFpRate{} Gitea), because an out-of-band grant fits
+only the wrong one of the predicate's two representations. On the real system the
+mismatch appears only under the crawl-time reading
+(\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\ \ResRsMismatchLive{} live),
+with an endogenous control holding final visibility fixed: within this controlled
+design the only manipulated explanatory variable is when the model was read, not
+what was visible.
+
+\paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
+authorization oracle that fully resolves the proposition under test---works, and
+in that regime the evaluated metamorphic step
+provides no observed incremental adjudication benefit over a direct consumer of the same oracle and outcome:
+an empirical premise, formalised as a conditional (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
+a single ordinary request yields the same false-proof count (false proofs
+\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
+true-violation records the paired comparison disagrees on only
+\ResAbDisagreementN{}, each time in favor of the plain request; no margin was
+pre-specified, so no inferential claim attaches.
+On Gitea the comparison is limited to false-proof behavior, because no
+vulnerability was present on the tested surface.
+
+\paragraph{Finding 3 (measurement)} The reported specificity of
+\ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is not
+conditioned on an explicit check that the reachability model equals the
+authorization state, and its input-level denominator cannot register a
+class-uniform failure.
+
+Support evidence: reading the implementation confirmed the semantics and added
+the mechanism---the crawl model is frozen by a cache never invalidated, and a
+missing crawl defaults to ``unreachable''---and the positive control is a sanity check that closes the loop: on a seeded
+vulnerable target, for one fault pattern, the surface-gated adjudicator detects
+all planted instances with zero false positives.
+

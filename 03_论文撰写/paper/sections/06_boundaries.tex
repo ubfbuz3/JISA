@@ -45,32 +45,58 @@ adjudication benefit.} We state the
 reason rather than present it as a discovered effect: its burden is an empirical
 premise about the evaluated relations, not an algebraic identity.
 
-\begin{proposition}[adjudication of the evaluated relations is oracle-determined]
-\label{lem:oracle-suff}
-Let $O$ be an authorization oracle that is \emph{readable} (its answer can be
-obtained from the vantage in question) and \emph{sound} (its answer equals the
-true permission), and let $R$ be the observed outcome of an ordinary request.
-For the authorization relations and scenarios evaluated here---whose predicates
-read the crawl-time reachability model $M$ and the response, and nothing
-else---once $O$ is readable, sound and complete for the proposition under test,
-$M$ supplies no decision-relevant authorization information that $(O,R)$ does not
-already determine: agreement with the true state is redundant, and disagreement
-makes the verdict unsound (Finding~1). The verdict of the metamorphic family is
-therefore a function $f(O,R)$ of $O$ and $R$ alone, and any adjudicator of that
-form is extensionally equal to the direct consumer $D := f(O,R)$---the two are
-the same function applied to the same arguments. A metamorphic step can be
-\emph{shown} to be necessary only by exhibiting an observable it consumes that
-the direct consumer does not.
-\end{proposition}
+We separate the two parts, because only one of them can fail. The algebraic part
+is a lemma about function composition; the empirical part is a statement about
+what these two relations actually read, and it has a falsifier.
+
+\emph{The direct adjudicator.} Fix, before any run, the rule $D$ that issues
+\texttt{violation-proven} for $(o,s,a)$ exactly when the oracle $O$ answers
+\emph{deny} and the ordinary request $R$ succeeds. $D$ consumes $O$ and $R$ and
+nothing else. It is a definition, not a result, and it is the comparator in the
+ablation of Section~\ref{sec:synthetic-ablation} (\texttt{direct\_observe}).
+
+\begin{lemma}[absorption]
+\label{lem:absorption}
+Let a detector issue its verdict through a map $g(A,O,R)$, where $A$ is its alarm
+and $O,R$ as above. If, on the domain of cells considered, (i)~$A$ is a function
+$a(M,R)$ of the crawl-time model and the response only, and (ii)~$M$ is
+$O$-determined for the authorization proposition under test---that is, $M$ carries
+no distinction the oracle does not already make---then there is a map $g'$ with
+$g(a(M,R),O,R)=g'(O,R)$ on that domain.
+\end{lemma}
 
 \begin{proof}
-The first clause is the empirical premise, established for these relations by
-source inspection (Section~\ref{sec:impl}) and by the ablation
-(Section~\ref{sec:synthetic-ablation}); the middle clause then follows because
-$M$ enters the verdict only through $(O,R)$, and the remainder is the observation
-that a function agrees pointwise with itself, the last sentence being its
-contrapositive.
+By (i) the first argument of $g$ is a function of $(M,R)$; by (ii) $M$ is a
+function of $O$ on the domain; substituting gives $A=a'(O,R)$, so $g$ factors
+through $(O,R)$ as $g'(O,R):=g(a'(O,R),O,R)$.
 \end{proof}
+
+The lemma is deliberately weak: it says that \emph{if} a detector reads nothing
+beyond the model and the response, its verdict cannot carry information the pair
+$(O,R)$ lacks. It does not say that any particular implementation satisfies (i)
+or (ii), and it does not compare two programs---it compares two functions on a
+domain.
+
+\begin{proposition}[the two relations fall in the lemma's domain]
+\label{lem:oracle-suff}
+For the two relations examined here, premise (i) holds by source inspection: their
+predicates read the crawl-time reachability model and the response, and nothing
+else (Section~\ref{sec:impl}). Premise (ii) holds on the cells tested, where the
+oracle is readable and sound: $M$ and $O$ agree on the authorization proposition,
+so $M$ adds no distinction. Consequently the verdict of each relation is
+extensionally the direct adjudicator $D$ on those cells, and the equality is
+checked, not assumed, by the paired ablation: the two methods disagree on
+\ResAbDisagreementN{} of \ResAbNBola{} true-violation records
+(Section~\ref{sec:synthetic-ablation}).
+\end{proposition}
+
+The proposition is falsifiable in one specific way: exhibit an observable $Z$
+that a relation consumes, that is decision-relevant, and that $(O,R)$ does not
+determine. Then premise (i) fails, the lemma does not apply, and the relation
+could in principle beat $D$. We know of no such observable for these two
+relations, and the ablation is consistent with its absence; that is the whole of
+the claim. We do not assert that no such observable could exist for other
+relations in the catalogue, and we do not assert that the relations are useless.
 
 The proposition concerns \emph{adjudication} information only. It does not imply
 that a metamorphic relation cannot improve input generation, search-space
@@ -118,8 +144,8 @@ definitions rather than a coincidental measurement.
 \emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
 generated inputs; it is not conditioned on an explicit check that the
 reachability model coincides with the true authorization state, and its
-input-level denominator cannot provide stable scenario-level resolution for a
-scenario-uniform failure.} The omission:
+input-level denominator cannot, on its own, provide stable scenario-level
+resolution for a scenario-uniform failure.} The omission:
 adjudication is a function of the
 reachability model, so where model and true state diverge---the out-of-band case
 of Finding~1---the figure measures agreement with the tool's own crawler; the
@@ -170,11 +196,16 @@ only warrant and it is wrong, a legitimate access becomes a false proof
 no adjudication over the direct consumer of that oracle and the outcome
 (Finding~2). And where no readable, admissible oracle exists---the black-box
 case---there is nothing for a sound method to consume, so it abstains rather than
-proves. Across the statuses the oracle can take, the outcomes the evaluated
-relations can yield are thus a false proof, a result no better than the plain
-request (and, where the oracle is readable, worse), or an abstention;
-adjudication of a genuinely illegal access is not among them for these
-relations.
+proves. Across the statuses the oracle can take, the verdict the evaluated
+relations can yield is thus a false proof, a result no better than the plain
+request (and, where the oracle is readable, worse), or an abstention. None of
+those is a proof of illegal access, because the relation's alarm is not evidence
+of it: an alarm says that the relation failed, and an ordinary request that
+succeeds says that the object was served. A genuine violation becomes reportable
+only when an independent entitlement source says \emph{deny} and a content-level
+effect observation says \emph{allow}; Section~\ref{sec:cvepair} reports that gate
+producing one true positive on a vulnerable build and none on its fixed
+successor. The relation contributes to neither side of that conjunction.
 
 Each finding would fall as
 follows: Finding~1, if the predicates were defined over live rather than
@@ -182,3 +213,67 @@ recorded reachability; Finding~2, by an authorization MR needing an observable
 that a succeeding request plus a readable oracle cannot produce; Finding~3, by
 a specificity in scenario units, or with the condition explicit, that still fails
 to separate the configurations studied here.
+
+Table~\ref{tab:evidence-claim} states, for each research question, what is
+assumed, what was measured, and what the result does not cover. We add it because
+the three findings rest on different kinds of evidence---source-level functional
+dependence, a constructed enumeration, and two real-system studies---and a reader
+should be able to see which kind carries which sentence.
+
+\begin{table*}[t]
+\centering
+\caption{Evidence to claim. Each row names the assumption the claim needs, the
+artefact that carries it, and the boundary that remains. The last row is not a
+research question: it checks the adjudication gate used throughout, and is not
+evidence about detection effectiveness.}
+\label{tab:evidence-claim}
+\footnotesize
+\begin{tabular}{@{}p{0.055\textwidth}p{0.235\textwidth}p{0.185\textwidth}p{0.245\textwidth}p{0.205\textwidth}@{}}
+\toprule
+RQ & Claim & Assumption it needs & Evidence & What it does not cover \\
+\midrule
+1 &
+A crawl-time reading reports an out-of-band grant of legitimate access as a
+proven violation. &
+The grant occurs after the crawl, is recorded in the ledger, and is reachable
+through a channel the crawl does not enumerate. &
+\ResSynRecords{}-record constructed study; \TmpBothPolicyEvents{} committed
+transitions on Gitea and GitLab, \TmpBothStaleFP{} stale false proofs, all
+\TmpBothFixed{} removed by a same-credential recrawl. &
+Two relations of one reachability-gated family; designed transitions, not a
+sample of deployment changes; no residual miss is a completeness claim. \\
+\addlinespace
+2 &
+Once a readable, sound oracle is supplied, the relation adds no observed
+adjudication benefit over the direct consumer of the same oracle and outcome. &
+The oracle is readable and sound on the cells scored; the relation consumes no
+decision-relevant observable outside $(O,R)$. &
+Paired ablation on \ResAbNBola{} true-violation records, disagreeing on
+\ResAbDisagreementN{}; channel-level oracle fidelity over
+\TmpBothCells{} cells. &
+Conditional on the antecedent: the unreadable stratum has no oracle to consult,
+and the oracle shares its implementation with enforcement. \\
+\addlinespace
+3 &
+The published specificity is an input-level figure whose denominator cannot, on
+its own, expose a class-uniform failure. &
+Scenario classes emit comparable numbers of inputs, so a uniform failure is
+diluted by unaffected inputs. &
+Proposition~\ref{prop:resolution} and its corollary; sensitivity of the example
+to the assumed inputs per case. &
+The original per-case denominators are unavailable, so the published figure is
+diagnosed rather than re-estimated. \\
+\addlinespace
+Gate &
+An independent entitlement ledger plus a content-level effect observation
+reports a real defect as a true positive and stays silent on its fix. &
+The ledger is complete for the tested object and the effect is read back by the
+owner, not inferred from a status code. &
+Gitea \CveVulnVersion{} versus \CveFixedVersion{}: \CveTruePositives{} true
+positive, \CveFalseProofs{} false proofs, \CveFixedAlarms{} alarms on the fixed
+build, \CveControls{} control probes as expected. &
+One publicly fixed defect found and supplied by us; this is a check of the gate,
+not a recall estimate. \\
+\bottomrule
+\end{tabular}
+\end{table*}
