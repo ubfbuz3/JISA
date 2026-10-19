@@ -280,6 +280,8 @@ PY
   run_step ingest_design.py            ingest_design.py
   run_step ingest_coverage.py          ingest_coverage.py
   run_step ingest_baseline.py          ingest_baseline.py
+  run_step ingest_budget.py            ingest_budget.py
+  run_step ingest_multiclass.py        ingest_multiclass.py
   if ! "$PYBIN" make_diagrams.py >/dev/null 2>&1; then
     echo "  [WARN] make_diagrams.py (figures) exited non-zero"
   fi
