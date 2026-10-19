@@ -1,0 +1,692 @@
+{
+  "git_head": {
+    "returncode": 0,
+    "output": "0d556ef67f085813ccfc2be8f70c766e327acd6f\n"
+  },
+  "git_status_start": {
+    "returncode": 0,
+    "output": "?? 06_论文追踪/2026-10-19_当前版本完整验收/\n"
+  },
+  "manifest_check": {
+    "returncode": 0,
+    "output": "[ok] make_manifests --check: all inputs and outputs match the committed manifests\n"
+  },
+  "letter_numbers": {
+    "returncode": 0,
+    "output": "[ok] 75 项承重数字与生成器当前输出一致\n"
+  },
+  "letter_refs": {
+    "returncode": 0,
+    "output": "main.pdf: 30 页, 24 张表\n检查了 31 个带页码的引用\n[ok] 回信全部表号/页码引用与 main.pdf 一致\n"
+  },
+  "pair_validation": {
+    "returncode": 0,
+    "output": "  [ok] 未扰动记录                            问题数=0\n  [ok] 删除脆弱版 own_comment 对照             问题数=2\n  [ok] 恢复改为失败                           问题数=1\n  [ok] 复读正文回退但保留 Y=True/TP              问题数=4\n  [ok] own_comment 改成 403               问题数=1\n  [ok] 标签重复                             问题数=2\n  [ok] 多出未登记标签                          问题数=2\n  [ok] E 与台账冲突                          问题数=1\n\n[ok] 8 个用例全部符合预期\n"
+  },
+  "skill_consistency": {
+    "returncode": 0,
+    "output": "[]\n"
+  },
+  "main": {
+    "pages": 30,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "cba14d432d2c7199067252c43096a28c61befc0505461c47a445db8bcafbd30b",
+    "annotations": 0
+  },
+  "letter": {
+    "pages": 11,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "531862de6029930a561501b595ad657d959cea73901a1087ed5dd3f93866ccea",
+    "annotations": 0
+  },
+  "highlighted": {
+    "pages": 30,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "24417890ec2658e5df301bf1056fd1ead9d6b3ce2f4ba2602167fea55bc114bf",
+    "annotations": 1987
+  },
+  "baseline": {
+    "pages": 16,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c",
+    "annotations": 0
+  },
+  "clean_highlighted_text_identical": true,
+  "tables": [
+    {
+      "table": 1,
+      "page": 5,
+      "caption_start": "The complete design. Every record is one point of the cross scenario × configuration × relation × exception policy × reachability reading; the last two are deliberately thrown switches, not replicates, so the enumeration carries no sampling"
+    },
+    {
+      "table": 2,
+      "page": 5,
+      "caption_start": "Attribution by matched pairs. Each row compares two records that differ in exactly one switch, holding configuration, scenario, relation and exception policy (or reachability reading) fixed, so the contrast cannot be carried by any other fa"
+    },
+    {
+      "table": 3,
+      "page": 8,
+      "caption_start": "End-to-end confusion matrix over all 576 records (216 true violations, 360 correct cases). The records are a fixed enumeration, not a sample (Section III, statistical treatment), so no inferential interval is attached; where a denominator i"
+    },
+    {
+      "table": 4,
+      "page": 9,
+      "caption_start": "The same 576 records scored on the decision rather than on the alarm. Coverage is the share of records on which a method asserts either a violation or its absence; the abstention column gives the count and, in parentheses, its rate, split b"
+    },
+    {
+      "table": 5,
+      "page": 10,
+      "caption_start": "Reconciling the representative grid with the full partition, record by record. The grid of Section IV is the original selection—e3 configurations, S3–S7, exception policy raw, aware reading—not a smaller version of the partition. Each block"
+    },
+    {
+      "table": 6,
+      "page": 11,
+      "caption_start": "The ablation of Table 3 re-run inside each stratum. The two panels are not rankings of the same population but two different regimes: in the readable stratum the oracle-bearing methods can act; in the unreadable stratum they cannot act and "
+    },
+    {
+      "table": 7,
+      "page": 11,
+      "caption_start": "The grant surface of Gitea 1.22.6 (instance-independent). quantity count paths in the system’s API description 253 grant endpoints 15 of which usable without site-admin 8 revocation endpoints 2 Is the authorization surface readable, and fro"
+    },
+    {
+      "table": 8,
+      "page": 12,
+      "caption_start": "Authorization-introspection readability protocol on Gitea. Each row is a distinct population and denominator, so the rows are not comparable: both the vantage and the unit of the denominator differ. vantage attempts readable owner-vantage a"
+    },
+    {
+      "table": 9,
+      "page": 12,
+      "caption_start": "Departure from the real authorization state, per reading of the reachability model. reading of the reachability model mismatch cells crawl-time snapshot (as the definitions pre- suppose) 10 48 live execution-time state 0 48 The mismatch is "
+    },
+    {
+      "table": 10,
+      "page": 12,
+      "caption_start": "Endogenous control: two objects that are both public at the end. object cells cannotReach MR fires public before the crawl 6 0 0 public only after the crawl 6 5 5 An endogenous control The most serious alternative explanation is that public"
+    },
+    {
+      "table": 11,
+      "page": 14,
+      "caption_start": "Oracle fidelity by granting channel, over the same transition cells as Table 12: a confusion matrix of the owner-vantage oracle against the ledger, per channel and per product. allow and deny count cells where the oracle agrees with the led"
+    },
+    {
+      "table": 12,
+      "page": 15,
+      "caption_start": "Temporal transitions on two products with the same pre-registered protocol. Stale FP: the frozen pre-change model does not list a resource the subject may legitimately read, so the relation would report a false proof. Fixed: a recrawl with "
+    },
+    {
+      "table": 13,
+      "page": 15,
+      "caption_start": "The same transition cells under the two unknown rules of Section III. The implementation scores every committed cell by closed-world default deny; the protocol’s literal unknown policy marks modelled-no-channel cells E-unknown and excludes "
+    },
+    {
+      "table": 14,
+      "page": 16,
+      "caption_start": "Cross-vendor replication under the identical three-phase protocol (crawl, out-of-band authorization change, adjudicate) on Gitea 1.22.6, Gogs 0.14.3, and GitLab 17.11.7. Counts are per reading of the same 48-cell grid; the live reading is g"
+    },
+    {
+      "table": 15,
+      "page": 16,
+      "caption_start": "Oracle fidelity by granting channel on Gogs 0.14.3, over the same 48 snapshot cells as Table 14. Channel labels come from the entitlement ledger, which is built from the lab topology, the documented inheritance rules and the recorded out-of"
+    },
+    {
+      "table": 16,
+      "page": 16,
+      "caption_start": "Positive control: detection of 3 seeded vulnerable instances (one fault pattern). TP/FN/FP/TN are counted against the known seed, not against a model. method TP FN FP TN mr_bookkeeping 3 0 2 43 v3 (owner vantage) 3 0 0 45 v3 (subject vantag"
+    },
+    {
+      "table": 17,
+      "page": 17,
+      "caption_start": "A publicly fixed defect (object-versus-path ownership). The verdict uses E from the ledger and Y from the owner’s re-read, not the write status. version PATCH re-read verdict 1.20.5 (vulnerable) 200 changed true positive 1.20.6 (fixed) 404 "
+    },
+    {
+      "table": 18,
+      "page": 20,
+      "caption_start": "The truth table of the two relations, with the temporal cells that fall in each row. Y : the ordinary request succeeds. M: the crawl-time model lists the object for the subject. O: the introspection surface’s answer, an em dash meaning it r"
+    },
+    {
+      "table": 19,
+      "page": 22,
+      "caption_start": "Competing baselines on the same 42 cells and the same probe pair. The cells comprise 15 true violations, 12 legitimate accesses through a grant (in-band or out-of-band), and 15 denials. Every method consumes one owner request and one actor "
+    },
+    {
+      "table": 20,
+      "page": 23,
+      "caption_start": "Evidence to claim. Each row names the assumption the claim needs, the artefact that carries it, and the boundary that remains. The last row is not a research question: it checks the adjudication gate used throughout, and is not evidence abo"
+    },
+    {
+      "table": 21,
+      "page": 24,
+      "caption_start": "The enumeration itself: records under each configuration and scenario. A dash is an inadmissible combination, not a missing run—the no-exception configurations have no legitimate-sharing facility, so S6 and S7, which are defined by a share "
+    },
+    {
+      "table": 22,
+      "page": 24,
+      "caption_start": "Execution facts for the native run of the published relations (Section VII-C). All values are emitted by ingest_native_engine.py; the upstream modification counts are generated from a frozen snapshot of the upstream source state (upstream c"
+    },
+    {
+      "table": 23,
+      "page": 24,
+      "caption_start": "The native alarms split into the three stages: A (the engine’s own getFailures()), H (the promotion policy P applied to A), and T (independent truth from the ledger E and the content re-read Y ). Every row is an alarm, so A is not repeated "
+    },
+    {
+      "table": 24,
+      "page": 25,
+      "caption_start": "The published authorization relations executed against Gitea 1.22.6. Each row is the applicability chain from the catalogue to the outcome: status is the engine’s per-relation result (10 of 11 evaluated, 1 aborted on an engine-side defect),"
+    }
+  ],
+  "response_structure": {
+    "concerns": 21,
+    "responses": 21,
+    "actions": 21
+  },
+  "letter_table_mentions": [
+    {
+      "line": 59,
+      "text": "record, and the channel decomposition (Table~11, p.~14) shows exactly which"
+    },
+    {
+      "line": 80,
+      "text": "(Table~12, p.~15) \\\\"
+    },
+    {
+      "line": 84,
+      "text": "channels; Tables~11 and~15), and an admission rule for when an oracle shares a"
+    },
+    {
+      "line": 89,
+      "text": "(Table~19) \\\\"
+    },
+    {
+      "line": 97,
+      "text": "(Tables~22--24) \\\\"
+    },
+    {
+      "line": 113,
+      "text": "\\Response{Table~18 (Section~VI-B, p.~20) is now that table. It defines four"
+    },
+    {
+      "line": 129,
+      "text": "\\Action{Table~18 and the definitions in Section~IV-A; the three-way split of the"
+    },
+    {
+      "line": 131,
+      "text": "(confirmed) is given in Table~23 (p.~24). In this revision the failure and"
+    },
+    {
+      "line": 143,
+      "text": "sensitivity table (Table~13): the reading changes the scorable set from 712 to"
+    },
+    {
+      "line": 178,
+      "text": "(Table~12, p.~15). On concurrency, the harness is single-threaded, no concurrent"
+    },
+    {
+      "line": 182,
+      "text": "\\Action{Section~V-A (Table~12, p.~15); the same scope limits restated in"
+    },
+    {
+      "line": 244,
+      "text": "claimed: it fails exactly on the stale cells, which is row~7 of Table~18, and the"
+    },
+    {
+      "line": 259,
+      "text": "\\Action{Section~VI-B with Lemma~1, Proposition~2, Table~18 (p.~20) and the"
+    },
+    {
+      "line": 267,
+      "text": "\\Response{The enumeration is now inspectable end to end. Table~1 (p.~5) is the"
+    },
+    {
+      "line": 270,
+      "text": "$44\\cdot2\\cdot3\\cdot2+8\\cdot3\\cdot2=576$ in the footnote. Table~21 (p.~24) is the"
+    },
+    {
+      "line": 275,
+      "text": "is Table~5 (p.~10): it starts from the S3--S7 original grid of 54 records"
+    },
+    {
+      "line": 282,
+      "text": "why attribution is done with matched pairs (Table~2, p.~5) rather than with a"
+    },
+    {
+      "line": 284,
+      "text": "\\Action{Tables~1, 2, 5 and 19; Section~III-A.}"
+    },
+    {
+      "line": 293,
+      "text": "run. Section~VI-D and Table~19 (p.~22) report three conventional differential"
+    },
+    {
+      "line": 328,
+      "text": "\\Action{Section~VI-D and Table~19 (p.~22); the runner"
+    },
+    {
+      "line": 355,
+      "text": "\\Response{Table~11 (Section~V-B, p.~14) is that matrix: the owner-vantage"
+    },
+    {
+      "line": 366,
+      "text": "decomposition (Table~15, Section~V-B, p.~16), and the reason an earlier draft"
+    },
+    {
+      "line": 392,
+      "text": "\\Action{Tables~11, 13 and~14; Section~V-B.}"
+    },
+    {
+      "line": 433,
+      "text": "\\Action{Section~V-D and Table~17 (p.~17); Section~V-C and Table~16 (p.~16) for"
+    },
+    {
+      "line": 466,
+      "text": "\\Action{Section~V-A and Table~12 (p.~15); the pre-registered protocol file, the"
+    },
+    {
+      "line": 532,
+      "text": "\\Response{Table~4 (Section~IV-D, p.~9) rescored the same 576 records on the"
+    },
+    {
+      "line": 550,
+      "text": "\\Action{Table~4 (p.~9) and Section~IV-D; the abstention semantics unified across"
+    },
+    {
+      "line": 567,
+      "text": "number (Section~VII-C, Tables~22--24, pp.~24--25): $A$, the engine's own"
+    },
+    {
+      "line": 590,
+      "text": "\\Action{Section~VII-C and Tables~21--23; \\texttt{reproduce.sh},"
+    },
+    {
+      "line": 605,
+      "text": "\\Response{Table~20 (Section~VI-E, p.~23) is that table. Each row names the"
+    },
+    {
+      "line": 616,
+      "text": "\\Action{Table~20 (p.~23); Section~VI-E; title, abstract and Section~X.}"
+    },
+    {
+      "line": 636,
+      "text": "\\Action{Section~V-A (Table~12, p.~15); Section~VI-A; the related-work claim"
+    },
+    {
+      "line": 647,
+      "text": "at its word limit: Section~VII-C and Table~22 (p.~24) record that of the"
+    },
+    {
+      "line": 666,
+      "text": "table (Table~18, p.~20) makes the functional representation explicit. The"
+    },
+    {
+      "line": 670,
+      "text": "\\Action{Section~VI-B, Table~18 (p.~20).}"
+    },
+    {
+      "line": 676,
+      "text": "(Section~V-D, Table~17, p.~17): a publicly fixed Gitea defect, one true positive"
+    },
+    {
+      "line": 685,
+      "text": "\\Action{Section~V-D and Table~17; Section~VI-B; Section~X.}"
+    },
+    {
+      "line": 704,
+      "text": "Table~5 gives the per-block record counts behind the 312/264 partition, Table~21"
+    },
+    {
+      "line": 705,
+      "text": "gives the per-cell census, and the matched-pair attribution (Table~2) shows"
+    },
+    {
+      "line": 711,
+      "text": "\\Action{Sections~V-B, VI-A and VIII; Tables~2, 5 and~19.}"
+    },
+    {
+      "line": 720,
+      "text": "the narrowed form stated in Section~IX and Table~20---a predicate-level account"
+    }
+  ],
+  "source_zip": {
+    "members": 93,
+    "sha256": "fc0c888b19050e5ac71bc08eb9fdee77bf0d4aabf37f2456bd77bd60ab304d11",
+    "bad_crc_member": null,
+    "source_mismatches": []
+  },
+  "highlight_audit": {
+    "changed_lines_recomputed": 1987,
+    "same_token_set_changed_lines_skipped": [
+      {
+        "page": 9,
+        "old": "0.00",
+        "new": "0 (0.00)",
+        "similarity": 0.8
+      },
+      {
+        "page": 9,
+        "old": "0.00",
+        "new": "0 (0.00)",
+        "similarity": 0.8
+      },
+      {
+        "page": 28,
+        "old": "Zenodo: https://doi.org/10.5281/zenodo.22859942.",
+        "new": "https://doi.org/10.5281/zenodo.22859942",
+        "similarity": 0.9333333333333333
+      }
+    ],
+    "duplicate_old_pool_reuses": [
+      {
+        "page": 5,
+        "text": "instantiation"
+      },
+      {
+        "page": 8,
+        "text": "0.78"
+      },
+      {
+        "page": 9,
+        "text": "degrade_all"
+      },
+      {
+        "page": 10,
+        "text": "records"
+      },
+      {
+        "page": 10,
+        "text": "raw,"
+      },
+      {
+        "page": 11,
+        "text": "raw"
+      },
+      {
+        "page": 11,
+        "text": "0.74"
+      },
+      {
+        "page": 11,
+        "text": "0.97"
+      },
+      {
+        "page": 11,
+        "text": "0.99"
+      },
+      {
+        "page": 11,
+        "text": "raw"
+      },
+      {
+        "page": 11,
+        "text": "v3 (state-calibrated)"
+      },
+      {
+        "page": 11,
+        "text": "0.00"
+      },
+      {
+        "page": 11,
+        "text": "0.00"
+      },
+      {
+        "page": 11,
+        "text": "0.69"
+      },
+      {
+        "page": 11,
+        "text": "0.82"
+      },
+      {
+        "page": 11,
+        "text": "1.00"
+      },
+      {
+        "page": 12,
+        "text": "readable"
+      },
+      {
+        "page": 14,
+        "text": "cells"
+      },
+      {
+        "page": 14,
+        "text": "cells"
+      },
+      {
+        "page": 15,
+        "text": "Gitea 1.22.6"
+      },
+      {
+        "page": 16,
+        "text": "Gitea 1.22.6"
+      },
+      {
+        "page": 16,
+        "text": "cells"
+      },
+      {
+        "page": 16,
+        "text": "cells"
+      },
+      {
+        "page": 16,
+        "text": "0.00"
+      },
+      {
+        "page": 16,
+        "text": "0.00"
+      },
+      {
+        "page": 16,
+        "text": "method"
+      },
+      {
+        "page": 16,
+        "text": "direct_only"
+      },
+      {
+        "page": 16,
+        "text": "direct_observe"
+      },
+      {
+        "page": 17,
+        "text": "verdict"
+      },
+      {
+        "page": 18,
+        "text": "(direct_observe)."
+      },
+      {
+        "page": 21,
+        "text": "adjudication."
+      },
+      {
+        "page": 22,
+        "text": "Method"
+      },
+      {
+        "page": 22,
+        "text": "TP"
+      },
+      {
+        "page": 22,
+        "text": "False proofs"
+      },
+      {
+        "page": 22,
+        "text": "readable"
+      },
+      {
+        "page": 23,
+        "text": "family;"
+      },
+      {
+        "page": 23,
+        "text": "a"
+      },
+      {
+        "page": 24,
+        "text": "only."
+      },
+      {
+        "page": 24,
+        "text": "S1"
+      },
+      {
+        "page": 24,
+        "text": "S2"
+      },
+      {
+        "page": 24,
+        "text": "S3"
+      },
+      {
+        "page": 24,
+        "text": "S4"
+      },
+      {
+        "page": 24,
+        "text": "S5"
+      },
+      {
+        "page": 24,
+        "text": "S6"
+      },
+      {
+        "page": 24,
+        "text": "S7"
+      },
+      {
+        "page": 24,
+        "text": "records"
+      },
+      {
+        "page": 24,
+        "text": "cells"
+      },
+      {
+        "page": 24,
+        "text": "subject"
+      },
+      {
+        "page": 24,
+        "text": "object"
+      },
+      {
+        "page": 25,
+        "text": "MR"
+      },
+      {
+        "page": 28,
+        "text": "raw"
+      },
+      {
+        "page": 28,
+        "text": "records"
+      },
+      {
+        "page": 28,
+        "text": "artifact-v1"
+      },
+      {
+        "page": 28,
+        "text": "records"
+      },
+      {
+        "page": 28,
+        "text": "here),"
+      },
+      {
+        "page": 28,
+        "text": "(2)"
+      },
+      {
+        "page": 28,
+        "text": "(real_system"
+      },
+      {
+        "page": 28,
+        "text": "raw"
+      },
+      {
+        "page": 29,
+        "text": "M."
+      },
+      {
+        "page": 29,
+        "text": "of"
+      },
+      {
+        "page": 29,
+        "text": "the"
+      },
+      {
+        "page": 29,
+        "text": "and"
+      },
+      {
+        "page": 29,
+        "text": "the"
+      },
+      {
+        "page": 29,
+        "text": "of"
+      },
+      {
+        "page": 29,
+        "text": "A"
+      },
+      {
+        "page": 29,
+        "text": "study,’’"
+      },
+      {
+        "page": 29,
+        "text": "in"
+      },
+      {
+        "page": 29,
+        "text": "and"
+      },
+      {
+        "page": 29,
+        "text": "and"
+      },
+      {
+        "page": 29,
+        "text": "T."
+      },
+      {
+        "page": 29,
+        "text": "reason"
+      }
+    ],
+    "counterexamples": [
+      {
+        "old": "Alice grants Bob read access to the repository",
+        "new": "Bob grants Alice read access to the repository",
+        "normalizations_equal": false,
+        "sets_equal": true,
+        "similarity": 0.75
+      },
+      {
+        "old": "The method is sound, conditional on a readable oracle.",
+        "new": "The method is sound conditional on a readable oracle.",
+        "normalizations_equal": true,
+        "sets_equal": true,
+        "similarity": 1.0
+      },
+      {
+        "old": "The result holds when x ≤ y",
+        "new": "The result holds when x ≥ y",
+        "normalizations_equal": true,
+        "sets_equal": true,
+        "similarity": 1.0
+      }
+    ],
+    "scope": "Current PDF misses distinguished from synthetic algorithm counterexamples."
+  },
+  "artifact_hashes_match_previous_verification": {
+    "main": true,
+    "letter": true,
+    "highlighted": true
+  }
+}

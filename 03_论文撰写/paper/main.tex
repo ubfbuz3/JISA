@@ -169,30 +169,24 @@ Two system-agnostic relations in MST-wi, a Web-system metamorphic testing
 framework, gate their verdict on a \emph{GUI-reachability model}---a crawl-time
 snapshot of what the interface permits---so what they establish about
 object-level authorization depends on when the model was read and what the
-adjudicator may consult. We study them and tie each limit to its evidence.
-Source inspection shows the engine records only that a relation failed:
-promotion to a \emph{proven violation} is added policy, stated here explicitly.
-On a \ResSynRecords{}-record constructed study, a legitimate access whose
-grant lies outside the framework's record is reported as proven in
-\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} alarms; the same failure
-appears when the grant is made between crawl and request, in the temporal
-experiments below. Once a readable, sound oracle is supplied, the relation adds
-no observed adjudication benefit over the direct consumer of the same oracle and
-outcome (the paired methods disagree on \ResAbDisagreementN{} of
-\ResAbNBola{} true-violation records, each time favouring the plain request); and
-the published specificity of \ResLitReportedSpecPct{}\% is an input-level figure
-whose denominator cannot, on its own, expose a class-uniform failure.
-
-Two experiments carry these claims further. A pre-registered temporal experiment
-on Gitea \ResRsVersion{} and GitLab CE \GlVersion{} commits
+adjudicator may consult. Source inspection shows the engine records only that a
+relation failed: promotion to a \emph{proven violation} is added policy, stated
+here explicitly. On a \ResSynRecords{}-record constructed study, a legitimate
+access whose grant lies outside the framework's record is reported as proven in
+\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} alarms, and the same
+failure appears when the grant is made between crawl and request. Once a
+readable, sound oracle is supplied, the relation adds no observed adjudication
+benefit over the direct consumer of the same oracle and outcome; and the
+published specificity of \ResLitReportedSpecPct{}\% is an input-level figure
+whose denominator cannot, on its own, expose a class-uniform failure. A
+temporal experiment on Gitea \ResRsVersion{} and GitLab CE \GlVersion{} commits
 \TmpBothPolicyEvents{} authorisation transitions over \TmpBothCells{}
-cross-credential cells, with entitlement and effect agreeing on \TmpBothEeqY{}:
-\TmpBothStaleFP{} stale false proofs appear, and a recrawl with the same
-credentials removes \TmpBothFixed{}. A real vulnerable/fixed pair (Gitea
-\CveVulnVersion{} to \CveFixedVersion{}) shows the independent entitlement/effect
-gate reporting \CveTruePositives{} true positive on the vulnerable build,
-\CveFalseProofs{} false proofs, and no alarm on the fixed build---a check of the
-gate, not a measure of detection effectiveness.
+cross-credential cells: \TmpBothStaleFP{} stale false proofs appear, and a
+recrawl with the same credentials removes \TmpBothFixed{}. A real
+vulnerable/fixed pair (Gitea \CveVulnVersion{} to \CveFixedVersion{}) shows the
+independent entitlement/effect gate reporting \CveTruePositives{} true positive
+on the vulnerable build, \CveFalseProofs{} false proofs, and no alarm on the
+fixed build---a check of the gate, not a measure of detection effectiveness.
 \end{abstract}
 
 \begin{keywords}

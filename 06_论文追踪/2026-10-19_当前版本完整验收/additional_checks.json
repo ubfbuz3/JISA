@@ -1,0 +1,18 @@
+{
+  "abstract": {
+    "whitespace_words_after_macro_expansion": 264,
+    "paragraphs": 2,
+    "text": "\nTwo system-agnostic relations in MST-wi, a Web-system metamorphic testing\nframework, gate their verdict on a GUI-reachability model---a crawl-time\nsnapshot of what the interface permits---so what they establish about\nobject-level authorization depends on when the model was read and what the\nadjudicator may consult. We study them and tie each limit to its evidence.\nSource inspection shows the engine records only that a relation failed:\npromotion to a proven violation is added policy, stated here explicitly.\nOn a 576-record constructed study, a legitimate access whose\ngrant lies outside the framework's record is reported as proven in\n8 of 8 alarms; the same failure\nappears when the grant is made between crawl and request, in the temporal\nexperiments below. Once a readable, sound oracle is supplied, the relation adds\nno observed adjudication benefit over the direct consumer of the same oracle and\noutcome (the paired methods disagree on 3 of\n216 true-violation records, each time favouring the plain request); and\nthe published specificity of 99.81\\% is an input-level figure\nwhose denominator cannot, on its own, expose a class-uniform failure.\n\nTwo experiments carry these claims further. A pre-registered temporal experiment\non Gitea 1.22.6 and GitLab CE 17.11.7 commits\n16 authorisation transitions over 712\ncross-credential cells, with entitlement and effect agreeing on 712:\n29 stale false proofs appear, and a recrawl with the same\ncredentials removes 29. A real vulnerable/fixed pair (Gitea\n1.20.5 to 1.20.6) shows the independent entitlement/effect\ngate reporting 1 true positive on the vulnerable build,\n0 false proofs, and no alarm on the fixed build---a check of the\ngate, not a measure of detection effectiveness.\n"
+  },
+  "highlight_counterexample": {
+    "old": "In the tested private repository Alice grants Bob read access through the recorded authorization channel",
+    "new": "In the tested private repository Bob grants Alice read access through the recorded authorization channel",
+    "similarity": 0.8666666666666667,
+    "same_token_set": true
+  },
+  "scientific_explanation_check": {
+    "claim": "M is O-determined iff one M per O across domain",
+    "counterexample_in_table18": "rows 1 and 2 both O=deny but M differs, counts 416 and 15; rows 7 and 8 both O=allow but M differs, counts 14 and 86",
+    "core_subset_result_unaffected": "H_v3 = y AND NOT m AND NOT o implies D = y AND NOT o"
+  }
+}

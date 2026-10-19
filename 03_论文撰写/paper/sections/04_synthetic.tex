@@ -90,7 +90,10 @@ Our earlier iteration proposed v3 as a mechanism, resting on the claim that the
 metamorphic step was necessary. We tested that claim by removing the step and
 substituting the most naive consumer of the same observable. The distinction
 matters: \texttt{direct\_only}---oracle yes, access outcome
-ignored---produces \ResAbDirectOnlyFP{} false proofs against v3's
+ignored---produces \ResAbDirectOnlyFP{} invalid violation claims (binary false
+positives, none of them strict false proofs in the sense of
+Section~\ref{sec:protocol}; every one falls on a request the server denied)
+against v3's
 \ResAbVThreeFP{} (precision \ResAbDirectOnlyPrec{}), and rejecting it proves
 nothing because it discards half the evidence. The fair control is
 \texttt{direct\_observe}: a succeeding ordinary request plus the same readable

@@ -14,9 +14,10 @@ further claim and are collected as support evidence in Section~\ref{sec:support}
 
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
 exceptions---the adjudication reports a legitimate access whose grant the crawl
-record does not contain as a finding that the published accounting counts as an
-established violation---the promotion policy $P$ of
-Section~\ref{sec:native-run}, which we state rather than inherit, since the
+record does not contain as a finding of an established violation under the
+promotion policy $P$ of
+Section~\ref{sec:native-run}, which we state explicitly for this evaluation
+rather than inherit, since the
 engine's own return value asserts nothing about authorization---in the direction
 forced by the two-valued predicate encoding.} The two studies supply the grant
 in different ways: the constructed study seeds it outside the framework's
@@ -87,7 +88,10 @@ domain.
 For the two relations examined here, premise~(i) of
 Lemma~\ref{lem:absorption} holds by source inspection: their predicates read the
 crawl-time reachability model and the response, and nothing else
-(Section~\ref{sec:impl}). Write $y$ for the response bit, $m$ for the model bit
+(Section~\ref{sec:impl}). Premise~(ii), by contrast, is an empirical condition
+on the recorded domain---$M$ would have to be a function of $O$ there---and we
+do not assume it; the conclusions below are stated so as not to need it.
+Write $y$ for the response bit, $m$ for the model bit
 and $o$ for the oracle bit; the shipped alarm is $A=y\wedge\neg m$, the direct
 adjudicator is $D=y\wedge\neg o$, and the promoted verdict of the
 state-calibrated method is $H=A\wedge\neg o$, which abstains where $o$ is
@@ -109,8 +113,10 @@ does not make the crawl-time model sound. Row~7 of Table~\ref{tab:truth} holds
 $y=1$, $m=0$ and $o=1$---the oracle answers correctly, the model is stale, and
 the relation raises a false proof that $D$ does not. The tempting step from
 ``the oracle is readable and correct'' to ``$M$ and $O$ agree'' is therefore
-invalid, and we do not take it; premise~(ii) of the lemma fails exactly on those
-cells, which is why we do not present the relation as informationally redundant
+invalid, and we do not take it; premise~(ii) of the lemma does not hold on the
+recorded domain, and row~7 shows one way a correct oracle and a stale model can
+disagree---row~8 exhibits the same disagreement when $O$ is
+\emph{allow}---which is why we do not present the relation as informationally redundant
 in general, only as non-additive in confirmation once a definite oracle exists.
 What the proposition establishes is narrower
 and sufficient for the argument: once a definite oracle is available, promotion

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "R1.1",
+    "original": "The novelty claim needs sharper positioning against existing BOLA testing research. The paper primarily identifies limitations in reachability-based adjudication, oracle assumptions, and metric design. However, it does not sufficiently distinguish these contributions from established work on oracle problems, stateful web testing, authorization testing, and metamorphic testing. Please provide a structured comparison identifying which limitations are newly demonstrated, which are already known, and what methodological advance the paper contributes beyond applying these concepts to MST-wi.",
+    "response_subsection_title": "Novelty positioning against existing BOLA testing research",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.2",
+    "original": "The formalization of false proofs requires a complete and unambiguous definition. The paper distinguishes alarms, false alarms, and violations proven, but the mapping between these outcomes and the ground-truth authorization state is not formalized consistently throughout the manuscript. Define the decision variables and truth conditions for every possible combination of request outcome, actual entitlement, oracle response, and detector verdict. In particular, explain how a legitimate successful request can be distinguished from unauthorized access without allowing the tested reachability model to determine its own ground truth.",
+    "response_subsection_title": "A complete definition of the false-proof outcomes",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.3",
+    "original": "The system model does not sufficiently characterize authorization-state transitions. The three-phase protocol assumes that a crawl-time snapshot becomes stale after an entitlement changes, but the effects of revocation, inherited permissions, public visibility, role changes, and concurrent authorization updates are not comprehensively modeled. Specify the state-transition semantics, the timing of each observation, and the consistency assumptions under which the reported deterministic false proofs arise. Also clarify whether the conclusions hold when authorization changes between the request and adjudication stages.",
+    "response_subsection_title": "Characterization of authorization-state transitions",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.4",
+    "original": "The admissibility condition for authorization oracles is insufficiently operationalized. Readability and soundness are distinguishable properties, but clause (2)—requiring a reason that the oracle is not affected by the same defect under investigation—remains a qualitative judgment. Please formulate a reproducible procedure for determining admissibility before examining outcomes, including how independence from the tested authorization mechanism is established. Without such a procedure, oracle admissibility risks becoming a post hoc decision that can bias adjudication.",
+    "response_subsection_title": "Operationalizing the admissibility condition",
+    "substantive_status": "partial: retrospective independence rule, no prospective validation"
+  },
+  {
+    "id": "R1.5",
+    "original": "Proposition 2 risks being tautological rather than establishing a substantive theoretical result. The proposition states that a metamorphic verdict determined entirely by an oracle and an ordinary request cannot outperform a direct consumer of those same inputs. This follows from the assumed functional dependence, rather than independently demonstrating a limitation of metamorphic testing. Please distinguish the formal identity from the empirical premise that the evaluated relations consume no additional decision-relevant information. A truth-table derivation or explicit functional representation of each predicate would make the argument more rigorous and clarify its applicability beyond the particular implementation.",
+    "response_subsection_title": "Proposition 2: separating the definitional from the empirical",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.6",
+    "original": "The synthetic-study design needs a more explicit account of coverage and identifiability. The 576 records form a fixed enumeration, but the manuscript does not present a sufficiently transparent mapping from configurations and scenarios to all records. Please provide the complete factorial design, explain how each factor is varied, and demonstrate that the reported effects can be attributed to crawl timing, exception handling, and oracle readability without confounding. The earlier representative 36-record readable and 18-record unreadable grids should also be reconciled explicitly with the later 312/264-record partition.",
+    "response_subsection_title": "Coverage and identifiability of the 576-record enumeration",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.7",
+    "original": "The evaluation of metamorphic relations uses baselines that do not establish superiority over competitive black-box methods. The direct_only baseline is deliberately unfair because it ignores request outcomes, while obs_success and always_alarm are intentionally weak references. The authors appropriately acknowledge these limitations, but the evidence is insufficient to characterize the practical value of the proposed testing approach. Please compare against a differential, multi-account authorization tester that probes equivalent objects under distinct privilege levels, as well as a conventional BOLA detector using request-response differentials. Report matched query budgets, execution costs, and detection outcomes.",
+    "response_subsection_title": "Comparison against competitive black-box methods",
+    "substantive_status": "partial: total request/information budgets unmatched"
+  },
+  {
+    "id": "R1.8",
+    "original": "The cross-vendor experiments expose a serious oracle-validity problem but do not fully isolate its causes. Gogs and GitLab produce false proofs when their membership-introspection surfaces omit authorization obtained through other channels. Please provide a channel-by-channel confusion matrix separating direct membership, team-derived access, administrative grants, public visibility, and out-of-band sharing. Also distinguish an incorrect oracle response from a stale reachability model, since these are different failure mechanisms requiring different remedies.",
+    "response_subsection_title": "Channel-by-channel isolation of the oracle-validity problem",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.9",
+    "original": "The reported detection results are too narrow to support broad conclusions about BOLA detection effectiveness. The three seeded vulnerable instances share one fault pattern and are explicitly not independent vulnerability discoveries. Moreover, the real-system experiments primarily evaluate false-proof behavior because no vulnerability was found on the tested surfaces. Please expand the positive-control evaluation to multiple independently implemented authorization defects, including unauthorized reads, unauthorized modifications, inherited-permission errors, and privilege-escalation paths. Report per-defect recall and false-positive rates rather than treating repeated instances of one fault pattern as evidence of general detection capability.",
+    "response_subsection_title": "Detection results across independently implemented defects",
+    "substantive_status": "not fulfilled experimentally: explicit scope disagreement"
+  },
+  {
+    "id": "R1.10",
+    "original": "The comparison between crawl-time and live authorization state requires stronger control of temporal and observational effects. The Gitea experiment reports 10 mismatch cells under snapshot reading and zero under live reading, but the manuscript should explain how live-state queries avoid changing the tested state, introducing additional privileges, or benefiting from information unavailable to the original detector. Please specify the ordering of crawling, entitlement mutation, oracle querying, and request execution, and provide timestamps or event logs sufficient to verify that the comparison changes only the model-reading time.",
+    "response_subsection_title": "Control of temporal and observational effects",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.11",
+    "original": "The specificity analysis requires a clearer justification of its denominator and interpretation. The illustrative 84.62% specificity depends on an assumed two follow-up inputs per case, rather than the original engine's exact input count. Although the authors disclose this limitation, the example cannot establish the numerical behavior of the published 99.81% figure without the underlying denominator. Please provide the original evaluation counts if available, or present a parameterized sensitivity analysis showing how specificity changes with the number of unaffected inputs. Clearly distinguish the proposed scenario-level diagnostic from conventional specificity, and avoid implying that one alternative metric alone resolves the underlying oracle-validity problem.",
+    "response_subsection_title": "The specificity denominator",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.12",
+    "original": "The mathematical treatment of scenario-level failure is correct in spirit but limited in scope. Proposition 1 assumes that each failing scenario contributes exactly \\(a\\) false-alarm inputs and each successful scenario contributes \\(m\\) alarm-free inputs. Real testing pipelines may produce unequal numbers of requests, correlated inputs, and different numbers of alarms per scenario. Please extend the result to heterogeneous scenario weights and explain whether the same dilution phenomenon holds when the number of generated inputs depends on scenario complexity or detector behavior. This would establish the generality of the measurement argument rather than only its validity under the stated construction.",
+    "response_subsection_title": "Heterogeneous scenario weights",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.13",
+    "original": "The reported metrics need consistent treatment of abstentions and operational cost. The state-calibrated method achieves perfect precision in the pooled table by abstaining when the oracle is unavailable, while missing 111 true violations. Precision and recall alone do not adequately characterize this selective behavior. Please report coverage, selective risk, abstention rate, and detection performance conditional on oracle availability, alongside execution time and request overhead. The discussion should also distinguish a safe abstention from a successful detection and avoid ranking methods primarily by metrics that reward non-decision.",
+    "response_subsection_title": "Consistent treatment of abstentions and operational cost",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.14",
+    "original": "The implementation and reproducibility evidence is incomplete for independently validating the principal claims. The paper reports a public artifact, source inspection, a separate implementation, and a native-engine execution, but the native run executes only a subset of the authorization relations, and the content predicate is never invoked. Please provide a version-pinned environment, exact commands, complete configuration and seed files, machine-readable raw outputs, and scripts that regenerate every table and figure. In particular, document the two failed relation executions, the engine-side defect, and the treatment of missing or failed observations so that an independent researcher can reproduce the reported counts without relying on author-specific interpretation.",
+    "response_subsection_title": "Reproducibility of the principal claims",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R1.15",
+    "original": "The conclusions should be narrowed to match the actual evidence and the stated research questions. The paper repeatedly acknowledges that it studies two relations from one reachability-gated family, three related-domain systems, and a limited seeded fault pattern. Nevertheless, statements suggesting that adjudication of genuine violations is absent from the evaluated relations risk extending beyond the experiments. Please distinguish conclusions established by source-level functional dependence, findings demonstrated by the synthetic construction, and findings observed on real systems. A final evidence-to-claim table linking each research question to its assumptions, tested configurations, supporting results, and explicit limitations would substantially improve the paper's scientific precision and credibility.",
+    "response_subsection_title": "Narrowing the conclusions; an evidence-to-claim table",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R2.1",
+    "original": "Novelty. State what is new beyond showing that a snapshot goes stale, and whether re-crawling or live reading removes the problem. Your data show 0 mismatches under live reading on Gitea.",
+    "response_subsection_title": "Novelty, and whether re-crawling or live reading removes the problem",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R2.2",
+    "original": "Scope of claims. Only 2 of 76 relations (one reachability-gated family) were studied, and only 2 of 11 authorization relations fired on Gitea. Narrow the title and abstract to MST-wi's reachability-gated relations, or extend the evaluation.",
+    "response_subsection_title": "Scope of claims: two relations of one family",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R2.3",
+    "original": "Proposition 2. It is close to true by definition. Separate clearly what is empirical from what is definitional.",
+    "response_subsection_title": "Proposition 2",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R2.4",
+    "original": "Detection side. No real system was vulnerable, so only false proofs were measured on real systems. Either add a real vulnerable case or remove the claim that the metamorphic step adds nothing for detection.",
+    "response_subsection_title": "Detection side: no real system was vulnerable",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R2.5",
+    "original": "The 84.62% figure. It assumes two inputs per case and is only illustrative. Keep it out of the abstract and don't present it as quantitative support.",
+    "response_subsection_title": "The 84.62\\% figure",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  },
+  {
+    "id": "R2.6",
+    "original": "Constructed ground truth. Discuss how far the false-proof rates (1.00 and 0.44) reflect your scenario design, such as the per-cell multipliers, rather than the technique.",
+    "response_subsection_title": "Constructed ground truth and the reported rates",
+    "substantive_status": "substantive response present; see report for local corrections and boundaries"
+  }
+]

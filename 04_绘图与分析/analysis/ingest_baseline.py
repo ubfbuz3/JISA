@@ -223,7 +223,7 @@ def main() -> None:
         r"\label{tab:baselines}",
         r"\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}p{0.155\textwidth}p{0.335\textwidth}rrrrrrr@{}}",
+        r"\begin{tabular}{@{}p{0.145\textwidth}p{0.300\textwidth}rrrrrrr@{}}",
         r"\toprule",
         r"Method & Decision rule & Claims & TP & False proofs & Abstain & "
         r"Coverage (\%) & Recall: decided / all (\%) \\",

@@ -69,9 +69,9 @@ an equal-budget contest. One experiment that had not been run at all (a
 competing differential
 baseline) has now been run and reported. Where a request could not be met with
 the evidence we have, we say so in the manuscript instead of softening the text;
-five of the twenty-one items are met only in part, and Section~\ref{sec:partial}
+three of the twenty-one items are met only in part, and Section~\ref{sec:partial}
 of this letter lists them together with what is missing and why. One of the
-five (R1.9) is reported as an open scope question for the editor rather than
+three (R1.9) is reported as an open scope question for the editor rather than
 as resolved.
 
 References below are to the revised manuscript (30 pages, 24 tables). Table and
@@ -125,7 +125,7 @@ Oracle problems in authorization testing & Established: no intrinsic oracle;
 differential probing lines use request-level oracles & A measured decomposition
 of one membership oracle's errors by channel (false denies only, named
 channels; Tables~11 and~15), and an admission rule for when an oracle shares a
-subsystem with enforcement (Section~VI-A) \\
+subsystem with enforcement (Section~VI-E) \\
 Direct request-level testers & BACScan-style probing and its predecessors are
 the established direct method & A differential-rule comparison on the same
 probe pair with the adjudication trade-off stated, not a detection contest
@@ -153,7 +153,7 @@ outcome, actual entitlement, oracle response and detector verdict, together with
 an account of how a legitimate successful request is distinguished from
 unauthorized access without letting the tested reachability model determine its
 own ground truth.}
-\Response{Table~18 (Section~VI-B, p.~20) is now that table. It defines four
+\Response{Table~18 (Section~VI-B, p.~20) is now that table. It defines the
 quantities over the 712 temporal cells: $Y$ (the ordinary request succeeds), $M$
 (the crawl-time model lists the object for the subject), $O$ (the introspection
 surface's answer, with an explicit ``no definite answer'' value), $A$ (the alarm
@@ -171,7 +171,7 @@ observation---never by $M$---and the manuscript says that the relation's alarm
 is not evidence of illegal access.}
 \Action{Table~18 and the definitions in Section~IV-A; the three-way split of the
 native run into $A$ (the engine's own alarm), $H$ (our promotion policy) and $T$
-(confirmed) is given in Table~23 (p.~24). In this revision the failure and
+(confirmed) is given in Table~23 (p.~25). In this revision the failure and
 unknown contract is additionally consolidated in the body itself
 (Section~III, ``Unknown and failure handling''): how an $E$-undefined
 transaction, a $Y$-undefined execution error and an $O$-undefined surface are
@@ -283,10 +283,12 @@ response---holds for these two relations by source inspection, and on the domain
 studied both alarms reduce to $y\wedge\neg m$ against $D=y\wedge\neg o$. What is
 verified empirically is that predicate reduction. What holds algebraically is
 $A=D$ if and only if $y=0$ or $m=o$, together with $H\Rightarrow D$.
-Premise~(ii) of the lemma---that the model is $O$-determined---is \emph{not}
-claimed: it fails exactly on the stale cells, which is row~7 of Table~18, and the
+Premise~(ii) of the lemma---that the model is $O$-determined on the domain---is
+\emph{not} claimed: it does not hold on the recorded domain, row~7 of Table~18
+shows one way a correct oracle and a stale model can disagree (row~8 the same
+when $O$ is allow), and the
 manuscript says so rather than presenting the relation as informationally
-redundant in general. The explicit predicates arewritten out ($A_{002}=\neg sup(B,A)\wedge\neg m\wedge\neg err(o_1)\wedge
+redundant in general. The explicit predicates are written out ($A_{002}=\neg sup(B,A)\wedge\neg m\wedge\neg err(o_1)\wedge
 q(o_1,o_2)$ and $A_{004}=y\wedge\neg m$, against $D=y\wedge\neg o$), and on the
 domain studied both reduce to $y\wedge\neg m$. The reduction was verified
 mechanically against 576 constructed records and 712 temporal cells with zero
@@ -324,7 +326,7 @@ relation is single-valued on S5; channel and visibility are defined only inside
 one exception setting), so a full interaction estimate is not available---which is
 why attribution is done with matched pairs (Table~2, p.~5) rather than with a
 regression.}
-\Action{Tables~1, 2, 5 and 19; Section~III-A.}
+\Action{Tables~1, 2, 5 and~21; Section~III-A.}
 
 \subsection{Comparison against competitive black-box methods}
 \Concern{\texttt{direct\_only} is deliberately unfair and \texttt{obs\_success} and
@@ -395,7 +397,7 @@ detection superiority; a full equal-total-budget design was not built.}
 team-derived access, administrative grants, public visibility and out-of-band
 sharing is requested, together with a distinction between an incorrect oracle
 response and a stale reachability model.}
-\Response{Table~11 (Section~V-B, p.~14) is that matrix: the owner-vantage
+\Response{Table~11 (Section~V-A, p.~14) is that matrix: the owner-vantage
 introspection surface scored against the ledger per channel and per product, with
 cells, agreements in each direction, the two error directions, and a separate
 ``unanswered'' column for anonymous readers. Neither product produces a single
@@ -432,7 +434,8 @@ permission suffix returns \GgChProbePermSuffix{}, the per-object team route
 (\GgChProbeOrgTeams{}). The decomposition is stable across readings
 (\GgChLiveAgree{} agreements and \GgChLiveFalseDeny{} false denials under the live
 reading), so the concentration is not an artifact of the snapshot.}
-\Action{Tables~11, 13 and~14; Section~V-B.}
+\Action{Tables~11, 13, 14 and~15; Sections~V-A and~V-B; the mechanism
+separation is Table~18 (Section~VI-B).}
 \Remains{The three affected strata on Gogs are small (\GgChSrcTeam{},
 \GgChSrcPublic{} and \GgChSrcSiteAdmin{} cells), so the per-channel rates describe
 this topology rather than estimate field prevalence; and the mechanism labels are
@@ -607,7 +610,7 @@ that regenerate every table and figure, and it was verified rather than asserted
 staging copy of the committed tree---extracted with \texttt{git archive}, so it
 cannot see the working tree---the pipeline regenerates all 31 byte-reproducible outputs byte-identically, including the two baseline tables; and in an empty
 directory the 93-file submission package compiles (30 pages, no undefined references). The native run is reported as three stages rather than one
-number (Section~VII-C, Tables~22--24, pp.~24--25): $A$, the engine's own
+number (Section~VII-C, Tables~22--24, pp.~24--26): $A$, the engine's own
 \texttt{getFailures()} alarms, 6; $H$, our promotion policy applied to them, 6;
 $T$, confirmed, 0---with 6 false proofs. The content predicate is reported by
 invocation count rather than claimed clean, and the text says so. The
@@ -630,7 +633,7 @@ engine-side defect; the number two is the count of relations that alarmed
 aborted relation, the engine-side defect and the alarm split are each documented
 at source, and the treatment of missing or failed observations is written into
 the protocol file that the run record binds.}
-\Action{Section~VII-C and Tables~21--23; \texttt{reproduce.sh},
+\Action{Section~VII-C and Tables~22--24; \texttt{reproduce.sh},
 \texttt{verify\_artifact.sh} and the hash manifests in the package.}
 \Remains{The failure and missing-observation rules were, at resubmission time,
 written in the protocol file and the scripts; this revision additionally
@@ -687,7 +690,7 @@ evaluation extended.}
 narrowed to the two reachability-gated relations in MST-wi, and the abstract
 opens by naming them as two relations of that framework. The native trigger
 range is stated where the run is reported rather than in the abstract, which is
-at its word limit: Section~VII-C and Table~22 (p.~24) record that of the
+kept to the IEEE single-paragraph, 250-word limit: Section~VII-C and Table~22 (p.~24) record that of the
 \NtMrTotal{} catalog authorization relations evaluated against Gitea,
 \NtMrExecuted{} ran and \NtMrFired{} alarmed, both of them reachability-gated
 (\NtKeyMrNames{}). We did not extend the evaluation to other relation
@@ -751,7 +754,7 @@ scenario, the legitimate share created through the framework's own facility,
 while the out-of-band scenario agrees with the reference. The reported rates are
 therefore presented as properties of the construction, not as deployment
 rates.}
-\Action{Sections~V-B, VI-A and VIII; Tables~2, 5 and~19.}
+\Action{Sections~V-B, VI-A and VIII; Tables~2, 5 and~21.}
 \Remains{We did not recompute the constructed rates under equal per-cell
 weights in parallel with the original weights; the sensitivity to the weighting
 is described qualitatively rather than tabulated.}
@@ -759,82 +762,65 @@ is described qualitatively rather than tabulated.}
 \section{Answers to the additional questions}
 \label{sec:addq}
 
-\noindent\textbf{Reviewer 1.} (1)~Contribution to the body of knowledge: yes, in
-the narrowed form stated in Section~IX and Table~20---a predicate-level account
-of what the two relations determine, a channel decomposition of the false proofs,
-and a resolution argument about a pooled specificity. (2)~Technically sound: the
-algebraic part is separated from the empirical part and the empirical part is
-checked against records by script; the unsupported parts are marked as
-limitations. (3)~Comprehensive: the design, the ablation, the real-system studies
-and the reproducibility package are all reported, with the gaps named. (4)~and
-(5)~References: applicable and sufficient; none is inappropriate.
-
-\noindent\textbf{Reviewer 2.} (1)~Contribution: partly, and we have narrowed the
-claim accordingly rather than defending the broader reading. (2)~Technically
-sound: the method is transparent and the artefacts are public; the evidence
-remains narrow and is labelled as such. (3)~Comprehensive: the related work is
-retained and the positioning claim is now falsifiable. (4)~and (5)~References:
-applicable and sufficient; none is inappropriate.
+\noindent\textbf{Reviewer 1 and Reviewer 2.} Both evaluation forms ask the same
+itemized questions (contribution, technical soundness, comprehensiveness,
+references). Rather than restate a self-assessment against each, we point to
+where the revision addresses the substance: contribution and positioning in
+Section~IX and Table~20; the separation of the definitional from the empirical
+in Section~VI; scope, boundaries and the named gaps in Section~VIII and the
+partial-response list above; and the revised, traceable bibliography. The
+judgement on each item belongs to the reviewers and the editor.
 
 \section{What this revision does not claim}
 \label{sec:partial}
 
-For the Associate Editor's convenience, the items that are met only in part,
-with the single missing element in each, stated against the reviewers' original
-wording rather than against our own extensions. Four rows cover five of the
-twenty-one items; the concerns consolidated in this revision (the truth-table
-and unknown/failure contract of R1.2, the per-channel matrix for Gogs of R1.8,
-and the in-body failure rules of R1.14) are no longer listed here, because
-their previously missing elements are now in the manuscript. Two items that
-earlier drafts of this letter listed as partly met are no longer listed,
-because the missing element named there was our own proposed extension rather
-than something the reviewer asked for: R1.12 asked for the derivation to be
+For the Associate Editor's convenience, the items that are met only in part
+against the reviewers' original wording, with the single missing element in
+each. Three rows cover three of the twenty-one items. Several items that
+earlier drafts of this letter listed here are no longer listed, because the
+missing element named there was our own proposed extension rather than
+something the reviewer asked for: R1.12 asked for the derivation to be
 extended to unequal and endogenous counts, which the conditional derivation
 now does, and no generative-model experiment was part of that request; R2.6
 asked for a discussion of how constructed rates depend on the design, which the
-manuscript states, and no equal-weight reanalysis was mandated by its wording.
+manuscript states, and no equal-weight reanalysis was mandated by its wording;
+R1.1 asked for a structured, qualitative known/new comparison, which the
+response above and Section~IX provide, and did not ask for a bibliometric or
+quantitative survey; R1.14 asked for reproducible materials, versions and
+commands, which the package provides, and did not require re-execution on a
+second machine---the same-host scope of the regeneration is stated as an
+evidence boundary in the R1.14 response itself; and R2.4 offered two
+alternatives, of which the manuscript has taken the second (the claim of no
+detection gain from metamorphic testing is withdrawn), so it is answered by
+narrowing rather than partly met.
 
 \begin{center}\small
 \begin{tabular}{@{}p{0.09\textwidth}p{0.42\textwidth}p{0.42\textwidth}@{}}
 \toprule
 \textbf{Item} & \textbf{What was done} & \textbf{What is still missing} \\
 \midrule
-R1.1 & A structured known/new comparison, element by element, with the
-already-established principle cited and the increment of this revision stated
-as a falsifiable claim (table in the R1.1 response above) & The comparison is
-qualitative and traceable rather than a bibliometric or quantitative mapping
-over the testing literature; we did not survey all related work systems at that
-level \\
 R1.4 & An admission rule for clause~(2), proposed in this revision and applied
 conservatively to the archived experiments; per-product path evidence at the
-API level; all three products recorded \emph{reject} & The rule is
-retrospective and its evidence base stops at the server boundary; a
-finer-grained enumeration would require an internal-source audit we did not
-perform \\
+API level; all three products recorded \emph{reject} & A pre-experiment
+procedure: the rule is retrospective and its evidence base stops at the server
+boundary; a finer-grained enumeration would require an internal-source audit we
+did not perform \\
 R1.7 & A three-rule differential baseline on the same 42 cells and the same
 probe pair; the budget caveat (111 vs.\ 84, unequal information) stated in the
 preface, the manuscript and the response & Matched \emph{total} request and
 information budgets; the comparison is probe-pair-matched only, and we claim no
 equal-budget detection superiority \\
-R1.9 / R2.4 & A real vulnerable/fixed pair through the adjudication gate; the
-seeded control bounded to one fault pattern; the scope objection stated in the
-letter & Per-defect recall and false-positive rates across several independent
-defect classes; reported as \emph{open}, for the editor to judge whether the
-alternative response suffices \\
-R1.14 & A pinned environment, exact commands, machine-readable raw records,
-byte-identical regeneration of all 31 byte-reproducible outputs, and the
-93-file source package verified to compile in an empty directory; the
-source-state facts of the native run are now generated from frozen upstream
-version, digest and patch inputs rather than from a live checkout, and the
-pipeline validates input hashes at entry & The archived runs were not
-re-executed on a second machine; the frozen inputs make the recorded facts
-recomputable, but that recomputation is not an independent rerun of the
-original experiments \\
+R1.9 & A real vulnerable/fixed pair through the adjudication gate; the seeded
+control bounded to one fault pattern; the scope objection stated in the letter
+and Section~VIII & The requested experiment itself: multiple independent
+defect classes with per-defect recall and false-positive rates; reported as
+\emph{open}, for the editor to judge whether the alternative response
+suffices \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent We would rather submit with these five items named than with a text
+\noindent We would rather submit with these three items named than with a text
 that implies they are closed. Each is visible in the manuscript as a
 stated boundary, in Section~VIII or at the point of use; R1.9 additionally
 remains an open scope question for the editor.

@@ -404,7 +404,7 @@ def main() -> None:
     # 同一批记录在两种 unknown 规则下的评分集合对账（R1.2 整改）。
     sens = [
         "% 由 ingest_temporal.py 生成，勿手改",
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\centering",
         r"\caption{The same transition cells under the two \emph{unknown} rules of "
         r"Section~\ref{sec:protocol}. The implementation scores every committed cell "
@@ -415,7 +415,7 @@ def main() -> None:
         r"which fall on $E$-allow cells inside the literal-known set.}",
         r"\label{tab:unknown-sensitivity}",
         r"\small",
-        r"\begin{tabular}{@{}lrrrrrr@{}}",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}",
         r"\toprule",
         r" & \multicolumn{3}{c}{implementation (default deny)} & "
         r"\multicolumn{3}{c}{literal protocol ($E$ unknown)} \\",
@@ -430,8 +430,8 @@ def main() -> None:
         f"Total & \\TmpBothCells & --- & \\TmpBothStaleFP & "
         f"\\TmpBothLitKnown & \\TmpBothLitEeqY & \\TmpBothLitStaleKnown \\\\",
         r"\bottomrule",
-        r"\end{tabular}",
-        r"\end{table}",
+        r"\end{tabular*}",
+        r"\end{table*}",
     ]
     (PROJ / "04_绘图与分析" / "results" / "temporal_sensitivity_table.tex").write_text(
         "\n".join(sens) + "\n", encoding="utf-8")

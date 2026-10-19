@@ -33,7 +33,8 @@ SIM = 0.80
 
 # 运算符必须作为独立词元存活到比较层，否则 x <= y 与 x >= y 归一化后相同，
 # 运算符改动会在第一层被抹掉（增量复核反例）。
-_OPS = [(r"<=", " le "), (r">=", " ge "), (r"<", " lt "), (r">", " gt "), (r"=", " eq ")]
+_OPS = [(r"<=", " le "), (r">=", " ge "), (r"<", " lt "), (r">", " gt "), (r"=", " eq "),
+        (r"\u2264", " le "), (r"\u2265", " ge "), (r"\u2260", " ne ")]
 
 
 def norm(s: str) -> str:
@@ -152,15 +153,14 @@ def main() -> int:
                 if best >= SIM:
                     break
         if best >= SIM and best_i >= 0:
-            a = set(nlist)
-            b = set(old_lines[best_i].split())
-            diff = (a - b) | (b - a)
-            if not diff:
-                # 词元集合相同（仅顺序/重复差异）——按未改处理，消耗旧行额度
+            # 顺序与重复次数敏感的对比：旧分支按“词元集合相同”跳过，
+            # 会漏掉角色对调、重复次数变化等改动——已删除。
+            if nlist == old_lines[best_i].split():
+                # 完全一致（含顺序与次数）——按未改处理，消耗旧行额度
                 old_pool[old_lines[best_i]] -= 1
                 used_old[old_lines[best_i]] += 1
                 continue
-            # 有任何词元差异（含 not、量词、运算符）→ 保守高亮，不做过滤
+            # 有任何词元差异（含顺序对调、重复、not、量词、运算符）→ 保守高亮，不做过滤
 
         page = new[pno - 1]
         annot = page.add_highlight_annot(rect)
