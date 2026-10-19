@@ -487,9 +487,17 @@ internal source, so the finer-grained verdict would be \emph{unknown}---and the
 conservative reading already available at the API level, one process and one
 authorization model on both paths, is recorded as \emph{reject}. On the
 controlled target, where we can read the source, the finer verdict is available
-and is also \emph{reject}: its content decision calls the same function the
-oracle answers from, so the shared decision point is visible at level~L2 rather
-than inferred. The protocol and the per-system register ship with the artifact.
+and is also \emph{reject}, though the ground differs by class and the register
+states it per class: a shared decision function (read); a guard that duplicates
+the rule over the same record, so the bypass clause is guard-only while the state
+and rule are shared (write); a fault the oracle does not read---which is why it
+reports \texttt{none} there---but whose class could sit in the inheritance branch
+the oracle does read (inheritance); and a shared collaborator map distinguished
+only by the flag the grant path writes (escalation). One revision of the
+register, logged in place and without changing a verdict, corrected three of
+those grounds; the protocol and the register ship with the artifact, with an
+errata that corrects the protocol header's commit pointer and its Gogs version
+label without touching the frozen bytes.
 Three epistemic statuses must then be kept apart: the diagnostic $O$/$H$ readings in
 the experiments (run under the recorded \texttt{shared} status); the
 classification of every promoted verdict against the independent ledger $E$ and

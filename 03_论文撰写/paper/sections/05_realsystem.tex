@@ -545,9 +545,10 @@ read cell cannot stand in for a write or a grant: \McNegRead{} read cells,
 \McNegWrite{} write cells and \McNegGrant{} grant cells, the read set shared by
 C1 and C3. The relation's bookkeeping variant alarms on \McFpRelRead{} of
 \McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and \McFpRelGrant{} of
-\McNegGrant{} of them---the same in-band failure the paper reports elsewhere---and
-the oracle-based adjudicator alarms on \McFpOracleMax{} of the \McNegRead{},
-\McNegWrite{} and \McNegGrant{} cells respectively. Write success
+\McNegGrant{}---the same in-band failure the paper reports elsewhere---and the
+oracle-based adjudicator alarms on \McFpOracleMax{} of \McNegRead{},
+\McFpOracleMax{} of \McNegWrite{} and \McFpOracleMax{} of \McNegGrant{}. Write
+success
 is judged by the object's state changing, not by the status code, so a
 \texttt{200} that leaves the object untouched is not counted as a detection; a
 grant counts only if the collaborator record actually appears. The zero in the

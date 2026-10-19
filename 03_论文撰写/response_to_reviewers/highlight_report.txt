@@ -1,6 +1,6 @@
 baseline sha256 : d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c
-baseline pages  : 16 ; revised pages : 31
-changed lines   : 2190 (of which short lines: 353)
+baseline pages  : 16 ; revised pages : 32
+changed lines   : 2199 (of which short lines: 352)
 deleted lines   : 286
 page 1: 33
 page 2: 50
@@ -25,13 +25,13 @@ page 20: 86
 page 21: 122
 page 22: 107
 page 23: 74
-page 24: 78
-page 25: 102
-page 26: 84
-page 27: 15
+page 24: 87
+page 25: 103
+page 26: 79
+page 27: 20
 page 28: 48
-page 29: 54
-page 30: 76
+page 29: 39
+page 30: 90
 
 ===== CHANGED =====
 p1	Two Reachability-Gated Relations in MST-wi:
@@ -1138,27 +1138,27 @@ p17	confined to the read channel. False alarms are counted per
 p17	channel, because a read cell cannot stand in for a write or
 p17	a grant: 23 read cells, 16 write cells and 7 grant cells, the
 p17	read set shared by C1 and C3. The relation’s bookkeeping
-p17	variant alarms on 8 of 23, 6 of 16 and 0 of 7 of them—
-p17	the same in-band failure the paper reports elsewhere—and
-p17	the oracle-based adjudicator alarms on 0 of the 23, 16 and
-p17	7 cells respectively. Write success is judged by the object’s
-p17	state changing, not by the status code, so a 200 that leaves the
-p17	object untouched is not counted as a detection; a grant counts
-p17	only if the collaborator record actually appears. The zero in
-p17	the oracle column is conditional on this target’s oracle being
-p17	sound, and Section VI-E reports what happens when it is not.
-p17	Two caveats belong here. First, the target’s oracle shares the
-p17	decision function with the content path, so under the admis-
-p17	sion rule of Section VI-E every class is refused promotion
-p17	(Section VI-E and the application register in the package):
-p17	the 9 hits are recall against known truth, not independence-
-p17	certified proofs. Second, these are four mechanisms on one
-p17	emulator, not four discoveries in production systems. Dis-
-p17	abling one class’s fault injection removes that class’s alarms
-p17	and leaves the other three classes’ alarms in place, under the
-p17	channel-matched probe as well as the relation—checked for
-p17	all four classes—so an alarm is attributable to its own defect
-p17	rather than to a shared root cause.
+p17	variant alarms on 8 of 23, 6 of 16 and 0 of 7—the same
+p17	in-band failure the paper reports elsewhere—and the oracle-
+p17	based adjudicator alarms on 0 of 23, 0 of 16 and 0 of 7.
+p17	Write success is judged by the object’s state changing, not
+p17	by the status code, so a 200 that leaves the object untouched
+p17	is not counted as a detection; a grant counts only if the
+p17	collaborator record actually appears. The zero in the oracle
+p17	column is conditional on this target’s oracle being sound, and
+p17	Section VI-E reports what happens when it is not. Two caveats
+p17	belong here. First, the target’s oracle shares the decision
+p17	function with the content path, so under the admission rule of
+p17	Section VI-E every class is refused promotion (Section VI-E
+p17	and the application register in the package): the 9 hits are
+p17	recall against known truth, not independence-certified proofs.
+p17	Second, these are four mechanisms on one emulator, not four
+p17	discoveries in production systems. Disabling one class’s fault
+p17	injection removes that class’s alarms and leaves the other
+p17	three classes’ alarms in place, under the channel-matched
+p17	probe as well as the relation—checked for all four classes—
+p17	so an alarm is attributable to its own defect rather than to a
+p17	shared root cause.
 p17	E. A PUBLICLY FIXED DEFECT
 p17	The seeded control is a controlled artifact, so we also ran one
 p17	defect that nobody here planted: Gitea 1.20.5 against 1.20.6,
@@ -1769,24 +1769,34 @@ p23	independence-based promotion is refused. Applied at that
 p23	level of evidence: on Gitea 1.22.6 the permission route the
 p24	oracle consults and the content routes are answered by the
 p24	same server binary applying the same permission model; on
-p24	Gogs 0.14.3 the per-object route the oracle consults enumer-
-p24	ates direct collaborators only, and the permission suffix that
-p24	would expose the remaining channels does not exist (404), so
-p24	the oracle path cannot even be completed; on GitLab 17.11.7
-p24	the members/all route the oracle consults and the content
-p24	routes are answered by the same application consulting the
-p24	same membership tables. On each product the enumeration
-p24	stops at the server boundary—below it we did not audit inter-
-p24	nal source, so the finer-grained verdict would be unknown—
-p24	and the conservative reading already available at the API
-p24	level, one process and one authorization model on both paths,
-p24	is recorded as reject. On the controlled target, where we can
-p24	read the source, the finer verdict is available and is also reject:
-p24	its content decision calls the same function the oracle answers
-p24	from, so the shared decision point is visible at level L2
-p24	rather than inferred. The protocol and the per-system register
-p24	ship with the artifact. Three epistemic statuses must then be
-p24	kept apart: the diagnostic O/H readings in the experiments
+p24	Gogs 0.14.3 the per-object route the oracle consults enu-
+p24	merates direct collaborators only, and the permission suffix
+p24	that would expose the remaining channels does not exist
+p24	(404), so the oracle path cannot even be completed; on Git-
+p24	Lab 17.11.7 the members/all route the oracle consults
+p24	and the content routes are answered by the same application
+p24	consulting the same membership tables. On each product the
+p24	enumeration stops at the server boundary—below it we did
+p24	not audit internal source, so the finer-grained verdict would
+p24	be unknown—and the conservative reading already available
+p24	at the API level, one process and one authorization model
+p24	on both paths, is recorded as reject. On the controlled target,
+p24	where we can read the source, the finer verdict is available
+p24	and is also reject, though the ground differs by class and the
+p24	register states it per class: a shared decision function (read);
+p24	a guard that duplicates the rule over the same record, so
+p24	the bypass clause is guard-only while the state and rule are
+p24	shared (write); a fault the oracle does not read—which is
+p24	why it reports none there—but whose class could sit in the
+p24	inheritance branch the oracle does read (inheritance); and a
+p24	shared collaborator map distinguished only by the flag the
+p24	grant path writes (escalation). One revision of the register,
+p24	logged in place and without changing a verdict, corrected
+p24	three of those grounds; the protocol and the register ship
+p24	with the artifact, with an errata that corrects the protocol
+p24	header’s commit pointer and its Gogs version label without
+p24	touching the frozen bytes. Three epistemic statuses must then
+p24	be kept apart: the diagnostic O/H readings in the experiments
 p24	(run under the recorded shared status); the classification of
 p24	every promoted verdict against the independent ledger E and
 p24	the content observation Y (gate correctness, which needs no
@@ -1844,7 +1854,6 @@ p24	surface and four do not. The two pairs of totals coincide; the
 p24	partitions do not. Section IV-F uses the second, and every
 p24	statement about it can be recomputed from the census column
 p24	[short]	by column.
-p24	B. CONFIRMATION AT SOURCE
 p25	TABLE 22. Evidence to claim. Each row names the assumption the claim needs, the artefact that carries it, and 
 p25	not a research question: it checks the adjudication gate used throughout, and is not evidence about detection 
 p25	[short]	RQ
@@ -1944,6 +1953,7 @@ p25	V-E3-vuln0-unlisted-nointro
 p25	V-E3-vuln1-unlisted-nointro
 p25	V-noE3-vuln0
 p25	V-noE3-vuln1
+p25	B. CONFIRMATION AT SOURCE
 p25	C. EXECUTING THE PUBLISHED RELATIONS
 p25	totalling 612 lines)—against Gitea 1.22.6 (Table 24). 10 of 11
 p25	in all—the engine’s own getFailures() value (Table 26).
@@ -1969,13 +1979,6 @@ p26	not perform. Since P applies to every alarm, H = 6 holds by
 p26	construction and carries no empirical content. All of it is in
 p26	the independent truth T, computed from the ledger grant (E)
 p26	and a content re-read (Y: the responder’s bytes are identical
-p26	to the owner’s and a third account is refused): 0 violations are
-p26	confirmed and 6 of the 6 promoted alarms are contradicted,
-p26	on 3 cells (Table 25). A reader who declines P should read the
-p26	run as 6 failed metamorphic relations rather than as 6 vulner-
-p26	abilities; the disagreement survives that reading, because the
-p26	failures fall on accesses the ledger allows.
-p26	D. IMPLEMENTATION ROBUSTNESS
 p26	TABLE 25. The native alarms split into the three stages: A (the engine’s
 p26	own getFailures()), H (the promotion policy P applied to A), and T
 p26	(independent truth from the ledger E and the content re-read Y ). Every
@@ -2017,6 +2020,13 @@ p26	[short]	carol/s1
 p26	[short]	allow
 p26	[short]	allow†
 p26	[short]	false proof
+p26	to the owner’s and a third account is refused): 0 violations are
+p26	confirmed and 6 of the 6 promoted alarms are contradicted,
+p26	on 3 cells (Table 25). A reader who declines P should read the
+p26	run as 6 failed metamorphic relations rather than as 6 vulner-
+p26	abilities; the disagreement survives that reading, because the
+p26	failures fall on accesses the ledger allows.
+p26	D. IMPLEMENTATION ROBUSTNESS
 p26	Maven; Section VII-B) and then executed the relations, un-
 p26	(Section VII-C). The harness substitutes an HTTP observa-
 p26	The run converts one class of claim: that a false proof is
@@ -2026,12 +2036,12 @@ p26	the rest: the scenario/configuration and cell studies remain
 p26	statements about our instantiation, our exception vocabulary
 p26	belongs to the same predicate family, and we report no sensi-
 p26	tivity or specificity attributable to MST-wi.
-p26	tion is paired and is reported as a discordance count. Finding 3
-p26	is a statement about what the published denominator pools
-p26	over, not about the value of any specificity figure: we do not
-p26	restate the predecessor’s specificity, and no conclusion in this
-p26	paper depends on it.
 p27	TABLE 26. The published authorization relations executed against Gitea 1.22.6. Each row is the applicability c
+p27	tion is paired and is reported as a discordance count. Finding 3
+p27	is a statement about what the published denominator pools
+p27	over, not about the value of any specificity figure: we do not
+p27	restate the predecessor’s specificity, and no conclusion in this
+p27	paper depends on it.
 p27	The split of Section IV-F is on whether the introspection
 p27	step against methods that need nothing, not to identify the
 p27	best oracle-free detector; a differential prober across accounts
@@ -2133,21 +2143,20 @@ p29	tion V-E supplies that population: the first are planted in
 p29	an emulator, the second is a real defect replayed under a
 p29	controlled topology, and neither is a sample of defects found
 p29	in the field; and second, relations whose gate is not the ab-
-p29	[short]	by
-p29	[short]	tag
-p29	access-resubmission-v10,
-p29	[short]	which
-p29	[short]	archives
-p29	every record behind every number in this paper—including
-p29	the two experiments added in this revision, the matched-
-p29	[short]	budget
-p29	[short]	sweep
-p29	(results/baseline_budget.json)
-p29	[short]	four-class
-p29	[short]	defect
-p29	/results/seeded_multiclass.json)—the frozen
-p29	admission protocol, its errata and the application register
-p29	(real_system/prereg/), and the generation scripts
+p30	[short]	by
+p30	[short]	tag
+p30	access-resubmission-v10,
+p30	[short]	which
+p30	[short]	archives
+p30	every record behind every number in this paper—including
+p30	the two experiments added in this revision, the matched-
+p30	[short]	budget
+p30	sweep (results/baseline_budget.json)
+p30	[short]	four-class
+p30	[short]	defect
+p30	/results/seeded_multiclass.json)—the frozen
+p30	admission protocol, its errata and the application register
+p30	(real_system/prereg/), and the generation scripts
 p30	that recompute the tables from those records. The earlier tags
 p30	remain in place as snapshots of prior states and should not be
 p30	conflated with it: artifact-v1 is the previously reviewed

@@ -183,7 +183,7 @@ def main() -> None:
         r"undetected in the overall denominator; that is a mechanism explanation, not a "
         r"removal from the denominator. The zero in the oracle column is conditional on this "
         r"target's oracle being sound, which it is not for any class under the admission "
-        r"rule of Section~VI-E.}")
+        r"rule of Section~\ref{sec:admissibility}.}")
     body.append(r"\label{tab:multiclass}")
     body.append(r"\small")
     body.append(r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrr}")
