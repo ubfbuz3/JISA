@@ -1,9 +1,9 @@
 ﻿id,concern,verified_current_status,next_action,fully_closed,audience
 R1.1,R1.1 新颖性,待系统重写,结构化相关工作比较，明确已有认识和具体新增证据,no,internal
-R1.2,R1.2 完整真值定义,A已建 E/Y/A/H/T；摘要已改口径：引擎只记录失败，升格是外加策略（2026-10-19）,补 5 变量（A/H/E/Y/oracle 可读性）完整真值表并与 D 逐行比对,no,internal
+R1.2,R1.2 完整真值定义,E/Y 分开（A 包）＋真值表 Table 12 给出 E×Y×M×O 全部组合下的真值与各自落格数,—,yes,internal
 R1.3,R1.3 状态转移,Gitea+GitLab 各 8 类转移完成，逐事件 hv/M0/M1 摘要可核验；A2 记录 GitLab 连带删除语义,补请求→裁决期间并发变更的处置规则（现只在讨论中说明静止窗口）,no,internal
 R1.4,R1.4 oracle admissibility,C 协议结果前冻结；A1 改主视点 4/4 闸门、A2 观察前落盘；渠道可读性已量化,补结果揭晓前可执行的独立性判据（现有闸门仍依赖同源实现）,no,internal
-R1.5,R1.5 命题2,已拆 Lemma(吸收)+Proposition(两条关系在定义域内)，并写明唯一证伪方式,缺两条关系实际判决函数与 D 的逐行真值表,no,internal
+R1.5,R1.5 命题2,两条关系写成 Eq.(1)(2)，在本域上化为 A=y∧¬m（576 条构造记录 + 712 格零不符）；真值表逐行比对 D=y∧¬o；三处实现差异（模型是存量非查询／isError 是状态码／q 是响应等同）已写明,—,yes,internal
 R1.6,R1.6 枚举设计,已有52格/576记录，解释仍需修正,配置与筛选manifest，blind/aware准确描述，36/18对312/264的映射,no,internal
 R1.7,R1.7 竞争基线,未完成,D，多账户及常规差分，同预算与成本,no,internal
 R1.8,R1.8 渠道混淆,表 VII 已改为逐渠道四格混淆矩阵（Gitea/GitLab 双栏），oracle 错误与 stale 模型分离,—,yes,internal
@@ -16,7 +16,7 @@ R1.14,R1.14 复现,native分段、配对数据和re-ingest已加入，部分,干
 R1.15,R1.15 证据到主张,已加证据—主张表 tab:evidence-claim；结论逐项对应源码/构造/真实系统三类证据,—,yes,internal
 R2.1,R2.1 新颖性与recrawl,Gitea：13/13 陈旧漏列被同权限 recrawl 修好，0 残留（本拓扑计数）,跨厂商复核；写清 crawl 源与 deploy key 的边界，不作 recrawl 完备性声明,no,internal
 R2.2,R2.2 标题与范围,标题、running head、摘要首句均限定两条 reachability-gated 关系,—,yes,internal
-R2.3,R2.3 命题2,未完成,与R1.5共用修订，但回复独立完整,no,internal
+R2.3,R2.3 命题2,"定义性与经验性已分开：A=D 是代数（共享因子 y），命题内容是 m=o 这一经验前提；证伪条件修为『(M,R) 之外的可观测量』，并说明陈旧模型只破坏前提 (ii)",—,yes,internal
 R2.4,R2.4 真实检测面,真实 vuln/fixed 配对已入文（E/Y 闸门），并明确它不是检测率,—,yes,internal
 R2.5,R2.5 84.62,84.62% 全文降为示例，摘要不含该数，且不再作 99.81% 的数值佐证,—,yes,internal
 R2.6,R2.6 构造设计与比例,E 来源已改进；比例对设计的依赖已有讨论,未按场景等权与原权重并列给出 1.00/0.44,no,internal

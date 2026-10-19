@@ -62,6 +62,8 @@ pushd "$ANA" >/dev/null
 "$PYBIN" ingest_cve_pair.py
 # 真时序实验的数字（temporal_gitea.json 随包提供，不需重跑实例）
 "$PYBIN" ingest_temporal.py
+# 两条关系的显式判定式复核 + 真值表（只读既有 raw_matrix / temporal JSON）
+"$PYBIN" ingest_truth.py
 "$PYBIN" make_diagrams.py
 popd >/dev/null
 

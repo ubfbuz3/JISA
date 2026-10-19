@@ -90,10 +90,102 @@ checked, not assumed, by the paired ablation: the two methods disagree on
 (Section~\ref{sec:synthetic-ablation}).
 \end{proposition}
 
-The proposition is falsifiable in one specific way: exhibit an observable $Z$
-that a relation consumes, that is decision-relevant, and that $(O,R)$ does not
-determine. Then premise (i) fails, the lemma does not apply, and the relation
-could in principle beat $D$. We know of no such observable for these two
+\paragraph{The predicates, explicitly}
+Write $y$ for the response bit, $y=1$ when the ordinary request returns no
+error; $m$ for the model bit, $m=1$ when the crawl-time reachability model lists
+the object for the subject; and $o$ for the oracle bit, $o=1$ when the
+introspection surface answers \emph{allow}. The two shipped predicates then read
+\begin{align}
+A_{002} &= \neg\mathrm{sup}(B,A)\;\wedge\;\neg m \nonumber\\
+        &\quad\wedge\;\neg\mathrm{err}(o_1)\;\wedge\;q(o_1,o_2),\label{eq:a002}\\
+A_{004} &= y\;\wedge\;\neg m,\label{eq:a004}
+\end{align}
+where $\mathrm{err}$ is the error predicate and $q$ normalised response
+identity. On the domain evaluated here $\neg\mathrm{sup}=1$,
+$\mathrm{err}(o_1)=0$, and $q=y$ in all \TvtMrTwo{} records on which the second
+clause was computed, so both collapse to the single map
+\begin{equation}
+A \;=\; y \;\wedge\; \neg m .
+\label{eq:aflat}
+\end{equation}
+The direct adjudicator is $D=y\wedge\neg o$, so $A=D$ exactly when $m=o$: the two
+expressions share the factor $y$, and that step is algebra.
+Equations~\eqref{eq:a002}--\eqref{eq:aflat} are not a paraphrase of the code;
+they reproduce the recorded alarm of all \TvtRecords{} constructed records and
+all \TvtCells{} temporal cells with no disagreement
+(\texttt{analysis/ingest\_truth.py}). What the proposition adds to the algebra is
+the empirical premise that $m=o$ wherever the oracle is readable and sound.
+
+\input{truth_table.tex}
+
+\paragraph{Reading the table}
+Table~\ref{tab:truth} evaluates both verdicts on every combination of the four
+variables and reports how many of the \TvtCells{} temporal cells fall in each
+row, split by the ledger's entitlement. Three things are visible in it that
+prose cannot state as compactly. First, the equivalence is exactly as narrow as
+the algebra says: the two verdicts agree in \TvtAgree{} of the \TvtReadable{}
+cells with a usable oracle and part only in the two rows where $Y=1$ and
+$M\ne O$, which hold \TvtDisagree{} cells. Second, the parting is not one
+phenomenon but two, and they need different remedies. In the \TvtOracleWrong{}
+cells of row~6 the model is right and the membership surface answers \emph{deny}
+on a cell that is both entitled and readable, so the direct adjudicator alone
+raises a false proof; a better oracle would remove those. In the
+\TvtModelWrong{} cells of row~7 the model is stale and the oracle right, so the
+relation alone raises a false proof; a recrawl would remove those. Third, row~5
+shows why agreement is not a certificate of correctness: in \TvtBothWrong{}
+cells both surfaces answer \emph{deny}, the ledger says the subject is entitled,
+the request succeeds, and both verdicts are false proofs. The proposition is
+about information, so it is silent on row~5---but a reader who took $A=D$ as
+evidence that the pair decides correctly would be wrong there, and the table
+says so before the reader has to notice it.
+
+Two further readings of the same table belong here, because both bear on how far
+the result travels. The rows without an oracle are not idle: \TvtUnreadable{}
+cells return no definite answer, $D$ is undefined on all of them, and the
+relation still alarms in \TvtUnreadAlarms{}---alarms that nothing in this
+experiment can adjudicate, which is the regime the proposition's antecedent
+excludes rather than a gap in it. And the model term is not free. Recomputed over
+the two model semantics of the constructed study, the constant variant, which
+alarms on every successful access, finds \TvtBlindTP{} violations at
+\TvtBlindFP{} false proofs; the crawl-time term finds \TvtConTP{} at
+\TvtConFP{}---\TvtModelSaveFP{} fewer false proofs for \TvtModelCostTP{} fewer
+detections, over \TvtConAware{} records each. A relation with a reachability
+gate is therefore neither the alarm-free ideal of Finding~2's antecedent nor a
+free improvement on the ungated variant; it trades one error for the other, and
+the trade is the reason the gate is worth stating as a variable rather than
+folding into the oracle.
+
+\paragraph{Three differences from the ideal predicate}
+Equations~\eqref{eq:a002}--\eqref{eq:aflat} describe the predicates as written,
+and the shipped code departs from them in three places. None changes the
+algebra; each either moves cells out of the domain or corrupts a variable the
+two verdicts share, which is why none of them makes the relation beat $D$.
+(i)~\emph{The model term is a store, not a query.}
+\texttt{cannotReachThroughGUI} and \texttt{userCanRetrieveContent} are set
+membership over the crawl inputs: they issue no request and read a store loaded
+once. So $m$ is fixed at crawl time while $y$ and $o$ are read at decision time,
+and rows~6--7 are precisely the cells on which that interval carries a change.
+(ii)~\emph{The error predicate is a status code.} MST-wi asks whether an error
+page is rendered; the port asks whether the status is at least 400. A denial
+served with 200, or an error page served with 403 on the subject's own object,
+makes $y$ wrong---and $y$ enters both $A$ and $D$, so the two stay tied while
+both are wrong. This is the sense in which the tie is evidence about information
+and not about accuracy. (iii)~\emph{Response identity is not authorization
+identity.} The clause $q$ compares the whole normalised response, not the
+authorization proposition under test; a per-viewer field would make $q$ false
+while access had in fact been granted, and the relation would stay silent on a
+violation. On the evaluated domain this does not bite ($q=y$ throughout), but it
+is the one of the three that produces a miss rather than a false proof, and it
+would grow if the relation were extended to responses carrying viewer-specific
+fields.
+
+The proposition is falsifiable in one specific way: exhibit an observable $Z$,
+\emph{other than the model and the response}, that a relation consumes and that
+is decision-relevant. Then premise (i) fails, the lemma does not apply, and the
+relation could in principle beat $D$. The model itself is not such a $Z$: a
+stale model also fails to be $O$-determined, but that breaks premise (ii), and
+the direction of the break is visible in Table~\ref{tab:truth}---row~7 is a
+false proof, not an advantage. We know of no such observable for these two
 relations, and the ablation is consistent with its absence; that is the whole of
 the claim. We do not assert that no such observable could exist for other
 relations in the catalogue, and we do not assert that the relations are useless.

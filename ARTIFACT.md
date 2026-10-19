@@ -13,8 +13,13 @@ to `reproduce.sh`.
 - **Source tree** (this repository), pinned to an exact commit hash.
 - **Analysis pipeline** (`04_绘图与分析/analysis/`): `compute_all.py`,
   `ingest_native_engine.py`, `ingest_gogs.py`, `ingest_gitlab.py`,
-  `ingest_seeded.py`, `make_diagrams.py`, `normalize_bib.py`,
-  `check_macros.py`.
+  `ingest_seeded.py`, `ingest_cve_pair.py`, `ingest_temporal.py`,
+  `ingest_m2_stratum.py`, `ingest_truth.py`, `make_diagrams.py`,
+  `normalize_bib.py`, `check_macros.py`. `ingest_truth.py` also *verifies*
+  the manuscript's two Boolean predicates against every recorded verdict
+  (576 constructed records, 712 temporal cells) before it emits
+  `results/truth_numbers.tex` and `results/truth_table.tex`; a mismatch
+  aborts the script rather than producing a table.
 - **Raw records** (`04_绘图与分析/results/*.json`,
   `experiments/real_system/results/*.json`): the factorial study, the Gitea /
   Gogs / GitLab cell grids, the native-engine execution log, the M1 census,
