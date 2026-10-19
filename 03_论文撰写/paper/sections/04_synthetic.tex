@@ -212,8 +212,9 @@ the temporal loop of Section~\ref{sec:realsystem}: a median of
 GitLab, of which the mutation is \CvgLoopGiteaMut{}~s and \CvgLoopGitlabMut{}~s,
 the recrawl \CvgLoopGiteaRecrawl{}~s and \CvgLoopGitlabRecrawl{}~s, and the
 cross-credential probe sweep \CvgLoopGiteaProbe{}~s and \CvgLoopGitlabProbe{}~s.
-The recrawl the mechanism needs is a small part of the loop; re-reading every
-credential is what costs.
+Each of these is a separate median, so the parts need not sum to the total
+exactly. The recrawl the mechanism needs is a small part of the loop; re-reading
+every credential is what costs.
 
 \input{coverage_table.tex}
 
