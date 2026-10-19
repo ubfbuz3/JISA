@@ -326,8 +326,10 @@ equality rule fires on all \BlRsBTwoClaims{} legitimately allowed cells, and the
 in-band log still leaves \BlRsBThreeClaims{}, because the framework log does not
 observe \ResRsChannelNotObservableRate{} of the effective access there. That
 figure is a property of the constructed topology, not an estimate of field
-prevalence. The cost is one extra read: \BlProbeReq{} probe requests per cell for
-every method, \BlOursProbeReq{} for ours.
+prevalence. The budget is matched: \BlProbeReq{} requests per cell for every
+method, one as the owner and one as the actor, plus one additional read of the
+authorization surface for ours on the \BlOursExtraCells{} cells where a relation
+alarms and none where it does not---\BlOursExtraAvg{} per cell on average.
 
 \input{baseline_table.tex}
 

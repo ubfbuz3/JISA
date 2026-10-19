@@ -114,15 +114,22 @@ def main() -> None:
     # ---- 宏 -------------------------------------------------------------
     budget = data["summary"]["_budget"]
     probe_req = budget["probe_requests_per_cell"][0]
-    ours_extra = budget["ours_extra_per_cell"][0]
+    extra_cells = sum(1 for r in recs if r["budget"]["ours_extra_requests"] >= 1)
+    extra_avg = extra_cells / len(recs)
+    check("matched probe budget", budget["probe_requests_per_cell"], [2])
+    check("extra reads only where a relation alarms",
+          sorted({r["budget"]["ours_extra_requests"] for r in recs}), [0, 1])
+    check("extra reads on the alarming cells",
+          extra_cells, b2["claims"])
 
     macros = {
         "BlCells": str(N),
+        "BlOursExtraCells": str(extra_cells),
+        "BlOursExtraAvg": f"{extra_avg:.2f}",
         "BlBolaCells": str(bola),
         "BlLegitCells": str(legit),
         "BlDeniedCells": str(denied),
         "BlProbeReq": str(probe_req),
-        "BlOursProbeReq": str(probe_req + ours_extra),
         "BlBOneClaims": str(b1["claims"]),
         "BlBOneTP": str(b1["tp"]),
         "BlBOneFP": str(b1["fp"]),
@@ -171,8 +178,10 @@ def main() -> None:
         r"probe pair. The cells comprise \BlBolaCells{} true violations, "
         r"\BlLegitCells{} legitimate accesses through a grant (in-band or "
         r"out-of-band), and \BlDeniedCells{} denials. Every method consumes one "
-        r"owner request and one actor request; ours issues one additional read of "
-        r"the authorization surface. A false proof is a cell with "
+        r"owner request and one actor request; ours issues one additional read "
+        r"of the authorization surface on the \BlOursExtraCells{} cells where a "
+        r"relation alarms, and none where it does not "
+        r"(\BlOursExtraAvg{} per cell on average). A false proof is a cell with "
         r"$E=\text{allow}$ that the method still reports as a proven violation.}",
         r"\label{tab:baselines}",
         r"\footnotesize",
