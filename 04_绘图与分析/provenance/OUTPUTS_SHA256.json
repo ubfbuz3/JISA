@@ -23,8 +23,8 @@
     },
     {
       "path": "04_绘图与分析\\results\\coverage_table.tex",
-      "sha256": "361fc4d0b93f6bc0056469a835e644179cf7304877a29c8472cef6cc2e89ff56",
-      "bytes": 3099
+      "sha256": "bf5340606a8e42693d7f6c3fd22b9c9e7dbe515ed945c9dcc951082786695546",
+      "bytes": 3132
     },
     {
       "path": "04_绘图与分析\\results\\cve_pair_numbers.tex",
@@ -138,8 +138,8 @@
     },
     {
       "path": "04_绘图与分析\\results\\truth_table.tex",
-      "sha256": "e9dfccc480bad5612eae5b2845071be55bc927e38626c644ee92f47852620b61",
-      "bytes": 3616
+      "sha256": "d6b2faea4b477984e835bfa0d94f3f2fe22114f9200e7769014c6420698d5641",
+      "bytes": 3674
     },
     {
       "path": "04_绘图与分析/results/metrics.json",

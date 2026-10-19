@@ -1,0 +1,40 @@
+{
+  "authors": [
+    "Qiulong Lin",
+    "Nanlei Chen"
+  ],
+  "pdfs": {
+    "main": {
+      "pages": 30,
+      "author": "Qiulong Lin and Nanlei Chen",
+      "sha256": "cba14d432d2c7199067252c43096a28c61befc0505461c47a445db8bcafbd30b"
+    },
+    "letter": {
+      "pages": 11,
+      "author": "Qiulong Lin and Nanlei Chen",
+      "sha256": "531862de6029930a561501b595ad657d959cea73901a1087ed5dd3f93866ccea"
+    },
+    "highlighted": {
+      "pages": 30,
+      "author": "Qiulong Lin and Nanlei Chen",
+      "sha256": "24417890ec2658e5df301bf1056fd1ead9d6b3ce2f4ba2602167fea55bc114bf"
+    }
+  },
+  "source_zip": {
+    "files": 93,
+    "sha256": "fc0c888b19050e5ac71bc08eb9fdee77bf0d4aabf37f2456bd77bd60ab304d11"
+  },
+  "isolated_regeneration": {
+    "outputs_matched": 31,
+    "mismatches": [],
+    "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_两作者最终材料\\builds\\regeneration_a4msh_zk",
+    "scope": "same-host working-copy regeneration with pinned external MST source; live experiments not rerun"
+  },
+  "raw_inputs_verified": 23,
+  "checks": {
+    "numbers": "[ok] 75 项承重数字与生成器当前输出一致\n",
+    "references": "main.pdf: 30 页, 24 张表\n检查了 31 个带页码的引用\n[ok] 回信全部表号/页码引用与 main.pdf 一致\n",
+    "manifest_check": "[ok] make_manifests --check: all inputs and outputs match the committed manifests\n"
+  },
+  "git_or_remote_mutated": false
+}

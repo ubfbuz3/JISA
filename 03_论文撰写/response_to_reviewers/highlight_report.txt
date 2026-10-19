@@ -1,6 +1,6 @@
 baseline sha256 : d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c
 baseline pages  : 16 ; revised pages : 30
-changed lines   : 1982 (of which short lines: 320)
+changed lines   : 1987 (of which short lines: 322)
 deleted lines   : 284
 page 1: 32
 page 2: 48
@@ -10,7 +10,7 @@ page 5: 121
 page 6: 4
 page 7: 73
 page 8: 89
-page 9: 88
+page 9: 89
 page 10: 44
 page 11: 26
 page 12: 40
@@ -21,7 +21,7 @@ page 16: 44
 page 17: 101
 page 18: 94
 page 19: 87
-page 20: 120
+page 20: 121
 page 21: 83
 page 22: 91
 page 23: 113
@@ -29,7 +29,7 @@ page 24: 83
 page 25: 20
 page 26: 51
 page 27: 32
-page 28: 79
+page 28: 82
 
 ===== CHANGED =====
 p1	Two Reachability-Gated Relations in MST-wi:
@@ -541,19 +541,20 @@ p8	number of scenarios in which the failure is uniform. Sscenario
 p8	is an analytical construct for characterising resolution; it is
 p9	TABLE 4. The same 576 records scored on the decision rather than on the alarm. Coverage is the share of record
 p9	violation or its absence; the abstention column gives the count and, in parentheses, its rate, split by whethe
-p9	and misses are the two error counts among decided records, and risk is their sum over that denominator—compara
-p9	coverage, which these methods do not have. A passed record is one on which the method did not fire, not a cert
-p9	direct_observe abstain when the probe is unreadable, as the direct adjudicator does, so their coverage is 54.1
-p9	not in scoring convention: direct_only asserts a violation whenever the authorization surface reports no grant
-p9	outcome; direct_observe additionally requires the ordinary request to succeed. All 108 false proofs of direct_
-p9	denied: under the strict false-proof definition used elsewhere in this paper they are invalid violation claims
-p9	than strict false proofs, and we report them as such instead of letting the request-success condition remove t
-p9	reference that forces a negative verdict on those cells, and its misses are the price of that forcing, not a p
-p9	abstentions by reason: only the first row is the availability gate the method is named for.
+p9	(invalid violation claims) and misses are the two error counts among decided records, and risk is their sum ov
+p9	methods only at equal coverage, which these methods do not have. A passed record is one on which the method di
+p9	direct_only and direct_observe abstain when the probe is unreadable, as the direct adjudicator does, so their 
+p9	adjudication rule, not in scoring convention: direct_only asserts a violation whenever the authorization surfa
+p9	of the request outcome; direct_observe additionally requires the ordinary request to succeed. All 108 FP claim
+p9	server in fact denied. These are invalid violation claims without unauthorized-access effect. Strict false pro
+p9	entitled access (E=allow), are a different subclass; both subclasses count as incorrect claims for the binary 
+p9	labelled binary reference that forces a negative verdict on those cells, and its misses are the price of that 
+p9	splits v3’s abstentions by reason: only the first row is the availability gate the method is named for.
 p9	[short]	coverage (%)
 p9	[short]	abstained
 p9	[short]	on violation
 p9	[short]	on normal
+p9	[short]	FP claims
 p9	[short]	misses
 p9	[short]	risk (%)
 p9	[short]	100.00
@@ -1344,20 +1345,21 @@ p19	The comparison above is pooled. Section IV-F re-runs it
 p19	inside each stratum of effective oracle readability (Table 6)
 p20	TABLE 18. The truth table of the two relations, with the temporal cells that fall in each row. Y : the ordinar
 p20	lists the object for the subject. O: the introspection surface’s answer, an em dash meaning it returns no defi
-p20	this domain both reduce to y ∧¬m. D: the direct adjudicator, y ∧¬o, undefined in rows 9–12. H: the promoted ve
-p20	A ∧¬o—the reading the promotion policy P gives the native alarm, not a third measurement—which exists only whe
-p20	subset of D by construction (H=1 ⇒D=1); it agrees with D on every row except row 6, where D fires and H does n
-p20	measured surfaces, and the disagreement count below is an A/D count—it must not be restated as an H/D count. R
-p20	The count columns split each row by the ledger’s entitlement E, so every row states its truth conditions for b
-p20	combination, and in the verdict column the first term reads E=deny and the second E=allow. Where D is defined 
-p20	Y =deny or M=O, and part only in the two rows with Y =allow and M̸ = O—54 of the 584 readable cells. Those two
-p20	that Section V-B keeps apart: in row 6 the model is right and the oracle wrong, so D alone raises a false proo
-p20	and the oracle right, so the relation alone does (A=1, D=0, H=0: the promotion suppresses the alarm, which is 
-p20	disagreement between H and D). Row 5 is the case neither explains—both surfaces answer deny on a cell the ledg
-p20	and their agreement certifies nothing.
+p20	this domain both reduce to y ∧¬m. D: the direct adjudicator, y ∧¬o, undefined in rows 9–12. Hv3 (abbreviated H
+p20	A ∧¬o. It differs from the native promotion policy P, whose verdict is HP = A. The state-calibrated verdict ex
+p20	a subset of D by construction (H=1 ⇒D=1); on the definite-oracle rows it agrees with D except in row 6, where 
+p20	are the two measured surfaces, and the disagreement count below is an A/D count—it must not be restated as an 
+p20	undefined like D. The count columns split each row by the ledger’s entitlement E, so every row states its trut
+p20	unrealised combination, and in the verdict column the first term reads E=deny and the second E=allow. Where D 
+p20	whenever Y =deny or M=O, and part only in the two rows with Y =allow and M̸ = O—54 of the 584 readable cells. 
+p20	mechanisms that Section V-B keeps apart: in row 6 the model is right and the oracle wrong, so D alone raises a
+p20	model is stale and the oracle right, so the relation alone does (A=1, D=0, H=0: the promotion suppresses the a
+p20	as a disagreement between H and D). Row 5 is the case neither explains—both surfaces answer deny on a cell the
+p20	proofs, and their agreement certifies nothing.
 p20	[short]	Y
 p20	[short]	O
 p20	[short]	D
+p20	[short]	Hv3
 p20	verdict at the ledger
 p20	E=deny
 p20	E=allow
@@ -1952,27 +1954,30 @@ p28	that lacks the component but consumes the same decision-
 p28	relevant observables is empirically or formally shown to be
 p28	[short]	weaker.
 p28	[short]	by
-p28	the tag access-resubmission-v3 at the commit
-p28	that carries this revision. The earlier tags remain in
-p28	place as snapshots of prior states and should not be
-p28	[short]	conflated
-p28	[short]	with
+p28	[short]	tag
+p28	access-resubmission-v4,
+p28	[short]	which
+p28	[short]	archives
+p28	the experimental records and frozen source-state inputs
+p28	used here. The earlier tags remain in place as snapshots
+p28	of prior states and should not be conflated with it:
 p28	[short]	is
 p28	[short]	previously
-p28	reviewed version (without the temporal or vulnerable/fixed
-p28	records added here), and access-resubmission-v2
-p28	is the working freeze at which an internal accuracy
+p28	[short]	reviewed
+p28	[short]	version
+p28	[short]	(without
+p28	[short]	temporal
+p28	[short]	or
+p28	[short]	vulnerable/fixed
+p28	[short]	added
+p28	access-resubmission-v2
+p28	[short]	is
+p28	the working freeze at which an internal accuracy review
+p28	was started; access-resubmission-v3 is the next
 p28	[short]	review
-p28	[short]	was
-p28	[short]	started;
-p28	access-resubmission-v3
-p28	[short]	supersedes
-p28	[short]	both.
-p28	[short]	revision
-p28	[short]	adds,
-p28	[short]	experiments/:
-p28	[short]	(1)
-p28	[short]	scenario/configuration
+p28	access-resubmission-v4
+p28	includes the subsequent corrections. The revision adds,
+p28	under experiments/: (1) the scenario/configuration
 p28	(results/raw_matrix.jsonl,
 p28	/results/*.json); (3) the temporal loop and its
 p28	archived pilot, with the protocol and both amendments

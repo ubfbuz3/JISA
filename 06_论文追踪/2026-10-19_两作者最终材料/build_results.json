@@ -1,0 +1,28 @@
+{
+  "main_pages": 30,
+  "letter_pages": 11,
+  "source_zip_compilation_matches": true,
+  "authors": [
+    "Qiulong Lin",
+    "Nanlei Chen"
+  ],
+  "checks": {
+    "numbers": {
+      "returncode": 0,
+      "output": "[ok] 75 项承重数字与生成器当前输出一致\n"
+    },
+    "references": {
+      "returncode": 0,
+      "output": "main.pdf: 30 页, 24 张表\n检查了 31 个带页码的引用\n[ok] 回信全部表号/页码引用与 main.pdf 一致\n"
+    },
+    "pair_validation": {
+      "returncode": 0,
+      "output": "  [ok] 未扰动记录                            问题数=0\n  [ok] 删除脆弱版 own_comment 对照             问题数=2\n  [ok] 恢复改为失败                           问题数=1\n  [ok] 复读正文回退但保留 Y=True/TP              问题数=4\n  [ok] own_comment 改成 403               问题数=1\n  [ok] 标签重复                             问题数=2\n  [ok] 多出未登记标签                          问题数=2\n  [ok] E 与台账冲突                          问题数=1\n\n[ok] 8 个用例全部符合预期\n"
+    }
+  },
+  "build_directories": [
+    "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_两作者最终材料\\builds\\main__cobwbkp",
+    "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_两作者最终材料\\builds\\zip_wmvslkcu",
+    "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_两作者最终材料\\builds\\letter_usn4r9v5"
+  ]
+}

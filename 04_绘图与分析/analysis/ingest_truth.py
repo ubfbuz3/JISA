@@ -261,12 +261,12 @@ def main() -> None:
         r"introspection surface's answer, an em dash meaning it returns no "
         r"definite answer. $A$: the alarm of either relation; on this domain both "
         r"reduce to $y\wedge\neg m$. $D$: the direct adjudicator, "
-        r"$y\wedge\neg o$, undefined in rows 9--12. $H$: the promoted verdict of "
-        r"the state-calibrated method, $A\wedge\neg o$---the reading the "
-        r"promotion policy $P$ gives the native alarm, not a third measurement---"
-        r"which exists only where $O$ "
+        r"$y\wedge\neg o$, undefined in rows 9--12. $H_{\mathrm{v3}}$ "
+        r"(abbreviated $H$ below) is the state-calibrated verdict $A\wedge\neg o$. "
+        r"It differs from the native promotion policy $P$, whose verdict is $H_P=A$. "
+        r"The state-calibrated verdict exists only where $O$ "
         r"is definite and is therefore a subset of $D$ by construction "
-        r"($H{=}1 \Rightarrow D{=}1$); it agrees with $D$ on every row except row 6, where "
+        r"($H{=}1 \Rightarrow D{=}1$); on the definite-oracle rows it agrees with $D$ except in row 6, where "
         r"$D$ fires and $H$ does not. The $A$/$D$ columns are the two measured "
         r"surfaces, and the disagreement count below is an $A$/$D$ count---it must "
         r"not be restated as an $H$/$D$ count. Rows 9--12 "
@@ -292,7 +292,7 @@ def main() -> None:
         r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llllcccp{1.52in}rr@{}}",
         r"\toprule",
-        r"$Y$ & $M$ & $O$ & $A$ & $D$ & $H$ & verdict at the ledger "
+        r"$Y$ & $M$ & $O$ & $A$ & $D$ & $H_{\mathrm{v3}}$ & verdict at the ledger "
         r"& $E{=}\mathrm{deny}$ & $E{=}\mathrm{allow}$ \\",
         r"\midrule",
     ]

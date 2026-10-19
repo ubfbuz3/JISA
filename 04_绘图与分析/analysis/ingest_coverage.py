@@ -335,7 +335,7 @@ def main() -> None:
         r"alarm. Coverage is the share of records on which a method asserts either a "
         r"violation or its absence; the abstention column gives the count and, in "
         r"parentheses, its rate, split by whether the record held a true violation. "
-        r"\emph{False proofs} and \emph{misses} are the two error counts among decided "
+        r"\emph{FP claims} (invalid violation claims) and \emph{misses} are the two error counts among decided "
         r"records, and \emph{risk} is their sum over that denominator---comparable "
         r"across methods only at equal coverage, which these methods do not have. "
         r"A passed record is one on which the method did not fire, not a certificate "
@@ -345,11 +345,11 @@ def main() -> None:
         r"convention: \texttt{direct\_only} asserts a violation whenever the "
         r"authorization surface reports no granting channel, regardless of the request "
         r"outcome; \texttt{direct\_observe} additionally requires the ordinary request "
-        r"to succeed. All \CvgDirOnlyFP{} false proofs of \texttt{direct\_only} fall on "
-        r"requests the server in fact denied: under the strict false-proof definition "
-        r"used elsewhere in this paper they are invalid violation claims without "
-        r"unauthorized-access effect rather than strict false proofs, and we report "
-        r"them as such instead of letting the request-success condition remove them. "
+        r"to succeed. All \CvgDirOnlyFP{} FP claims of \texttt{direct\_only} fall on "
+        r"requests the server in fact denied. These are invalid violation claims without "
+        r"unauthorized-access effect. Strict false proofs, defined elsewhere as promoted "
+        r"claims on entitled access ($E{=}\mathrm{allow}$), are a different subclass; "
+        r"both subclasses count as incorrect claims for the binary risk in this table. "
         r"The last row is a clearly labelled binary reference "
         r"that forces a negative verdict on those cells, and its misses are the price "
         r"of that forcing, not a property of the method. Panel (b) splits v3's "
@@ -362,7 +362,7 @@ def main() -> None:
         r"\begin{tabular}{@{}p{0.225\textwidth}rrrrrrr@{}}",
         r"\toprule",
         r"method & coverage (\%) & abstained & on violation & on normal & "
-        r"false proofs & misses & risk (\%) \\",
+        r"FP claims & misses & risk (\%) \\",
         r"\midrule",
     ]
     for m in METHODS:
