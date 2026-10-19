@@ -56,13 +56,15 @@
 
 ## E. 通用投稿前核对（排版/合规）
 - ☑ **模板**：已切换为 **IEEE Access 官方 `ieeeaccess.cls`**（`\documentclass{ieeeaccess}`）；作者块（大写姓名+上标单位号）、编号单位、`Corresponding author`、ORCID iD 图标、INDEX TERMS、文末作者简介均按官方版式。单盲（作者信息在手稿中）。
-- ☑ **页数**：当前 **16 页**（ieeeaccess.cls 双栏；IEEE Access 无硬性页数上限，建议 ≤20 页）。
+- ☑ **页数**：当前 **24 页**（ieeeaccess.cls 双栏；IEEE Access 不设硬性页数上限，但超出 20 页需付 overlength 费；若需压页可把 Table 1/2/4/18 移入补充材料）。
 - ☑ **摘要词数** ≤ 250（当前 **244**；统计须先展开 `\Res*` 宏再计，脚本在 `AppData/Local/Temp/count_abstract*.py`）。
 - ☑ 0 undefined references / citations / control sequences（`build.sh` 第 4 步校验）。
 - ☑ **投稿包自足可编译**（2026-10-19 修正）：`make_submission_zip.py` 的宏文件清单改为从正文
   `\input{}` 自动推导——旧的硬编码清单漏了 `temporal_*`、`cve_pair_*`、`native_split_table`
-  共 6 个生成表，ReX 端会直接编译失败。现为 **79 个文件**；已验证：解压到空目录 →
-  `pdflatex ×2` 直接出 20 页 PDF，0 个未定义引用（`main.bbl` 随包）。
+  共 6 个生成表，ReX 端会直接编译失败。现为 **88 个文件**（新增 R1.6/R1.13 的 7 个生成文件）；
+  已验证：解压到空目录 → `pdflatex` → `bibtex` → `pdflatex ×2` 直接出 **24 页** PDF，0 个未定义引用。
+- ☑ **表格宽度实测**（2026-10-19）：把 12 张表的 tabular 取出单独装箱测 `\wd`，全部 ≤ `\textwidth`
+  (505.1 pt)；正文段落只剩类文件 `\maketitle` 自带的 9.3 pt 一条 overfull。
 - ☑ 参考文献真实可溯源、无手敲（`refs.bib` 由 `normalize_bib.py` 规范化，字段值无 CJK）；bibliographystyle 已换 `IEEEtran`。
 - ☑ 图表全部矢量、无 AI 生成像素；矢量图字节可复现。
 - ☑ 标题/摘要主张只覆盖 reachability-gated relations，不泛化（红线 ⑦）。

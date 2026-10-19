@@ -146,6 +146,77 @@ Selective presentation would have hidden the cost: v3's precision of
 \ResAbVThreeFone{}), an exchange of \ResAbVOneFP{} false alarms for missed
 violations dressed as an improvement.
 
+\subsection{Coverage, selective risk, and what a pooled precision does not say}
+\label{sec:coverage}
+
+Table~\ref{tab:ablation} scores the alarm. A method that abstains is counted as
+not having alarmed, so the abstention lands in TN or in FN: for the question
+``does the tool report a violation'' that is the right scoring, but it is not the
+scoring for ``does the method decide''. Table~\ref{tab:coverage} rescores the
+same \CvgN{} records on the decision and reports coverage, abstention rate,
+selective risk and request cost.
+
+v3 decides \CvgVthreeDecided{} of \CvgN{} records---coverage
+\CvgVthreeCoveragePct{}\%---and abstains on \CvgVthreeAbstain{},
+\CvgVthreeAbstBola{} of them on true violations and \CvgVthreeAbstNormal{} on
+records with none. Its precision of $1.00$ and its selective risk of
+\CvgVthreeRiskPct{}\% are therefore properties of a \CvgVthreeCoveragePct{}\% coverage: over the
+remaining two records in five the method claims nothing, and the pooled precision
+is not an error rate over all records.
+
+The abstentions are not all of one kind (Table~\ref{tab:coverage}, panel b).
+\CvgVthreeUnread{} are structural---the surface returns nothing, and there is
+nothing for the method to consult. The other \CvgVthreeCover{} fall on a
+\emph{readable} surface that shows a covering grant: the access is explained, and
+the method still declines to assert its absence. A conservative method may prefer
+silence to a positive ``no violation'', and we do not score that as an error; but
+it is a non-decision, and it cannot be read as a correct rejection. The
+comparison with v2 makes the arithmetic visible. v2 promotes \CvgVtwoFP{} false
+proofs; v3 declines \CvgVtwoFPUnread{} of them because the surface is unreadable
+and \CvgVtwoFPCover{} because it is readable and shows the grant. Only the first
+\CvgVtwoFPUnread{} are the availability gate the method is named for. The rest is
+a false proof converted into a non-decision.
+
+The other side of the ledger is dearer. \CvgVthreeAbstBola{} abstentions fall on
+true violations, and with the \CvgVthreeMissed{} records on which no method
+alarms, v3 leaves \CvgVthreeFNunproven{} of \CvgViolations{} violations
+unproven---the count the review derived from the pooled table.
+\texttt{direct\_observe}, at full coverage and with no abstention channel,
+detects \CvgObsDetected{} and misses \CvgObsMissed{} with no false proofs. At the
+operating points measured, the plain request therefore detects \CvgDetectGap{} more
+violations than v3, abstains on none, and its higher selective risk
+(\CvgObsRiskPct{}\%) consists entirely of missed violations rather than of false
+proofs.
+
+Selective risk is not a ranking either, and we do not use it as one.
+\texttt{degrade\_all}, which alarms on nothing, has the second-lowest risk
+(\CvgDegradeRiskPct{}\%) at \CvgDegradeCoveragePct{}\% coverage and detects no
+violation at all; an ordering by risk alone would place it above v2. We therefore
+report precision and selective risk with coverage attached, never compare them
+across methods at unequal coverage, and make the comparison that matters inside a
+stratum, where coverage is common by construction
+(Section~\ref{sec:stratum}). A safe abstention is not a detection and we never
+count it as one.
+
+\paragraph{Cost} The enumeration issues \CvgReqTotal{} requests over \CvgN{}
+records (median \CvgReqMedian{} per record, range \CvgReqMin--\CvgReqMax). The
+oracle-consuming methods add \CvgProbeGets{} probe GETs over \CvgProbeCells{}
+cell-operations: charged per record that is one request, and \CvgProbePerRecord{}
+amortised as executed, because the probe is shared by the records of a cell.
+\texttt{raw}, v1 and v2 issue none of their own---they read the log the crawl
+already wrote. We do not report wall-clock time for this study: every method
+replays the same recorded exchanges, so a difference would measure our replay
+loop rather than the system under test. The study we did execute end to end is
+the temporal loop of Section~\ref{sec:realsystem}: a median of
+\CvgLoopGiteaTotal{}~s per transition on Gitea and \CvgLoopGitlabTotal{}~s on
+GitLab, of which the mutation is \CvgLoopGiteaMut{}~s and \CvgLoopGitlabMut{}~s,
+the recrawl \CvgLoopGiteaRecrawl{}~s and \CvgLoopGitlabRecrawl{}~s, and the
+cross-credential probe sweep \CvgLoopGiteaProbe{}~s and \CvgLoopGitlabProbe{}~s.
+The recrawl the mechanism needs is a small part of the loop; re-reading every
+credential is what costs.
+
+\input{coverage_table.tex}
+
 \subsection{A published metric's resolution: what the reported specificity does not condition on}
 
 The practical content of this finding is a diagnosis of a specific published

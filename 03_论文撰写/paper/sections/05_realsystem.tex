@@ -432,8 +432,8 @@ private repository.
 
 Each version runs as a fresh instance, and the collision is built into the
 topology: alice owns a private repository with one issue comment, bob owns a
-public one. Bob sends \texttt{PATCH
-/api/v1/repos/bob/pub/issues/comments/\{alice's comment id\}} with a replacement
+public one. Bob sends \texttt{PATCH\allowbreak
+/api\allowbreak/v1\allowbreak/repos\allowbreak/bob\allowbreak/pub\allowbreak/issues\allowbreak/comments/\allowbreak\{alice's comment id\}} with a replacement
 body. On \CveVulnVersion{} the write succeeds (HTTP \CveVulnStatus{}) and
 alice's own re-read returns the replacement body, so the effect is real and not
 a status-code artifact. On \CveFixedVersion{} the same request is refused (HTTP

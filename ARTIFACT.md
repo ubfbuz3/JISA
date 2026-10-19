@@ -14,19 +14,29 @@ to `reproduce.sh`.
 - **Analysis pipeline** (`04_绘图与分析/analysis/`): `compute_all.py`,
   `ingest_native_engine.py`, `ingest_gogs.py`, `ingest_gitlab.py`,
   `ingest_seeded.py`, `ingest_cve_pair.py`, `ingest_temporal.py`,
-  `ingest_m2_stratum.py`, `ingest_truth.py`, `make_diagrams.py`,
+  `ingest_m2_stratum.py`, `ingest_truth.py`, `ingest_design.py`,
+  `ingest_coverage.py`, `make_diagrams.py`,
   `normalize_bib.py`, `check_macros.py`. `ingest_truth.py` also *verifies*
   the manuscript's two Boolean predicates against every recorded verdict
   (576 constructed records, 712 temporal cells) before it emits
   `results/truth_numbers.tex` and `results/truth_table.tex`; a mismatch
-  aborts the script rather than producing a table.
+  aborts the script rather than producing a table. `ingest_design.py` is the
+  design audit: it re-derives the factor table, the matched-pair attribution,
+  the configuration×scenario census and the 36/18→312/264 reconciliation from
+  `raw_matrix.jsonl`, and asserts each of them against the macros already
+  reported (`ResDesign*`, `Mii*`, the 312/264 split) before writing anything.
+  `ingest_coverage.py` rescores the same 576 records on the decision rather than
+  on the alarm (coverage, abstention split by reason, selective risk, request
+  cost), and cross-checks its tallies against the alarm-based counts in
+  `numbers.tex`, so the two framings cannot drift apart silently.
 - **Raw records** (`04_绘图与分析/results/*.json`,
   `experiments/real_system/results/*.json`): the factorial study, the Gitea /
   Gogs / GitLab cell grids, the native-engine execution log, the M1 census,
   and the seeded positive-control record (`seeded.json`).
   These are the inputs `compute_all.py` and the ingest scripts consume.
 - **Per-table auto-generation scripts** (the ingest/compute scripts above)
-  so every entry of Table 2–11 is traceable to a line of code.
+  so every table entry is traceable to a line of code — including the design
+  audit (Table 1, 2, 5, 18) and the decision-scored ablation (Table 4).
 - **Scenario configuration**: the design-cell definition (52 cells × 2 MRs × 3
   exception policies × 2 reachability readings) and the `m1_census.py` /
   `m1_gitea_swagger.py` route tables.

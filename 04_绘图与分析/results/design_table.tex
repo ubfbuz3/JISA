@@ -1,0 +1,29 @@
+% 由 ingest_design.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{The complete design. Every record is one point of the cross scenario $\times$ configuration $\times$ relation $\times$ exception policy $\times$ crawl reading; the last two are deliberately thrown switches, not replicates, so the enumeration carries no sampling error. ``Records'' gives the count at each level of the factor, and the last column states what the factor is crossed with. Only the listed-with-introspection cell is missing, and Section~\ref{sec:identify} says what that costs.}
+\label{tab:design}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.145\textwidth}p{0.105\textwidth}p{0.385\textwidth}rp{0.185\textwidth}@{}}
+\toprule
+factor & levels & how it is varied & records & crossed with\\
+\midrule
+\multicolumn{5}{@{}l}{\emph{scenario}}\\
+scenario & 7 & the origin of the share and the ground truth: no shared object (S1, S2); a share made through the framework's own facility (S3); an unshared violation (S4); a read-only share plus a write violation (S5); a share made out of band (S6); out of band plus a violation (S7) & 48--96 & all configuration levels where admissible\\
+\addlinespace[2pt]
+\multicolumn{5}{@{}l}{\emph{configuration}}\\
+instantiation & 2 & whether the application offers a legitimate-sharing facility at all (e3) or not (no-e3) & 468 / 108 & enforcement, visibility; undefined under S6--S7\\
+enforcement & 2 & the application either enforces object ownership (correct) or serves the object to any authenticated subject (violating) & 288 / 288 & full\\
+channel visibility & 2 & whether the share is written to the framework's own log (listed) or not (unlisted) & 420 / 156 & e3 only; no share exists to list under no-e3\\
+introspection & 2 & whether the application exposes a readable per-object share list (on) or not (off) & 420 / 156 & \emph{listed exists only with introspection on}\\
+\addlinespace[2pt]
+\multicolumn{5}{@{}l}{\emph{expansion}}\\
+relation & 2 & the metamorphic relation evaluated: MR-002 or MR-004 & 312 / 264 & S5 carries MR-002 only\\
+exception policy & 3 & how many MST-wi exception predicates are thrown before the relation fires: none (raw), one (e1), two (e1e2) & 192 / 192 / 192 & full\\
+crawl reading & 2 & whether the reachability model is the frozen crawl-time snapshot (frozen) or the execution-time state (live) & 288 / 288 & full\\
+\midrule
+\multicolumn{5}{@{}l}{$44\cdot 2\cdot 3\cdot 2 + 8\cdot 3\cdot 2 = 576$ records over $52$ cells}\\
+\bottomrule
+\end{tabular}
+\end{table*}

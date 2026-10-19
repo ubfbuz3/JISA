@@ -1,0 +1,24 @@
+% 由 ingest_design.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{The enumeration itself: records under each configuration and scenario. A dash is an inadmissible combination, not a missing run---the no-exception configurations have no legitimate-sharing facility, so S6 and S7, which are defined by a share the facility did not record, are undefined for them. Each populated cell holds six exception-policy $\times$ crawl-reading records per relation.}
+\label{tab:design-census}
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrr}
+\toprule
+configuration & S1 & S2 & S3 & S4 & S5 & S6 & S7 & total \\
+\midrule
+\texttt{V-E3-vuln0-unlisted} & 12 & 12 & 12 & 12 & 6 & 12 & 12 & 78 \\
+\texttt{V-E3-vuln1-unlisted} & 12 & 12 & 12 & 12 & 6 & 12 & 12 & 78 \\
+\texttt{V-E3-vuln0-listed} & 12 & 12 & 12 & 12 & 6 & 12 & 12 & 78 \\
+\texttt{V-E3-vuln1-listed} & 12 & 12 & 12 & 12 & 6 & 12 & 12 & 78 \\
+\texttt{V-E3-vuln0-unlisted-nointro} & 12 & 12 & 12 & 12 & 6 & 12 & 12 & 78 \\
+\texttt{V-E3-vuln1-unlisted-nointro} & 12 & 12 & 12 & 12 & 6 & 12 & 12 & 78 \\
+\texttt{V-noE3-vuln0} & 12 & 12 & 12 & 12 & 6 & \textemdash & \textemdash & 54 \\
+\texttt{V-noE3-vuln1} & 12 & 12 & 12 & 12 & 6 & \textemdash & \textemdash & 54 \\
+\midrule
+records & 96 & 96 & 96 & 96 & 48 & 72 & 72 & 576 \\
+cells & 8 & 8 & 8 & 8 & 8 & 6 & 6 & 52 \\
+\bottomrule
+\end{tabular*}
+\end{table*}

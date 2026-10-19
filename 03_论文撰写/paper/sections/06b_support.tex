@@ -12,6 +12,29 @@ remaining confirmations and stay with the study that produced them. Each item is
 a confirmation of a mechanism already stated, not a new claim about what the
 technique can detect.
 
+\subsection{The enumeration, cell by cell}
+\label{sec:census}
+
+Table~\ref{tab:design-census} is the mapping the review asked for: every
+configuration against every scenario, with the number of records under each
+populated cell and a dash where the combination is undefined. The eight
+configurations are the full cross of instantiation mode, enforcement
+correctness, channel visibility and introspection availability, less the two
+corners that do not exist (no exception mechanism to list a share under, and no
+listed share to read with the surface off). Each populated cell holds
+$\DsgBalOn{}+\DsgBalOff{}$ records: three exception policies and two crawl
+readings for each relation that applies there.
+
+\input{design_census_table.tex}
+
+Two partitions of these records are easy to confuse, because both are counted in
+the same totals. Split by relation, MR-002 holds \DsgMrTwo{} records and MR-004
+\DsgMrFour{}, since S5 carries the first only. Split by effective readability,
+\DsgFullOn{} are readable and \DsgFullOff{} are not, since four of the eight
+configurations expose a surface and four do not. The two pairs of totals
+coincide; the partitions do not. Section~\ref{sec:stratum} uses the second, and
+every statement about it can be recomputed from the census column by column.
+
 \subsection{Confirmation at source}
 \label{sec:impl}
 

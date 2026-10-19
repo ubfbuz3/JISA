@@ -1,0 +1,19 @@
+% 由 ingest_design.py 生成，勿手改
+\begin{table}[t]
+\centering
+\caption{Reconciling the representative grid with the full partition. The grid of Section~\ref{sec:synthetic} is one point of the switch space, not a smaller version of the partition: it fixes the exception policy at raw and the crawl reading at live, keeps the six e3 configurations, and stops at S5. Adding the rest of the enumeration reproduces the 312/264 partition exactly.}
+\label{tab:reconcile}
+\footnotesize
+\begin{tabular}{@{}p{0.47\columnwidth}rrr@{}}
+\toprule
+subset & readable & unreadable & records \\
+\midrule
+representative grid & 36 & 18 & 54\\
+$+$ other five switch settings & 180 & 90 & 270\\
+$+$ S6--S7, six e3 configurations & 96 & 48 & 144\\
+$=$ all e3 records & 312 & 156 & 468\\
+$+$ two no-exception configurations & 0 & 108 & 108\\
+$=$ all records & 312 & 264 & 576\\
+\bottomrule
+\end{tabular}
+\end{table}

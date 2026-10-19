@@ -1,0 +1,22 @@
+% 由 ingest_design.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{Attribution by matched pairs. Each row compares two records that differ in exactly one switch, holding configuration, scenario, relation and exception policy (or crawl reading) fixed, so the contrast cannot be carried by any other factor. ``First only'' and ``second only'' are the discordant pairs: a one-way count means the switch moves the outcome in one direction only, and a zero means it does not move it at all. The two switches that were hypothesised to matter are separated in the first two blocks; the third shows the effect is confined to violations that a readable surface can resolve.}
+\label{tab:attribution}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrrrrrrp{0.225\textwidth}@{}}
+\toprule
+contrast & outcome & pairs & first only & second only & both & neither & reading \\
+\midrule
+frozen $\rightarrow$ live & false proof & 288 & 12 & 0 & 24 & 252 & live reading removes 12 false proofs, adds 0 \\
+frozen $\rightarrow$ live & violation detected & 288 & 3 & 0 & 105 & 180 & and costs 3 detections \\
+\addlinespace[3pt]
+raw $\rightarrow$ e1 & false proof & 192 & 0 & 0 & 20 & 172 & no discordant pair: the ladder changes nothing \\
+e1 $\rightarrow$ e1e2 & false proof & 192 & 0 & 0 & 20 & 172 & no discordant pair: the second predicate adds nothing \\
+\addlinespace[3pt]
+unreadable $\rightarrow$ readable & verdict of violation-proven & 78 & 0 & 54 & 0 & 24 & all 54 changes are detections gained, none lost \\
+unreadable $\rightarrow$ readable & verdict of violation-proven & 78 & 0 & 0 & 0 & 78 & no change where there is no violation to detect \\
+\bottomrule
+\end{tabular}
+\end{table*}

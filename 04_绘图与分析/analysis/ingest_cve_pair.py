@@ -103,8 +103,10 @@ def main() -> int:
                                                   encoding="utf-8")
 
     tl = ["% 由 analysis/ingest_cve_pair.py 自动生成 —— 请勿手改",
-          "\\begin{tabular}{llll}", "\\toprule",
-          "version & PATCH status & owner re-read & gate verdict \\\\", "\\midrule"]
+          "\\footnotesize",
+          "\\setlength{\\tabcolsep}{4pt}",
+          "\\begin{tabular}{@{}llll@{}}", "\\toprule",
+          "version & PATCH & re-read & verdict \\\\", "\\midrule"]
     for r, lab in ((vuln, "vulnerable"), (fixed, "fixed")):
         m = r["main"]
         body = "changed" if m["Y_allow"] else "unchanged"

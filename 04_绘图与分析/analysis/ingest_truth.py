@@ -278,7 +278,7 @@ def main() -> None:
         r"\label{tab:truth}",
         r"\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llllccp{1.60in}rr@{}}",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llllccp{1.52in}rr@{}}",
         r"\toprule",
         r"$Y$ & $M$ & $O$ & $A$ & $D$ & verdict at the ledger "
         r"& $E{=}\mathrm{deny}$ & $E{=}\mathrm{allow}$ \\",

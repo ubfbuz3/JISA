@@ -19,6 +19,23 @@ therefore repeat the same comparison inside each stratum, with the same methods
 and the same decision rule, and we add two references that need no oracle
 against which the metamorphic family can be scored where no oracle exists.
 
+\paragraph{Reconciling the representative grid with this partition}
+The 36/18 grid of Section~\ref{sec:synthetic} is not a miniature of the
+312/264 partition, and the two should not be read as one number at two sizes.
+The grid is a single point of the switch space: it fixes the exception policy at
+raw and the crawl reading at live, keeps the six e3 configurations, and stops at
+S5, which leaves \DsgGridN{} records---\DsgGridOn{} readable and \DsgGridOff{}
+unreadable. Table~\ref{tab:reconcile} closes the gap additively: the other five
+switch settings on the same configurations and scenarios contribute
+\DsgOtherN{}, S6--S7 for those configurations \DsgSixSevenN{}, and the two
+no-exception configurations \DsgNoeThreeN{}, all of them unreadable. The readable
+count runs \DsgGridOn{} in the grid, \DsgGridOn{}+\DsgOtherOn{} once the other
+switch settings are added, \DsgEthreeOn{} across all e3 records, and
+\DsgFullOn{} overall: the S6--S7 block is the only step that contributes readable
+records, and the arithmetic is exact at every step.
+
+\input{reconcile_table.tex}
+
 \paragraph{Stratification variable} We stratify on the \emph{effective}
 readability of the surface---the value the probe returns for the record---not on
 the configuration switch. The distinction is not cosmetic: \MiiFlagOnButUnavailable{}
