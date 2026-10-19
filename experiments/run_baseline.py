@@ -20,8 +20,8 @@ R1.7 竞争基线 · 常规多账户差分 vs 关系感知裁决
 
 ★ 公平性要点（必须与结果一起声明）
   1. 预算：四个方法消费**同一对请求**（owner 一次、actor 一次）。B1/B2/B3 的判定
-     完全由这两个观测加本地账本推出，不额外发请求。ours 额外发 1 次自省查询，
-     成本在表里单列，不隐藏。
+     完全由这两个观测加本地账本推出，不额外发请求。ours 只在 MR **触发**时才额外
+     发 1 次自省查询（未触发即 pass，不读面），成本在表里单列，不隐藏。
   2. 信息：B3 已经拥有"框架可见的全部授权"，是比真实工具更强的对照；真实工具
      连这一层都没有（那更接近 B2）。因此 B3 是**上界式**的常规基线，不是稻草人。
   3. 真值：仍用动作级构造式真值 `ground_truth(...)`，与主实验同一口径。
@@ -113,17 +113,36 @@ def run_cell(cfg, scenario: str, budget_cap: int | None = None) -> dict:
                 "isError_out1": not owner_ok,
                 "out1_equals_out2": equal}
         before = client.request_count
-        if budget_cap is not None and budget_cap < 3:
-            # 预算只够探测对：没有余量读授权面 ⇒ 只能弃权，不得凭关系本身确证。
+        # ---- ours：原裁决器的**顺序不变**，预算只限制"还能不能读面" -------
+        # 1) MR 未触发 → pass：原裁决器本来就不读面、不花额外请求（boundary_aware
+        #    .adjudicate 第一条分支）。预算再紧也不改变这个判定。
+        # 2) MR 触发、但上限只够探测对（cap<3）→ 弃权：没有余量读面，不得凭关系确证。
+        # 3) MR 触发且有余量 → 读一次面，按原 v3 裁决。
+        if not triggered:
+            v3 = None
+            claimed = False
+            abstained = False
+            verdict = "pass"
+            reason = "MR not triggered: nothing to adjudicate, the surface is not read"
+            oracle_read = False
+            ours_extra = 0
+        elif budget_cap is not None and budget_cap < 3:
             v3 = None
             claimed = False
             abstained = True
+            verdict = "indeterminate"
+            reason = ("budget: relation triggered, but the ceiling leaves no request "
+                      "for the authorization surface")
+            oracle_read = False
             ours_extra = 0
         else:
             v3 = ba.adjudicate(mres, client, setup, version="v3")
+            oracle_read = True
             ours_extra = client.request_count - before
             claimed = (v3.verdict == "violation-proven")
             abstained = (v3.verdict == "indeterminate")
+            verdict = v3.verdict
+            reason = v3.reason
 
         # ---- B3r：把同一份额外预算花在**可达性**上（黑箱可达的最强常规差分）----
         # 只多花 1 次请求（列出 actor 可见对象），用它压制"本来就能通过 GUI 看到"的格。
@@ -172,13 +191,14 @@ def run_cell(cfg, scenario: str, budget_cap: int | None = None) -> dict:
                 **({"B3r_diff_reach": {"alarm": bool(b3r), **score(bool(b3r))}}
                    if b3r is not None else {}),
                 "ours_mr_v3": {"alarm": claimed,
-                               "verdict": (v3.verdict if v3 else "indeterminate"),
-                               "reason": (v3.reason if v3 else "budget: no room to read the authorization surface"),
+                               "verdict": verdict,
+                               "reason": reason,
                                **score(claimed, abstained)},
             },
             "budget": {"probe_requests": probe_requests,
                        "ours_extra_requests": ours_extra,
                        "reach_extra_requests": reach_cost,
+                       "oracle_read": oracle_read,
                        "cap": budget_cap},
         }
     finally:
@@ -248,8 +268,13 @@ def aggregate(recs: list[dict]) -> dict:
 def run_budget_sweep(caps: tuple[int, ...] = (2, 3)) -> dict:
     """R1.7：同一总请求预算上限下的横向比较 + 预算曲线。
 
-    cap=2：只够一对探测请求 ⇒ 任何依赖授权面的方法都必须弃权；
+    **原方法的顺序不变**：MR 未触发 → pass（不读面、不花额外请求）；触发且上限
+    只够探测对 → 弃权；触发且有余量 → 读面并按 v3 裁决。预算只决定"能不能读面"，
+    不改变"不需要读面时的判定"。
+
+    cap=2：只够一对探测请求，没有方法有余量做额外观测（B3r 因此不参跑）；
     cap=3：多出的一次额外观测，各方法自己决定怎么花（ours 读授权面，B3r 读可达性）。
+    逐格记录（每 cap 42 条）随 summary 一起归档，下游生成器从记录重算并比对。
     """
     t0 = time.time()
     payload = {
@@ -258,9 +283,13 @@ def run_budget_sweep(caps: tuple[int, ...] = (2, 3)) -> dict:
             "budget": "每个方法在同一格上的**总请求数上限**相同；实际支出如实记账，"
                       "不向基线补发无用请求。",
             "credentials": "所有方法使用同一组账户与同一组凭证；真值仍用动作级构造式真值。",
-            "extra_by_method": {"ours_mr_v3": "1 次授权面读取（cap>=3 才有）",
+            "ours_order": "MR 未触发 → pass（不读面）；触发且预算不足 → 弃权；"
+                          "触发且预算足够 → 读面并按 v3 裁决。上限不改变前两步。",
+            "extra_by_method": {"ours_mr_v3": "1 次授权面读取，且只在 MR 触发时发生",
                                 "B3r_diff_reach": "1 次 actor 可见性列举（cap>=3 才有）",
                                 "B1/B2/B3": "不使用额外预算（支出低于上限，如实报告）"},
+            "records": "每个 cap 保存 42 条逐格记录（判定、状态码、请求记账），"
+                       "analysis/ingest_budget.py 从记录重算并断言与 summary 一致。",
         },
         "sweeps": {},
     }
@@ -276,7 +305,8 @@ def run_budget_sweep(caps: tuple[int, ...] = (2, 3)) -> dict:
         ok = [r for r in recs if "error" not in r]
         payload["sweeps"][str(cap)] = {"cells": len(ok),
                                        "errors": len(recs) - len(ok),
-                                       "summary": aggregate(ok)}
+                                       "summary": aggregate(ok),
+                                       "records": recs}
         print(f"[cap={cap}] {len(ok)} cells")
         for k, v in payload["sweeps"][str(cap)]["summary"].items():
             if k.startswith("_"):

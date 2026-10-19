@@ -1,6 +1,7 @@
 % 由 analysis/ingest_multiclass.py 自动生成 —— 勿手改
 % 来源: experiments/real_system/results/seeded_multiclass.json (run_multiclass.py)
 % 真值 = 靶机正确模型 intended_perm；观测 = 实际请求；与真实系统同一套 alarm 公式。
+% 汇总由逐例/逐条负例记录重算并交叉校验；不一致时本脚本拒绝出数。
 \newcommand{\McInstances}{9}
 \newcommand{\McReadHits}{3}
 \newcommand{\McChannelHits}{5}
@@ -8,7 +9,17 @@
 \newcommand{\McOracleChannelHits}{9}
 \newcommand{\McVthreeReadHits}{3}
 \newcommand{\McVthreeChannelHits}{5}
+\newcommand{\McClasses}{4}
+\newcommand{\McNegRead}{23}
+\newcommand{\McNegWrite}{16}
+\newcommand{\McNegGrant}{7}
+\newcommand{\McFpRelRead}{8}
+\newcommand{\McFpRelWrite}{6}
+\newcommand{\McFpRelGrant}{0}
+\newcommand{\McFprRelRead}{34.78}
+\newcommand{\McFprRelWrite}{37.50}
+\newcommand{\McFprRelGrant}{0.00}
+\newcommand{\McFpOracleMax}{0}
+\newcommand{\McFprOracleMax}{0.00}
 \newcommand{\McFpBookkeeping}{8}
 \newcommand{\McAuthorizedCells}{23}
-\newcommand{\McFpOracle}{0}
-\newcommand{\McClasses}{4}

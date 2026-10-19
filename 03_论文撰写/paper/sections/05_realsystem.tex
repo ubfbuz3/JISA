@@ -523,34 +523,46 @@ interchangeable: they stress different premises of the relation.
 
 \input{multiclass_table.tex}
 
-Table~\ref{tab:multiclass} reports per-class recall against the seeded truth. The
-studied relation covers C1 and nothing else. C2 is invisible to it because the
-relation is defined on whether the object is \emph{served}, not on whether it can
-be \emph{changed}; moving the same relation to the channel the defect breaks
-recovers both instances, which says something about the relation family rather
-than about the relation we studied. C3 and C4 are worse than missed: in both the
+Table~\ref{tab:multiclass} reports per-class recall against the seeded truth and,
+separately, false alarms on authorized cells of the same channel. C1 is the class
+the gate was designed for, and it is the only class the read relation covers. C2
+breaks a different channel: the relation asks whether the object is \emph{served},
+not whether it can be \emph{changed}, so it is silent on both instances; moving
+the same relation to the channel the defect breaks recovers both, which says
+something about the relation family rather than about the relation we studied.
+C3 and C4 are undetected end to end, and the reason is mechanical: in both the
 subject already sees the object, so \texttt{cannotReachThroughGUI} is false and
 the antecedent of the relation does not hold. The gate is not failing to notice
-them; it reads its own premise and concludes there is nothing to test. That is a
-property of reachability-gated testing against inheritance and escalation, not a
-tuning problem, and it is the clearest evidence we have for why the gate cannot
-be the whole adjudication.
+them; it reads its own premise and concludes there is nothing to test. They stay
+in the denominator---the study reports \McChannelHits{} of \McInstances{} for the
+channel-matched relation, not a rate over the classes the gate happens to
+cover---and the antecedent's failure is the explanation, not an exclusion.
 
 The oracle-consuming adjudicator fires on all \McInstances{} instances once the
 probe is channel-matched, and on \McOracleReadHits{} of \McInstances{} when
-confined to the read channel. Its \McFpOracle{} false alarms on the
-\McAuthorizedCells{} authorized cells are conditional on this target's oracle
-being sound, and Section~\ref{sec:admissibility} reports what happens when it is
-not. Two caveats belong here. First, the target's oracle shares the decision
-function with the content path, so under the admission rule of
-Section~\ref{sec:admissibility} every class is refused promotion: the
-\McInstances{} hits are recall against known truth, not independence-certified
-proofs. Second, these are four mechanisms on one emulator, not four discoveries
-in production systems. Disabling one class's fault injection removes that
-class's alarms and leaves the other classes' alarms in place, so an alarm is
-attributable to its own defect rather than to a shared root cause; for C3 and C4,
-where the gate never fires, the same check only shows that the mechanism's
-removal introduces no alarms elsewhere.
+confined to the read channel. False alarms are counted per channel, because a
+read cell cannot stand in for a write or a grant: \McNegRead{} read cells,
+\McNegWrite{} write cells and \McNegGrant{} grant cells, the read set shared by
+C1 and C3. The relation's bookkeeping variant alarms on \McFpRelRead{} of
+\McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and \McFpRelGrant{} of
+\McNegGrant{} of them---the same in-band failure the paper reports elsewhere---and
+the oracle-based adjudicator alarms on \McFpOracleMax{} of the \McNegRead{},
+\McNegWrite{} and \McNegGrant{} cells respectively. Write success
+is judged by the object's state changing, not by the status code, so a
+\texttt{200} that leaves the object untouched is not counted as a detection; a
+grant counts only if the collaborator record actually appears. The zero in the
+oracle column is conditional on this target's oracle being sound, and
+Section~\ref{sec:admissibility} reports what happens when it is not. Two caveats
+belong here. First, the target's oracle shares the decision function with the
+content path, so under the admission rule of Section~\ref{sec:admissibility} every
+class is refused promotion (Section~\ref{sec:admissibility} and the application
+register in the package): the \McInstances{} hits are recall against known truth,
+not independence-certified proofs. Second, these are four mechanisms on one
+emulator, not four discoveries in production systems. Disabling one class's fault
+injection removes that class's alarms and leaves the other three classes' alarms
+in place, under the channel-matched probe as well as the relation---checked for
+all four classes---so an alarm is attributable to its own defect rather than to a
+shared root cause.
 
 \subsection{A publicly fixed defect}
 \label{sec:cvepair}

@@ -1,0 +1,51 @@
+{
+  "multiclass_raw_recount": {
+    "C1": {
+      "n": 3,
+      "unauthorized": 3,
+      "effects": 3,
+      "cannot_reach": 3,
+      "mr_read": 3,
+      "mr_channel": 3,
+      "direct_channel": 3
+    },
+    "C2": {
+      "n": 2,
+      "unauthorized": 2,
+      "effects": 2,
+      "cannot_reach": 2,
+      "mr_read": 0,
+      "mr_channel": 2,
+      "direct_channel": 2
+    },
+    "C3": {
+      "n": 2,
+      "unauthorized": 2,
+      "effects": 2,
+      "cannot_reach": 0,
+      "mr_read": 0,
+      "mr_channel": 0,
+      "direct_channel": 2
+    },
+    "C4": {
+      "n": 2,
+      "unauthorized": 2,
+      "effects": 2,
+      "cannot_reach": 0,
+      "mr_read": 0,
+      "mr_channel": 0,
+      "direct_channel": 2
+    }
+  },
+  "original_chain_passes": 15,
+  "original_chain_no_extra_reads": 15,
+  "protocol_sha256": "198f21402fa6d800ffa9015ad378724de78234fc7fb6ea170e5140e5bf8be5b2",
+  "protocol_bytes_equal_first_freeze_commit": true,
+  "freeze_commit": "a049cb1",
+  "baseline_generated_at": "2026-10-19 22:06:51",
+  "recording_limits": {
+    "multiclass_fp": "Pooled counters only; no per-negative-cell read or write records",
+    "budget": "Aggregates only; run_budget_sweep does not save per-cell records",
+    "run_protocol_binding": "Neither new result file includes protocol digest or run-start timestamp"
+  }
+}

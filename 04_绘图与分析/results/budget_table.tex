@@ -3,23 +3,23 @@
 
 \begin{table*}[t]
 \centering
-\caption{Equal-budget comparison on the same \BgtCells{} cells and the same credentials. \emph{cap} is the total request budget per cell: at cap~2 only the owner/actor probe pair fits, so any method that must consult the authorization surface has to abstain; at cap~3 each method may spend one further observation of its own choosing---ours reads the authorization surface, B3r enumerates the actor's visible objects---while B1--B3 spend nothing extra and are reported as under budget. No method is given padding requests. Ours therefore does not dominate: at the same ceiling B3r reaches \BgtBthreeRTpCapThree{} of \BgtViolations{} with \BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with \BgtOursFpCapThree{} and \BgtOursAbstainCapThree{} abstentions, and where the surface is unreadable ours refuses to claim rather than guessing. Ours also spends \BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows, because an abstaining cell costs nothing.}
+\caption{Equal-budget comparison on the same \BgtCells{} cells and the same credentials. \emph{cap} is the total request budget per cell. At cap~2 only the owner/actor probe pair fits: our method keeps its own order---it passes on the \BgtOursPassCapTwo{} cells where the relation does not trigger, reading no surface, and abstains on the rest, where the relation does trigger and no request is left to read the surface. At cap~3 each method may spend one further observation of its own choosing---ours reads the authorization surface, B3r enumerates the actor's visible objects---while B1--B3 spend nothing extra and are reported as under budget. No method is given padding requests. Ours therefore does not dominate: at the same ceiling B3r reaches \BgtBthreeRTpCapThree{} of \BgtViolations{} with \BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with \BgtOursFpCapThree{} and \BgtOursAbstainCapThree{} abstentions, and where the surface is unreadable ours refuses to claim rather than guessing. Ours spends \BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows because the \BgtOursPassCapTwo{} untriggered cells never read the surface---not because an abstaining cell is free: it still pays for its probe pair, and for the surface read whenever the relation triggers under a ceiling that reaches it.}
 \label{tab:budget}
 \small
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrrrr}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrrrrr}
 \toprule
-cap & method & TP & FN & FP & abstain & requests \\
+cap & method & TP & FN & FP & TN & abstain & requests \\
 \midrule
-2 & B1 status-only & 15 & 0 & 12 & 0 & 84 \\
-2 & B2 diff-equal & 15 & 0 & 12 & 0 & 84 \\
-2 & B3 diff+in-band & 15 & 0 & 6 & 0 & 84 \\
-2 & ours (MR + v3) & 0 & 0 & 0 & 42 & 84 \\
+2 & B1 status-only & 15 & 0 & 12 & 15 & 0 & 84 \\
+2 & B2 diff-equal & 15 & 0 & 12 & 15 & 0 & 84 \\
+2 & B3 diff+in-band & 15 & 0 & 6 & 21 & 0 & 84 \\
+2 & ours (MR + v3) & 0 & 0 & 0 & 15 & 27 & 84 \\
 \midrule
-3 & B1 status-only & 15 & 0 & 12 & 0 & 84 \\
-3 & B2 diff-equal & 15 & 0 & 12 & 0 & 84 \\
-3 & B3 diff+in-band & 15 & 0 & 6 & 0 & 84 \\
-3 & B3r diff+in-band+reach & 14 & 1 & 4 & 0 & 126 \\
-3 & ours (MR + v3) & 10 & 0 & 0 & 17 & 111 \\
+3 & B1 status-only & 15 & 0 & 12 & 15 & 0 & 84 \\
+3 & B2 diff-equal & 15 & 0 & 12 & 15 & 0 & 84 \\
+3 & B3 diff+in-band & 15 & 0 & 6 & 21 & 0 & 84 \\
+3 & B3r diff+in-band+reach & 14 & 1 & 4 & 23 & 0 & 126 \\
+3 & ours (MR + v3) & 10 & 0 & 0 & 15 & 17 & 111 \\
 \bottomrule
 \end{tabular*}
 \end{table*}

@@ -3,19 +3,19 @@
 % （\newcommand 重复定义会报 Command already defined）。
 \begin{table*}[t]
 \centering
-\caption{Per-defect recall of the studied chain on the controlled target, by defect class. Each instance is a cell whose true (correct-model) permission is \emph{none} and on which the defect nevertheless lets the access succeed. \emph{read gate} is the reachability-gated relation as studied in this paper; \emph{channel gate} is the same relation moved to the channel the defect actually breaks; the last two columns are the oracle-consuming adjudicator on the read channel and on the channel-matched probe. Every instance here is one the gate was designed for except C3 and C4, which it cannot see: in both, the object is visible to the subject, so the antecedent of the relation is false and no alarm is raised---not a tuning problem but the gate reading its own premise. The oracle-based adjudicator reaches all \McInstances{} instances once the probe is channel-matched. False alarms on the \McAuthorizedCells{} authorized cells: \McFpBookkeeping{} for the relation's bookkeeping variant, \McFpOracle{} for the oracle-based adjudicator, whose zero is conditional on this target's oracle being sound (Section~VI-C reports what happens when it is not).}
+\caption{Per-class recall and per-channel false alarms of the studied chain on the controlled target. Each instance is a cell whose true (correct-model) permission is \emph{none} and on which the defect nevertheless lets the access succeed. \emph{read gate} is the reachability-gated relation as studied in this paper; \emph{channel gate} moves the same relation to the channel the defect breaks; the next two columns are the oracle-consuming adjudicator on the read channel and on the channel-matched probe. False alarms are counted on authorized cells of the \emph{same} channel---\McNegRead{} read, \McNegWrite{} write and \McNegGrant{} grant cells---because a read cell cannot stand in for a write or a grant: write success is judged by the object's state changing, not by the status code, and a grant only counts if the collaborator record appears. C1 and C3 share the read negatives (marked $^{\dagger}$); C2 and C4 have their own. The relation alarms on \McFpRelRead{} of \McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and \McFpRelGrant{} of \McNegGrant{} authorized cells, which is the in-band bookkeeping failure the paper already reports; the oracle-based adjudicator alarms on \McFpOracleMax{} of them. C1 is the class the gate was designed for. C2 breaks a different channel, so the read relation cannot see it and the channel-matched relation does. C3 and C4 falsify the antecedent---the subject can already see the object---so the gate is silent on them end to end and they remain undetected in the overall denominator; that is a mechanism explanation, not a removal from the denominator. The zero in the oracle column is conditional on this target's oracle being sound, which it is not for any class under the admission rule of Section~VI-E.}
 \label{tab:multiclass}
 \small
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrr}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrr}
 \toprule
-Class & inst. & read gate & channel gate & oracle (read) & oracle (channel) \\
+Class & inst. & read gate & channel gate & oracle (read) & oracle (channel) & relation FP & oracle FP \\
 \midrule
-C1: read enforcement & 3 & 3 & 3 & 3 & 3 \\
-C2: modify enforcement & 2 & 0 & 2 & 0 & 2 \\
-C3: inheritance & 2 & 0 & 0 & 2 & 2 \\
-C4: privilege escalation & 2 & 0 & 0 & 2 & 2 \\
+C1: read enforcement & 3 & 3 & 3 & 3 & 3 & 8/23$^{\dagger}$ & 0/23$^{\dagger}$ \\
+C2: modify enforcement & 2 & 0 & 2 & 0 & 2 & 6/16 & 0/16 \\
+C3: inheritance & 2 & 0 & 0 & 2 & 2 & 8/23$^{\dagger}$ & 0/23$^{\dagger}$ \\
+C4: privilege escalation & 2 & 0 & 0 & 2 & 2 & 0/7 & 0/7 \\
 \addlinespace[2pt]
-\emph{total} & 9 & 3 & 5 & 7 & 9 \\
+\emph{total} & 9 & 3 & 5 & 7 & 9 & --- & --- \\
 \bottomrule
 \end{tabular*}
 \end{table*}

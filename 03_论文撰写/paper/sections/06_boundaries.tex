@@ -407,22 +407,27 @@ reasonably ask whether its precision is bought with requests the baselines were
 not allowed to spend. Table~\ref{tab:budget} answers that with a total-request
 ceiling per cell instead of a probe-pair match, on the same \BgtCells{} cells,
 with the same accounts and the same credentials. At a ceiling of two, only the
-owner/actor pair fits, and our method abstains on all \BgtCells{} cells: a method
-that must read the surface cannot claim anything when the budget does not reach
-it, and the table records that rather than letting the relation stand in for the
-surface. At a ceiling of three, each method may spend one further observation of
-its own choosing, declared in advance---ours reads the authorization surface, a
-strengthened baseline B3r enumerates the actor's visible objects---while B1--B3
-spend nothing extra, which is reported as under-spend rather than padded. Under
-that ceiling our method does not dominate: B3r reaches \BgtBthreeRTpCapThree{} of
-\BgtViolations{} violations with \BgtBthreeRFpCapThree{} false proofs, ours
-\BgtOursTpCapThree{} with \BgtOursFpCapThree{} and \BgtOursAbstainCapThree{}
-abstentions, and ours spends \BgtOursReqCapThree{} of the
-\BgtCells{}$\times$3 requests the ceiling allows because an abstaining cell costs
-nothing. What survives a matched budget is the trade the paper describes---a
-higher precision on the claims actually made, paid for in coverage where the
-surface cannot be read---not a detection advantage over the differential
-baselines, and we claim none.
+owner/actor pair fits. Our method keeps its own order rather than being forced to
+abstain: where the relation does not trigger it passes, which needs no surface
+read, and those \BgtOursPassCapTwo{} cells are recorded as true negatives; on the
+\BgtOursAbstainCapTwo{} cells where the relation does trigger, no request is left
+to read the surface, so it abstains rather than letting the relation stand in for
+the surface. That is the method under the ceiling, not a separate budget policy
+grafted onto it. At a ceiling of three, each method may spend one further
+observation of its own choosing, declared in advance---ours reads the
+authorization surface, a strengthened baseline B3r enumerates the actor's visible
+objects---while B1--B3 spend nothing extra, which is reported as under-spend
+rather than padded. Under that ceiling our method does not dominate: B3r reaches
+\BgtBthreeRTpCapThree{} of \BgtViolations{} violations with
+\BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with
+\BgtOursFpCapThree{} and \BgtOursAbstainCapThree{} abstentions, and ours spends
+\BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows
+because the \BgtOursPassCapTwo{} untriggered cells never read the surface. An
+abstaining cell is not free: it pays for its probe pair and, under a ceiling that
+reaches the surface, for the read that made it abstain. What survives a matched
+budget is the trade the paper describes---a higher precision on the claims
+actually made, paid for in coverage where the surface cannot be read---not a
+detection advantage over the differential baselines, and we claim none.
 
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}

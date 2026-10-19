@@ -12,14 +12,22 @@
 
 The raw records of the studies reported here are publicly available in the
 companion repository \url{https://github.com/ubfbuz3/JISA}, version-pinned by the
-tag \texttt{access-resubmission-v4}, which archives the experimental records
-and frozen source-state inputs used here.
+tag \texttt{access-resubmission-v10}, which archives every record behind every
+number in this paper---including the two experiments added in this revision, the
+matched-budget sweep (\texttt{results\allowbreak/baseline\_budget.json}) and the
+four-class defect study
+(\texttt{real\_system\allowbreak/results\allowbreak/seeded\_multiclass.json})---the
+frozen admission protocol, its errata and the application register
+(\texttt{real\_system\allowbreak/prereg/}), and the generation scripts that
+recompute the tables from those records.
 The earlier tags remain in place as snapshots of prior states and should not be
 conflated with it: \texttt{artifact-v1} is the previously reviewed version
-(without the temporal or vulnerable/fixed records added here), and
+(without the temporal or vulnerable/fixed records added here),
 \texttt{access-resubmission-v2} is the working freeze at which an internal
-accuracy review was started; \texttt{access-resubmission-v3} is the next review
-snapshot and \texttt{access-resubmission-v4} includes the subsequent corrections.
+accuracy review was started, \texttt{access-resubmission-v3} is the next review
+snapshot, \texttt{access-resubmission-v4} includes the subsequent corrections,
+and \texttt{access-resubmission-v9} is the freeze immediately preceding this one,
+which does not contain the two experiments named above.
 The revision adds, under
 \texttt{experiments/}:
 (1)~the scenario/configuration study
@@ -34,6 +42,11 @@ amendments by digest (\texttt{real\_system\allowbreak/results\allowbreak/tempora
 (5)~the execution of the published relations on the native engine
 (\texttt{native\_engine\allowbreak/results/*.json});
 and (6)~the seeded positive control (\texttt{seeded.json}).
+The two records added in this revision sit beside them:
+(7)~the equal-budget sweep with its per-cell records
+(\texttt{results\allowbreak/baseline\_budget.json}) and
+(8)~the four-class defect study with per-instance and per-channel negative
+records (\texttt{real\_system\allowbreak/results\allowbreak/seeded\_multiclass.json}).
 The analysis pipeline (\texttt{analysis/*.py}) recomputes every number, table and
 figure from those records, including the design audit
 (\texttt{ingest\_design.py}), the decision-scored coverage table

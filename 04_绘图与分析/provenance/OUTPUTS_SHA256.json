@@ -18,13 +18,13 @@
     },
     {
       "path": "04_绘图与分析\\results\\budget_numbers.tex",
-      "sha256": "58e84013e88768b6bc2fb7db212f3651cd67bf9178a33abd9c92a4a21be4e583",
-      "bytes": 1490
+      "sha256": "ca57778c664845ac8babfaa9562c0e49c0fb6431eeb00c70eadba9c6dea3cb0f",
+      "bytes": 1653
     },
     {
       "path": "04_绘图与分析\\results\\budget_table.tex",
-      "sha256": "2f6dbbd92eeb25c6a4cc662717be1b7921b2ba51729071ec78bc048254f86fab",
-      "bytes": 1750
+      "sha256": "e4cf4a75bc8e92c88d9dbba18cd6141856b9dad34072f0db3dc71d570822b352",
+      "bytes": 2154
     },
     {
       "path": "04_绘图与分析\\results\\coverage_numbers.tex",
@@ -93,13 +93,13 @@
     },
     {
       "path": "04_绘图与分析\\results\\multiclass_numbers.tex",
-      "sha256": "bd11bbdbb55a594f88bb138afc838afd61341a7fdf7c897ed837cdc8e710a9b1",
-      "bytes": 630
+      "sha256": "8419d5134c8ace5ef617b501836ac666551b48be2b783fdc0fed907589d6d8c1",
+      "bytes": 1053
     },
     {
       "path": "04_绘图与分析\\results\\multiclass_table.tex",
-      "sha256": "815fb35a53e3354fe3eba361eb13b8e70906982c719d718b48e8250a00b76e0d",
-      "bytes": 1887
+      "sha256": "029dbf0fdc9a2956e6b89747e1accf92bc1dcd4e11abb0047179ccea3d716388",
+      "bytes": 2629
     },
     {
       "path": "04_绘图与分析\\results\\native_engine_numbers.tex",

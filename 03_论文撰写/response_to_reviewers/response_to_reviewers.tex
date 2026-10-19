@@ -73,11 +73,13 @@ at all (a competing differential
 baseline) has now been run and reported. Three items that earlier drafts of this
 letter left as scope objections---an admission rule for new oracle evidence
 (R1.4), a budget-matched comparison (R1.7) and detection across more than one
-defect class (R1.9)---now carry results;
-Section~\ref{sec:partial} lists them together with what each result does
-\emph{not} establish. No requested experiment is left unrun and none is put to
-the editor as a scope question: where the evidence stops short, the limit is
-stated in the manuscript next to the number it qualifies.
+defect class (R1.9)---now carry results, each reported with the boundary it does
+not cross (Section~\ref{sec:partial}). We do not present that as closing the three
+questions: the detection study runs on one emulator, the budget comparison has two
+ceilings rather than a swept curve, and the admission rule refuses promotion for
+every class it examined. What has changed is that the answers are measurements
+with their limits attached, stated next to the numbers they qualify, rather than a
+request for the editor to rule on scope.
 
 References below are to the revised manuscript (31 pages, 26 tables). Table and
 section numbers are stable; page numbers are given for the tables most often at
@@ -158,7 +160,7 @@ outcome, actual entitlement, oracle response and detector verdict, together with
 an account of how a legitimate successful request is distinguished from
 unauthorized access without letting the tested reachability model determine its
 own ground truth.}
-\Response{Table~19 (Section~VI-B, p.~20) is now that table. It defines the
+\Response{Table~19 (Section~VI-B, p.~21) is now that table. It defines the
 quantities over the 712 temporal cells: $Y$ (the ordinary request succeeds), $M$
 (the crawl-time model lists the object for the subject), $O$ (the introspection
 surface's answer, with an explicit ``no definite answer'' value), $A$ (the alarm
@@ -264,9 +266,23 @@ suffix that would expose the remaining channels does not exist
 routes are answered by the same application consulting the same membership
 tables. On those three products the enumeration stops at the server boundary, so
 the recorded status is \emph{reject} at L1, not a claim of proven sharing. On the
-controlled target we can read the source, so the finer verdict is available and
-is also \emph{reject}: the content decision calls the same function the oracle
-answers from, which makes the sharing visible at L2 instead of inferred at L1.
+controlled target we can read the source, so a finer verdict is available, and it
+is also \emph{reject}---but the ground differs by class, and the register states it
+per class instead of under one label: for the read bypass the content decision
+calls the function the oracle answers from; for the write bypass the guard does
+\emph{not} call it---it duplicates the rule inline over the same repository record
+the oracle reads, so the bypass clause is guard-only while the authorization state
+and rule are shared; for the inheritance fault the oracle does not read the faulty
+field at all, which is why it reports \texttt{none} and detects the class, but the
+inheritance branch the oracle does execute is where a fault of that class would
+live, so non-propagation follows from where the fault was placed rather than from
+independence; for the escalation the two paths read the same collaborator map and
+differ only by the flag that marks the grant as tainted, so the oracle's
+correctness depends on the path under test having written that flag. A first fill
+of the register attributed three of these four to a simpler ground; it was revised
+from the pinned source and the revision is logged in the register itself, with the
+protocol's commit pointer corrected in a separate errata that leaves the frozen
+bytes and their digest untouched. No verdict changed.
 That last decision has teeth in this revision: because the target's oracle is not
 admissible, the \McInstances{} per-class hits of Table~17 are reported as recall against
 known truth and explicitly not as independence-certified proofs. Three epistemic
@@ -277,8 +293,9 @@ independence-certified proofs of previously unknown defects, which the rule
 refuses here. No recorded number changes under the rule.}
 \Action{Section~VI-E (the rule, the per-product path evidence, and the three
 epistemic statuses); \texttt{experiments/real\_system/prereg/} in the package
-holds the frozen protocol with its \texttt{SHA256SUMS} and the per-system
-application register, including the leave-one-out checks on the controlled
+holds the frozen protocol with its \texttt{SHA256SUMS}, the errata that correct
+the protocol's commit pointer, and the per-system application register with its
+revision log, including the channel-matched leave-one-out checks on the controlled
 target.}
 \Remains{The evidence base for the three production products is API-observable
 behaviour, not an internal-source audit; a finer-grained per-component
@@ -321,7 +338,7 @@ and the oracle right. Those two rows are the two failure mechanisms the
 cross-vendor section keeps apart. The falsification condition is stated: produce
 an observable, outside what a succeeding request plus a readable oracle can
 determine, on which an authorization metamorphic relation still decides.}
-\Action{Section~VI-B with Lemma~1, Proposition~2, Table~19 (p.~20) and the
+\Action{Section~VI-B with Lemma~1, Proposition~2, Table~19 (p.~21) and the
 corrected equivalence; the earlier claim of extensional equality is deleted.}
 
 \subsection{Coverage and identifiability of the 576-record enumeration}
@@ -392,16 +409,24 @@ prevalence.
 \emph{(ii) Matched total budget.} Table~21 (p.~23) re-runs the same comparison
 under a total-request ceiling per cell instead of a probe-pair match, on the same
 42 cells and with the same accounts and credentials. At a ceiling of two, only
-the owner/actor pair fits, and ours abstains on all 42 cells: a method that must
-read the authorization surface cannot claim anything when the budget does not
-reach it. At a ceiling of three, each method may spend one further observation of
-its own choosing, declared before the run---ours reads the authorization surface,
-a strengthened baseline B3r enumerates the actor's visible objects---and B1--B3
-spend nothing extra, reported as under-spend rather than padded. Under that
-ceiling ours does not dominate: B3r reaches \BgtBthreeRTpCapThree{} of the \BgtViolations{} violations with \BgtBthreeRFpCapThree{} false
-proofs, ours \BgtOursTpCapThree{} with none and \BgtOursAbstainCapThree{} abstentions, and ours spends \BgtOursReqCapThree{} of the \BgtCells{}$\times$3
-requests the ceiling allows because an abstaining cell costs nothing. No method
-receives a request it cannot use.}
+the owner/actor pair fits. Our method is not forced into abstention there: it
+keeps its own order, so where the relation does not trigger it returns \emph{pass}
+without reading any surface, and those \BgtOursPassCapTwo{} cells are recorded as
+true negatives; on the remaining \BgtOursAbstainCapTwo{}, where the relation does
+trigger, no request is left to read the surface and it abstains rather than
+letting the relation stand in for the surface. At a ceiling of three, each method
+may spend one further observation of its own choosing, declared before the
+run---ours reads the authorization surface, a strengthened baseline B3r enumerates
+the actor's visible objects---and B1--B3 spend nothing extra, reported as
+under-spend rather than padded. Under that ceiling ours does not dominate: B3r
+reaches \BgtBthreeRTpCapThree{} of the \BgtViolations{} violations with
+\BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with none and
+\BgtOursAbstainCapThree{} abstentions, and ours spends
+\BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows
+because the \BgtOursPassCapTwo{} untriggered cells never read the surface---not
+because abstaining is free, since an abstaining cell still pays for its probe pair
+and, under a ceiling that reaches the surface, for the read that made it abstain.
+No method receives a request it cannot use.}
 \Action{Section~VI-D, Table~20 (p.~23) for the probe-pair comparison and
 Table~21 (p.~23) for the matched-budget one; both runners
 (\texttt{experiments/run\_baseline.py}, default and \texttt{--budget}) and their
@@ -501,25 +526,36 @@ seeded truth. The studied reachability-gated relation covers C1 and nothing else
 whether the object is \emph{served}, not on whether it can be \emph{changed};
 moving the same relation to the channel the defect breaks recovers both
 instances, which is a property of the relation family, not of the relation we
-studied. C3 and C4 are worse than missed---in both the subject already sees the
-object, so \texttt{cannotReachThroughGUI} is false and the antecedent of the
-relation does not hold. The gate is not failing to notice them; it reads its own
-premise and concludes there is nothing to test. The oracle-consuming adjudicator
-fires on all \McInstances{} instances once the probe is channel-matched and on \McOracleReadHits{} of
-\McInstances{} when confined to the read channel. False alarms on the \McAuthorizedCells{} authorized cells
-are \McFpBookkeeping{} for the relation's bookkeeping variant and none for the oracle-based
-adjudicator, the latter conditional on this target's oracle being sound. Two
-limits are stated with the numbers: the target's oracle shares its decision
-function with the content path, so under the admission rule of Section~VI-E every
-class is refused promotion and the \McInstances{} hits are recall against known truth rather
-than independence-certified proofs; and these are four mechanisms on one
-emulator, not four discoveries in production systems. Each class is also
-leave-one-out checked: disabling its fault injection removes that class's alarms
-and leaves the other classes' alarms in place, so an alarm is attributable to its
-defect rather than to a shared root cause; for C3 and C4, where the gate never
-fires, the check only shows that removing the mechanism creates no alarms
-elsewhere. The publicly fixed CVE pair is retained alongside this, as a
-control of the gate rather than of recall: Section~V-C and Table~18 (p.~18), one
+studied. C3 and C4 are undetected end to end, and the reason is mechanical: in
+both the subject already sees the object, so \texttt{cannotReachThroughGUI} is
+false and the antecedent of the relation does not hold. The gate is not failing to
+notice them; it reads its own premise and concludes there is nothing to test.
+They are not removed from the denominator: the per-class counts are reported over
+all \McInstances{} instances, and the channel-matched relation reaches
+\McChannelHits{} of them. The oracle-consuming adjudicator fires on all
+\McInstances{} instances once the probe is channel-matched and on
+\McOracleReadHits{} of \McInstances{} when confined to the read channel. False
+alarms are counted per channel, because the negative control has to match the
+operation: \McNegRead{} read cells, \McNegWrite{} write cells and \McNegGrant{}
+grant cells, the read set shared by C1 and C3. The relation's bookkeeping variant
+alarms on \McFpRelRead{} of \McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and
+\McFpRelGrant{} of \McNegGrant{} authorized cells; the oracle-based adjudicator
+alarms on \McFpOracleMax{} of each set, and that zero is conditional on this
+target's oracle being sound. Write success is judged by the object's state
+changing, not by the status code, so a \texttt{200} that leaves the object
+untouched is not counted as a detection, and a grant counts only if the
+collaborator record actually appears. Two limits are stated with the numbers: the
+target's oracle shares a decision function with the content path, so under the
+admission rule of Section~VI-E every class is refused promotion---with the ground
+differing by class, as the register records---and the \McInstances{} hits are
+recall against known truth rather than independence-certified proofs; and these
+are four mechanisms on one emulator, not four discoveries in production systems.
+Each class is also leave-one-out checked: disabling its fault injection removes
+that class's alarms and leaves the other classes' alarms in place, under the
+channel-matched adjudicator as well as the relation, for all four classes, so an
+alarm is attributable to its defect rather than to a shared root cause. The
+publicly fixed CVE pair is retained alongside this, as a
+control of the gate rather than of recall: Section~V-E and Table~18 (p.~18), one
 true positive on 1.20.5 and no claim on 1.20.6, with the seven-perturbation
 regression test unchanged.}
 \Action{Section~V-D and Table~17 (p.~18) for the four classes; Section~V-C and
@@ -742,7 +778,7 @@ evaluation extended.}
 narrowed to the two reachability-gated relations in MST-wi, and the abstract
 opens by naming them as two relations of that framework. The native trigger
 range is stated where the run is reported rather than in the abstract, which is
-kept to the IEEE single-paragraph, 250-word limit: Section~VII-C and Table~24 (p.~25) record that of the
+kept to the IEEE single-paragraph, 250-word limit: Section~VII-C and Table~24 (p.~26) record that of the
 \NtMrTotal{} catalog authorization relations evaluated against Gitea,
 \NtMrExecuted{} ran and \NtMrFired{} alarmed, both of them reachability-gated
 (\NtKeyMrNames{}). We did not extend the evaluation to other relation
@@ -761,11 +797,11 @@ request cannot outperform the direct consumer of those same inputs. The claim
 that \emph{these two} relations satisfy the lemma's premise is a separate
 proposition whose premise is checked against the records: their alarms reduce to
 $y\wedge\neg m$ on the domain studied, against $D=y\wedge\neg o$, and the truth
-table (Table~19, p.~20) makes the functional representation explicit. The
+table (Table~19, p.~21) makes the functional representation explicit. The
 lemma's second premise---that the model is $O$-determined---is not claimed and
 fails on the stale cells, so the paper does not present the relations as
 informationally redundant in general.}
-\Action{Section~VI-B, Table~19 (p.~20).}
+\Action{Section~VI-B, Table~19 (p.~21).}
 
 \subsection{Detection side: no real system was vulnerable}
 \Concern{Either add a real vulnerable case or remove the claim that the
@@ -827,10 +863,11 @@ judgement on each item belongs to the reviewers and the editor.
 \label{sec:partial}
 
 For the Associate Editor's convenience, this section records the three items
-that earlier drafts of this letter left as scope objections. All three have now
-been addressed by experiment, and the table states what was run and what each
-result does \emph{not} establish. No row records a requested experiment that was
-not run. Several items that earlier drafts listed here are no longer listed,
+that earlier drafts of this letter left as scope objections. All three now carry
+experimental results, and the table states what was run and what each result does
+\emph{not} establish. No row records a requested experiment that was not run, and
+none of the three is put to the editor as a question of scope. Several items that
+earlier drafts listed here are no longer listed,
 because the missing element named there was our own proposed extension rather
 than something the reviewer asked for: R1.12 asked for the derivation to be
 extended to unequal and endogenous counts, which the conditional derivation
@@ -856,28 +893,38 @@ R1.4 & An admission protocol frozen with its digest before the new runs:
 four defect classes, evidence levels L0--L3, an ordered
 \emph{admit}/\emph{reject}/\emph{unknown} rule, claim licensing and change
 control; applied to the four archived products (all \emph{reject}, L1) and to the
-controlled target (\emph{reject}, L2, source-level) & Independence for the three
+controlled target (\emph{reject}, L2, source-level, with the ground stated per
+class in a register whose one revision is logged) & Independence for the three
 production products: their evidence stops at the server boundary, so no
-promotion is claimed there and their results remain diagnostic readings \\
+promotion is claimed there and their results remain diagnostic readings; and no
+\emph{admit} row exists, so the rule licenses no independence-certified proof in
+this paper \\
 R1.7 & The probe-pair comparison plus a matched total-request ceiling (2 and 3
-requests per cell) with the same accounts and credentials, a declared allocation
-of the one extra observation each method may spend, and cost, detection,
-false-proof and abstention counts side by side & A detection advantage: at the
-matched ceiling the strengthened baseline reaches 14 of 15 violations with 4
-false proofs against our 10 with none and 17 abstentions; and the curve has two
-points, not a sweep \\
+requests per cell) with the same accounts and credentials, per-cell records, a
+declared allocation of the one extra observation each method may spend, and cost,
+detection, false-proof and abstention counts side by side & A detection
+advantage: at the matched ceiling the strengthened baseline reaches 14 of 15
+violations with 4 false proofs against our 10 with none and 17 abstentions; the
+curve has two points, not a sweep; and at a ceiling of two our method passes the
+\BgtOursPassCapTwo{} cells where the relation does not trigger and abstains on the
+other \BgtOursAbstainCapTwo{}, so the ceiling constrains what it can prove, not
+whether it fires \\
 R1.9 & Four defect classes (read, modify, inheritance, escalation), \McInstances{}
 independently switchable instances, the same crawl/introspection/adjudication
-code, per-class recall and false alarms, and a leave-one-out run per class & Population
+code, per-class recall, per-channel negative controls (\McNegRead{} read,
+\McNegWrite{} write, \McNegGrant{} grant authorized cells) with false-alarm rates,
+and a leave-one-out run per class & Population
 evidence: one emulator and four mechanisms, not four discoveries in production
-systems; the gate is blind to inheritance and escalation by construction and was
-not retuned to catch them \\
+systems; C3 and C4 stay in the denominator as undetected, because their
+antecedent is false rather than because the gate was not retuned; and the zero
+false-alarm figure for the oracle is conditional on that oracle being sound \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent The residual in the third column is scope, not missing work, and each
-limit is stated in the manuscript where the corresponding number appears. Where
+\noindent The residual in the third column is a limit of what these runs measure,
+not a request for a ruling on scope; each limit is stated in the manuscript where
+the corresponding number appears. Where
 the rule refuses promotion, the number is still reported---as a diagnostic
 reading, not as a confirmed violation.
 

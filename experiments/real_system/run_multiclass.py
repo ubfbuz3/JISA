@@ -17,10 +17,14 @@ R1.9 · 多类独立授权缺陷 · 逐缺陷召回与误报
     关系族搬到该通道会怎样"的对照，**不**声称是本文已研究的关系
 
 真值：靶机的正确模型（intended_perm），与 E/Y 拆分中的 E 同角色；观测：实际请求。
-误报定义与正文一致：在**被授权**（intended != none）的单元格上报警。
+误报定义与正文一致：在**被授权**（intended != none）的单元格上报警。负例按通道
+分组（read / write / grant），因为读格不能代替写格与授予格：写通道的成功以
+**实际状态变化**判定（不是状态码），授予通道要求协作者记录真的出现。
 
 归因检验：全量跑一次，再对每一类做 leave-one-out（只关掉该类），确认该类的实例
 不再报警、其余类仍报警 —— 证明每个报警可归因到那一个缺陷，而不是共享根因。
+归因量取三条链路的复合（关系、渠道匹配关系、渠道匹配 oracle），四类都有可归因
+的报警。
 
 用法：python run_multiclass.py
 """
@@ -105,6 +109,7 @@ def _measure(port: int, cl, active: set[str]):
 
     # ---- C4：先执行越权授予（被授予者之后才会在列表里看到对象）----
     grants = []
+    grant_st: dict[str, int] = {}
     for actor, grantee, obj in ESCALATIONS:
         if "C4" not in active:
             continue
@@ -112,6 +117,7 @@ def _measure(port: int, cl, active: set[str]):
         st, _ = cl[actor].put(f"/api/v1/repos/{o}/{n}/collaborators/{grantee}",
                               {"permission": "read"})
         grants.append({"actor": actor, "grantee": grantee, "object": obj, "status": st})
+        grant_st[obj] = st
     out["escalation_grants"] = grants
 
     # ---- 爬取（GUI 等价）：所有主体的可达集 ----
@@ -155,8 +161,11 @@ def _measure(port: int, cl, active: set[str]):
                 rec["channel_effect"] = bool(st in (200, 204) and post != pre)
             else:  # C4：测被授予者
                 st, _ = cl[subj].get(f"/api/v1/repos/{o}/{n}")
-                rec["probe"] = {"channel": "grant", "status": st}
-                rec["channel_effect"] = bool(st == 200)
+                gst = grant_st.get(obj)
+                rec["probe"] = {"channel": "grant", "status": st, "grant_status": gst}
+                # 效果判定：越权授予被接受 **且** 被授予者真的读到了对象；
+                # 只看被授予者的状态码会把"本来就能读"误计为提权生效。
+                rec["channel_effect"] = bool(st == 200 and gst in (200, 204))
 
             # 已研究的关系：read gate（同一公式，所有类都用它评一次）
             read_st, read_b = cl[subj].get(f"/api/v1/repos/{o}/{n}")
@@ -176,47 +185,172 @@ def _measure(port: int, cl, active: set[str]):
                 "v3": bool(mr_read and readable and says_none),
                 "v3_channel": bool(mr_channel and readable and says_none),
                 "direct_observe": bool(readable and says_none and read_st == 200),
+                # 与效果合同对齐：写通道以**实际状态变化**判定成功，不看状态码。
                 "direct_observe_channel": bool(readable and says_none
-                                               and rec["probe"]["status"] in (200, 204)),
+                                               and rec["channel_effect"]),
                 "direct_only": bool(readable and says_none),
             }
             out["instances"].append(rec)
 
-    # ---- 误报：被授权单元格（intended != none）上的报警 ----
-    fp = {k: 0 for k in ("mr_bookkeeping", "v3", "v3_channel", "direct_observe",
-                         "direct_observe_channel", "direct_only")}
-    safe = 0
-    for subj in list(ST.USERS) + [ST.ADMIN_USER]:
+    # ---- 误报对照：**逐通道**的授权负例 --------------------------------
+    # 每个通道各自一组"正确模型说该主体有权做该操作"的格。在这些格上：关系触发、
+    # 或 oracle 回答 none、或（写通道）状态码成功但状态没变，都是误报。
+    # 逐条保存 E（正确模型）、Y（该通道的实际效果）、方法输出与请求成本；分母按
+    # 通道分别记。读通道的 23 格同时充当 C1/C3 的负例（复用，不重复发请求）；
+    # 写通道与授予通道各自独立，不能用读格代替。
+    users = list(ST.USERS) + [ST.ADMIN_USER]
+    neg: dict[str, list] = {"read": [], "write": [], "grant": []}
+
+    def _alarms(mr: bool, readable: bool, says_none: bool, effect: bool) -> dict:
+        return {
+            "relation": bool(mr),
+            "relation_oracle": bool(mr and readable and says_none),
+            "oracle_only": bool(readable and says_none and effect),
+            "bookkeeping": bool(mr and effect),   # 只用于读通道的 log 变体，见下
+        }
+
+    # (a) 读通道 ------------------------------------------------------
+    for subj in users:
         for obj in ST.ALL_OBJS:
-            if m.intended_perm(subj, obj) == "none":
+            perm = m.intended_perm(subj, obj)
+            if perm == "none":
                 continue
-            safe += 1
             o, n = obj.split("/")
             ins = R.introspect(cl, obj, subj)
             st, b = cl[subj].get(f"/api/v1/repos/{o}/{n}")
             read_ok = (st == 200 and isinstance(b, dict)
                        and R._norm_repo(b) == R._norm_repo(owner_view(obj)))
-            mr_read = bool(can_snap(subj, obj) and read_ok)
+            cannot = bool(can_snap(subj, obj))
             log_has = subj in R.FRAMEWORK_LOG.get(obj, {})
-            if mr_read and not log_has:
-                fp["mr_bookkeeping"] += 1
-            if mr_read and ins.get("readable") and ins.get("says_none"):
-                fp["v3"] += 1
-                fp["v3_channel"] += 1
-            if ins.get("readable") and ins.get("says_none") and st == 200:
-                fp["direct_observe"] += 1
-                fp["direct_observe_channel"] += 1
-            if ins.get("readable") and ins.get("says_none"):
-                fp["direct_only"] += 1
+            a = _alarms(cannot and read_ok, ins.get("readable", False),
+                        ins.get("says_none", False), bool(read_ok))
+            a["bookkeeping"] = bool(cannot and read_ok and not log_has)
+            neg["read"].append({
+                "channel": "read", "subject": subj, "object": obj,
+                "truth_permission": perm, "truth": "authorized",
+                "cannot_reach": cannot, "log_has": log_has,
+                "effect": bool(read_ok), "probe_status": st,
+                "E_says": perm, "Y_effect": bool(read_ok),
+                "oracle_readable": bool(ins.get("readable")),
+                "oracle_says_none": bool(ins.get("says_none")),
+                "alarms": a, "requests": 2,
+            })
+
+    # (b) 写通道（PATCH）—— 成功以**实际状态变化**判定，不看状态码 --------
+    for subj in users:
+        for obj in ST.ALL_OBJS:
+            perm = m.intended_perm(subj, obj)
+            if perm not in ("write", "admin"):
+                continue
+            o, n = obj.split("/")
+            pre = owner_view(obj).get("description")
+            st, _ = cl[subj].patch(f"/api/v1/repos/{o}/{n}",
+                                   {"description": f"neg-write-{subj}-{n}"})
+            post = owner_view(obj).get("description")
+            effect = bool(st in (200, 204) and post != pre)
+            ins = R.introspect(cl, obj, subj)
+            cannot = bool(can_snap(subj, obj))
+            neg["write"].append({
+                "channel": "write", "subject": subj, "object": obj,
+                "truth_permission": perm, "truth": "authorized",
+                "cannot_reach": cannot,
+                "effect": effect, "probe_status": st,
+                "E_says": perm, "Y_effect": effect,
+                "pre": pre, "post": post,
+                "oracle_readable": bool(ins.get("readable")),
+                "oracle_says_none": bool(ins.get("says_none")),
+                "alarms": _alarms(cannot and effect, ins.get("readable", False),
+                                  ins.get("says_none", False), effect),
+                "requests": 3,   # 读前状态 + PATCH + 读后状态（oracle 查询另计）
+            })
+
+    # (c) 授予通道（PUT collaborators）—— 只有 owner/admin 是合法授予者 ------
+    # 注意：授予会改变可达性，所以不能拿授予前的爬取快照判 cannot_reach；
+    # 先做完所有授予，再对同一个被授予者重新爬一次（1 次共享枚举），然后判。
+    grantee = "eve"
+    grant_cells: list[dict] = []
+    for subj in users:
+        for obj in ST.ALL_OBJS:
+            if not (subj == ST.ADMIN_USER or m.repos[obj]["owner"] == subj):
+                continue
+            if m.intended_perm(grantee, obj) != "none":
+                continue          # 被授予者本就有权：该格不是"授予产生访问"的负例
+            o, n = obj.split("/")
+            st, _ = cl[subj].put(f"/api/v1/repos/{o}/{n}/collaborators/{grantee}",
+                                 {"permission": "read"})
+            lst = cl[subj].get(f"/api/v1/repos/{o}/{n}/collaborators")[1] or []
+            in_collab = any(isinstance(c, dict) and c.get("login") == grantee for c in lst)
+            ins = R.introspect(cl, obj, grantee)
+            grant_cells.append({
+                "channel": "grant", "subject": subj, "grantee": grantee, "object": obj,
+                "truth_permission": "admin", "truth": "authorized",
+                "effect": bool(st in (200, 204) and in_collab), "probe_status": st,
+                "E_says": "admin", "Y_effect": bool(st in (200, 204) and in_collab),
+                "oracle_readable": bool(ins.get("readable")),
+                "oracle_says_none": bool(ins.get("says_none")),
+                "requests": 3,   # PUT + 协作者列表复核 + oracle
+            })
+    if grant_cells:                       # 授予后的新鲜可达集（1 次共享枚举）
+        urls = set(R.crawl(cl[grantee], [ST.ORG])["urls"])
+        for c in grant_cells:
+            c["cannot_reach"] = c["object"] not in urls
+            c["alarms"] = _alarms(c["cannot_reach"] and c["effect"],
+                                  c["oracle_readable"], c["oracle_says_none"],
+                                  c["effect"])
+        neg["grant"] = grant_cells
+
+    out["negatives"] = neg
+    out["neg_denominator"] = {k: len(v) for k, v in neg.items()}
+    # 通道级共享成本：授予通道要在授予后重新枚举一次被授予者的可达集。
+    out["neg_shared_requests"] = {"read": 0, "write": 0, "grant": 2 if grant_cells else 0}
+    # 兼容旧字段：合并读通道计数（与正文既有 8/23、0 同一口径）
+    fp = {k: 0 for k in ("mr_bookkeeping", "v3", "v3_channel", "direct_observe",
+                         "direct_observe_channel", "direct_only")}
+    for r in neg["read"]:
+        a = r["alarms"]
+        fp["mr_bookkeeping"] += int(a["bookkeeping"])
+        fp["v3"] += int(a["relation_oracle"])
+        fp["v3_channel"] += int(a["relation_oracle"])
+        fp["direct_observe"] += int(a["oracle_only"])
+        fp["direct_observe_channel"] += int(a["oracle_only"])
+        fp["direct_only"] += int(r["oracle_readable"] and r["oracle_says_none"])
     out["fp"] = fp
-    out["fp_denominator"] = safe
+    out["fp_denominator"] = len(neg["read"])
     return out
 
 
+CLASS_CHANNEL = {"C1": "read", "C2": "write", "C3": "read", "C4": "grant"}
+
+
+def _any_alarm(rec: dict) -> bool:
+    """该实例上"有没有任何一条被检验的链路报警"。
+
+    取三条：已研究的关系（mr_read）、渠道匹配的关系（v3_channel）、渠道匹配的
+    oracle 裁决（direct_observe_channel 已在测量里用效果判定）。留一法用这个
+    复合量，四类都有可归因的报警，不再出现"某类本来就不响所以检验为空"。
+    """
+    a = rec["alarms"]
+    return bool(rec["mr_read"] or a["v3_channel"] or a["direct_observe_channel"])
+
+
 def _summarise(runs: dict[str, dict]):
-    """runs: {run_name: measure_result}。返回逐类 TP/FN/recall 与 FP。"""
+    """runs: {run_name: measure_result}。返回逐类 TP/FN/recall 与逐通道 FP。"""
     full = runs["all"]
     per_class = {}
+    # 逐通道误报：分母 = 该通道的授权负例数
+    neg_fp = {}
+    shared = full.get("neg_shared_requests", {})
+    for ch, rows in full["negatives"].items():
+        n = len(rows)
+        d = {"n": n,
+             "relation": sum(1 for r in rows if r["alarms"]["relation"]),
+             "relation_oracle": sum(1 for r in rows if r["alarms"]["relation_oracle"]),
+             "oracle_only": sum(1 for r in rows if r["alarms"]["oracle_only"]),
+             "requests": sum(r["requests"] for r in rows) + shared.get(ch, 0),
+             "shared_requests": shared.get(ch, 0)}
+        d["fpr_relation_oracle"] = round(d["relation_oracle"] / n, 4) if n else None
+        d["fpr_oracle_only"] = round(d["oracle_only"] / n, 4) if n else None
+        neg_fp[ch] = d
     for cls, spec in CLASSES.items():
         rows = [r for r in full["instances"] if r["class"] == cls]
         entry = {"label": spec["label"], "n": len(rows), "detected": {},
@@ -225,20 +359,28 @@ def _summarise(runs: dict[str, dict]):
         for meth in ("mr_bookkeeping", "v3", "v3_channel", "direct_observe",
                      "direct_observe_channel", "direct_only"):
             entry["detected"][meth] = sum(1 for r in rows if r["alarms"][meth])
+        ch = CLASS_CHANNEL[cls]
+        entry["neg_channel"] = ch
+        entry["neg_n"] = neg_fp[ch]["n"]
+        entry["neg_fp_channel"] = neg_fp[ch]["relation_oracle"]
+        entry["neg_fp_oracle"] = neg_fp[ch]["oracle_only"]
+        entry["neg_fpr_channel"] = neg_fp[ch]["fpr_relation_oracle"]
+        entry["neg_fpr_oracle"] = neg_fp[ch]["fpr_oracle_only"]
         per_class[cls] = entry
-    # leave-one-out：关掉某类后，该类实例应全部不再报警，其余类保持
+    # leave-one-out：关掉某类后，该类实例不再报警，其余类保持
     loo = {}
     for cls in CLASSES:
         off = runs[f"without_{cls}"]
         own = [r for r in off["instances"] if r["class"] == cls]
         other = [r for r in off["instances"] if r["class"] != cls]
         loo[cls] = {
-            "own_alarms_after_disable": sum(1 for r in own
-                                            if r["alarms"]["v3_channel"] or r["mr_read"]),
-            "other_alarms_retained": sum(1 for r in other
-                                         if r["alarms"]["v3_channel"] or r["mr_read"]),
+            "own_alarms_after_disable": sum(1 for r in own if _any_alarm(r)),
+            "other_alarms_retained": sum(1 for r in other if _any_alarm(r)),
+            "own_total_when_active": sum(1 for r in full["instances"]
+                                         if r["class"] == cls and _any_alarm(r)),
         }
     return {"per_class": per_class, "leave_one_out": loo,
+            "negatives": neg_fp,
             "fp": full["fp"], "fp_denominator": full["fp_denominator"]}
 
 
@@ -284,7 +426,8 @@ def main():
         print(f"{cls:6s}{e['n']:>3}{e['mr_read']:>9}{e['mr_channel']:>7}"
               f"{e['detected']['v3']:>5}{e['detected']['v3_channel']:>7}"
               f"{e['detected']['direct_observe']:>7}{e['detected']['direct_only']:>8}")
-    print("\n误报（被授权单元格）：", summary["fp"], "分母", summary["fp_denominator"])
+    print("\n误报（合并读通道）：", summary["fp"], "分母", summary["fp_denominator"])
+    print("逐通道负例：", json.dumps(summary["negatives"], ensure_ascii=False))
     print("leave-one-out：", json.dumps(summary["leave_one_out"], ensure_ascii=False))
     print(f"[done] -> {p} ({out['meta']['elapsed_s']}s)")
 

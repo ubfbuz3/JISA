@@ -35,12 +35,88 @@ ORDER = ["B1_status_only", "B2_diff_equal", "B3_diff_inband",
          "B3r_diff_reach", "ours_mr_v3"]
 
 
+def recompute(recs: list[dict]) -> dict:
+    """从逐格记录独立重算汇总（不复用 run_baseline.aggregate）。
+
+    与缓存 summary 交叉校验：两份实现不一致就拒绝出数，避免"汇总与逐例脱节"。
+    """
+    out: dict[str, dict] = {}
+    names = [n for n in ORDER if any(n in r.get("methods", {}) for r in recs)]
+    for name in names:
+        c = {"tp": 0, "fp": 0, "fn": 0, "tn": 0, "abstain": 0}
+        req = 0
+        for r in recs:
+            m = r["methods"][name]
+            for k in c:
+                c[k] += int(bool(m[k]))
+            req += r["budget"]["probe_requests"]
+            if name == "ours_mr_v3":
+                req += r["budget"]["ours_extra_requests"]
+            if name == "B3r_diff_reach":
+                req += r["budget"]["reach_extra_requests"]
+        n = len(recs)
+        n_viol = sum(1 for r in recs if r.get("truth") == "bola")
+        decided = c["tp"] + c["fn"]
+        claimed = c["tp"] + c["fp"]
+        out[name] = {
+            **c,
+            "cells": n,
+            "claimed": claimed,
+            "violation_cells": n_viol,
+            "abstained_violations": sum(
+                1 for r in recs
+                if r.get("truth") == "bola" and r["methods"][name]["abstain"]),
+            "coverage": round((n - c["abstain"]) / n, 4) if n else None,
+            "precision_on_claims": round(c["tp"] / claimed, 4) if claimed else None,
+            "recall_on_decided": round(c["tp"] / decided, 4) if decided else None,
+            "recall_all_violations": round(c["tp"] / n_viol, 4) if n_viol else None,
+            "false_proof_rate": round(c["fp"] / n, 4) if n else None,
+            "requests_total": req,
+        }
+    return out
+
+
+SCALARS = ("tp", "fp", "fn", "tn", "abstain", "cells", "claimed",
+           "violation_cells", "abstained_violations", "coverage",
+           "precision_on_claims", "recall_on_decided", "recall_all_violations",
+           "false_proof_rate", "requests_total")
+
+
+def cross_check(cap: int, cached: dict, recs: list[dict]) -> dict:
+    """逐字段比对"缓存 summary"与"从记录重算"；有分歧直接抛错，不出数。"""
+    fresh = recompute(recs)
+    for name, got in fresh.items():
+        want = cached.get(name)
+        if want is None:
+            raise SystemExit(f"[FAIL] cap={cap}: method {name} in records but not in summary")
+        for k in SCALARS:
+            if got[k] != want[k]:
+                raise SystemExit(
+                    f"[FAIL] cap={cap} {name} {k}: records say {got[k]!r}, "
+                    f"summary says {want[k]!r} -- refusing to emit numbers")
+    if set(fresh) != {k for k in cached if not k.startswith("_")}:
+        raise SystemExit(f"[FAIL] cap={cap}: method sets differ between records and summary")
+    return fresh
+
+
 def main() -> None:
     d = json.loads(SRC.read_text(encoding="utf-8"))
     s2, s3 = d["sweeps"]["2"], d["sweeps"]["3"]
+    # 先做逐格重算 ↔ 缓存 summary 的交叉校验，再取数排版。
+    for cap, s in ((2, s2), (3, s3)):
+        if "records" not in s:
+            raise SystemExit(f"[FAIL] cap={cap}: no per-cell records in {SRC.name}")
+        cross_check(cap, s["summary"], [r for r in s["records"] if "error" not in r])
     a2, a3 = s2["summary"], s3["summary"]
     cells = s2["cells"]
     n_viol = a3["ours_mr_v3"]["violation_cells"]
+    # 成本口径：ours 的额外读取只在 MR 触发时发生；未触发的格直接 pass、不读面。
+    pass2 = sum(1 for r in s2["records"]
+                if r.get("methods", {}).get("ours_mr_v3", {}).get("verdict") == "pass")
+    pass3 = sum(1 for r in s3["records"]
+                if r.get("methods", {}).get("ours_mr_v3", {}).get("verdict") == "pass")
+    read2 = sum(1 for r in s2["records"] if r.get("budget", {}).get("oracle_read"))
+    read3 = sum(1 for r in s3["records"] if r.get("budget", {}).get("oracle_read"))
 
     lines: list[str] = []
 
@@ -49,6 +125,10 @@ def main() -> None:
 
     cmd("Cells", cells)
     cmd("Violations", n_viol)
+    cmd("OursPassCapTwo", pass2)
+    cmd("OursPassCapThree", pass3)
+    cmd("OursOracleReadCapTwo", read2)
+    cmd("OursOracleReadCapThree", read3)
     for cap, agg, tag in ((2, a2, "CapTwo"), (3, a3, "CapThree")):
         o = agg["ours_mr_v3"]
         cmd(f"OursTp{tag}", o["tp"])
@@ -70,23 +150,27 @@ def main() -> None:
     rows.append(r"\centering")
     rows.append(
         r"\caption{Equal-budget comparison on the same \BgtCells{} cells and the same "
-        r"credentials. \emph{cap} is the total request budget per cell: at cap~2 only the "
-        r"owner/actor probe pair fits, so any method that must consult the authorization "
-        r"surface has to abstain; at cap~3 each method may spend one further observation of "
-        r"its own choosing---ours reads the authorization surface, B3r enumerates the actor's "
-        r"visible objects---while B1--B3 spend nothing extra and are reported as under budget. "
-        r"No method is given padding requests. Ours therefore does not dominate: at the same "
+        r"credentials. \emph{cap} is the total request budget per cell. At cap~2 only the "
+        r"owner/actor probe pair fits: our method keeps its own order---it passes on the "
+        r"\BgtOursPassCapTwo{} cells where the relation does not trigger, reading no surface, "
+        r"and abstains on the rest, where the relation does trigger and no request is left to "
+        r"read the surface. At cap~3 each method may spend one further observation of its own "
+        r"choosing---ours reads the authorization surface, B3r enumerates the actor's visible "
+        r"objects---while B1--B3 spend nothing extra and are reported as under budget. No "
+        r"method is given padding requests. Ours therefore does not dominate: at the same "
         r"ceiling B3r reaches \BgtBthreeRTpCapThree{} of \BgtViolations{} with "
         r"\BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with "
         r"\BgtOursFpCapThree{} and \BgtOursAbstainCapThree{} abstentions, and where the surface "
-        r"is unreadable ours refuses to claim rather than guessing. Ours also spends "
-        r"\BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows, because "
-        r"an abstaining cell costs nothing.}")
+        r"is unreadable ours refuses to claim rather than guessing. Ours spends "
+        r"\BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows because "
+        r"the \BgtOursPassCapTwo{} untriggered cells never read the surface---not because an "
+        r"abstaining cell is free: it still pays for its probe pair, and for the surface read "
+        r"whenever the relation triggers under a ceiling that reaches it.}")
     rows.append(r"\label{tab:budget}")
     rows.append(r"\small")
-    rows.append(r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrrrr}")
+    rows.append(r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrrrrr}")
     rows.append(r"\toprule")
-    rows.append(r"cap & method & TP & FN & FP & abstain & requests \\")
+    rows.append(r"cap & method & TP & FN & FP & TN & abstain & requests \\")
     rows.append(r"\midrule")
     for cap, agg in ((2, a2), (3, a3)):
         for m in ORDER:
@@ -94,7 +178,7 @@ def main() -> None:
                 continue
             v = agg[m]
             rows.append(f"{cap} & {LABEL[m]} & {v['tp']} & {v['fn']} & {v['fp']} & "
-                        f"{v['abstain']} & {v['requests_total']} \\\\")
+                        f"{v['tn']} & {v['abstain']} & {v['requests_total']} \\\\")
         if cap == 2:
             rows.append(r"\midrule")
     rows.append(r"\bottomrule")

@@ -40,8 +40,9 @@ the mechanism---the crawl model is frozen by a cache never invalidated, and a
 missing crawl defaults to ``unreachable''---and the positive control is a sanity check that closes the loop: on a seeded
 vulnerable target the surface-gated adjudicator detects all planted instances of
 the fault pattern it was built for with zero false positives, and on four seeded
-defect classes it detects the read bypass and nothing else, because the other
-three are reached through objects the subject can already see.
+defect classes it detects the read bypass and nothing else---the write bypass
+breaks a channel the relation does not test, and the inheritance and escalation
+faults falsify the antecedent because the subject can already see the object.
 
 \paragraph{What the two added experiments carry} The temporal finding is not
 confined to one product. Under the same pre-registered protocol, frozen before
@@ -100,7 +101,9 @@ by what the reachability reading can see.
 stronger needs, first, a population of real systems that \emph{contain} the
 flaw, so detection can be measured---neither the four seeded classes of
 Section~\ref{sec:multiclass} nor the single publicly fixed defect of
-Section~\ref{sec:cvepair} supplies that population, since both are constructed; and second, relations whose gate is not the absence of
+Section~\ref{sec:cvepair} supplies that population: the first are planted in an
+emulator, the second is a real defect replayed under a controlled topology, and
+neither is a sample of defects found in the field; and second, relations whose gate is not the absence of
 evidence---checkable against a subject's entitlements without pretending that
 entitlements are reachable facts. The transferable condition---we call it the
 \emph{same-observable condition}---is the one that killed our own
