@@ -216,6 +216,7 @@ do_repro() {
   "$PYBIN" ingest_m2_stratum.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_m2_stratum.py"; popd >/dev/null; return 1; }
   "$PYBIN" ingest_design.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_design.py"; popd >/dev/null; return 1; }
   "$PYBIN" ingest_coverage.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_coverage.py"; popd >/dev/null; return 1; }
+  "$PYBIN" ingest_baseline.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_baseline.py"; popd >/dev/null; return 1; }
   "$PYBIN" make_diagrams.py >/dev/null 2>&1 || { echo "  [WARN] make_diagrams.py (figures)"; }
   popd >/dev/null
 

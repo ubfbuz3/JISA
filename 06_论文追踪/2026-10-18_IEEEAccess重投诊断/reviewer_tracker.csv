@@ -5,7 +5,7 @@ R1.3,R1.3 状态转移,major,接受。明确 grant/revoke、继承、public、ro
 R1.4,R1.4 admissibility,major,接受。预先冻结候选、渠道、缺陷类与共享依赖审查；不从 outcome 反选好 oracle,PARTIAL,A2 时间链改为按摘要绑定并披露 written_at 矛盾；admissibility 仍未给出可照做的判定程序,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
 R1.5,R1.5 命题2,major,接受且重写。充分性与实际实现等价分开，保留3条差异，写两个 MR 的显式谓词,CLOSED_IN_TEXT,等价式改为 A=D ⇔ y=0 或 m=o；删去外延相等，改证 H⇒D；3 条差异归为 S5 写场景漏报,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
 R1.6,R1.6 576设计,major,部分已有内容，应增强可读性；同时纠正 blind/aware 与 snapshot/live 的错配，列完整8配置,CLOSED_IN_TEXT,blind/aware 命名复原；对账改以 S3–S7 原网格为起点并逐记录校验；每格 12/6 条；listed+unreadable 改称未测,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
-R1.7,R1.7 竞争基线,major,接受比较不足。公平多账户与常规差分，按候选和预算匹配；direct_only 移至诊断附录,OPEN,未执行多账号/差分基线；仅在 related work 与 threats 说明未做且不主张检测优势,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.7,R1.7 竞争基线,major,接受比较不足。公平多账户与常规差分，按候选和预算匹配；direct_only 移至诊断附录,CLOSED_IN_EXPERIMENT,已实跑：experiments/run_baseline.py 42 格（6 配置 × S1–S7），B1/B2/B3 与 ours 共用同一对探测请求；假确证 12/12/6/0，弃权 0/0/0/17，覆盖 59.52%；已写明"非检测增益"；Table 17 + 06_boundaries §D,见 06_论文追踪/2026-10-19_竞争基线执行记录.md,yes,internal/editor only
 R1.8,R1.8 跨厂商渠道,major,接受。按直接、继承、admin、public、带外分别报 E/O confusion 和 stale M；多来源允许多标签,PARTIAL,Gitea/GitLab 渠道表 + 单渠道互斥分组已写明；Gogs 缺逐渠道四格表，已明确声明,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
 R1.9,R1.9 多种缺陷,major,接受限制。多条独立故障实现，per-defect recall，合法配对控制的FP/FPR；BFLA与BOLA分开,PARTIAL,真实配对改为“只检验闸门、未跑 MR”；多缺陷 recall 明确未做,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
 R1.10,R1.10 时间观测控制,major,接受。recrawl 用相同subject权限，owner oracle单独列；保存事件、policy version、token角色、只读操作,CLOSED_IN_TEXT,A2 先后改由 run 记录摘要绑定；written_at 矛盾单列说明，不改原件,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only

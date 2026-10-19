@@ -43,6 +43,8 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/reconcile_table.tex" \
          "$PROJ/04_绘图与分析/results/coverage_numbers.tex" \
          "$PROJ/04_绘图与分析/results/coverage_table.tex" \
+         "$PROJ/04_绘图与分析/results/baseline_numbers.tex" \
+         "$PROJ/04_绘图与分析/results/baseline_table.tex" \
          "$SRC_PAPER/refs.bib"; do
   [ -f "$f" ] || { echo "!! 缺少 $f，请先跑 analysis/compute_all.py ingest_native_engine.py ingest_gogs.py ingest_gitlab.py ingest_gitlab.py ingest_seeded.py"; exit 1; }
 done
@@ -105,6 +107,8 @@ cp "$PROJ/04_绘图与分析/results/attribution_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/reconcile_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/coverage_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/coverage_table.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/baseline_numbers.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/baseline_table.tex" "$BUILD/"
 cp "$SRC_PAPER/refs.bib"           "$BUILD/"
 cp "$SRC_PAPER"/sections/*.tex     "$BUILD/sections/"
 # 只装配矢量 PDF 图（无 AI 生成像素；矢量可无限缩放）

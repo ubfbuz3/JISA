@@ -152,8 +152,10 @@ of oracle-free detection: \texttt{obs\_success} uses one request and no model,
 and a differential prober that compares several accounts against one another---the
 shape taken by the black-box line reviewed in
 Section~\ref{sec:related}---consumes more than \texttt{obs\_success} does and was
-not instantiated here. The lift we measure is therefore an estimate against weak
-references, not a claim about metamorphic testing versus the best oracle-free
+not instantiated on this record set; the same rule, evaluated on a separate
+controlled factorial with a live probe pair, is reported in
+Section~\ref{sec:baselines}. The lift we measure is therefore an estimate against
+weak references, not a claim about metamorphic testing versus the best oracle-free
 detector, and we make no such claim. Both references also share an observable
 with the reference labelling (\texttt{obs\_success} alarms on the same access
 outcome that partly defines a violation), so their absolute rates carry the same

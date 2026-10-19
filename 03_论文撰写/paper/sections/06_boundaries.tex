@@ -286,6 +286,51 @@ the crawled input set does not by itself certify that a class outside that set
 was exercised, and that a class-uniform failure can be held above any fixed
 threshold by unaffected inputs.
 
+\subsection{Competing baselines: what a succeeding request cannot separate}
+\label{sec:baselines}
+
+The comparison that matters is not against our own ablations but against what a
+conventional differential prober can do with the same two observations. We
+implemented three such rules and ran them on the same \BlCells{} cells (six
+configurations crossed with S1--S7), each consuming one request as the owner and
+one as the actor. \emph{B1 status-only} alarms whenever the replayed request
+returns a non-error status---the coarsest rule a replay scanner can use.
+\emph{B2 equality replay} alarms only when the owner's request succeeded and the
+actor received byte-identical output, which is the differential rule with no
+authorization model. \emph{B3} adds the strongest information a tester can hold
+without reading the target: it suppresses every cell covered by the tester's own
+share log, so it knows each grant it created itself. The fourth row is MR-002
+with the v3 adjudication.
+
+Table~\ref{tab:baselines} reports the outcome. The cells contain
+\BlBolaCells{} true violations, \BlLegitCells{} legitimate accesses through a
+grant, and \BlDeniedCells{} denials. B1 and B2 claim on all 27 allowed cells:
+\BlBOneTP{} true positives and \BlBOneFP{} false proofs, a precision of
+\BlBTwoPrecision{}\%. On these cells the equality test adds nothing to the status
+test, because every allowed access returns the owner's bytes. B3 removes the six
+in-band grants and still issues \BlBThreeFP{} false proofs, all on S6, where the
+grant was seeded out of band. Ours issues \BlOursTP{} true positives and no false
+proof (precision \BlOursPrecision{}\%), at the cost of \BlOursAbstain{}
+abstentions: the twelve legitimate grants plus five violations in the two
+configurations whose authorization surface is unreadable.
+
+Two readings of this table would be wrong. It is not a detection gain: the
+baselines find all fifteen violations, whereas ours confirms ten---exactly those
+whose surface is readable---and declines the other five. Nor is it a free
+improvement: coverage falls to \BlOursCoverage{}\%. What the table isolates is the
+only difference the claim depends on. A succeeding request is compatible with
+both a grant and a defect, so a rule that treats it as proof must either ignore
+grants (B1, B2) or see only the grants it created (B3). The out-of-band grant is
+the residual, and it is not a corner case in the lab: on the Gitea snapshot the
+equality rule fires on all \BlRsBTwoClaims{} legitimately allowed cells, and the
+in-band log still leaves \BlRsBThreeClaims{}, because the framework log does not
+observe \ResRsChannelNotObservableRate{} of the effective access there. That
+figure is a property of the constructed topology, not an estimate of field
+prevalence. The cost is one extra read: \BlProbeReq{} probe requests per cell for
+every method, \BlOursProbeReq{} for ours.
+
+\input{baseline_table.tex}
+
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}
 

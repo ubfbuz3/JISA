@@ -1,0 +1,18 @@
+% 由 analysis/ingest_baseline.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{Competing baselines on the same \BlCells{} cells and the same probe pair. The cells comprise \BlBolaCells{} true violations, \BlLegitCells{} legitimate accesses through a grant (in-band or out-of-band), and \BlDeniedCells{} denials. Every method consumes one owner request and one actor request; ours issues one additional read of the authorization surface. A false proof is a cell with $E=\text{allow}$ that the method still reports as a proven violation.}
+\label{tab:baselines}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.155\textwidth}p{0.335\textwidth}rrrrr@{}}
+\toprule
+Method & Decision rule & Claims & TP & False proofs & Abstain & Coverage (\%) \\
+\midrule
+B1 status-only & alarm iff the actor's request returns non-error & 27 & 15 & 12 & 0 & 100.00 \\
+B2 equality replay & alarm iff the owner succeeded and the actor received byte-identical output & 27 & 15 & 12 & 0 & 100.00 \\
+B3 B2 + in-band log & suppress cells covered by the tester's own share log & 21 & 15 & 6 & 0 & 100.00 \\
+Ours: MR-002 + v3 & consult the SUT authorization surface; abstain if unreadable & 10 & 10 & 0 & 17 & 59.52 \\
+\bottomrule
+\end{tabular}
+\end{table*}

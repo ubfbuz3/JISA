@@ -1,0 +1,4072 @@
+{
+  "generated_at": "2026-10-19 11:24:10",
+  "elapsed_sec": 22.3,
+  "cells": 42,
+  "errors": 0,
+  "design": {
+    "domain": "mode == 'e3' 的 6 个配置 × S1–S7（共享能力是 S3–S7 构造的前提）",
+    "shared_probe_pair": "owner 与 actor 对同一动作各发一次请求，四个方法共用",
+    "b1": "低权账户 status < 400 即告警（Autorize 朴素模式）",
+    "b2": "owner 成功且 actor 响应逐字节相同即告警（重放差分，无授权模型）",
+    "b3": "b2 之上用框架 in-band share_log 压制；等价于已知测试期全部自建授权的理想差分",
+    "ours": "MR-002 + v3（查询 SUT 授权自省面；不可读则弃权）"
+  },
+  "summary": {
+    "B1_status_only": {
+      "tp": 15,
+      "fp": 12,
+      "fn": 0,
+      "tn": 15,
+      "abstain": 0,
+      "cells": 42,
+      "claimed": 27,
+      "coverage": 1.0,
+      "precision_on_claims": 0.5556,
+      "recall": 1.0,
+      "false_proof_rate": 0.2857
+    },
+    "B2_diff_equal": {
+      "tp": 15,
+      "fp": 12,
+      "fn": 0,
+      "tn": 15,
+      "abstain": 0,
+      "cells": 42,
+      "claimed": 27,
+      "coverage": 1.0,
+      "precision_on_claims": 0.5556,
+      "recall": 1.0,
+      "false_proof_rate": 0.2857
+    },
+    "B3_diff_inband": {
+      "tp": 15,
+      "fp": 6,
+      "fn": 0,
+      "tn": 21,
+      "abstain": 0,
+      "cells": 42,
+      "claimed": 21,
+      "coverage": 1.0,
+      "precision_on_claims": 0.7143,
+      "recall": 1.0,
+      "false_proof_rate": 0.1429
+    },
+    "ours_mr_v3": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "tn": 15,
+      "abstain": 17,
+      "cells": 42,
+      "claimed": 10,
+      "coverage": 0.5952,
+      "precision_on_claims": 1.0,
+      "recall": 1.0,
+      "false_proof_rate": 0.0
+    },
+    "_budget": {
+      "probe_requests_per_cell": [
+        2
+      ],
+      "ours_extra_per_cell": [
+        0,
+        1
+      ]
+    }
+  },
+  "records": [
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S1",
+      "intent": "无共享阴性对照：跨用户访问同一对象，应用应正确拒绝",
+      "op": "read",
+      "owner": "B",
+      "actor": "A",
+      "target_doc": "doc0003",
+      "share_origin": "none",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "A",
+        "doc_id": "doc0003",
+        "op": "read",
+        "doc_owner": "B",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0003"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S2",
+      "intent": "无共享 + 访问他人对象 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "none",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S3",
+      "intent": "拥有者显式共享给访问者，访问者访问该对象 → 合法（E3 例外，授权由框架创建、可观测）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": true,
+        "inband_records": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ]
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S4",
+      "intent": "存在共享 a1，但访问未共享的 a2 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S5",
+      "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "op": "write",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S6",
+      "intent": "**预存**共享（带外种入，框架无记录），访问者访问该对象 → 合法，但授权对框架不可观测",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln0-unlisted"
+      },
+      "scenario": "S7",
+      "intent": "**预存**共享（带外种入），访问者访问未共享的另一对象 → 越权（检验检测力是否受损）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S1",
+      "intent": "无共享阴性对照：跨用户访问同一对象，应用应正确拒绝",
+      "op": "read",
+      "owner": "B",
+      "actor": "A",
+      "target_doc": "doc0003",
+      "share_origin": "none",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "A",
+        "doc_id": "doc0003",
+        "op": "read",
+        "doc_owner": "B",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 A 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S2",
+      "intent": "无共享 + 访问他人对象 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "none",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S3",
+      "intent": "拥有者显式共享给访问者，访问者访问该对象 → 合法（E3 例外，授权由框架创建、可观测）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": true,
+        "inband_records": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ]
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S4",
+      "intent": "存在共享 a1，但访问未共享的 a2 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "framework",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S5",
+      "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "op": "write",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'write' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S6",
+      "intent": "**预存**共享（带外种入，框架无记录），访问者访问该对象 → 合法，但授权对框架不可观测",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "on",
+        "label": "V-E3-vuln1-unlisted"
+      },
+      "scenario": "S7",
+      "intent": "**预存**共享（带外种入），访问者访问未共享的另一对象 → 越权（检验检测力是否受损）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "out_of_band",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S1",
+      "intent": "无共享阴性对照：跨用户访问同一对象，应用应正确拒绝",
+      "op": "read",
+      "owner": "B",
+      "actor": "A",
+      "target_doc": "doc0003",
+      "share_origin": "none",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "A",
+        "doc_id": "doc0003",
+        "op": "read",
+        "doc_owner": "B",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0003"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S2",
+      "intent": "无共享 + 访问他人对象 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "none",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S3",
+      "intent": "拥有者显式共享给访问者，访问者访问该对象 → 合法（E3 例外，授权由框架创建、可观测）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": true,
+        "inband_records": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ]
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S4",
+      "intent": "存在共享 a1，但访问未共享的 a2 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S5",
+      "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "op": "write",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S6",
+      "intent": "**预存**共享（带外种入，框架无记录），访问者访问该对象 → 合法，但授权对框架不可观测",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln0-listed"
+      },
+      "scenario": "S7",
+      "intent": "**预存**共享（带外种入），访问者访问未共享的另一对象 → 越权（检验检测力是否受损）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S1",
+      "intent": "无共享阴性对照：跨用户访问同一对象，应用应正确拒绝",
+      "op": "read",
+      "owner": "B",
+      "actor": "A",
+      "target_doc": "doc0003",
+      "share_origin": "none",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "A",
+        "doc_id": "doc0003",
+        "op": "read",
+        "doc_owner": "B",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 A 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S2",
+      "intent": "无共享 + 访问他人对象 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "none",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S3",
+      "intent": "拥有者显式共享给访问者，访问者访问该对象 → 合法（E3 例外，授权由框架创建、可观测）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": true,
+        "inband_records": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ]
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S4",
+      "intent": "存在共享 a1，但访问未共享的 a2 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "framework",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S5",
+      "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "op": "write",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'write' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S6",
+      "intent": "**预存**共享（带外种入，框架无记录），访问者访问该对象 → 合法，但授权对框架不可观测",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "SUT 授权面显示对象 doc0001 对 B 存在可覆盖 'read' 的授权，观测与合法授权假设一致",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "listed",
+        "introspection": "on",
+        "label": "V-E3-vuln1-listed"
+      },
+      "scenario": "S7",
+      "intent": "**预存**共享（带外种入），访问者访问未共享的另一对象 → 越权（检验检测力是否受损）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "out_of_band",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": true,
+          "verdict": "violation-proven",
+          "reason": "SUT 授权面可读，且其中**不存在**对 B 可覆盖 'read' 的授权，唯一已知的合法例外解释被排除",
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S1",
+      "intent": "无共享阴性对照：跨用户访问同一对象，应用应正确拒绝",
+      "op": "read",
+      "owner": "B",
+      "actor": "A",
+      "target_doc": "doc0003",
+      "share_origin": "none",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "A",
+        "doc_id": "doc0003",
+        "op": "read",
+        "doc_owner": "B",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0003"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S2",
+      "intent": "无共享 + 访问他人对象 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "none",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S3",
+      "intent": "拥有者显式共享给访问者，访问者访问该对象 → 合法（E3 例外，授权由框架创建、可观测）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": true,
+        "inband_records": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ]
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0001/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S4",
+      "intent": "存在共享 a1，但访问未共享的 a2 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S5",
+      "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "op": "write",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S6",
+      "intent": "**预存**共享（带外种入，框架无记录），访问者访问该对象 → 合法，但授权对框架不可观测",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0001/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 0,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln0-unlisted-nointro"
+      },
+      "scenario": "S7",
+      "intent": "**预存**共享（带外种入），访问者访问未共享的另一对象 → 越权（检验检测力是否受损）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": false,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": false,
+        "equal": false,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "pass",
+          "reason": "MR 未触发，无需裁决",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 0
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S1",
+      "intent": "无共享阴性对照：跨用户访问同一对象，应用应正确拒绝",
+      "op": "read",
+      "owner": "B",
+      "actor": "A",
+      "target_doc": "doc0003",
+      "share_origin": "none",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "A",
+        "doc_id": "doc0003",
+        "op": "read",
+        "doc_owner": "B",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-B-main",
+          "id": "doc0003",
+          "owner": "B",
+          "title": "B-main"
+        },
+        "url": "/doc/doc0003"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0003/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S2",
+      "intent": "无共享 + 访问他人对象 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "none",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0001/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S3",
+      "intent": "拥有者显式共享给访问者，访问者访问该对象 → 合法（E3 例外，授权由框架创建、可观测）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": true,
+        "inband_records": [
+          {
+            "doc_id": "doc0001",
+            "grantee": "B",
+            "permission": "read",
+            "by": "A",
+            "status": 200,
+            "resp": {
+              "by": "A",
+              "grantee": "B",
+              "origin": "api",
+              "permission": "read",
+              "share_id": "sh0004"
+            }
+          }
+        ]
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": false,
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": true,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0001/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S4",
+      "intent": "存在共享 a1，但访问未共享的 a2 → 越权",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "framework",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0002/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S5",
+      "intent": "共享为只读，访问者发起写 → 写越权（E3 权限层级不覆盖）",
+      "op": "write",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "framework",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "mutated-by-follower",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0001/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S6",
+      "intent": "**预存**共享（带外种入，框架无记录），访问者访问该对象 → 合法，但授权对框架不可观测",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0001",
+      "share_origin": "out_of_band",
+      "truth": "normal",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": true,
+        "app_allowed": true,
+        "truth": "normal",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-main",
+          "id": "doc0001",
+          "owner": "A",
+          "title": "A-main"
+        },
+        "url": "/doc/doc0001"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": false,
+          "fp": true,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0001/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    },
+    {
+      "config": {
+        "mode": "e3",
+        "vulnerable": 1,
+        "share_visibility": "unlisted",
+        "introspection": "off",
+        "label": "V-E3-vuln1-unlisted-nointro"
+      },
+      "scenario": "S7",
+      "intent": "**预存**共享（带外种入），访问者访问未共享的另一对象 → 越权（检验检测力是否受损）",
+      "op": "read",
+      "owner": "A",
+      "actor": "B",
+      "target_doc": "doc0002",
+      "share_origin": "out_of_band",
+      "truth": "bola",
+      "truth_detail": {
+        "actor": "B",
+        "doc_id": "doc0002",
+        "op": "read",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      },
+      "out1": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "out2": {
+        "status": 200,
+        "body": {
+          "content": "content-of-A-second",
+          "id": "doc0002",
+          "owner": "A",
+          "title": "A-second"
+        },
+        "url": "/doc/doc0002"
+      },
+      "signals": {
+        "owner_ok": true,
+        "actor_ok": true,
+        "equal": true,
+        "inband_covering": false,
+        "inband_records": []
+      },
+      "methods": {
+        "B1_status_only": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B2_diff_equal": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "B3_diff_inband": {
+          "alarm": true,
+          "tp": true,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": false
+        },
+        "ours_mr_v3": {
+          "alarm": false,
+          "verdict": "indeterminate",
+          "reason": "应用未暴露授权自省面（GET /doc/doc0002/shares 不可读），无法排除不透明的对象级授权 —— 按可容许条件必须弃权，不得升级为确证",
+          "tp": false,
+          "fp": false,
+          "fn": false,
+          "tn": false,
+          "abstain": true
+        }
+      },
+      "budget": {
+        "probe_requests": 2,
+        "ours_extra_requests": 1
+      }
+    }
+  ]
+}

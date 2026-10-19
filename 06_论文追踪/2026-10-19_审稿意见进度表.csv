@@ -5,7 +5,7 @@ R1.3,R1.3 状态转移,CLOSED_IN_TEXT,§V 作用域补“请求—判定窗口�
 R1.4,R1.4 oracle admissibility,PARTIAL,A2 时间链改为按摘要绑定并披露 written_at 矛盾；admissibility 仍未给出可照做的判定程序,no,internal
 R1.5,R1.5 命题2,CLOSED_IN_TEXT,等价式改为 A=D ⇔ y=0 或 m=o；删去外延相等，改证 H⇒D；3 条差异归为 S5 写场景漏报,yes,internal
 R1.6,R1.6 枚举设计,CLOSED_IN_TEXT,blind/aware 命名复原；对账改以 S3–S7 原网格为起点并逐记录校验；每格 12/6 条；listed+unreadable 改称未测,yes,internal
-R1.7,R1.7 竞争基线,OPEN,未执行多账号/差分基线；仅在 related work 与 threats 说明未做且不主张检测优势,no,internal
+R1.7,R1.7 竞争基线,CLOSED_IN_EXPERIMENT,新增 run_baseline.py：42 格受控实验，三种常规差分（status-only / 等值重放 / +框架账本压制）与 MR-002+v3 同一对探测请求对比；B1/B2 12 个假确证、B3 6 个（全在 S6 带外）、ours 0 个但 17 弃权（覆盖 59.52%）；Table 17 + §D,no,internal
 R1.8,R1.8 渠道混淆,PARTIAL,Gitea/GitLab 渠道表 + 单渠道互斥分组已写明；Gogs 缺逐渠道四格表，已明确声明,no,internal
 R1.9,R1.9 独立缺陷,PARTIAL,真实配对改为“只检验闸门、未跑 MR”；多缺陷 recall 明确未做,no,internal
 R1.10,R1.10 live对照控制,CLOSED_IN_TEXT,A2 先后改由 run 记录摘要绑定；written_at 矛盾单列说明，不改原件,yes,internal

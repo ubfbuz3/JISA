@@ -56,6 +56,8 @@ RAW_INPUTS = [
     "experiments/real_system/results/temporal/temporal_gitea.json",
     "experiments/real_system/results/temporal/temporal_gitlab.json",
     "experiments/real_system/results/temporal/pilot_cascade/temporal_gitlab_pilot.json",
+    # ingest_baseline.py  (R1.7 competitive baseline: 42 controlled cells)
+    "experiments/results/baseline_compare.json",
 ]
 
 # --- (b) byte-reproducible outputs the pipeline emits (output integrity) -
