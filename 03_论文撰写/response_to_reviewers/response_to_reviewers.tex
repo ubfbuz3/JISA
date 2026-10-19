@@ -284,9 +284,9 @@ studied both alarms reduce to $y\wedge\neg m$ against $D=y\wedge\neg o$. What is
 verified empirically is that predicate reduction. What holds algebraically is
 $A=D$ if and only if $y=0$ or $m=o$, together with $H\Rightarrow D$.
 Premise~(ii) of the lemma---that the model is $O$-determined on the domain---is
-\emph{not} claimed: it does not hold on the recorded domain, row~7 of Table~18
-shows one way a correct oracle and a stale model can disagree (row~8 the same
-when $O$ is allow), and the
+\emph{not} claimed: it does not hold on the recorded domain---rows~7 and~8 of
+Table~18 share $O=\mathrm{allow}$ but differ in $M$, so $O$ does not determine
+$M$ there---and the
 manuscript says so rather than presenting the relation as informationally
 redundant in general. The explicit predicates are written out ($A_{002}=\neg sup(B,A)\wedge\neg m\wedge\neg err(o_1)\wedge
 q(o_1,o_2)$ and $A_{004}=y\wedge\neg m$, against $D=y\wedge\neg o$), and on the
@@ -619,7 +619,10 @@ commit) are generated from frozen inputs---the recorded upstream version,
 its content digest and the patch manifest archived with the run---rather than
 from a live checkout of the upstream workspace, so the outputs are a function
 of archived records alone; the live \texttt{git status} remains available only
-as an additional diagnostic and never feeds a reported number. The pipeline
+as an additional diagnostic and never feeds a reported number. The regeneration
+is same-host: it runs from the archived records on the same machine as the
+original experiments, against the pinned external MST source dependency, and it
+is not an independent rerun of the live experiments. The pipeline
 validates input hashes at entry, so an unverified or modified input fails the
 run before any table is produced, and the two
 artefact layers are documented separately: the 93-file LaTeX package

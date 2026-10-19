@@ -192,13 +192,13 @@ authorization surface reports no granting channel, regardless of the request
 outcome. On the \CvgN{} records it decides \CvgDirOnlyDecided{} (the same
 abstention set as \texttt{direct\_observe}, so the two differ in rule, not in
 coverage) and it is right on \CvgDirOnlyTP{} true violations. Its
-\CvgDirOnlyFP{} false proofs are not, however, strict false proofs in the sense
-defined in Section~\ref{sec:protocol}: every one of them falls on a request the
-server in fact denied, so no unauthorized access resulted
+\CvgDirOnlyFP{} invalid violation claims are not, however, strict false proofs in
+the sense defined in Section~\ref{sec:protocol}: every one of them falls on a
+request the server in fact denied, so no unauthorized access resulted
 (\CvgDirOnlyFpNoEffect{} of \CvgDirOnlyFP{} without violation effect,
-\CvgDirOnlyFpEffect{} on allowed requests). They are invalid violation
-claims---the oracle's ``no granting channel'' read as a violation claim that the
-request outcome contradicts---and its selective risk over the decided set is
+\CvgDirOnlyFpEffect{} on allowed requests). They arise from reading the oracle's
+``no granting channel'' as a violation claim that the request outcome
+contradicts, and its selective risk over the decided set is
 \CvgDirOnlyRiskPct\%, not zero. Keeping the rule fixed across both tables is what
 exposes this cost; a table that silently added the request-success condition to
 this row would have reported a zero risk that the method never earned.

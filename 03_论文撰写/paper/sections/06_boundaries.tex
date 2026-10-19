@@ -79,7 +79,8 @@ through $(O,R)$ as $g'(O,R):=g(a'(O,R),O,R)$.
 
 The lemma is deliberately weak: it says that \emph{if} a detector reads nothing
 beyond the model and the response, its verdict cannot carry information the pair
-$(O,R)$ lacks. It does not say that any particular implementation satisfies (i)
+$(O,R)$ lacks---but only when both premises (i) and (ii) hold on the domain. It
+does not say that any particular implementation satisfies (i)
 or (ii), and it does not compare two programs---it compares two functions on a
 domain.
 
@@ -114,9 +115,9 @@ $y=1$, $m=0$ and $o=1$---the oracle answers correctly, the model is stale, and
 the relation raises a false proof that $D$ does not. The tempting step from
 ``the oracle is readable and correct'' to ``$M$ and $O$ agree'' is therefore
 invalid, and we do not take it; premise~(ii) of the lemma does not hold on the
-recorded domain, and row~7 shows one way a correct oracle and a stale model can
-disagree---row~8 exhibits the same disagreement when $O$ is
-\emph{allow}---which is why we do not present the relation as informationally redundant
+recorded domain: rows~7 and~8 share $O=\mathrm{allow}$ but carry different
+values of $M$, so $O$ does not determine $M$ there---which is why we do not
+present the relation as informationally redundant
 in general, only as non-additive in confirmation once a definite oracle exists.
 What the proposition establishes is narrower
 and sufficient for the argument: once a definite oracle is available, promotion

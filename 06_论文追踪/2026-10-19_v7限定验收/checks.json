@@ -1,0 +1,75 @@
+{
+  "head": "e0ae5aa",
+  "abstract": {
+    "words": 220,
+    "paragraphs": 1
+  },
+  "main": {
+    "pages": 30,
+    "sha256": "68e57057c50912b1e1117f4eac19619715227c1ca23bae38bd3c1e255336fe6c",
+    "author": "Qiulong Lin and Nanlei Chen",
+    "annotations": 0
+  },
+  "letter": {
+    "pages": 11,
+    "sha256": "3edbe2b014c40e017ed096d501654a2b680665107b7611bbdc7a89bbe5dea825",
+    "author": "Qiulong Lin and Nanlei Chen",
+    "annotations": 0
+  },
+  "highlighted": {
+    "pages": 30,
+    "sha256": "7142108b293d0e9a23410012d5cf814f342b79c4e725e96c8ffdc9b41cb9f95a",
+    "author": "Qiulong Lin and Nanlei Chen",
+    "annotations": 2003
+  },
+  "clean_marked_text_identical": true,
+  "zip": {
+    "files": 93,
+    "sha256": "26f54f6e4bd5c40745dec1b0c7c8a62ae3f00001c17924aeaadf9a883dcaa0a2",
+    "crc_error": null,
+    "source_mismatch": []
+  },
+  "reply_blocks": {
+    "Concern": 21,
+    "Response": 21,
+    "Action": 21
+  },
+  "gap_rows": [
+    "R1.4",
+    "R1.7",
+    "R1.9"
+  ],
+  "norm_distinguishes_cases": {
+    "not": true,
+    "ascii_operator": true,
+    "quantifier": true,
+    "role_order": true,
+    "unicode_operator": true
+  },
+  "table_pages": {
+    "1": 5,
+    "2": 5,
+    "3": 8,
+    "4": 9,
+    "5": 10,
+    "6": 11,
+    "7": 11,
+    "8": 12,
+    "9": 12,
+    "10": 12,
+    "11": 14,
+    "12": 15,
+    "13": 15,
+    "14": 15,
+    "15": 16,
+    "16": 16,
+    "17": 17,
+    "18": 20,
+    "19": 22,
+    "20": 23,
+    "21": 24,
+    "22": 24,
+    "23": 25,
+    "24": 26
+  }
+}

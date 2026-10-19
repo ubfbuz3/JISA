@@ -1,6 +1,6 @@
 baseline sha256 : d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c
 baseline pages  : 16 ; revised pages : 30
-changed lines   : 2003 (of which short lines: 325)
+changed lines   : 2003 (of which short lines: 324)
 deleted lines   : 291
 page 1: 34
 page 2: 43
@@ -451,27 +451,27 @@ p7	count the review derived from the pooled table.
 p7	direct_only is scored under its own adjudication rule,
 p7	which is also the rule Table 3 uses: assert a violation whenever
 p7	the authorization surface reports no granting channel, regard-
-p7	less of the request outcome. On the 576 records it decides 312
-p7	(the same abstention set as direct_observe, so the two
-p7	differ in rule, not in coverage) and it is right on 108 true viola-
-p7	tions. Its 108 false proofs are not, however, strict false proofs
-p7	in the sense defined in Section III: every one of them falls on
-p7	a request the server in fact denied, so no unauthorized access
-p7	resulted (108 of 108 without violation effect, 0 on allowed
-p7	requests). They are invalid violation claims—the oracle’s ‘‘no
-p7	granting channel’’ read as a violation claim that the request
-p7	outcome contradicts—and its selective risk over the decided
-p7	set is 34.62%, not zero. Keeping the rule fixed across both
-p7	tables is what exposes this cost; a table that silently added the
-p7	request-success condition to this row would have reported a
+p7	less of the request outcome. On the 576 records it decides
+p7	312 (the same abstention set as direct_observe, so the
+p7	two differ in rule, not in coverage) and it is right on 108 true
+p7	violations. Its 108 invalid violation claims are not, however,
+p7	strict false proofs in the sense defined in Section III: every
+p7	one of them falls on a request the server in fact denied, so no
+p7	unauthorized access resulted (108 of 108 without violation
+p7	effect, 0 on allowed requests). They arise from reading the
+p7	oracle’s ‘‘no granting channel’’ as a violation claim that the
+p7	request outcome contradicts, and its selective risk over the
+p7	decided set is 34.62%, not zero. Keeping the rule fixed across
+p7	both tables is what exposes this cost; a table that silently added
+p7	the request-success condition to this row would have reported
 p8	TABLE 3. End-to-end confusion matrix over all 576 records (216 true violations, 360 correct cases). The record
 p8	raw (no exception handling)
 p8	[short]	0.64
 p8	v1 (existence filter)
 p8	v2 (existence + coverage)
-p8	zero risk that the method never earned. The overlap of v3’s
-p8	decisions with direct_only’s covers 240 records—the
-p8	312 records on which the direct method decides minus the
+p8	a zero risk that the method never earned. The overlap of
+p8	v3’s decisions with direct_only’s covers 240 records—
+p8	the 312 records on which the direct method decides minus the
 p8	72 records on which v3 additionally declines on a readable
 p8	covering surface—and the violation-detection difference on
 p8	comparable denominators is stated with its own denominator,
@@ -1194,10 +1194,11 @@ p18	A = a′(O, R), so g factors through (O, R) as g′(O, R) :=
 p18	g(a′(O, R), O, R).
 p18	The lemma is deliberately weak: it says that if a detector
 p18	reads nothing beyond the model and the response, its verdict
-p18	cannot carry information the pair (O, R) lacks. It does not say
-p18	that any particular implementation satisfies (i) or (ii), and it
-p18	does not compare two programs—it compares two functions
-p18	on a domain.
+p18	cannot carry information the pair (O, R) lacks—but only
+p18	when both premises (i) and (ii) hold on the domain. It does
+p18	not say that any particular implementation satisfies (i) or (ii),
+p18	and it does not compare two programs—it compares two
+p18	functions on a domain.
 p18	Proposition 2 (what the relation can add once the oracle is
 p18	admitted). For the two relations examined here, premise (i) of
 p18	Lemma 1 holds by source inspection: their predicates read the
@@ -1227,19 +1228,18 @@ p18	14 cells with y = 1, m = 0 and o = 1—the oracle answers
 p18	correctly, the model is stale, and the relation raises a false
 p18	proof that D does not. The tempting step from ‘‘the oracle
 p18	is readable and correct’’ to ‘‘M and O agree’’ is therefore
-p18	invalid, and we do not take it; premise (ii) of the lemma does
-p18	not hold on the recorded domain, and row 7 shows one way a
-p18	correct oracle and a stale model can disagree—row 8 exhibits
-p18	the same disagreement when O is allow—which is why we
-p18	do not present the relation as informationally redundant in
-p18	general, only as non-additive in confirmation once a definite
-p18	oracle exists. What the proposition establishes is narrower and
-p18	sufficient for the argument: once a definite oracle is available,
-p18	promotion through the relation is a subset of direct adju-
-p18	dication, so the relation cannot add confirmations. Whether
-p18	m = o holds is a measured property of each system, reported
-p18	in Table 18 and in Section IV-F, not a corollary of oracle
-p18	[short]	correctness.
+p18	invalid, and we do not take it; premise (ii) of the lemma
+p18	does not hold on the recorded domain: rows 7 and 8 share
+p18	O = allow but carry different values of M, so O does
+p18	not determine M there—which is why we do not present
+p18	the relation as informationally redundant in general, only as
+p18	non-additive in confirmation once a definite oracle exists.
+p18	What the proposition establishes is narrower and sufficient for
+p18	the argument: once a definite oracle is available, promotion
+p18	through the relation is a subset of direct adjudication, so the
+p18	relation cannot add confirmations. Whether m = o holds is a
+p18	measured property of each system, reported in Table 18 and
+p18	in Section IV-F, not a corollary of oracle correctness.
 p18	The predicates, explicitly. The two shipped predicates read
 p18	A002 = ¬sup(B, A) ∧¬m
 p18	∧¬err(o1) ∧q(o1, o2),
