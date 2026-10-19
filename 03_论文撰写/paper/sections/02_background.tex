@@ -23,11 +23,18 @@ subject cannot reach it; the relation then treats the successful response as a
 violation. Every step is exactly as specified, so no guard is miswritten: the
 predicate's two representations---``reachable as recorded'' and ``not reachable
 as recorded''---cannot express ``reachable, but only after the record was
-taken''. Recrawling the \emph{same} interface does not remove the false proof,
-because the grant need not be visible through the subject's interface at all;
-only a recrawl that can observe the granting channel removes it, which is what
-the temporal experiment does when a privileged recrawl repairs all
-\TmpBothFixed{} stale cells. The reported specificity does not register the
+taken''. Two different cures exist for two different situations, and they must
+not be conflated. When the grant makes the object listable through the
+subject's own interface, a \emph{re-enumeration with the same credential}
+picks it up: in the temporal experiment such a same-credential recrawl repairs
+all \TmpBothFixed{} stale cells, and no elevation of credential is involved.
+When instead the object never enters that crawl source at all---the granting
+channel is invisible to the crawled interface---no amount of re-enumerating
+repairs the model, and that is the boundary the Gogs residual cells in
+Section~\ref{sec:gogs} illustrate. Observing the repair therefore requires only
+re-listing objects, not reading the administrative event that caused the
+grant, and the temporal experiment's repair claim is a same-credential one.
+The reported specificity does not register the
 failure either, because it is a property of the adjudication's \emph{reading
 moment} rather than of any single generated input.
 This is the mechanism the rest of the paper measures, and the reason we speak of

@@ -1,0 +1,27 @@
+{
+  "manuscript": {
+    "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_v3正文独立复核\\isolated_builds\\manuscript_vze3xvmb",
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "pages": 28,
+    "same_text_as_shipped": true,
+    "undefined_references": false,
+    "tex_errors": []
+  },
+  "response": {
+    "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_v3正文独立复核\\isolated_builds\\response_ulukviie",
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "pages": 10,
+    "same_text_as_shipped": true,
+    "undefined_references": false,
+    "tex_errors": []
+  }
+}

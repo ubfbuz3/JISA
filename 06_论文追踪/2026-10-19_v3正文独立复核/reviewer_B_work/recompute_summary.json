@@ -1,0 +1,178 @@
+{
+  "runs": [
+    {
+      "script": "compute_all.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_native_engine.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_gogs.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_gogs_channel.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_gitlab.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_seeded.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_cve_pair.py",
+      "returncode": 0
+    },
+    {
+      "script": "test_cve_pair_validation.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_temporal.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_truth.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_m2_stratum.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_design.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_coverage.py",
+      "returncode": 0
+    },
+    {
+      "script": "ingest_baseline.py",
+      "returncode": 0
+    }
+  ],
+  "comparison": [
+    {
+      "name": "attribution_table.tex",
+      "equal": true
+    },
+    {
+      "name": "baseline_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "baseline_table.tex",
+      "equal": true
+    },
+    {
+      "name": "coverage_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "coverage_table.tex",
+      "equal": true
+    },
+    {
+      "name": "cve_pair_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "cve_pair_table.tex",
+      "equal": true
+    },
+    {
+      "name": "design_census_table.tex",
+      "equal": true
+    },
+    {
+      "name": "design_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "design_table.tex",
+      "equal": true
+    },
+    {
+      "name": "gitlab_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "gogs_channel_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "gogs_channel_table.tex",
+      "equal": true
+    },
+    {
+      "name": "gogs_cross_table.tex",
+      "equal": true
+    },
+    {
+      "name": "gogs_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "m2_stratum.json",
+      "equal": true
+    },
+    {
+      "name": "m2_stratum.tex",
+      "equal": true
+    },
+    {
+      "name": "metrics.json",
+      "equal": false
+    },
+    {
+      "name": "native_engine_numbers.tex",
+      "equal": false
+    },
+    {
+      "name": "native_engine_table.tex",
+      "equal": true
+    },
+    {
+      "name": "native_split_table.tex",
+      "equal": true
+    },
+    {
+      "name": "numbers.tex",
+      "equal": false
+    },
+    {
+      "name": "reconcile_table.tex",
+      "equal": true
+    },
+    {
+      "name": "seeded_table.tex",
+      "equal": true
+    },
+    {
+      "name": "temporal_channel_table.tex",
+      "equal": true
+    },
+    {
+      "name": "temporal_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "temporal_table.tex",
+      "equal": true
+    },
+    {
+      "name": "truth_numbers.tex",
+      "equal": true
+    },
+    {
+      "name": "truth_table.tex",
+      "equal": true
+    }
+  ]
+}

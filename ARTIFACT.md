@@ -4,9 +4,16 @@ This document lists everything a third party needs to **reproduce every number
 and table in the paper** and to **re-run the experiments**. It is the companion
 to `reproduce.sh`.
 
-> Status: the seeded positive-control experiment has been **run** (see §4);
-> its inputs, scripts and JSON output are part of this artifact. GitHub
-> publication awaits repository creation (see §5).
+> Status (updated 2026-10-19): the artifact is **published**. The repository is
+> on GitHub (tag `artifact-v1`, commit `a86cd4c`, archived with Zenodo DOI
+> `10.5281/zenodo.22859942`); the resubmission freeze is tag
+> `access-resubmission-v3` and later. Input/output integrity: SHA-256
+> manifests over **23 raw records** (including the frozen upstream source
+> state) and **30 byte-reproducible outputs**, enforced at pipeline entry by
+> `reproduce.sh` step 0 (`make_manifests.py --check`). The historical
+> source-state facts of the native run are generated from
+> `experiments/native_engine/results/frozen_source_state.json` (produced by
+> `analysis/freeze_native_sources.py`), not from a live checkout.
 
 ## 1. What to publish on GitHub
 
@@ -15,8 +22,14 @@ to `reproduce.sh`.
   `ingest_native_engine.py`, `ingest_gogs.py`, `ingest_gitlab.py`,
   `ingest_seeded.py`, `ingest_cve_pair.py`, `ingest_temporal.py`,
   `ingest_m2_stratum.py`, `ingest_truth.py`, `ingest_design.py`,
-  `ingest_coverage.py`, `make_diagrams.py`,
-  `normalize_bib.py`, `check_macros.py`. `ingest_truth.py` also *verifies*
+  `ingest_coverage.py`, `ingest_gogs_channel.py`, `ingest_baseline.py`,
+  `freeze_native_sources.py`, `make_manifests.py`, `make_diagrams.py`,
+  `normalize_bib.py`, `check_macros.py`. Historical source-state facts are
+  frozen inputs (`freeze_native_sources.py` ->
+  `frozen_source_state.json`), so `ingest_native_engine.py` and
+  `compute_all.py` are deterministic functions of archived records; a live
+  checkout is consulted only as a diagnostic and never feeds a reported
+  number. `ingest_truth.py` also *verifies*
   the manuscript's two Boolean predicates against every recorded verdict
   (576 constructed records, 712 temporal cells) before it emits
   `results/truth_numbers.tex` and `results/truth_table.tex`; a mismatch
@@ -160,12 +173,11 @@ external services), then `python 04_绘图与分析/analysis/ingest_seeded.py`.
 
 ## 5. GitHub publication
 
-The repository layout follows §1. Publication steps: create the repo,
-`git init && git add && git commit`, tag the release commit, and push. The
-commit hash, the raw JSON records and their SHA-256 checksums (§1) must be
-recorded in the camera-ready's artifact footnote. `gh` CLI / a push token was
-not available on the build host at artifact-freeze time, so the push itself
-is performed by the corresponding author.
+**Done.** The repository is published on GitHub and archived on Zenodo
+(DOI `10.5281/zenodo.22859942`). The commit hash and the raw-records SHA-256
+manifests (§1) are recorded in the manuscript's artifact footnote; refresh the
+manifests (`make_manifests.py`) and commit them together with any legitimate
+change to the raw records or the generation scripts.
 
 ## 6. One-command self-check (clean-environment + reproducibility)
 
@@ -174,11 +186,12 @@ and reproducible:
 
 - `bash verify_artifact.sh`  (or `bash reproduce.sh check`) — pre-flight of the
   toolchain (Python + svglib/reportlab/matplotlib/pandas, pdflatex, bibtex;
-  Docker is noted as optional for re-running the live labs); SHA-256 of all 12 raw
-  records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 10
+  Docker is noted as optional for re-running the live labs); SHA-256 of all 23
+  raw records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 30
   byte-reproducible outputs (every number-bearing `.tex`, `metrics.json`, and the
   two vector diagrams) vs `provenance/OUTPUTS_SHA256.json`; plus a git
-  working-tree status note.
+  working-tree status note. The same input check runs at the entry of every
+  `reproduce.sh` invocation, before any generator executes.
 - `bash verify_artifact.sh repro` — extracts the *committed* tree with
   `git archive HEAD` into a throw-away copy, re-runs the full analysis pipeline,
   and confirms every output regenerates byte-for-byte. The working tree is never

@@ -1,0 +1,322 @@
+--- baseline/sections/03_protocol.tex
++++ current/sections/03_protocol.tex
+@@ -1,103 +1,216 @@
+-\section{Protocol: a faithful three-phase instantiation}
+-\label{sec:protocol}
+-
+-Two instruments carry distinct claims. The three-phase instantiation below
+-carries the quantitative results of Sections~\ref{sec:synthetic}
+-and~\ref{sec:realsystem}; a direct execution of the library's own
+-relations---source unmodified, with the build configuration and a replay harness
+-added---carries one qualitative claim, that the published code produces the
+-false proof we predict (Section~\ref{sec:native-run}). Neither instrument is a
+-benchmark: the standing scope and non-claims are collected in
+-Section~\ref{sec:threats}, and neither yields a claim of detector accuracy.
+-
+-\paragraph{Three phases}
+-(A)~\emph{Crawl}: record, per subject and object, whether the subject can reach
+-the object through the interface, and freeze that record---the model the
+-predicates will consult. (B)~\emph{Change authorization out of band}: alter a
+-(subject, object) entitlement through a channel outside the crawled interface;
+-the frozen model is not updated, because the architecture has no mechanism to
+-update it. (C)~\emph{Execute the MR} against the current state while the
+-predicates consult the frozen model. Phase~B is what the original evaluation
+-does not exercise, and it is where the reachability stand-in can be wrong
+-(Fig.~\ref{fig:protocol}).
+-
+-\begin{figure*}[t]
+-\centering
+-\includegraphics[width=0.72\textwidth]{fig1_protocol.pdf}
+-\caption{The three-phase instantiation. The predicates consult the reachability
+-model frozen in Phase~A. A Phase~B entitlement change made outside the crawled
+-interface leaves that model stale, so in Phase~C a legitimately granted access
+-has no representation but ``cannot reach''; the exception predicate is not
+-discharged and the alarm is promoted to a proven violation---the false proof of
+-Finding~1.}
+-\label{fig:protocol}
+-\end{figure*}
+-
+-\paragraph{Adjudicator variants and internal controls}
+-A raw alarm becomes a verdict through an exception policy, and different policies
+-are different methods: \textbf{v1} (raw alarms proven); \textbf{v2}
+-(legitimate-sharing exceptions filtered); \textbf{v3} (state-calibrated---consults
+-a readable authorization introspection surface, abstains when none is readable);
+-\texttt{degrade\_all} (the floor: abstain on every alarm);
+-\texttt{direct\_only} (authorization surface only, access outcome ignored---a
+-deliberately unfair control); and \texttt{direct\_observe} (a succeeding plain
+-request checked against the same readable surface). The last consumes the same
+-observable quantity as the MR family and decides the negative result.
+-
+-\paragraph{Ground truth}
+-Every quantitative result names its ground-truth source, and it is never the
+-detector under test: construction state for the constructed system and the
+-scenario/configuration study; system-specific live re-probes of effective
+-authorization (the per-system validation procedure is described in
+-Section~\ref{sec:realsystem}) for Gitea, Gogs and GitLab; the pinned route tables for the grant census;
+-and the seed list for the seeded target.
+-
+-\paragraph{Scenarios and design cells}
+-Seven scenarios separate the reasons an MR can misfire: no shared object (S1,
+-S2); an in-band legitimate share visible in the framework log (S3); an unshared
+-plain violation (S4); a read-only share plus a write violation (S5); an
+-out-of-band share invisible to the framework log (S6); an out-of-band share plus
+-a genuine violation (S7). They are crossed with \ResSynConfigs{} configurations
+-defined by instantiation mode, enforcement correctness, channel visibility and
+-introspection availability. The nominal cross is
+-$\ResDesignScenarios{}\times\ResSynConfigs{}$ combinations,
+-but four are inadmissible: the two no-exception configurations
+-(\texttt{V-noE3-vuln0}, \texttt{V-noE3-vuln1}) are undefined under the two
+-out-of-band scenarios (S6, S7), where the legitimate-sharing exception does not
+-apply. This leaves \ResDesignCells{} admissible design cells.
+-
+-\paragraph{Statistical treatment}
+-The \ResSynRecords{} records are not independent observations. Each admissible
+-cell is expanded deterministically by the factors that are actually varied:
+-\ResDesignMrs{} metamorphic relations (MR-002, MR-004), \ResDesignPrecondVariants{}
+-exception-policy variants (raw, one level, two levels---the first deliberately
+-thrown switch), and \ResDesignGuiModes{} reachability readings (the frozen
+-crawl-time snapshot and the live execution-time state---the second deliberately
+-thrown switch). The two relations do not both apply to every cell: only MR-002 applies
+-under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while
+-the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
+-\[
+-\ResSynRecords{} = \ResDesignCellsTwoMr{}\cdot\ResDesignMrs{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}
+-+ \ResDesignCellsOneMr{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{},
+-\]
+-a deliberately unbalanced design---the per-cell multiplier differs by
+-scenario. The records are therefore a fixed enumeration, not a sample: we report
+-counts, rates and design-cell denominators, and we attach no inferential
+-interval to any of them. Where a headline count has a small denominator we say
+-so explicitly (the anchored rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is
+-unstable by construction) and lead with the larger-denominator count of the same
+-phenomenon. No conclusion rests on statistical significance. Where a comparison
+-is paired---the ablation of Section~\ref{sec:synthetic-ablation}---we report
+-discordant-pair counts rather than an interval over a difference. The
+-replication ceiling is
+-explicit: one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs,
+-three real systems.
+-
+-\paragraph{Tooling and code provenance}
+-Development of the analysis scripts was assisted by an AI coding assistant
+-(declared in the Declarations). Every script that assistant touched was
+-reviewed, executed, and its output checked by the authors against the raw
+-records; the released pipeline recomputes every reported scalar from those
+-records, every table is generated by the pipeline, and the macro files and the
+-two auto-generated tables share a single source of truth. No AI tool
+-participated in the detection loop or in any adjudication.
++\section{Protocol: a faithful three-phase instantiation}
++\label{sec:protocol}
++
++Two instruments carry distinct claims. The three-phase instantiation below
++carries the quantitative results of Sections~\ref{sec:synthetic}
++and~\ref{sec:realsystem}; a direct execution of the library's own
++relations---source unmodified, with the build configuration and a replay harness
++added---carries one qualitative claim, that the published code produces the
++false proof we predict (Section~\ref{sec:native-run}). Neither instrument is a
++benchmark: the standing scope and non-claims are collected in
++Section~\ref{sec:threats}, and neither yields a claim of detector accuracy.
++
++\paragraph{Three phases}
++(A)~\emph{Crawl}: record, per subject and object, whether the subject can reach
++the object through the interface, and freeze that record---the model the
++predicates will consult. (B)~\emph{Change authorization out of band}: alter a
++(subject, object) entitlement through a channel outside the crawled interface;
++the frozen model is not updated, because the architecture has no mechanism to
++update it. (C)~\emph{Execute the MR} against the current state while the
++predicates consult the frozen model. Phase~B is what the original evaluation
++does not exercise, and it is where the reachability stand-in can be wrong
++(Fig.~\ref{fig:protocol}).
++
++\begin{figure*}[t]
++\centering
++\includegraphics[width=0.72\textwidth]{fig1_protocol.pdf}
++\caption{The three-phase instantiation. The predicates consult the reachability
++model frozen in Phase~A. A Phase~B entitlement change made outside the crawled
++interface leaves that model stale, so in Phase~C a legitimately granted access
++has no representation but ``cannot reach''; the exception predicate is not
++discharged and the alarm is promoted to a proven violation---the false proof of
++Finding~1.}
++\label{fig:protocol}
++\end{figure*}
++
++\paragraph{Adjudicator variants and internal controls}
++A raw alarm becomes a verdict through an exception policy, and different policies
++are different methods: \texttt{raw} (the alarm itself, with no exception handling
++at all---this is the baseline any filter must be read against); \textbf{v1} (an
++\emph{existence} filter: any sharing record on the object downgrades the alarm,
++regardless of whom it names or what it permits); \textbf{v2} (existence plus
++operation coverage: the record must cover the operation the MR triggered);
++\textbf{v3} (state-calibrated---consults
++a readable authorization introspection surface, abstains when none is readable);
++\texttt{degrade\_all} (the floor: abstain on every alarm);
++\texttt{direct\_only} (authorization surface only, access outcome ignored---a
++deliberately unfair control); and \texttt{direct\_observe} (a succeeding plain
++request checked against the same readable surface). The last consumes the same
++observable quantity as the MR family and decides the negative result.
++
++\paragraph{Ground truth}
++Every quantitative result names its ground-truth source, and it is never the
++detector under test: construction state for the constructed system and the
++scenario/configuration study; system-specific live re-probes of effective
++authorization (the per-system validation procedure is described in
++Section~\ref{sec:realsystem}) for Gitea, Gogs and GitLab; the pinned route tables for the grant census;
++and the seed list for the seeded target.
++
++\paragraph{Unknown and failure handling}
++Each predicate can fail to yield a bit, and the handling is fixed by the
++pre-registered protocol before any cell is observed, not negotiated per result.
++The three failure modes are distinct and are stated as implemented.
++\emph{Transport-level retries:} an HTTP request that fails to connect (status~0)
++is re-issued up to two more times; this retry exists for the network, not for
++the transaction. \emph{$E$ undefined:} an entitlement-changing transaction that
++is refused or otherwise does not commit is \emph{not} retried at the
++transaction level---the runner issues it once, and the cell is marked
++\emph{failed} (reason \texttt{mutation\_failed}) and excluded from every
++denominator, with the exclusion count reported alongside the result.
++\emph{$Y$ undefined:} an execution error or timeout leaves the cell unscored,
++never coerced to \emph{allow} or \emph{deny}---in the native engine run,
++\NtMrTotal{} relations were attempted, \NtMrExecuted{} executed and
++\NtMrErrored{} errored, and the errored one is reported rather than silently
++dropped from the attempted count. \emph{$O$ undefined:} the introspection
++surface may return no definite answer; the state-calibrated method abstains on
++those cells by construction, and the channel table reports them in an explicit
++\emph{unanswered} column (\TmpUnansGitea{} Gitea and \TmpUnansGitlab{} GitLab
++cells for the anonymous reader, \GgChUnans{} on Gogs' authenticated reader)
++instead of absorbing them into \emph{deny}. On those cells $E$ and $Y$ remain
++scoreable---an unanswered oracle removes the oracle-based adjudicators, not the
++cell. The twelve-row truth table is defined over
++$E\in\{\text{allow},\text{deny}\}$; an $E$-undefined cell would fall outside
++its rows and be reported as excluded, not reassigned. $E$ itself is
++\texttt{unknown} when an object is absent from the ledger model. For a
++modelled object with no recorded granting channel, the pre-registered policy
++promised \texttt{unknown} (``the ledger models no channel for the triple''),
++while the shipped implementation returns a genuine \emph{deny} for that case,
++reserving \texttt{unknown} for the absent-object case and for the one channel
++the protocol singles out as unmodellable (deploy keys, which would have to
++surface as unknown). We disclose this protocol-to-implementation divergence
++rather than reconcile it silently. In the reported runs the two readings
++coincide in effect: the channel space of every modelled object is fixed by the
++setup ledger, no deploy-key-reachable cell exists in the topology, and the
++\TmpEDeny{} Gitea and \TmpGEDeny{} GitLab deny cells under the
++default-deny stratum are exactly the cells whose grant rows are absent---so no
++cell's verdict depends on which reading is taken. Were an unmodelled channel to
++arise, the contract marks the cell \texttt{unknown} rather than guessing. In
++the reported runs the
++failure-exclusion exits were never taken: all \TmpCellsTotal{} temporal cells
++and both Gogs readings committed, $E{=}Y$ throughout, and zero cells were
++excluded as failed; the \emph{unanswered-oracle} exits, by contrast, were
++taken, and their counts are the ones given above. The contract would bind any
++rerun on a degraded deployment. Missing or modified input records fail the
++pipeline outright (SHA-256 manifests over inputs and outputs are shipped with
++the artefact); the pipeline never substitutes a default value for an absent
++record.
++
++\paragraph{Scenarios and design cells}
++Seven scenarios separate the reasons an MR can misfire: no shared object (S1,
++S2); an in-band legitimate share visible in the framework log (S3); an unshared
++plain violation (S4); a read-only share plus a write violation (S5); an
++out-of-band share invisible to the framework log (S6); an out-of-band share plus
++a genuine violation (S7). They are crossed with \ResSynConfigs{} configurations
++defined by instantiation mode, enforcement correctness, channel visibility and
++introspection availability. The nominal cross is
++$\ResDesignScenarios{}\times\ResSynConfigs{}$ combinations,
++but four are inadmissible: the two no-exception configurations
++(\texttt{V-noE3-vuln0}, \texttt{V-noE3-vuln1}) are undefined under the two
++out-of-band scenarios (S6, S7), where the legitimate-sharing exception does not
++apply. This leaves \ResDesignCells{} admissible design cells.
++
++Table~\ref{tab:design} gives the complete cross, factor by factor: the levels of
++each, how it is varied, the number of records at each level, and what it is
++crossed with. Table~\ref{tab:design-census} in Section~\ref{sec:support} gives
++the cell-by-cell census---eight configurations by seven scenarios, with a dash
++wherever a combination is undefined. Two dimensions are nested rather than
++crossed, and we state them here instead of letting the tables imply a factorial
++that was not run: channel visibility exists only where the application offers a
++sharing facility, so the two no-exception configurations sit outside it; and the
++listed level was instantiated only with introspection on, so the combination
++\emph{listed and unreadable} is untested rather than shown to be impossible:
++a product can list a share and still refuse to answer the per-object
++introspection query, and this enumeration would not see it.
++
++\input{design_table.tex}
++
++\subsection{What the design varies, and what it can identify}
++\label{sec:identify}
++
++Because the exception policy and the reachability reading are thrown per record
++rather than held per configuration, every record has a partner that differs in
++that switch alone. Table~\ref{tab:attribution} uses that: it pairs records on
++configuration, scenario, relation and the other switch, and reports the
++discordant pairs. A contrast carried by some other factor would show up as
++movement in the paired cells; a contrast that is not there shows up as a zero.
++
++\input{attribution_table.tex}
++
++Three results come out of it, and they are stronger than the aggregate rates
++they explain. First, the reachability reading moves the outcome in one direction only:
++of \DsgGuiPairs{} blind--aware pairs, \DsgGuiFixedFP{} lose a false proof when
++the reading is aware and \DsgGuiNewFP{} gain one, while the same switch costs
++\DsgGuiLostTP{} detections and gains none. The aware reading is therefore a
++trade in a fixed direction, not noise around a rate. It is a statement about
++what the gate can see, not about when authorization changed: the constructed
++study seeds the out-of-band share before the run and never mutates entitlement
++inside it, so the temporal reading of this contrast belongs to
++Section~\ref{sec:realsystem}, not here. Second, the exception ladder has
++\emph{no} discordant pair at either step: raw and e1 differ on no individual
++record, and neither do e1 and e1e2. That is a stronger statement than the
++aggregate rate not moving---\DsgExcKeptFP{} records carry a false proof under all
++three policies---and it says the two exception predicates are, on this system,
++inert rather than merely weak. Third, oracle readability acts only where there
++is something to resolve: in the violating configuration \DsgReadGained{} of
++\DsgReadPairs{} paired records change from \texttt{violation-proven} to
++\texttt{indeterminate} when the surface is switched off, none the other way; in
++the correct configuration \DsgReadNullPairs{} pairs change not at all.
++
++What the design cannot identify follows from the two nested dimensions, and we
++prefer to name it. The interaction between channel visibility and readability is
++not estimable, because the listed-and-unreadable cell was not run; the
++readability contrast is identified within unlisted only, and we make no claim
++that readability moderates the listed channel. The legitimate-sharing mechanism
++is not identified under S6--S7, where it is undefined by construction, so the
++out-of-band estimates are for the e3 configurations alone. The two relations are
++not orthogonal to scenario---S5 carries MR-002 only---so we never compare
++relations with each other. What remains is balanced: every
++(exception policy, reachability reading) slice holds \DsgBalOn{} readable and
++\DsgBalOff{} unreadable records, so the readability contrast cannot be carried by
++either thrown switch.
++
++\paragraph{Statistical treatment}
++The \ResSynRecords{} records are not independent observations. Each admissible
++cell is expanded deterministically by the factors that are actually varied:
++\ResDesignMrs{} metamorphic relations (MR-002, MR-004), \ResDesignPrecondVariants{}
++exception-policy variants (raw, one level, two levels---the first deliberately
++thrown switch), and \ResDesignGuiModes{} reachability readings (a constant
++unreachable list and the listing current at execution---the second deliberately
++thrown switch). The second is a visibility manipulation, not a temporal one. The two relations do not both apply to every cell: only MR-002 applies
++under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while
++the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
++\[
++\ResSynRecords{} = \ResDesignCellsTwoMr{}\cdot\ResDesignMrs{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}
+++ \ResDesignCellsOneMr{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{},
++\]
++a deliberately unbalanced design---the per-cell multiplier differs by
++scenario. The records are therefore a fixed enumeration, not a sample: we report
++counts, rates and design-cell denominators, and we attach no inferential
++interval to any of them. Where a headline count has a small denominator we say
++so explicitly (the anchored rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is
++unstable by construction) and lead with the larger-denominator count of the same
++phenomenon. No conclusion rests on statistical significance. Where a comparison
++is paired---the ablation of Section~\ref{sec:synthetic-ablation}---we report
++discordant-pair counts rather than an interval over a difference. The
++replication ceiling is
++explicit: one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs,
++three real systems.
++
++\paragraph{Tooling and code provenance}
++Development of the analysis scripts was assisted by an AI coding assistant
++(declared in the Declarations). Every script that assistant touched was
++reviewed, executed, and its output checked by the authors against the raw
++records; the released pipeline recomputes every reported scalar from those
++records, every table is generated by the pipeline, and the macro files and the
++two auto-generated tables share a single source of truth. No AI tool
++participated in the detection loop or in any adjudication.

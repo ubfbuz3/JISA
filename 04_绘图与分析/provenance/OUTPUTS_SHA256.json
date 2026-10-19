@@ -18,13 +18,13 @@
     },
     {
       "path": "04_绘图与分析\\results\\coverage_numbers.tex",
-      "sha256": "b348a1e8831fa77769df0b3f10baa02d7b916c8db2cea4ca4f2f750f13ab0396",
-      "bytes": 2258
+      "sha256": "efb064a4bd376573c4e4cb29f3b58d31f9344d4568c6bffa999f4ac87b25c0f9",
+      "bytes": 2584
     },
     {
       "path": "04_绘图与分析\\results\\coverage_table.tex",
-      "sha256": "1b2114b9b6dadb5f59740f41a929ebc1fdaebf02520bed2310d08d5f5ca8af0f",
-      "bytes": 2449
+      "sha256": "361fc4d0b93f6bc0056469a835e644179cf7304877a29c8472cef6cc2e89ff56",
+      "bytes": 3099
     },
     {
       "path": "04_绘图与分析\\results\\cve_pair_numbers.tex",
@@ -118,8 +118,13 @@
     },
     {
       "path": "04_绘图与分析\\results\\temporal_numbers.tex",
-      "sha256": "af78240ad9c7d6feeb906ac20dc67230bd2e144fc73b6b81a1ebc6f77c7c559a",
-      "bytes": 2619
+      "sha256": "52e11b48c3e03306192b19f9bc462e8b7d919f88d0dd58da41642e6379332203",
+      "bytes": 3095
+    },
+    {
+      "path": "04_绘图与分析\\results\\temporal_sensitivity_table.tex",
+      "sha256": "3bbce8029e36ef6930e1d8375efdb684de0969d84464d9d8a4cf7a4c02d400e5",
+      "bytes": 1283
     },
     {
       "path": "04_绘图与分析\\results\\temporal_table.tex",
@@ -133,8 +138,8 @@
     },
     {
       "path": "04_绘图与分析\\results\\truth_table.tex",
-      "sha256": "bdabf1969ac3822cf777592eb97ab53a621245a9907a2d320489c30d01a18223",
-      "bytes": 2966
+      "sha256": "e9dfccc480bad5612eae5b2845071be55bc927e38626c644ee92f47852620b61",
+      "bytes": 3616
     },
     {
       "path": "04_绘图与分析/results/metrics.json",

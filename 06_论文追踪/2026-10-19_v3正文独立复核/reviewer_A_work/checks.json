@@ -1,0 +1,99 @@
+{
+  "matrix_predicates": {
+    "bad002": 0,
+    "bad004": 0,
+    "flat_bad": 0,
+    "n002": 312,
+    "n": 576
+  },
+  "temporal": {
+    "gitea": {
+      "cross_cells": 280,
+      "EY_agree": 280,
+      "flat_alarm_disagreement": 0,
+      "E_deny": 203,
+      "E_allow": 77,
+      "no_grant_channel": 203,
+      "literal_protocol_scoreable": 77,
+      "stale_false_proofs": 13,
+      "live_false_proofs": 0
+    },
+    "gitlab": {
+      "cross_cells": 432,
+      "EY_agree": 432,
+      "flat_alarm_disagreement": 0,
+      "E_deny": 338,
+      "E_allow": 94,
+      "no_grant_channel": 338,
+      "literal_protocol_scoreable": 94,
+      "stale_false_proofs": 16,
+      "live_false_proofs": 0
+    }
+  },
+  "boolean_rows": [
+    {
+      "Y": 0,
+      "M": 0,
+      "O": 0,
+      "A": 0,
+      "D": 0,
+      "H_v3": 0
+    },
+    {
+      "Y": 0,
+      "M": 0,
+      "O": 1,
+      "A": 0,
+      "D": 0,
+      "H_v3": 0
+    },
+    {
+      "Y": 0,
+      "M": 1,
+      "O": 0,
+      "A": 0,
+      "D": 0,
+      "H_v3": 0
+    },
+    {
+      "Y": 0,
+      "M": 1,
+      "O": 1,
+      "A": 0,
+      "D": 0,
+      "H_v3": 0
+    },
+    {
+      "Y": 1,
+      "M": 0,
+      "O": 0,
+      "A": 1,
+      "D": 1,
+      "H_v3": 1
+    },
+    {
+      "Y": 1,
+      "M": 0,
+      "O": 1,
+      "A": 1,
+      "D": 0,
+      "H_v3": 0
+    },
+    {
+      "Y": 1,
+      "M": 1,
+      "O": 0,
+      "A": 0,
+      "D": 1,
+      "H_v3": 0
+    },
+    {
+      "Y": 1,
+      "M": 1,
+      "O": 1,
+      "A": 0,
+      "D": 0,
+      "H_v3": 0
+    }
+  ]
+}

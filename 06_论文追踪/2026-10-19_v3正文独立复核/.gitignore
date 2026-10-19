@@ -1,0 +1,4 @@
+# Retain reports and check scripts, omit rebuild copies of the repository/package.
+isolated_builds/
+reviewer_B_work/stage/
+__pycache__/

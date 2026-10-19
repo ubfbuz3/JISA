@@ -58,6 +58,8 @@ RAW_INPUTS = [
     "experiments/real_system/results/temporal/pilot_cascade/temporal_gitlab_pilot.json",
     # ingest_baseline.py  (R1.7 competitive baseline: 42 controlled cells)
     "experiments/results/baseline_compare.json",
+    # 冻结的上游源码状态（R1.14：历史事实的输入，freeze_native_sources.py 产出）
+    "experiments/native_engine/results/frozen_source_state.json",
 ]
 
 # --- (b) byte-reproducible outputs the pipeline emits (output integrity) -
@@ -112,6 +114,32 @@ def _generated_outputs():
 
 
 def main() -> None:
+    if "--check" in sys.argv[1:]:
+        # 入口校验模式：当前文件必须与已提交清单一致，否则非零退出。
+        # reproduce.sh 在任何生成器运行之前先调用本模式，保证"改了输入
+        # 就跑生成器"在流水线入口即被拒绝，而不是事后由 verify 抓住。
+        bad = []
+        for prov, rels in (("RAW_RECORDS_SHA256.json", RAW_INPUTS),
+                           ("OUTPUTS_SHA256.json", _generated_outputs())):
+            doc = json.loads((PROV / prov).read_text(encoding="utf-8"))
+            have = {f["path"]: f["sha256"] for f in doc["files"]}
+            for rel in rels:
+                p = ROOT / rel
+                if not p.is_file():
+                    bad.append(f"MISSING {rel}")
+                    continue
+                if rel in have and sha256_of(p) != have[rel]:
+                    bad.append(f"CHANGED {rel}")
+                if rel not in have:
+                    bad.append(f"UNMANIFESTED {rel}")
+        if bad:
+            sys.exit("[make_manifests --check] input/output integrity FAIL\n  "
+                     + "\n  ".join(bad)
+                     + "\n  Refresh the manifests only with a legitimate, "
+                       "committed change (see ARTIFACT.md).")
+        print("[ok] make_manifests --check: all inputs and outputs match the "
+              "committed manifests")
+        return
     raw = build("raw", RAW_INPUTS)
     out = build("output", _generated_outputs())
     (PROV / "RAW_RECORDS_SHA256.json").write_text(

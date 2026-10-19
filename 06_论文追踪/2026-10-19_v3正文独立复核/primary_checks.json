@@ -1,0 +1,300 @@
+{
+  "head": "8e2c706d3c843d517747fa94fa47eb80b5b59a46",
+  "v3_local": "8e2c706d3c843d517747fa94fa47eb80b5b59a46",
+  "remote_verification": {
+    "returncode": 0,
+    "stdout": "8e2c706d3c843d517747fa94fa47eb80b5b59a46\trefs/heads/main\nc39cfcee0bad6aa3ad7ae1a768a4c17203c3157c\trefs/tags/access-resubmission-v3\n8e2c706d3c843d517747fa94fa47eb80b5b59a46\trefs/tags/access-resubmission-v3^{}\n",
+    "stderr": ""
+  },
+  "check_commands": {
+    "letter_numbers": {
+      "returncode": 0,
+      "output": "[ok] 75 项承重数字与生成器当前输出一致\n"
+    },
+    "letter_refs": {
+      "returncode": 0,
+      "output": "main.pdf: 28 页, 23 张表\n检查了 30 个带页码的引用\n[ok] 回信全部表号/页码引用与 main.pdf 一致\n"
+    },
+    "cve_validation": {
+      "returncode": 0,
+      "output": "  [ok] 未扰动记录                            问题数=0\n  [ok] 删除脆弱版 own_comment 对照             问题数=2\n  [ok] 恢复改为失败                           问题数=1\n  [ok] 复读正文回退但保留 Y=True/TP              问题数=4\n  [ok] own_comment 改成 403               问题数=1\n  [ok] 标签重复                             问题数=2\n  [ok] 多出未登记标签                          问题数=2\n  [ok] E 与台账冲突                          问题数=1\n\n[ok] 8 个用例全部符合预期\n"
+    }
+  },
+  "pdfs": {
+    "clean": {
+      "pages": 28,
+      "annotations": {
+        "/Link": 206
+      },
+      "sha256": "3d376df0f4a02d84e9ddc5faf9a467470092baa1b64259163d550bd0e978fcbd",
+      "title_start": "Digital Object Identifier\nTwo Reachability-Gated Relations in MST-wi:\nTemporal Mismatch, Oracle Admissibility, and\nMeasurement Limits\nQIULONG LIN 1,2 AND NANLEI CHEN 1,2\n1Y ango University, Fuzhou 350015, China (e-mail: ubfbzu3@163.com)\n2Sogang University, Seoul 04107, Republic of Korea\nCorresponding author: Nanlei Chen (e-mail: ubfbzu3@163.com).\nABSTRACTTwo system-agnostic relations in MST-wi, a Web-system metamorphic testing framework, gate\ntheir verdict on aGUI-reachability model—a crawl-time snapshot of what the interface permits—so what\nthey establish about object-level authorization depends on when the model was read and what the adjudicator\nmay consult. We study them and tie each limit to its evidence. Source inspection shows the engine records\nonly that a relation failed: promotion to aproven violationis added policy, stated here explicitly. On a 576-\nrecord constructed study, a legitimate access whose grant lies outside the fra"
+    },
+    "response": {
+      "pages": 10,
+      "annotations": {
+        "/Link": 1
+      },
+      "sha256": "ab0364d97c80646cb175c7c871e0b7f2d7eaa7d5421b4a0b4a9eecc9e54a507b",
+      "title_start": "Response to Reviewers — Access-2026-49387 1\nRESPONSE TO REVIEWERS\nManuscript #Access-2026-49387\nRevised title:Two Reachability-Gated Relations in MST-wi: Temporal Mismatch, Oracle Admissibility, and\nMeasurement Limits\nQiulong Lin and Nanlei Chen\n19 October 2026\nDear Associate Editor and Reviewers,\nThank you for the detailed reports. The revision is substantive rather than cosmetic, and we have kept the narrowing\nthat both reports asked for: the title, the abstract, the running head and every claim are now restricted to the two\nreachability-gated relations that were actually examined. Three statements that were previously argued in prose are\nnow computed from records and reproduced by script—the complete factorial design and its reconciliation, the truth\ntable of the two relations, and a competitive differential baseline on a matched request budget. One experiment that\nhad not been run at all (a competing differential baseline) has now b"
+    },
+    "highlighted": {
+      "pages": 28,
+      "annotations": {
+        "/Link": 206,
+        "/Highlight": 1846
+      },
+      "sha256": "46fa04e96d179cbcaed0e03878b1388e6dd20d08e5a8f4e6edd7df181b9ed183",
+      "title_start": "Digital Object Identifier\nTwo Reachability-Gated Relations in MST-wi:\nTemporal Mismatch, Oracle Admissibility, and\nMeasurement Limits\nQIULONG LIN 1,2 AND NANLEI CHEN 1,2\n1Y ango University, Fuzhou 350015, China (e-mail: ubfbzu3@163.com)\n2Sogang University, Seoul 04107, Republic of Korea\nCorresponding author: Nanlei Chen (e-mail: ubfbzu3@163.com).\nABSTRACTTwo system-agnostic relations in MST-wi, a Web-system metamorphic testing framework, gate\ntheir verdict on aGUI-reachability model—a crawl-time snapshot of what the interface permits—so what\nthey establish about object-level authorization depends on when the model was read and what the adjudicator\nmay consult. We study them and tie each limit to its evidence. Source inspection shows the engine records\nonly that a relation failed: promotion to aproven violationis added policy, stated here explicitly. On a 576-\nrecord constructed study, a legitimate access whose grant lies outside the fra"
+    },
+    "initial": {
+      "pages": 16,
+      "annotations": {
+        "/Link": 159
+      },
+      "sha256": "d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c",
+      "title_start": "Digital Object Identifier\nLimits of Metamorphic Testing for Object-Level\nAuthorization: Temporal Reachability, Oracle\nAdmissibility, and Measurement Resolution\nQIULONG LIN 1,2 AND NANLEI CHEN 1,2\n1Y ango University, Fuzhou 350015, China (e-mail: ubfbzu3@163.com)\n2Sogang University, Seoul 04107, Republic of Korea\nCorresponding author: Nanlei Chen (e-mail: ubfbzu3@163.com).\nABSTRACTBroken object-level authorization (BOLA) is the top-ranked API security risk, yet detecting it\nis an oracle problem: vulnerable and correct systems answer identically. Metamorphic testing is a leading\ntechnique for that problem in Web systems; for the relations we study, the predicates delegate the verdict to a\nGUI-reachability model—a crawl-time snapshot of what the interface permits. We instantiate the published\nrelations as defined and drive constructed and real systems through crawl, out-of-band change, and execution.\nThree findings follow. (1) Access grant"
+    }
+  },
+  "clean_highlighted_same_text": true,
+  "hashes": {
+    "RAW_RECORDS_SHA256": {
+      "files": 22,
+      "mismatches": []
+    },
+    "OUTPUTS_SHA256": {
+      "files": 30,
+      "mismatches": []
+    }
+  },
+  "zip": {
+    "files": 92,
+    "sha256": "16d6b59574b4ab6adbabdfcfa1c482aa7970d2ccb4995d58dac339deed1af7ec",
+    "bad_member": null,
+    "members": [
+      "IEEEtran.bst",
+      "IEEEtran.cls",
+      "attribution_table.tex",
+      "baseline_numbers.tex",
+      "baseline_table.tex",
+      "bullet.png",
+      "coverage_numbers.tex",
+      "coverage_table.tex",
+      "cve_pair_numbers.tex",
+      "cve_pair_table.tex",
+      "design_census_table.tex",
+      "design_numbers.tex",
+      "design_table.tex",
+      "figures/fig1_protocol.pdf",
+      "figures/fig2_scenarios.pdf",
+      "figures/fig5_real_system.pdf",
+      "gitlab_numbers.tex",
+      "gogs_channel_numbers.tex",
+      "gogs_channel_table.tex",
+      "gogs_cross_table.tex",
+      "gogs_numbers.tex",
+      "ieeeaccess.cls",
+      "logo.png",
+      "m2_stratum.tex",
+      "main.bbl",
+      "main.tex",
+      "native_engine_numbers.tex",
+      "native_engine_table.tex",
+      "native_split_table.tex",
+      "notaglinelogo.png",
+      "numbers.tex",
+      "reconcile_table.tex",
+      "refs.bib",
+      "sections/01_intro.tex",
+      "sections/02_background.tex",
+      "sections/03_protocol.tex",
+      "sections/04_synthetic.tex",
+      "sections/04b_stratum.tex",
+      "sections/05_realsystem.tex",
+      "sections/06_boundaries.tex",
+      "sections/06b_support.tex",
+      "sections/07_threats.tex",
+      "sections/08_related.tex",
+      "sections/09_conclusion.tex",
+      "sections/10_declarations.tex",
+      "seeded_table.tex",
+      "spotcolor.sty",
+      "t1-formata-bold.pfb",
+      "t1-formata-bold.tfm",
+      "t1-formata-bolditalic.pfb",
+      "t1-formata-bolditalic.tfm",
+      "t1-formata-condmedium.pfb",
+      "t1-formata-condmedium.tfm",
+      "t1-formata-condmediumital.pfb",
+      "t1-formata-condmediumital.tfm",
+      "t1-formata-italic.pfb",
+      "t1-formata-italic.tfm",
+      "t1-formata-light.pfb",
+      "t1-formata-light.tfm",
+      "t1-formata-lightitalic.pfb",
+      "t1-formata-lightitalic.tfm",
+      "t1-formata-medium.pfb",
+      "t1-formata-medium.tfm",
+      "t1-formata-mediumitalic.pfb",
+      "t1-formata-mediumitalic.tfm",
+      "t1-formata-regsymb.pfb",
+      "t1-formata-regsymb.tfm",
+      "t1-formata-regular.pfb",
+      "t1-formata-regular.tfm",
+      "t1-formata.map",
+      "t1-giovannistd-bookitalic.pfb",
+      "t1-giovannistd-bookitalic.tfm",
+      "t1-giovannistd.map",
+      "t1-helvetica.map",
+      "t1-times-bold.pfb",
+      "t1-times-bold.tfm",
+      "t1-times-bolditalic.pfb",
+      "t1-times-bolditalic.tfm",
+      "t1-times-italic.pfb",
+      "t1-times-italic.tfm",
+      "t1-times.map",
+      "t1-times.pfb",
+      "t1-times.tfm",
+      "t1formata.fd",
+      "t1giovannistd.fd",
+      "t1helvetica.fd",
+      "t1times.fd",
+      "temporal_channel_table.tex",
+      "temporal_numbers.tex",
+      "temporal_table.tex",
+      "truth_numbers.tex",
+      "truth_table.tex"
+    ],
+    "raw_record_files": [],
+    "python_generators": []
+  },
+  "literal_unknown_sensitivity": {
+    "gitea": {
+      "population_rule": "non_owner_role",
+      "recorded_scored": 280,
+      "recorded_E_counts": {
+        "deny": 203,
+        "allow": 77
+      },
+      "deny_expected_channels": {
+        "none": 203
+      },
+      "deny_basis_examples": [
+        [
+          "no granting channel for read"
+        ],
+        [
+          "no granting channel for read"
+        ],
+        [
+          "no granting channel for read"
+        ]
+      ],
+      "literal_unknown_count": 203,
+      "literal_known_E_cells": 77,
+      "literal_EY_agreements_on_known_cells": 77,
+      "deny_Y_allow": 0,
+      "recorded_totals": {
+        "cycles": 8,
+        "cycles_scored": 8,
+        "cells": 280,
+        "E_allow": 77,
+        "E_deny": 203,
+        "E_unknown": 0,
+        "Y_allow": 77,
+        "E_eq_Y": 280,
+        "stale_false_proofs": 13,
+        "live_false_proofs": 0,
+        "stale_missing_legit": 13,
+        "live_missing_legit": 0,
+        "recrawl_fixed": 13,
+        "recrawl_still_misses": 0,
+        "true_positives": 0,
+        "oracle_readable": 224,
+        "oracle_self_readable": 7,
+        "abstained_cells": 0
+      },
+      "diagnostic_stale_promotions_on_allow": {
+        "recorded": 13,
+        "literal_known_E": 13
+      }
+    },
+    "gitlab": {
+      "population_rule": "non_owner_role",
+      "recorded_scored": 432,
+      "recorded_E_counts": {
+        "deny": 338,
+        "allow": 94
+      },
+      "deny_expected_channels": {
+        "none": 338
+      },
+      "deny_basis_examples": [
+        [
+          "no granting channel for read"
+        ],
+        [
+          "no granting channel for read"
+        ],
+        [
+          "no granting channel for read"
+        ]
+      ],
+      "literal_unknown_count": 338,
+      "literal_known_E_cells": 94,
+      "literal_EY_agreements_on_known_cells": 94,
+      "deny_Y_allow": 0,
+      "recorded_totals": {
+        "cycles": 8,
+        "cycles_scored": 8,
+        "cells": 432,
+        "E_allow": 94,
+        "E_deny": 338,
+        "E_unknown": 0,
+        "Y_allow": 94,
+        "E_eq_Y": 432,
+        "stale_false_proofs": 16,
+        "live_false_proofs": 0,
+        "stale_missing_legit": 16,
+        "live_missing_legit": 0,
+        "recrawl_fixed": 16,
+        "recrawl_still_misses": 0,
+        "true_positives": 0,
+        "oracle_readable": 360,
+        "oracle_self_readable": 360,
+        "oracle_disagrees_with_E": 53,
+        "abstained_cells": 0
+      },
+      "diagnostic_stale_promotions_on_allow": {
+        "recorded": 16,
+        "literal_known_E": 16
+      }
+    }
+  },
+  "independent_compile": {
+    "manuscript": {
+      "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_v3正文独立复核\\isolated_builds\\manuscript_vze3xvmb",
+      "exit_codes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pages": 28,
+      "same_text_as_shipped": true,
+      "undefined_references": false,
+      "tex_errors": []
+    },
+    "response": {
+      "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_v3正文独立复核\\isolated_builds\\response_ulukviie",
+      "exit_codes": [
+        0,
+        0,
+        0
+      ],
+      "pages": 10,
+      "same_text_as_shipped": true,
+      "undefined_references": false,
+      "tex_errors": []
+    }
+  }
+}

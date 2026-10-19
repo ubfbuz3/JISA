@@ -1,0 +1,60 @@
+{
+ "frozen_at": "2026-10-19T11:20:40+00:00",
+ "frozen_by": "analysis/freeze_native_sources.py",
+ "note": "Frozen snapshot of the upstream MST workspace used for the native-engine run. Historical facts in the paper are generated from this file, not from a live checkout; the live git state may move on and is used only as a diagnostic comparison. frozen_at is the freeze time, not the experiment time.",
+ "source_root_env": "MST_SRC_PATH",
+ "head": {
+  "commit": "efa9915b65954640cd256e865e46b1ff4b1aad9b",
+  "date": "Fri Oct 31 11:55:01 2025 +0100",
+  "subject": "Updated licence information"
+ },
+ "status_entries": [
+  " M pom.xml"
+ ],
+ "modified_files": [
+  {
+   "status": " M",
+   "path": "pom.xml",
+   "worktree_sha256": "adea575f37bdf2fe3b5246f1cea1edc58a5d3c60ba47727f7239b9e10f3066f4",
+   "head_sha256": "d5e40c8119b979b9517d770a1f7891cac933b781ef1d1b08ab0035bef83d63cb"
+  }
+ ],
+ "counts": {
+  "modified_total": 1,
+  "java_modified": 0,
+  "build_modified": 1,
+  "diff_lines": 15
+ },
+ "pom_diff": "diff --git a/pom.xml b/pom.xml\nindex d71f43f..11dbbad 100644\n--- a/pom.xml\n+++ b/pom.xml\n@@ -52,6 +52,10 @@\n             <configuration>\n                 <sources>\n                     <source>src-ros</source>\n+                    <!-- 本地构建补充（非上游内容）：src-mrs-icst2020 是 ICST 2020 的\n+                         OWASP MR 集（24 个类，含 11 条 OTG_AUTHZ）。上游 pom 未把该目录\n+                         配为源码根，因此默认构建出的 jar **不含任何 MR 类**。 -->\n+                    <source>src-mrs-icst2020</source>\n                 </sources>\n             </configuration>\n         </execution>\n",
+ "mr_dir_files_sha256": {
+  "src-mrs-icst2020/smrl/mr/owasp/CheckTags.java": "6237a9abb7995a12ba80172b301de45525baef989b67dfd573da87d17a1e8821",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHN_001.java": "3808e6ce41ab2a59881d4b7679773af1d84670f37c8db5af99aba9b826e4a52d",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHN_004.java": "9f8a7f7be040a0dcd473fad211311d6d46157e06d22a1fafba9ab98c3fdb3067",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHN_010.java": "f29f14bd1b19830713b5292adc6c2e48f4e94e3cd4e5fc2f0a775341d3ec4257",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_001.java": "eefba46e914358045e3bacfb66f17366cc239f6cfd790a5b90a64e72e92f86f8",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_001b.java": "f7753aab1f77647facfa1b06c3b85566fd191b6c3fabd8dc0e30812044e2c575",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_001b2.java": "2feb6b7de860f666c94cece45a2bf3b16cf2bb1572b90319ead16c2fdfbb16ee",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_002.java": "b3326994847095b76fe058a9148bb1f2ffbde8721a7d61983fa7d3f45d11eb44",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_002a.java": "e2c8f98b1b2cde46d6b70fa848a6d46485a6c0add3161e4d7605902929655681",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_002b.java": "6448c62ffa8fa4efb61b4266589f48c21c6196b080f20ceb607f37d9480d8286",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_002c.java": "487cccbd2dfb2e62dcb827ecb0b91757e7bb7d87270d61b01ff38c6a6bce189b",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_002d.java": "bcb4734b9f175d77ea395c5ef073eabec87f3e433205ff171fc054dfae5c7f52",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_002e.java": "dcfb20fe273be0e5cc78fae5f998d5409d82ae4e49e723064898a78eaf873165",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_003.java": "59eeff65aa645e571abf2c2598628cf155364df1e48a2c775a2baf224368bc56",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_AUTHZ_004.java": "a1ebac29e663997dcaa5ad293d77ca24a6c60b58924053e2a6f7acbe2bf7aa46",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_BUSLOGIC_005.java": "59dac1eeaced4c7df7fd7decfc75c60abc2428805349fccc6b0cfabb110e7970",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_CONFIG_007.java": "9da3b94a706a91b7f0b9f216f34be5b265c9438c67842e1181ff692b5b5428ba",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_CRYPST_004.java": "b8842b942ce311f93fa7064dc1e779faeb7b6b1d5faf365857a2aadabd014634",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_INPVAL_003.java": "b78ac25aa89ed8c1a6c88e09778908a382c5d1525a4600680111531b12048663",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_INPVAL_004.java": "88d580575ccae2954fd82dfe41111ca635b6b0b66d0d9499193fe88505b9362a",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_SESS_003.java": "ab82ca2e040cb135c6666d81a7593f5c7c926c7e12055602dd02495afdd06768",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_SESS_006.java": "2c00cac864737d4057ac4e9af2b6a2daee6fc0cc574122a61d34572257e8ce51",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_SESS_007.java": "6f3a8a215e376922bc2720d4e64e3a5d1a5e671f7f7c44378da799a640042e9a",
+  "src-mrs-icst2020/smrl/mr/owasp/OTG_SESS_008.java": "e1e0689b43a1de4eb0c634901c844cbce8631e9a1dfd17de546ad3c5300ac871"
+ },
+ "key_files_sha256": {
+  "src/smrl/mr/crawljax/WebProcessor.java": "4e8a24a444d0aa75712c38d9bec7d5045dbe42f6ecdef35f81827adef5af9aa7",
+  "src/smrl/mr/crawljax/WebOperationsProvider.java": "1d0a03cc08306c3d9c735ad675fa9f8504b51f70e93110f7848ca6f33c39f682",
+  "src/smrl/mr/language/SystemConfig.java": "3417adde4226650efb2598575913cc46ffd33ef0e5c1a785b3c481c55fd0d96b"
+ }
+}

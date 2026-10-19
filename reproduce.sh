@@ -54,6 +54,12 @@ pick_python() {
 PYBIN="$(pick_python)"
 echo "[env] using interpreter: $PYBIN"
 
+# [0] 入口完整性校验（R1.14 整改）：任何生成器运行之前，先核对当前输入与
+# 已提交的 SHA-256 清单一致。修改过的输入会在入口被拒绝，而不是事后由
+# verify 抓住；正文合同因此可以写成"必须先通过本入口校验的流程"。
+echo "[0/3] Verifying input integrity against the committed manifests..."
+"$PYBIN" "$ANA/make_manifests.py" --check
+
 echo "[1/2] Running analysis pipeline (regenerates all numbers + tables)..."
 pushd "$ANA" >/dev/null
 "$PYBIN" compute_all.py

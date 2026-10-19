@@ -11,7 +11,11 @@ our study. We take the
 technique's own admission that the role-to-resource mapping is ``not always
 available'' at face value and follow it to its consequence for what the
 adjudication can decide. A relation whose guard reads a crawl-time model is
-sound only while the model equals the authorization state, and that equality is
+sound in the false-proof direction whenever the model does not understate the
+subject's reachability; equality with the authorization state is a
+\emph{sufficient} condition for that, not a necessary one---a model that
+overstates reachability turns a legitimate access into silence rather than
+into a false proof, trading false proofs for misses. That equality is
 exactly what the technique cannot check for itself.
 
 \paragraph{Detecting broken access control} A large and active literature

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import collections
 import json
+import os
 import re
 import subprocess
 import sys
@@ -31,7 +32,7 @@ if hasattr(sys.stdout, "reconfigure"):
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent                      # 3区论文/
 RESULTS = HERE.parent / "results"
-MST_SRC = Path(r"C:/Users/Administrator/WorkBuddy/mst_engine/MST")
+MST_SRC = Path(os.environ.get("MST_SRC_PATH", r"C:/Users/Administrator/WorkBuddy/mst_engine/MST"))
 HARNESS_SRC = ROOT / "experiments" / "native_engine" / "src"
 ENGINE_RESULTS = ROOT / "experiments" / "native_engine" / "results"
 LAB_OUT = Path(r"C:/Users/Administrator/WorkBuddy/mst_native_lab/out")
@@ -46,39 +47,42 @@ from entitlement import classify as truth_classify, covers as perm_covers  # noq
 
 
 # --------------------------------------------------------------------------
-# 保真性凭据：上游仓库的改动面（机械核验，不靠自述）
+# 保真性凭据：上游仓库的改动面
+# ★ R1.14 整改：历史事实只从冻结文件 frozen_source_state.json 读取（由
+#   freeze_native_sources.py 一次性固化），实时 git 状态仅作附加诊断比对，
+#   绝不进宏。冻结文件缺失时非零退出（fail-closed），不静默降级。
 # --------------------------------------------------------------------------
+FROZEN_SRC_STATE = ENGINE_RESULTS / "frozen_source_state.json"
+
+
 def repo_facts() -> dict:
-    out = {"ok": False, "modified_total": None, "java_modified": None,
-           "build_modified": None, "head": None, "diff_pom_lines": None}
+    if not FROZEN_SRC_STATE.exists():
+        raise SystemExit(
+            "[FATAL] 缺少冻结的上游源码状态: " + str(FROZEN_SRC_STATE) + "\n"
+            "         历史事实（上游改动面）必须由 freeze_native_sources.py "
+            "冻结后才能复算，\n"
+            "         不得退回实时 git 状态（输出须是归档记录的确定函数）。")
+    f = json.loads(FROZEN_SRC_STATE.read_text(encoding="utf-8"))
+    c = f.get("counts") or {}
+    out = {"ok": True,
+           "modified_total": c.get("modified_total"),
+           "java_modified": c.get("java_modified"),
+           "build_modified": c.get("build_modified"),
+           "head": (f.get("head") or {}).get("commit"),
+           "diff_pom_lines": c.get("diff_lines"),
+           "frozen_at": f.get("frozen_at")}
+    # 附加诊断：实时状态与冻结状态比对（不一致只告警，不改数字）
     try:
         r = subprocess.run(["git", "-C", str(MST_SRC), "status", "--porcelain"],
                            capture_output=True, text=True, timeout=60)
-        if r.returncode != 0:
-            return out
-        entries = [ln for ln in r.stdout.splitlines() if ln.strip()]
-        out["ok"] = True
-        out["modified_total"] = len(entries)
-        paths = [ln[3:].strip() for ln in entries]
-        # 源码级改动 = 位于 src* 下的 .java
-        out["java_modified"] = sum(
-            1 for p in paths
-            if p.lower().endswith(".java") and p.split("/")[0].lower().startswith("src"))
-        # 构建文件改动
-        out["build_modified"] = sum(
-            1 for p in paths if Path(p).name.lower() in ("pom.xml", "build.xml", "build.gradle"))
-
-        h = subprocess.run(["git", "-C", str(MST_SRC), "log", "-1", "--format=%H%x09%ad"],
-                           capture_output=True, text=True, timeout=60)
-        if h.returncode == 0 and h.stdout.strip():
-            out["head"] = h.stdout.strip().split("\t")[0]
-
-        d = subprocess.run(["git", "-C", str(MST_SRC), "diff", "--stat", "pom.xml"],
-                           capture_output=True, text=True, timeout=60)
-        if d.returncode == 0:
-            out["diff_pom_lines"] = len([x for x in d.stdout.splitlines() if x.strip()])
-    except Exception:
-        return out
+        if r.returncode == 0:
+            live = [ln for ln in r.stdout.splitlines() if ln.strip()]
+            if len(live) != len(f.get("status_entries") or []):
+                print(f"  [diag] 实时上游工作区改动 {len(live)} 条 != 冻结 "
+                      f"{len(f.get('status_entries') or [])} 条"
+                      "（历史事实仍以冻结文件为准）")
+    except Exception:                                          # noqa: BLE001
+        print("  [diag] 实时上游状态不可读（仅诊断，历史事实仍以冻结文件为准）")
     return out
 
 

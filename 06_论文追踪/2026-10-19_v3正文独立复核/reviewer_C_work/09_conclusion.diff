@@ -1,0 +1,200 @@
+--- baseline/sections/09_conclusion.tex
++++ current/sections/09_conclusion.tex
+@@ -1,87 +1,110 @@
+-\section{Conclusion}
+-\label{sec:conclusion}
+-
+-For object-level authorization, \mbox{MST-wi}'s predicates do not know whether
+-the acting subject is entitled to the object; they know what the interface, as
+-crawled, permitted. Instantiating them as defined produced three findings
+-(Section~\ref{sec:findings}).
+-
+-\paragraph{Finding 1 (temporal)} As designed, the adjudication false-proofs on
+-legitimately granted access, deterministically (\ResObsOobVtwoFpRate{}
+-constructed; \ResRsMrBookkeepingFpRate{} Gitea), because an out-of-band grant fits
+-only the wrong one of the predicate's two representations. On the real system the
+-mismatch appears only under the crawl-time reading
+-(\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\ \ResRsMismatchLive{} live),
+-with an endogenous control holding final visibility fixed: within this controlled
+-design the only manipulated explanatory variable is when the model was read, not
+-what was visible.
+-
+-\paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
+-authorization oracle that fully resolves the proposition under test---works, and
+-in that regime the evaluated metamorphic step
+-provides no observed incremental adjudication benefit over a direct consumer of the same oracle and outcome:
+-an empirical premise, formalised as a conditional (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
+-a single ordinary request yields the same false-proof count (false proofs
+-\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
+-true-violation records the paired comparison disagrees on only
+-\ResAbDisagreementN{}, each time in favor of the plain request; no margin was
+-pre-specified, so no inferential claim attaches.
+-On Gitea the comparison is limited to false-proof behavior, because no
+-vulnerability was present on the tested surface.
+-
+-\paragraph{Finding 3 (measurement)} The reported specificity of
+-\ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is not
+-conditioned on an explicit check that the reachability model equals the
+-authorization state, and its input-level denominator cannot register a
+-class-uniform failure.
+-
+-Support evidence: reading the implementation confirmed the semantics and added
+-the mechanism---the crawl model is frozen by a cache never invalidated, and a
+-missing crawl defaults to ``unreachable''---and the positive control is a sanity check that closes the loop: on a seeded
+-vulnerable target, for one fault pattern, the surface-gated adjudicator detects
+-all planted instances with zero false positives.
+-
+-\paragraph{What we do not claim, and how far the claims reach} We do not claim
+-that \mbox{MST-wi} is wrong or say anything about its accuracy as a detector; the
+-native run establishes a qualitative outcome, for one gate family, on one real
+-system that on the tested endpoints and transitions enforces the expected
+-decisions. Three ceilings stack and bound everything above. First, our two
+-relations are two of a catalogue of \ResLitMrCatalog{}, and both belong to one
+-reachability-gated family. Second, even the execution of the published relations
+-on the native engine reaches only that family: \NtMrFired{} of the \NtMrTotal{}
+-authorization relations fire (\NtMrExecuted{} executed; \NtKeyMrNames{}), and the content predicate
+-\texttt{userCanRetrieveContent} is never invoked (\NtUcrcCalls{} calls), so that
+-evidence is bounded the same way. Third, the real-system study exercises the
+-\emph{false-proof} face on a single constructed fault pattern, not the detection
+-face against a population of real flaws, and the Gitea channel proportions are
+-topology design parameters, not field prevalence. Together these fix the ceiling
+-on what a practitioner may transfer.
+-
+-\paragraph{What a practitioner should do differently} Three operational
+-consequences follow, each bounded by what was measured. Do not read a
+-reachability-gated relation's alarm as proof: because the reading time is part of
+-the specification, an alarm raised against a crawl-time snapshot---rather than
+-against live state---cannot be promoted to \texttt{violation-proven} on the
+-relation's word alone. If a readable, sound authorization oracle is in fact
+-available to the analyst, consult it directly and drop the relation: for the
+-relations studied it adds no adjudication information once that antecedent holds
+-(Proposition~\ref{lem:oracle-suff}, Section~\ref{sec:stratum}). And treat a
+-reported input-level specificity as a corpus statistic rather than a guarantee of
+-scenario-level resolution: it can sit near one while a whole class of legitimate
+-access is misreported (Finding~3). These are not a claim that metamorphic testing
+-is worthless; they locate its contribution where no oracle exists, and bound it
+-by what the reachability reading can see.
+-
+-\paragraph{What a stronger claim would require} Moving from characterization to something
+-stronger needs, first, a real system that \emph{contains} the flaw, so detection
+-can be measured; and second, relations whose gate is not the absence of
+-evidence---checkable against a subject's entitlements without pretending that
+-entitlements are reachable facts. The transferable condition---we call it the
+-\emph{same-observable condition}---is the one that killed our own
+-mechanism: a component's necessity must be tested against a substitute that
+-consumes the \emph{same} observable quantity as the ground truth; a substitute
+-that consumes less does not establish incremental value. The \mbox{MST-wi} case
+-study is an instance of that condition, not its scope: a component's necessity is
+-not established unless a fair control that lacks the component but consumes the
+-same decision-relevant observables is empirically or formally shown to be
+-weaker.
++\section{Conclusion}
++\label{sec:conclusion}
++
++For object-level authorization, \mbox{MST-wi}'s predicates do not know whether
++the acting subject is entitled to the object; they know what the interface, as
++crawled, permitted. Instantiating them as defined produced three findings
++(Section~\ref{sec:findings}).
++
++\paragraph{Finding 1 (temporal)} As designed, the adjudication false-proofs on
++legitimately granted access, deterministically (\ResObsOobVtwoFpRate{}
++constructed; \ResRsMrBookkeepingFpRate{} Gitea), because an out-of-band grant fits
++only the wrong one of the predicate's two representations. On the real system the
++mismatch appears only under the crawl-time reading
++(\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\ \ResRsMismatchLive{} live),
++with an endogenous control holding final visibility fixed: within this controlled
++design the only manipulated explanatory variable is when the model was read, not
++what was visible.
++
++\paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
++authorization oracle that fully resolves the proposition under test---works, and
++in that regime the evaluated metamorphic step
++provides no observed incremental adjudication benefit over a direct consumer of the same oracle and outcome:
++an empirical premise, formalised as a conditional (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
++a single ordinary request yields the same false-proof count (false proofs
++\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
++true-violation records the paired comparison disagrees on only
++\ResAbDisagreementN{}, each time in favor of the plain request; no margin was
++pre-specified, so no inferential claim attaches.
++On Gitea the comparison is limited to false-proof behavior, because no
++vulnerability was present on the tested surface.
++
++\paragraph{Finding 3 (measurement)} The reported specificity of
++\ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is
++$\mathrm{TN}/(\mathrm{TN}+\mathrm{FP})$ over the follow-up inputs the crawl
++could enumerate, with manually verified labels, and that denominator cannot
++register a failure confined to a class the run did not exercise.
++
++Support evidence: reading the implementation confirmed the semantics and added
++the mechanism---the crawl model is frozen by a cache never invalidated, and a
++missing crawl defaults to ``unreachable''---and the positive control is a sanity check that closes the loop: on a seeded
++vulnerable target, for one fault pattern, the surface-gated adjudicator detects
++all planted instances with zero false positives.
++
++\paragraph{What the two added experiments carry} The temporal finding is not
++confined to one product. Under the same pre-registered protocol, frozen before
++the second run was observed, GitLab CE \GlVersion{} commits \TmpGPolicyEvents{}
++transitions over \TmpGCells{} cells, with entitlement and effect agreeing on
++\TmpGEeqY{} of them: \TmpGStaleFP{} stale false proofs, all \TmpGFixed{} removed
++by a recrawl with the same credentials, \TmpGLiveFP{} live false proofs and
++\TmpGStillMiss{} residual misses. Pooled with Gitea this is \TmpBothCells{}
++cells, \TmpBothEeqY{} agreements, \TmpBothStaleFP{} stale false proofs and
++\TmpBothFixed{} fixes. The replication is of a protocol, not of a topology:
++GitLab's project-membership surface answers 200 or 404, so it errs only by
++omission---in \TmpGOracleDisagree{} cells it disagrees with the ledger, every one
++of them a false deny, concentrated in the public
++(\TmpGOracleDisagreePublic{}) and site-administration
++(\TmpGOracleDisagreeAdmin{}) channels---and both properties are read from the
++same run rather than one being derived from the other. The entitlement/effect
++gate is in turn checked against a real defect: on a publicly fixed
++object-versus-path ownership flaw, Gitea \CveVulnVersion{} yields
++\CveTruePositives{} true positive with \CveFalseProofs{} false proofs, and the
++fixed \CveFixedVersion{} yields \CveFixedAlarms{} alarms over \CveControls{}
++control probes. That is a check of the gate on one defect we located and
++supplied; it is not a detection rate.
++
++\paragraph{What we do not claim, and how far the claims reach} We do not claim
++that \mbox{MST-wi} is wrong or say anything about its accuracy as a detector; the
++native run establishes a qualitative outcome, for one gate family, on one real
++system that on the tested endpoints and transitions enforces the expected
++decisions. Three ceilings stack and bound everything above. First, our two
++relations are two of a catalogue of \ResLitMrCatalog{}, and both belong to one
++reachability-gated family. Second, even the execution of the published relations
++on the native engine reaches only that family: \NtMrFired{} of the \NtMrTotal{}
++authorization relations fire (\NtMrExecuted{} executed; \NtKeyMrNames{}), and the content predicate
++\texttt{userCanRetrieveContent} is never invoked (\NtUcrcCalls{} calls), so that
++evidence is bounded the same way. Third, the real-system study exercises the
++\emph{false-proof} face on a single constructed fault pattern, not the detection
++face against a population of real flaws, and the Gitea channel proportions are
++topology design parameters, not field prevalence. Together these fix the ceiling
++on what a practitioner may transfer.
++
++\paragraph{What a practitioner should do differently} Three operational
++consequences follow, each bounded by what was measured. Do not read a
++reachability-gated relation's alarm as proof: because the reading time is part of
++the specification, an alarm raised against a crawl-time snapshot---rather than
++against live state---cannot be promoted to \texttt{violation-proven} on the
++relation's word alone. If a readable, sound authorization oracle is in fact
++available to the analyst, consult it directly and drop the relation: for the
++relations studied it adds no adjudication information once that antecedent holds
++(Proposition~\ref{lem:oracle-suff}, Section~\ref{sec:stratum}). And treat a
++reported input-level specificity as a corpus statistic rather than a guarantee of
++scenario-level resolution: it can sit near one while a whole class of legitimate
++access is misreported (Finding~3). These are not a claim that metamorphic testing
++is worthless; they locate its contribution where no oracle exists, and bound it
++by what the reachability reading can see.
++
++\paragraph{What a stronger claim would require} Moving from characterization to something
++stronger needs, first, a population of real systems that \emph{contain} the
++flaw, so detection can be measured---the single defect of
++Section~\ref{sec:cvepair} checks the gate but cannot supply that population; and second, relations whose gate is not the absence of
++evidence---checkable against a subject's entitlements without pretending that
++entitlements are reachable facts. The transferable condition---we call it the
++\emph{same-observable condition}---is the one that killed our own
++mechanism: a component's necessity must be tested against a substitute that
++consumes the \emph{same} observable quantity as the ground truth; a substitute
++that consumes less does not establish incremental value. The \mbox{MST-wi} case
++study is an instance of that condition, not its scope: a component's necessity is
++not established unless a fair control that lacks the component but consumes the
++same decision-relevant observables is empirically or formally shown to be
++weaker.

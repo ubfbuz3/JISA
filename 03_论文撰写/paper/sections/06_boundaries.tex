@@ -137,12 +137,20 @@ Equations~\eqref{eq:a002}--\eqref{eq:aflat} are not a paraphrase of the code;
 they reproduce the recorded alarm of all \TvtRecords{} constructed records and
 all \TvtCells{} temporal cells with no disagreement
 (\texttt{analysis/ingest\_truth.py}), and the same script checks
-part~(a) cell by cell. The three records on which the state-calibrated method
+part~(a) cell by cell. Two evidence layers must be kept apart here. The
+temporal-cell check evaluates the domain-internal simplification of
+Equation~\eqref{eq:aflat} against the alarm each cell already recorded; it is a
+self-consistency check of the map, not a second, independent execution of the
+full MR-002, whose predicate also consults the supervisor relation and the
+response pair. The evidence that the full-form predicate fires as written is
+the constructed study's \TvtMrTwo{} predicate-level records; the native run of
+Section~\ref{sec:native-run} carries the unmodified library's own evaluation,
+and neither layer is substituted for the other. The three records on which the state-calibrated method
 and \texttt{direct\_observe} still differ are not a counterexample to~(b): all
 three are the same S5 write cell under the three exception settings, where the
 model lists the object for reading, the alarm stays silent, and the oracle
 reports that the write is denied. There the relation misses a violation the
-direct adjudicator confirms---a loss, not an gain, and one the reachability
+direct adjudicator confirms---a loss, not a gain, and one the reachability
 gate cannot express because it collapses read and write reachability.
 
 \input{truth_table.tex}
@@ -152,7 +160,9 @@ Table~\ref{tab:truth} evaluates both verdicts on every combination of the four
 variables and reports how many of the \TvtCells{} temporal cells fall in each
 row, split by the ledger's entitlement. Three things are visible in it that
 prose cannot state as compactly. First, the equivalence is exactly as narrow as
-the algebra says: the two verdicts agree in \TvtAgree{} of the \TvtReadable{}
+the algebra says: the native alarm $A$ and the direct adjudicator $D$---the two
+measured surfaces, not the promoted verdict $H$, which the table lists
+separately---agree in \TvtAgree{} of the \TvtReadable{}
 cells with a usable oracle and part only in the two rows where $Y=1$ and
 $M\ne O$, which hold \TvtDisagree{} cells. Second, the parting is not one
 phenomenon but two, and they need different remedies. In the \TvtOracleWrong{}

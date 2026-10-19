@@ -44,7 +44,7 @@
 {\normalsize Manuscript \#Access-2026-49387}\\[0.4ex]
 {\normalsize \textbf{Revised title:} \emph{Two Reachability-Gated Relations in MST-wi:
 Temporal Mismatch, Oracle Admissibility, and Measurement Limits}}\\[0.4ex]
-{\normalsize Qiulong Lin and Nanlei Chen}\\[0.4ex]
+{\normalsize Qiulong Lin, Xiaoyu Ke, and Nanlei Chen}\\[0.4ex]
 {\normalsize 19 October 2026}
 \end{center}
 
@@ -57,8 +57,12 @@ the abstract, the running head and every claim are now restricted to the two
 reachability-gated relations that were actually examined. Three statements that
 were previously argued in prose are now computed from records and reproduced by
 script---the complete factorial design and its reconciliation, the truth table of
-the two relations, and a competitive differential baseline on a matched request
-budget. One experiment that had not been run at all (a competing differential
+the two relations, and a competitive differential baseline. The baseline is
+matched to ours at the level of the probe pair only: total request and
+information budgets differ (111 requests against the baselines' 84 shared
+probes), and the manuscript states the comparison in those terms rather than as
+an equal-budget contest. One experiment that had not been run at all (a
+competing differential
 baseline) has now been run and reported. Where a request could not be met with
 the evidence we have, we say so in the manuscript instead of softening the text;
 five of the twenty-one items are met only in part, and Section~\ref{sec:partial}
@@ -66,7 +70,7 @@ of this letter lists them together with what is missing and why. One of the
 five (R1.9) is reported as an open scope question for the editor rather than
 as resolved.
 
-References below are to the revised manuscript (28 pages, 23 tables). Table and
+References below are to the revised manuscript (30 pages, 24 tables). Table and
 section numbers are stable; page numbers are given for the tables most often at
 issue. Every number quoted in this letter was checked against the artefact that
 generates it---the macros in the analysis output and the raw JSON records they
@@ -100,7 +104,42 @@ state plainly that we do not compare detection rates and cannot, from our
 evidence, claim any.}
 \Action{Section~IX rewritten around these three increments; the claim of being
 ``orthogonal'' to prior work deleted; the abstract's first sentence and the
-conclusion restated in the same terms.}
+conclusion restated in the same terms. To make the comparison traceable item by
+item, the following maps each element of the reviewer's list to what was already
+known and what this revision adds on the two relations examined:}
+\begin{center}\small
+\begin{tabular}{@{}p{0.30\textwidth}p{0.30\textwidth}p{0.30\textwidth}@{}}
+\toprule
+\textbf{Element} & \textbf{Already established} & \textbf{Added by this revision} \\
+\midrule
+Frozen crawl-time model goes stale & Mai et al.\ and MST-wi state the
+role-to-resource mapping is ``not always available''; stale-crawl effects are
+folklore & A cell-level temporal control on two products: 29 stale false proofs,
+all repaired by same-credential recrawl, 0 under live reading
+(Table~12, p.~15) \\
+Oracle problems in authorization testing & Established: no intrinsic oracle;
+differential probing lines use request-level oracles & A measured decomposition
+of one membership oracle's errors by channel (false denies only, named
+channels; Tables~11 and~15), and an admission rule for when an oracle shares a
+subsystem with enforcement (Section~VI-A) \\
+Direct request-level testers & BACScan-style probing and its predecessors are
+the established direct method & A differential-rule comparison on the same
+probe pair with the adjudication trade-off stated, not a detection contest
+(Table~19) \\
+Metric dilution under pooled denominators & Simpson-type aggregation effects
+are classical & Proposition~1 and Corollary~1 instantiated for the
+follow-up-input specificity, with the class-share bound $[1-w,1]$
+(Section~IV-E) \\
+Promotion of an MR failure to ``proven violation'' & Not previously separated
+in the MST-wi artifact & Source-level split of $A$ (engine alarm), $H$
+(our promotion policy $P$) and $T$ (independent truth) on the native run
+(Tables~22--24) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent The claims this revision makes are confined to the last column, on the
+two reachability-gated relations and the fixed domains examined; the middle
+column is cited, not claimed.
 
 \subsection{A complete definition of the false-proof outcomes}
 \Concern{The mapping between alarms, false alarms and proven violations and the
@@ -110,7 +149,7 @@ outcome, actual entitlement, oracle response and detector verdict, together with
 an account of how a legitimate successful request is distinguished from
 unauthorized access without letting the tested reachability model determine its
 own ground truth.}
-\Response{Table~17 (Section~VI-B, p.~19) is now that table. It defines four
+\Response{Table~18 (Section~VI-B, p.~20) is now that table. It defines four
 quantities over the 712 temporal cells: $Y$ (the ordinary request succeeds), $M$
 (the crawl-time model lists the object for the subject), $O$ (the introspection
 surface's answer, with an explicit ``no definite answer'' value), $A$ (the alarm
@@ -126,9 +165,9 @@ a label. A legitimate success is separated from unauthorized access only by an
 independent \emph{deny} from $E$ together with a content-level \emph{allow}
 observation---never by $M$---and the manuscript says that the relation's alarm
 is not evidence of illegal access.}
-\Action{Table~17 and the definitions in Section~IV-A; the three-way split of the
+\Action{Table~18 and the definitions in Section~IV-A; the three-way split of the
 native run into $A$ (the engine's own alarm), $H$ (our promotion policy) and $T$
-(confirmed) is given in Table~22 (p.~23). In this revision the failure and
+(confirmed) is given in Table~23 (p.~24). In this revision the failure and
 unknown contract is additionally consolidated in the body itself
 (Section~III, ``Unknown and failure handling''): how an $E$-undefined
 transaction, a $Y$-undefined execution error and an $O$-undefined surface are
@@ -137,10 +176,15 @@ cells, and how the exclusions are disclosed---fixed before the run by the
 pre-registered protocol, not negotiated per result. That section also discloses
 one protocol-to-implementation divergence rather than reconciling it silently:
 the protocol promised $E{=}$unknown for a modelled object with no recorded
-granting channel, while the implementation returns a genuine \emph{deny} there;
-the two readings coincide on every reported cell because the channel space of
-each modelled object is fixed by the setup ledger and no deploy-key-reachable
-cell exists, and the text says so.}
+granting channel, while the implementation returns a genuine \emph{deny} there.
+The revision now registers the closed-world default-deny reading as the rule
+the implementation adopts, reconciles the two calibers in a dedicated
+sensitivity table (Table~13): the reading changes the scorable set from 712 to
+the 171 cells whose ledger entitlement is $E$-allow under the literal rule,
+while the 29 stale false proofs and the 0 live false proofs fall on
+$E$-allow cells and are identical under both calibers; ``no effect'' is
+therefore claimed only for the false-proof phenomenon, not for the scoring
+denominators.}
 
 \subsection{Characterization of authorization-state transitions}
 \Concern{The three-phase protocol does not comprehensively model revocation,
@@ -170,11 +214,11 @@ access was revoked (\TmpOverRevoke{} on Gitea, \TmpGOverRevoke{} on GitLab), and
 in every one of them the request is refused, so no violation occurred and
 nothing was missed---scoring them as false negatives would require
 $E=\text{deny}$ and $Y=\text{allow}$ together, which never happens here
-(Table~12, p.~14). On concurrency, the harness is single-threaded, no concurrent
+(Table~12, p.~15). On concurrency, the harness is single-threaded, no concurrent
 writer ran, and $hv$ is declared to be a harness-maintained logical version
 rather than an atomic server snapshot---which is what makes the still window
 meaningful.}
-\Action{Section~V-A (Table~12, p.~14); the same scope limits restated in
+\Action{Section~V-A (Table~12, p.~15); the same scope limits restated in
 Section~VIII.}
 
 \subsection{Operationalizing the admissibility condition}
@@ -236,7 +280,7 @@ studied both alarms reduce to $y\wedge\neg m$ against $D=y\wedge\neg o$. What is
 verified empirically is that predicate reduction. What holds algebraically is
 $A=D$ if and only if $y=0$ or $m=o$, together with $H\Rightarrow D$.
 Premise~(ii) of the lemma---that the model is $O$-determined---is \emph{not}
-claimed: it fails exactly on the stale cells, which is row~7 of Table~17, and the
+claimed: it fails exactly on the stale cells, which is row~7 of Table~18, and the
 manuscript says so rather than presenting the relation as informationally
 redundant in general. The explicit predicates arewritten out ($A_{002}=\neg sup(B,A)\wedge\neg m\wedge\neg err(o_1)\wedge
 q(o_1,o_2)$ and $A_{004}=y\wedge\neg m$, against $D=y\wedge\neg o$), and on the
@@ -251,7 +295,7 @@ and the oracle right. Those two rows are the two failure mechanisms the
 cross-vendor section keeps apart. The falsification condition is stated: produce
 an observable, outside what a succeeding request plus a readable oracle can
 determine, on which an authorization metamorphic relation still decides.}
-\Action{Section~VI-B with Lemma~1, Proposition~2, Table~17 (p.~19) and the
+\Action{Section~VI-B with Lemma~1, Proposition~2, Table~18 (p.~20) and the
 corrected equivalence; the earlier claim of extensional equality is deleted.}
 
 \subsection{Coverage and identifiability of the 576-record enumeration}
@@ -262,12 +306,12 @@ varied, attribution of the reported effects, and an explicit reconciliation of t
 \Response{The enumeration is now inspectable end to end. Table~1 (p.~5) is the
 complete design: seven factors, their levels, how each level is varied, the record
 count per level and what it crosses with, with the additive identity
-$44\cdot2\cdot3\cdot2+8\cdot3\cdot2=576$ in the footnote. Table~20 (p.~23) is the
+$44\cdot2\cdot3\cdot2+8\cdot3\cdot2=576$ in the footnote. Table~21 (p.~24) is the
 configuration-by-scenario census, where a dash marks an inadmissible combination
 and the caption says why (a configuration with no share has nothing to list; the
 listed-and-unreadable combination was not run, so it is untested rather than
 impossible). The reconciliation the reviewer asks for
-is Table~5 (p.~9): it starts from the S3--S7 original grid of 54 records
+is Table~5 (p.~10): it starts from the S3--S7 original grid of 54 records
 (which contains 8 v2 false proofs) and adds the remaining blocks, asserting by
 record key that the blocks are mutually disjoint and that their union is exactly
 576, split 312 readable / 264 unreadable. Section~III-A states what the design
@@ -285,7 +329,7 @@ authorization tester probing equivalent objects under distinct privilege levels
 is requested, with matched query budgets, execution costs and detection
 outcomes.}
 \Response{This is the one comment that required a new experiment, and it has been
-run. Section~VI-D and Table~18 (p.~21) report three conventional differential
+run. Section~VI-D and Table~19 (p.~22) report three conventional differential
 rules on the same 42 controlled cells (six configurations crossed with S1--S7)
 and, critically, on the \emph{same probe pair}: every method consumes one request
 as the owner and one as the actor---\BlSharedProbes{} shared probes in all---and
@@ -320,7 +364,7 @@ equality rule fires on all 25 legitimately allowed cells and the in-band log
 still leaves 24, because the framework log does not observe 0.96 of the effective
 access there---a property of the constructed topology, not an estimate of field
 prevalence.}
-\Action{Section~VI-D and Table~18 (p.~21); the runner
+\Action{Section~VI-D and Table~19 (p.~22); the runner
 (\texttt{experiments/run\_baseline.py}) and its raw output are in the
 reproducibility package, and both baseline tables are reproduced byte-identically
 by \texttt{verify\_artifact.sh repro}.}
@@ -334,7 +378,13 @@ same two recorded responses in the same process, so any per-method number would
 measure our replay loop rather than the rule. What the reviewer's question needs
 beyond that---the cost of the same probes against a live target---is reported for
 the real-system temporal loops only (Gitea 21.2~s, GitLab 7.3~s, of which the
-probes are 20.7~s and 6.0~s), where the requests really do reach a server.}
+probes are 20.7~s and 6.0~s), where the requests really do reach a server.
+Beyond the wall-clock point, the budget condition of the request is met only at
+the probe-pair level: the reviewer asked for matched query budgets, execution
+costs and detection outcomes, and what is implemented matches the two probes
+per cell while total request count, visible information and privilege differ
+(111 against 84). We state this in the manuscript and claim no equal-budget
+detection superiority; a full equal-total-budget design was not built.}
 
 \subsection{Channel-by-channel isolation of the oracle-validity problem}
 \Concern{A channel-by-channel confusion matrix separating direct membership,
@@ -352,7 +402,7 @@ and by table: in the truth table, row~6 is the oracle answering \emph{deny} on a
 cell the ledger allows (40 cells, an unsound oracle), row~7 is the model failing
 to list a cell the ledger allows (14 cells, a stale model), and the two verdicts
 disagree in precisely those rows. Gogs now carries the same channel
-decomposition (Table~14, Section~V-B, p.~15), and the reason an earlier draft
+decomposition (Table~15, Section~V-B, p.~16), and the reason an earlier draft
 declared the gap instead is recorded in the manuscript, because it was a
 category error rather than a data limitation: a channel label is a property of
 the entitlement ledger---built from the lab topology, the documented inheritance
@@ -419,7 +469,7 @@ honestly: the three instances instantiate one fault pattern, and the one BFLA
 defect we seeded (a non-privileged actor succeeding at a collaborator-write
 endpoint) is reported as a boundary of the read-oriented logic, not as a
 detection failure.}
-\Action{Section~V-D and Table~16 (p.~16); Section~V-C and Table~15 (p.~16) for
+\Action{Section~V-D and Table~17 (p.~17); Section~V-C and Table~16 (p.~16) for
 the seeded control; the scope statement in Section~X.}
 \Remains{Per-defect recall and false-positive rates across several independent
 defect classes. Not done, and stated as out of scope in the manuscript. The
@@ -436,8 +486,13 @@ verify that the comparison changes only the model-reading time, and an account o
 how live-state queries avoid changing the tested state or gaining privileges.}
 \Response{The ordering is fixed and stated: crawl, then freeze the model at
 $t_0$, then commit the transition, then query the oracle, then issue the request;
-all observations are \texttt{GET} requests, so nothing in the measurement path
-mutates state; the recrawl uses the same credential as the original crawl, so it
+the enumeration, oracle and read probes are all \texttt{GET} requests; the
+write-capable transitions additionally carry one write probe (an HTTP POST
+creating the probe artifact) and an owner-side DELETE that restores the state,
+both recorded like every other call and neither changing any authorization
+configuration, so ``nothing in the measurement path mutates state'' holds for
+the authorization state the measurement is about, not for every HTTP method
+issued; the recrawl uses the same credential as the original crawl, so it
 grants no privilege the detector did not have; and the owner oracle is reported
 separately from the subject-side reading rather than pooled with it. The run
 record carries the protocol digest, the event sequence numbers, the policy
@@ -447,7 +502,7 @@ server snapshot. The results are symmetric across the two products: Gitea 280
 cells with 13 stale false proofs, all 13 repaired by a recrawl with the same
 credential and 0 mismatches under the live reading; GitLab CE 432 cells with 16
 stale false proofs, all 16 repaired and 0 under live reading.}
-\Action{Section~V-A and Table~12 (p.~14); the pre-registered protocol file, the
+\Action{Section~V-A and Table~12 (p.~15); the pre-registered protocol file, the
 run records and the amendment timing note are in the reproducibility package.}
 
 \subsection{The specificity denominator}
@@ -546,14 +601,23 @@ observations.}
 seed and configuration files, the machine-readable raw records and the scripts
 that regenerate every table and figure, and it was verified rather than asserted: in a
 staging copy of the committed tree---extracted with \texttt{git archive}, so it
-cannot see the working tree---the pipeline regenerates all 28 number-bearing
-artefacts byte-identically, including the two baseline tables; and in an empty
-directory the 92-file submission package compiles (28 pages, no undefined
-references). The native run is reported as three stages rather than one
-number (Section~VII-C, Tables~21--23, pp.~23--25): $A$, the engine's own
+cannot see the working tree---the pipeline regenerates all 31 byte-reproducible outputs byte-identically, including the two baseline tables; and in an empty
+directory the 93-file submission package compiles (30 pages, no undefined references). The native run is reported as three stages rather than one
+number (Section~VII-C, Tables~22--24, pp.~24--25): $A$, the engine's own
 \texttt{getFailures()} alarms, 6; $H$, our promotion policy applied to them, 6;
 $T$, confirmed, 0---with 6 false proofs. The content predicate is reported by
-invocation count rather than claimed clean, and the text says so. On the
+invocation count rather than claimed clean, and the text says so. The
+source-state facts of that run (upstream modification counts, the upstream
+commit) are generated from frozen inputs---the recorded upstream version,
+its content digest and the patch manifest archived with the run---rather than
+from a live checkout of the upstream workspace, so the outputs are a function
+of archived records alone; the live \texttt{git status} remains available only
+as an additional diagnostic and never feeds a reported number. The pipeline
+validates input hashes at entry, so an unverified or modified input fails the
+run before any table is produced, and the two
+artefact layers are documented separately: the 93-file LaTeX package
+compiles; the full repository reproduces the numbers.
+On the
 reviewer's phrase ``two failed relation executions'': the current record has one
 execution error, not two. Of the \NtMrTotal{} catalog authorization relations
 evaluated against Gitea, \NtMrExecuted{} ran and \NtMrErrored{} aborted on an
@@ -562,7 +626,7 @@ engine-side defect; the number two is the count of relations that alarmed
 aborted relation, the engine-side defect and the alarm split are each documented
 at source, and the treatment of missing or failed observations is written into
 the protocol file that the run record binds.}
-\Action{Section~VII-C and Tables~20--22; \texttt{reproduce.sh},
+\Action{Section~VII-C and Tables~21--23; \texttt{reproduce.sh},
 \texttt{verify\_artifact.sh} and the hash manifests in the package.}
 \Remains{The failure and missing-observation rules were, at resubmission time,
 written in the protocol file and the scripts; this revision additionally
@@ -577,7 +641,7 @@ from the evaluated relations risk extending beyond the experiments; conclusions
 established by source-level dependence, by the synthetic construction and on real
 systems should be distinguished, with a final table linking each research
 question to its assumptions, tested configurations, results and limitations.}
-\Response{Table~19 (Section~VI-E, p.~22) is that table. Each row names the
+\Response{Table~20 (Section~VI-E, p.~23) is that table. Each row names the
 assumption the claim needs, the artefact that carries it, and the boundary that
 remains; the last row is the adjudication gate and is marked as not being
 evidence about detection effectiveness. The three findings are explicitly
@@ -588,7 +652,7 @@ extended beyond the experiments has been deleted, together with the
 mis-attribution of a constructed result to a published one; the title, abstract,
 running head and conclusion are narrowed to the two reachability-gated relations,
 and each finding is stated with its own falsification condition.}
-\Action{Table~19 (p.~22); Section~VI-E; title, abstract and Section~X.}
+\Action{Table~20 (p.~23); Section~VI-E; title, abstract and Section~X.}
 
 \section{Reviewer 2}
 
@@ -608,7 +672,7 @@ that a snapshot goes stale, but the measurement of when staleness produces a
 \emph{false proof} rather than a miss, the separation of that mechanism from an
 unsound oracle, and the fact that the residual survives the strongest
 tester-side bookkeeping.}
-\Action{Section~V-A (Table~12, p.~14); Section~VI-A; the related-work claim
+\Action{Section~V-A (Table~12, p.~15); Section~VI-A; the related-work claim
 restated in Section~IX.}
 
 \subsection{Scope of claims: two relations of one family}
@@ -619,7 +683,7 @@ evaluation extended.}
 narrowed to the two reachability-gated relations in MST-wi, and the abstract
 opens by naming them as two relations of that framework. The native trigger
 range is stated where the run is reported rather than in the abstract, which is
-at its word limit: Section~VII-C and Table~21 (p.~23) record that of the
+at its word limit: Section~VII-C and Table~22 (p.~24) record that of the
 \NtMrTotal{} catalog authorization relations evaluated against Gitea,
 \NtMrExecuted{} ran and \NtMrFired{} alarmed, both of them reachability-gated
 (\NtKeyMrNames{}). We did not extend the evaluation to other relation
@@ -638,17 +702,17 @@ request cannot outperform the direct consumer of those same inputs. The claim
 that \emph{these two} relations satisfy the lemma's premise is a separate
 proposition whose premise is checked against the records: their alarms reduce to
 $y\wedge\neg m$ on the domain studied, against $D=y\wedge\neg o$, and the truth
-table (Table~17, p.~19) makes the functional representation explicit. The
+table (Table~18, p.~20) makes the functional representation explicit. The
 lemma's second premise---that the model is $O$-determined---is not claimed and
 fails on the stale cells, so the paper does not present the relations as
 informationally redundant in general.}
-\Action{Section~VI-B, Table~17 (p.~19).}
+\Action{Section~VI-B, Table~18 (p.~20).}
 
 \subsection{Detection side: no real system was vulnerable}
 \Concern{Either add a real vulnerable case or remove the claim that the
 metamorphic step adds nothing for detection.}
 \Response{Both halves were done. A real vulnerable/fixed pair was added
-(Section~V-D, Table~16, p.~16): a publicly fixed Gitea defect, one true positive
+(Section~V-D, Table~17, p.~17): a publicly fixed Gitea defect, one true positive
 on the vulnerable build, no claim on the fixed build, and twelve control checks
 (ten expected responses plus two recovery checks) passing under a fail-closed
 validator that recomputes the effect from the owner's re-read. And the claim was
@@ -657,7 +721,7 @@ metamorphic step adds nothing \emph{for detection}; what it supports is that the
 step adds no adjudication information where a readable, sound oracle exists
 (Lemma~1 and Proposition~2), and that the relations' recall on real defects is
 unevaluated---which Section~X states as the boundary of the evidence.}
-\Action{Section~V-D and Table~16; Section~VI-B; Section~X.}
+\Action{Section~V-D and Table~17; Section~VI-B; Section~X.}
 
 \subsection{The 84.62\% figure}
 \Concern{It assumes two inputs per case and is only illustrative; keep it out of
@@ -676,7 +740,7 @@ are topology design parameters and not field prevalence, that the eight
 transitions are a designed set and not a sample of deployment changes, and that
 the out-of-band share quoted on the real system is a property of the constructed
 topology. The design dependence is also made inspectable rather than asserted:
-Table~5 gives the per-block record counts behind the 312/264 partition, Table~20
+Table~5 gives the per-block record counts behind the 312/264 partition, Table~21
 gives the per-cell census, and the matched-pair attribution (Table~2) shows
 exactly which cells carry each effect---the false-proof saving falls on one
 scenario, the legitimate share created through the framework's own facility,
@@ -692,7 +756,7 @@ is described qualitatively rather than tabulated.}
 \label{sec:addq}
 
 \noindent\textbf{Reviewer 1.} (1)~Contribution to the body of knowledge: yes, in
-the narrowed form stated in Section~IX and Table~19---a predicate-level account
+the narrowed form stated in Section~IX and Table~20---a predicate-level account
 of what the two relations determine, a channel decomposition of the false proofs,
 and a resolution argument about a pooled specificity. (2)~Technically sound: the
 algebraic part is separated from the empirical part and the empirical part is
@@ -712,40 +776,62 @@ applicable and sufficient; none is inappropriate.
 \label{sec:partial}
 
 For the Associate Editor's convenience, the items that are met only in part,
-with the single missing element in each. Four rows cover five of the
+with the single missing element in each, stated against the reviewers' original
+wording rather than against our own extensions. Four rows cover five of the
 twenty-one items; the concerns consolidated in this revision (the truth-table
 and unknown/failure contract of R1.2, the per-channel matrix for Gogs of R1.8,
 and the in-body failure rules of R1.14) are no longer listed here, because
-their previously missing elements are now in the manuscript:
+their previously missing elements are now in the manuscript. Two items that
+earlier drafts of this letter listed as partly met are no longer listed,
+because the missing element named there was our own proposed extension rather
+than something the reviewer asked for: R1.12 asked for the derivation to be
+extended to unequal and endogenous counts, which the conditional derivation
+now does, and no generative-model experiment was part of that request; R2.6
+asked for a discussion of how constructed rates depend on the design, which the
+manuscript states, and no equal-weight reanalysis was mandated by its wording.
 
 \begin{center}\small
 \begin{tabular}{@{}p{0.09\textwidth}p{0.42\textwidth}p{0.42\textwidth}@{}}
 \toprule
 \textbf{Item} & \textbf{What was done} & \textbf{What is still missing} \\
 \midrule
+R1.1 & A structured known/new comparison, element by element, with the
+already-established principle cited and the increment of this revision stated
+as a falsifiable claim (table in the R1.1 response above) & The comparison is
+qualitative and traceable rather than a bibliometric or quantitative mapping
+over the testing literature; we did not survey all related work systems at that
+level \\
 R1.4 & An admission rule for clause~(2), proposed in this revision and applied
 conservatively to the archived experiments; per-product path evidence at the
 API level; all three products recorded \emph{reject} & The rule is
 retrospective and its evidence base stops at the server boundary; a
 finer-grained enumeration would require an internal-source audit we did not
 perform \\
+R1.7 & A three-rule differential baseline on the same 42 cells and the same
+probe pair; the budget caveat (111 vs.\ 84, unequal information) stated in the
+preface, the manuscript and the response & Matched \emph{total} request and
+information budgets; the comparison is probe-pair-matched only, and we claim no
+equal-budget detection superiority \\
 R1.9 / R2.4 & A real vulnerable/fixed pair through the adjudication gate; the
 seeded control bounded to one fault pattern; the scope objection stated in the
 letter & Per-defect recall and false-positive rates across several independent
 defect classes; reported as \emph{open}, for the editor to judge whether the
 alternative response suffices \\
-R1.12 & A conditional derivation for endogenous counts: the per-run identity,
-the $S_k\to 1\iff \sum f/\sum n\to 0$ condition, and the fixed-FP and
-proportional-FP examples & A generative model of detector-dependent input
-production, which our fixed-enumeration pipeline does not instantiate \\
-R2.6 & Design dependence stated; per-block and per-cell counts inspectable &
-Rates recomputed under equal per-cell weights alongside the original weights \\
+R1.14 & A pinned environment, exact commands, machine-readable raw records,
+byte-identical regeneration of all 31 byte-reproducible outputs, and the
+93-file source package verified to compile in an empty directory; the
+source-state facts of the native run are now generated from frozen upstream
+version, digest and patch inputs rather than from a live checkout, and the
+pipeline validates input hashes at entry & The archived runs were not
+re-executed on a second machine; the frozen inputs make the recorded facts
+recomputable, but that recomputation is not an independent rerun of the
+original experiments \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent We would rather submit with these four rows named than with a text
-that implies the five items are closed. Each is visible in the manuscript as a
+\noindent We would rather submit with these five items named than with a text
+that implies they are closed. Each is visible in the manuscript as a
 stated boundary, in Section~VIII or at the point of use; R1.9 additionally
 remains an open scope question for the editor.
 
@@ -755,8 +841,10 @@ remains an open scope question for the editor.
 \item This response to reviewers.
 \item The revised manuscript with all changes highlighted.
 \item A clean copy of the revised manuscript, as PDF and as the LaTeX source
-package (92 files), which compiles in an empty directory and reproduces every
-table and figure from the raw records.
+package (93 files), which compiles in an empty directory. The numbers
+themselves are reproduced by the full repository---raw records, generators and
+verification scripts---which is archived separately; the 93-file package
+contains the typesetting sources, not the raw records.
 \end{enumerate}
 
 \end{document}

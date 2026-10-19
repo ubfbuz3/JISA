@@ -50,11 +50,18 @@ observable quantity as the MR family and decides the negative result.
 
 \paragraph{Ground truth}
 Every quantitative result names its ground-truth source, and it is never the
-detector under test: construction state for the constructed system and the
-scenario/configuration study; system-specific live re-probes of effective
-authorization (the per-system validation procedure is described in
-Section~\ref{sec:realsystem}) for Gitea, Gogs and GitLab; the pinned route tables for the grant census;
-and the seed list for the seeded target.
+detector under test. For the real-system experiments the three quantities come
+from different places and are kept apart: $E$ (entitlement) is read from the
+runner's own ledger of authorization events, recorded at mutation time and
+independent of the interfaces under test; $Y$ (effect) is the content-level
+outcome of a probe by the subject's own credential (for writes, owner-side
+re-reads and deletion re-reads rather than status codes); $O$ (the
+introspection surface) is diagnostic only and never substitutes for either.
+That the ledger and the content probes agreed cell by cell is a measured result
+of the runs, not a definition, and the oracle's disagreements with the ledger
+are reported as findings, not absorbed. Construction state carries the
+constructed system and the scenario/configuration study; the pinned route
+tables carry the grant census; the seed list carries the seeded target.
 
 \paragraph{Unknown and failure handling}
 Each predicate can fail to yield a bit, and the handling is fixed by the
@@ -88,12 +95,24 @@ while the shipped implementation returns a genuine \emph{deny} for that case,
 reserving \texttt{unknown} for the absent-object case and for the one channel
 the protocol singles out as unmodellable (deploy keys, which would have to
 surface as unknown). We disclose this protocol-to-implementation divergence
-rather than reconcile it silently. In the reported runs the two readings
-coincide in effect: the channel space of every modelled object is fixed by the
-setup ledger, no deploy-key-reachable cell exists in the topology, and the
-\TmpEDeny{} Gitea and \TmpGEDeny{} GitLab deny cells under the
-default-deny stratum are exactly the cells whose grant rows are absent---so no
-cell's verdict depends on which reading is taken. Were an unmodelled channel to
+rather than reconcile it silently, and we register it precisely. The
+closed-world default-deny reading is the rule the implementation adopts and the
+one the main analysis is computed under; it presupposes that the setup ledger
+enumerates the complete channel topology, which holds for the frozen
+topologies examined here. The literal-protocol reading marks those cells
+$E$-unknown instead. In the reported runs the two readings do not differ on any
+cell's alarm booleans: the deny cells of the default-deny stratum are exactly
+the cells whose grant rows are absent, the stale false proofs all fall on
+$E$-allow cells, and the zero live false proofs are likewise unaffected. What
+the reading does change is the scorable set: under the literal rule the
+\TmpCellsTotal{} committed cells shrink to the \TmpBothLitKnown{} cells whose
+ledger entitlement is $E$-allow (\TmpLitKnown{} on Gitea, \TmpGLitKnown{} on
+GitLab), with the remaining \TmpBothLitUnk{} marked unknown, and the $E/Y$
+agreement is then \TmpBothLitEeqY/\TmpBothLitKnown{} on that set rather than
+\TmpBothEeqY/\TmpBothCells{} on the full one.
+Table~\ref{tab:unknown-sensitivity} reconciles the two calibers side by side;
+``no effect'' is therefore claimed only for the observed false-proof
+phenomenon, not for the scoring denominators. Were an unmodelled channel to
 arise, the contract marks the cell \texttt{unknown} rather than guessing. In
 the reported runs the
 failure-exclusion exits were never taken: all \TmpCellsTotal{} temporal cells
@@ -101,9 +120,14 @@ and both Gogs readings committed, $E{=}Y$ throughout, and zero cells were
 excluded as failed; the \emph{unanswered-oracle} exits, by contrast, were
 taken, and their counts are the ones given above. The contract would bind any
 rerun on a degraded deployment. Missing or modified input records fail the
-pipeline outright (SHA-256 manifests over inputs and outputs are shipped with
-the artefact); the pipeline never substitutes a default value for an absent
-record.
+pipeline at entry: the SHA-256 manifests over inputs and outputs shipped with
+the artefact are checked before any generator runs, so a modified input is
+rejected before it can reach a table, and a missing one aborts rather than
+degrades; the pipeline never substitutes a default value for an absent
+record. The source-state facts of the native run are generated from frozen
+upstream inputs (commit, digests and patch manifest) rather than a live
+checkout, so the historical statements are recomputable from the archive
+alone.
 
 \paragraph{Scenarios and design cells}
 Seven scenarios separate the reasons an MR can misfire: no shared object (S1,

@@ -82,8 +82,12 @@ bounds any reproduction.
 \centering
 \caption{Execution facts for the native run of the published relations
 (Section~\ref{sec:native-run}). All values are emitted by
-\texttt{ingest\_native\_engine.py} from the run record; upstream Java sources are
-unchanged apart from the build configuration.}
+\texttt{ingest\_native\_engine.py}; the upstream modification counts are
+generated from a frozen snapshot of the upstream source state (upstream commit,
+per-file digests and the build-configuration patch archived with the artifact),
+not from a live checkout, so they are a deterministic function of archived
+records; upstream Java sources are unchanged apart from the build
+configuration.}
 \label{tab:native-facts}
 \small
 \begin{tabular}{@{}p{0.66\columnwidth}r@{}}

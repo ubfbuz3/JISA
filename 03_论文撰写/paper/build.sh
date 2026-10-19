@@ -29,6 +29,7 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/temporal_numbers.tex" \
          "$PROJ/04_绘图与分析/results/temporal_table.tex" \
          "$PROJ/04_绘图与分析/results/temporal_channel_table.tex" \
+         "$PROJ/04_绘图与分析/results/temporal_sensitivity_table.tex" \
          "$PROJ/04_绘图与分析/results/gogs_numbers.tex" \
          "$PROJ/04_绘图与分析/results/gogs_cross_table.tex" \
          "$PROJ/04_绘图与分析/results/gogs_channel_numbers.tex" \
@@ -95,6 +96,7 @@ cp "$PROJ/04_绘图与分析/results/cve_pair_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/temporal_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/temporal_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/temporal_channel_table.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/temporal_sensitivity_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_cross_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_channel_numbers.tex" "$BUILD/"

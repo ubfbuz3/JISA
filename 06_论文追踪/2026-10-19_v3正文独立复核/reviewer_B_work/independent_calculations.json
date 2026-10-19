@@ -1,0 +1,608 @@
+{
+  "RAW_RECORDS_SHA256.json": {
+    "files": 22,
+    "bad": []
+  },
+  "OUTPUTS_SHA256.json": {
+    "files": 30,
+    "bad": []
+  },
+  "confusions": {
+    "v3": {
+      "TN": 240,
+      "abstain_truth": 108,
+      "abstain_normal": 120,
+      "TP": 105,
+      "FN": 3
+    },
+    "direct_only": {
+      "abstain_normal": 156,
+      "abstain_truth": 108,
+      "FP": 108,
+      "TN": 96,
+      "TP": 108
+    },
+    "direct_observe": {
+      "abstain_normal": 156,
+      "abstain_truth": 108,
+      "TN": 204,
+      "TP": 108
+    }
+  },
+  "direct_only_FP_records": [
+    {
+      "record_line": 109,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 110,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 111,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 112,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 113,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 114,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 115,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 116,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 117,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 118,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 119,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 120,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 121,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 122,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 123,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 124,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 125,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 126,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 127,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 128,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 129,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 130,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 131,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 132,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 145,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 146,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 147,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 148,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 149,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 150,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 151,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 152,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 153,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 154,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 155,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 156,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 157,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 158,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 159,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 160,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 161,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 162,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 175,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 176,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 177,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 178,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 179,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 180,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 181,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 182,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 183,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 184,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 185,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 186,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 265,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 266,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 267,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 268,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 269,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 270,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 271,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 272,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 273,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 274,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 275,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 276,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 277,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 278,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 279,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 280,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 281,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 282,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 283,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 284,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 285,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 286,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 287,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 288,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 301,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 302,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 303,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 304,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 305,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 306,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 307,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 308,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 309,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 310,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 311,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 312,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 313,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 314,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 315,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 316,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 317,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 318,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 331,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 332,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 333,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 334,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 335,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 336,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 337,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 338,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 339,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 340,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 341,
+      "E": false,
+      "Y": false
+    },
+    {
+      "record_line": 342,
+      "E": false,
+      "Y": false
+    }
+  ],
+  "both_decide": 240,
+  "direct_observe_decide": 312,
+  "v3_decide": 348,
+  "disagreement_lines": [
+    392,
+    394,
+    396
+  ],
+  "temporal": {
+    "gitea": {
+      "counts": {
+        "cells": 280,
+        "EeqY": 280,
+        "stale_fp": 13,
+        "live_fp": 0,
+        "fixed": 13,
+        "Owrong": 0
+      },
+      "snapshots_checked": 16,
+      "all_hashes_agree": true
+    },
+    "gitlab": {
+      "counts": {
+        "cells": 432,
+        "EeqY": 432,
+        "stale_fp": 16,
+        "live_fp": 0,
+        "fixed": 16,
+        "Owrong": 53
+      },
+      "snapshots_checked": 16,
+      "all_hashes_agree": true
+    }
+  }
+}

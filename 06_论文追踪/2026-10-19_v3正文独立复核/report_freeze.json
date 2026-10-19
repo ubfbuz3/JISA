@@ -1,0 +1,11 @@
+{
+  "reviewed_commit": "8e2c706d3c843d517747fa94fa47eb80b5b59a46",
+  "independent_reports_frozen_before_synthesis": true,
+  "reports": {
+    "REVIEW_PACKET.md": "8c60eb368478862a20c42f967e09a4a9700a5d7432cf9dbdaf6eb82fcedc95fd",
+    "reviewer_A.md": "158b92d43e04e915a8fdd0bc34333d258cf3f363544b4c4681055f66f241ffac",
+    "reviewer_B.md": "40d01aeeabc67a3342fc2fb4326ef97f0b0caaa6fd5b1643bd7f4e76402854cf",
+    "reviewer_C.md": "e69cea997fdf815ad4a268926b31ccc7f72dffeb9aad4d8d5d8d36a0135f0c7c",
+    "综合复核报告.md": "c490038b863240631f96d741e3f6d0db7ac912d65c62450a31f84ce20e4b23d7"
+  }
+}

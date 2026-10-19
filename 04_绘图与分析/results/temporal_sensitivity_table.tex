@@ -1,0 +1,19 @@
+% 由 ingest_temporal.py 生成，勿手改
+\begin{table}[t]
+\centering
+\caption{The same transition cells under the two \emph{unknown} rules of Section~\ref{sec:protocol}. The implementation scores every committed cell by closed-world default deny; the protocol's literal \emph{unknown} policy marks modelled-no-channel cells $E$-unknown and excludes them from scoring. The rule changes the scorable set, the $E$ classification and the $E/Y$ denominator; it does not move the stale false proofs, all of which fall on $E$-allow cells inside the literal-known set.}
+\label{tab:unknown-sensitivity}
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \multicolumn{3}{c}{implementation (default deny)} & \multicolumn{3}{c}{literal protocol ($E$ unknown)} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Product & scored & $E$ allow & stale FP & scorable & $E/Y$ agree & stale FP \\
+\midrule
+Gitea \TmpVersion & \TmpCells & \TmpEAllow & \TmpStaleFP & \TmpLitKnown & \TmpLitEeqY & \TmpLitStaleKnown \\
+GitLab CE \TmpGVersion & \TmpGCells & \TmpGEAllow & \TmpGStaleFP & \TmpGLitKnown & \TmpGLitEeqY & \TmpGLitStaleKnown \\
+\midrule
+Total & \TmpBothCells & --- & \TmpBothStaleFP & \TmpBothLitKnown & \TmpBothLitEeqY & \TmpBothLitStaleKnown \\
+\bottomrule
+\end{tabular}
+\end{table}

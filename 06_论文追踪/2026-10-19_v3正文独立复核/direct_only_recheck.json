@@ -1,0 +1,12 @@
+{
+  "tally": {
+    "abstain": 264,
+    "decided": 312,
+    "FP_binary": 108,
+    "FP_binary_Y_deny": 108,
+    "TN": 96,
+    "TP": 108
+  },
+  "binary_claim_error_risk": 0.34615384615384615,
+  "joint_v3_direct_decided": 240
+}

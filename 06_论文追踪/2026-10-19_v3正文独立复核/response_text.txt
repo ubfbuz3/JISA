@@ -1,0 +1,499 @@
+
+=== PAGE 1 ===
+Response to Reviewers — Access-2026-49387 1
+RESPONSE TO REVIEWERS
+Manuscript #Access-2026-49387
+Revised title:Two Reachability-Gated Relations in MST-wi: Temporal Mismatch, Oracle Admissibility, and
+Measurement Limits
+Qiulong Lin and Nanlei Chen
+19 October 2026
+Dear Associate Editor and Reviewers,
+Thank you for the detailed reports. The revision is substantive rather than cosmetic, and we have kept the narrowing
+that both reports asked for: the title, the abstract, the running head and every claim are now restricted to the two
+reachability-gated relations that were actually examined. Three statements that were previously argued in prose are
+now computed from records and reproduced by script—the complete factorial design and its reconciliation, the truth
+table of the two relations, and a competitive differential baseline on a matched request budget. One experiment that
+had not been run at all (a competing differential baseline) has now been run and reported. Where a request could not
+be met with the evidence we have, we say so in the manuscript instead of softening the text; five of the twenty-one
+items are met only in part, and Section 4 of this letter lists them together with what is missing and why. One of the
+five (R1.9) is reported as an open scope question for the editor rather than as resolved.
+References below are to the revised manuscript (28 pages, 23 tables). Table and section numbers are stable; page
+numbers are given for the tables most often at issue. Every number quoted in this letter was checked against the
+artefact that generates it—the macros in the analysis output and the raw JSON records they are computed from. This
+letter is prose, not a generated file, so the check is a separate step rather than an automatic consequence of compiling
+it;check_letter_numbers.pyin the package re-runs that comparison.
+1 Reviewer 1
+1.1 Novelty positioning against existing BOLA testing research
+Concern.The paper identifies limitations in reachability-based adjudication, oracle assumptions and metric design,
+but does not sufficiently distinguish these contributions from established work on oracle problems, stateful web testing,
+authorization testing and metamorphic testing. A structured comparison is requested.
+Response.We agree that “a frozen snapshot goes stale” is not new, and the manuscript now says so explicitly. What we
+can support with evidence is narrower and is stated as three falsifiable increments rather than as a general positioning
+claim. (i)Predicate level:at source, the verdict of each of the two relations is a function of the crawl-time reachability
+model and the request outcome, so it is determined by quantities that a direct request-plus-oracle comparison already
+has (Section VII-B, confirmed by execution in Section VII-C). (ii)Subset level:the false proofs we exhibit are con-
+fined to the cells whose grant is invisible to the framework’s own record, and the channel decomposition (Table 11,
+p. 14) shows exactly which channels those are; neither product’s membership surface produces a single falseallow.
+(iii)Denominator level:a pooled input-level specificity cannot resolve a failure confined to one class, and no fixed
+threshold can force such a class below it (Proposition 1 and Corollary 1, Section IV-E). We also state plainly that we
+do not compare detection rates and cannot, from our evidence, claim any.
+Action.Section IX rewritten around these three increments; the claim of being “orthogonal” to prior work deleted; the
+abstract’s first sentence and the conclusion restated in the same terms.
+1.2 A complete definition of the false-proof outcomes
+Concern.The mapping between alarms, false alarms and proven violations and the ground-truth authorization state
+is not formalized consistently; decision variables and truth conditions are requested for every combination of request
+outcome, actual entitlement, oracle response and detector verdict, together with an account of how a legitimate suc-
+cessful request is distinguished from unauthorized access without letting the tested reachability model determine its
+own ground truth.
+Response.Table 17 (Section VI-B, p. 19) is now that table. It defines four quantities over the 712 temporal cells:Y
+(the ordinary request succeeds),M(the crawl-time model lists the object for the subject),O(the introspection surface’s
+answer, with an explicit “no definite answer” value),A(the alarm of either relation; on this domain both reduce to
+y∧ ¬m) andD(the direct adjudicator,y∧ ¬o), plusH=A∧ ¬o, the promoted verdict of the state-calibrated method,
+
+=== PAGE 2 ===
+Response to Reviewers — Access-2026-49387 2
+which exists only whereOis definite. The twelve rows cover every combination of(Y,M,O), and the count columns
+split each row by the ledger’s entitlementE, so each row states its truth conditions for both values ofE. On the anti-
+circularity point: the labelEcomes from the framework’s own grant and membership ledger, which is an independent
+entitlement source;Mis aninputto the relations and is never used as a label. A legitimate success is separated from
+unauthorized access only by an independentdenyfromEtogether with a content-levelallowobservation—never by
+M—and the manuscript says that the relation’s alarm is not evidence of illegal access.
+Action.Table 17 and the definitions in Section IV-A; the three-way split of the native run intoA(the engine’s own
+alarm),H(our promotion policy) andT(confirmed) is given in Table 22 (p. 23). In this revision the failure and
+unknown contract is additionally consolidated in the body itself (Section III, “Unknown and failure handling”): how
+anE-undefined transaction, aY-undefined execution error and anO-undefined surface are each classified, when the
+method abstains, which denominators exclude such cells, and how the exclusions are disclosed—fixed before the run
+by the pre-registered protocol, not negotiated per result. That section also discloses one protocol-to-implementation di-
+vergence rather than reconciling it silently: the protocol promisedE=unknown for a modelled object with no recorded
+granting channel, while the implementation returns a genuinedenythere; the two readings coincide on every reported
+cell because the channel space of each modelled object is fixed by the setup ledger and no deploy-key-reachable cell
+exists, and the text says so.
+1.3 Characterization of authorization-state transitions
+Concern.The three-phase protocol does not comprehensively model revocation, inherited permissions, public vis-
+ibility, role changes and concurrent updates; the state-transition semantics, the timing of each observation and the
+consistency assumptions behind the deterministic false proofs are requested, as is whether the conclusions hold when
+authorization changes between request and adjudication.
+Response.Section V-A now states the semantics that the experiment actually exercises, and three scope limits are
+stated as part of the result rather than buried in the discussion. The eight committed transitions are a designed set, and
+we list them by the name the run record uses rather than by category: direct grant, direct revoke, team-to-repository
+attach, team-member removal, private-to-public visibility, public-to-private visibility, a read-to-write role change, and
+a site-administrator grant. GitLab’s set is the same shape with two of its own: group share and group-member re-
+moval. There is no team-detach, no member addition and no site-administrator revoke in the record; the two visibility
+directions are separate events. Each cell is serialised, no mutation is issued between a cell’s request and its probe,
+so the window between them is staticby construction; and a deployment in which a grant or revoke lands inside that
+window is outside what these cells measure—for such a case the cell’s conclusion does not apply and the observation
+must be repeated, which the manuscript says we do not claim to detect. Revocations behave differently from grants,
+and the manuscript is explicit that they must not be scored as misses: the stale model still lists 17 cells whose access
+was revoked (7 on Gitea, 10 on GitLab), and in every one of them the request is refused, so no violation occurred and
+nothing was missed—scoring them as false negatives would requireE=deny andY=allow together, which never
+happens here (Table 12, p. 14). On concurrency, the harness is single-threaded, no concurrent writer ran, andhvis
+declared to be a harness-maintained logical version rather than an atomic server snapshot—which is what makes the
+still window meaningful.
+Action.Section V-A (Table 12, p. 14); the same scope limits restated in Section VIII.
+1.4 Operationalizing the admissibility condition
+Concern.Clause (2)—that the oracle is not affected by the same defect under investigation—remains a qualitative
+judgement; a reproducible procedure for determining admissibilitybeforeexamining outcomes is requested.
+Response.We agree this is the weakest link. In this revision we give clause (2) an operational procedure—anad-
+mission rule—and apply it conservatively to the archived experiments (Section VI-E, “An oracle-independence ad-
+mission rule, applied retrospectively”). We state its epistemic status plainly: the rule isproposed in this revision,
+not extracted from the pre-registered protocol. The protocol pinned by digest did record the qualitative judgement
+(oracle_independence=shared; the oracle read for diagnosis only), but it did not contain the procedure, and we
+do not backdate it. The rule itself: fix the target defect class; enumerate, at the level the product’s own documentation
+and observable behaviour support, the path that produces the enforcement answer and the path that produces the oracle
+answer;admitif neither path contains the other’s decision point nor shares a component whose failure could co-occur
+with the tested defect;rejecton such sharing;unknown—refusing independence-based promotion—where either path
+cannot be enumerated at that level. Applying it: on Gitea the permission route the oracle consults and the content
+
+=== PAGE 3 ===
+Response to Reviewers — Access-2026-49387 3
+routes are answered by the same server binary applying the same permission model; on Gogs the per-object route
+enumerates direct collaborators only and the permission suffix that would expose the remaining channels does not
+exist (404); on GitLab themembers/allroute and the content routes are answered by the same application consulting
+the same membership tables. The enumeration stops at each server boundary—we did not audit internal source, so
+the finer-grained verdict would beunknown—and the conservative reading available at the API level is recorded as
+rejecton all three products. Three epistemic statuses are kept apart in the manuscript: the diagnosticO/Hreadings
+(run under the recordedsharedstatus); the post-hoc gate-correctness classification against the independent ledger and
+content observation (which needs no oracle independence); and independence-certified proofs of previously unknown
+defects, which the rule refuses here. No recorded number changes under the rule.
+Action.Section VI-E (admission rule, per-product path evidence, and the three epistemic statuses); the pre-registered
+protocol and the amendment timing note remain in the reproducibility package as the earlier, qualitative record.
+What remains.The rule is retrospective and its evidence base is API-observable behaviour, not an internal-source au-
+dit; a finer-grained per-component enumeration would be needed for anything beyond the conservative reject recorded
+here. This is listed as a limitation in Section VIII.
+1.5 Proposition 2: separating the definitional from the empirical
+Concern.The proposition risks being tautological; the formal identity should be distinguished from the empirical
+premise that the evaluated relations consume no additional decision-relevant information, with a truth-table derivation
+or explicit functional representation.
+Response.The result is now split in two.Lemma 1(absorption) is the algebraic part: if a verdict is a function of an
+oracle answer and an ordinary request, it cannot outperform the direct consumer of those same inputs. That part is
+definitional and is labelled as such.Proposition 2is the empirical part, and it is deliberately narrower than the lemma’s
+domain: premise (i) of the lemma—that the alarm reads only the crawl-time model and the response—holds for these
+two relations by source inspection, and on the domain studied both alarms reduce toy∧¬magainstD=y∧¬o. What is
+verified empirically is that predicate reduction. What holds algebraically isA=Dif and only ify=0 orm=o, together
+withH⇒D. Premise (ii) of the lemma—that the model isO-determined—isnotclaimed: it fails exactly on the stale
+cells, which is row 7 of Table 17, and the manuscript says so rather than presenting the relation as informationally
+redundant in general. The explicit predicates arewritten out (A 002 =¬sup(B,A)∧ ¬m∧ ¬err(o 1)∧q(o 1,o 2)and
+A004 =y∧ ¬m, againstD=y∧ ¬o), and on the domain studied both reduce toy∧ ¬m. The reduction was verified
+mechanically against 576 constructed records and 712 temporal cells with zero mismatches; the generating script exits
+rather than emitting the table if any record disagrees. The equivalence is stated correctly asA=D⇔y=0∨m=o:
+whereDis defined the two verdicts coincide in 530 of the 584 readable cells and part in the two rows withY=allow
+andM̸=O—40 cells where the model is right and the oracle wrong, and 14 where the model is stale and the oracle
+right. Those two rows are the two failure mechanisms the cross-vendor section keeps apart. The falsification condition
+is stated: produce an observable, outside what a succeeding request plus a readable oracle can determine, on which an
+authorization metamorphic relation still decides.
+Action.Section VI-B with Lemma 1, Proposition 2, Table 17 (p. 19) and the corrected equivalence; the earlier claim
+of extensional equality is deleted.
+1.6 Coverage and identifiability of the 576-record enumeration
+Concern.A transparent mapping from configurations and scenarios to all records is requested, with the complete fac-
+torial design, an account of how each factor is varied, attribution of the reported effects, and an explicit reconciliation
+of the 36/18 representative grid with the later 312/264 partition.
+Response.The enumeration is now inspectable end to end. Table 1 (p. 5) is the complete design: seven factors,
+their levels, how each level is varied, the record count per level and what it crosses with, with the additive identity
+44·2·3·2+8·3·2=576 in the footnote. Table 20 (p. 23) is the configuration-by-scenario census, where a dash marks
+an inadmissible combination and the caption says why (a configuration with no share has nothing to list; the listed-
+and-unreadable combination was not run, so it is untested rather than impossible). The reconciliation the reviewer asks
+for is Table 5 (p. 9): it starts from the S3–S7 original grid of 54 records (which contains 8 v2 false proofs) and adds
+the remaining blocks, asserting by record key that the blocks are mutually disjoint and that their union is exactly 576,
+split 312 readable / 264 unreadable. Section III-A states what the design can and cannot identify: the three dimensions
+are nested rather than crossed (the relation is single-valued on S5; channel and visibility are defined only inside one
+
+=== PAGE 4 ===
+Response to Reviewers — Access-2026-49387 4
+exception setting), so a full interaction estimate is not available—which is why attribution is done with matched pairs
+(Table 2, p. 5) rather than with a regression.
+Action.Tables 1, 2, 5 and 19; Section III-A.
+1.7 Comparison against competitive black-box methods
+Concern.direct_onlyis deliberately unfair andobs_successandalways_alarmare intentionally weak; a differ-
+ential, multi-account authorization tester probing equivalent objects under distinct privilege levels is requested, with
+matched query budgets, execution costs and detection outcomes.
+Response.This is the one comment that required a new experiment, and it has been run. Section VI-D and Table 18
+(p. 21) report three conventional differential rules on the same 42 controlled cells (six configurations crossed with S1–
+S7) and, critically, on thesame probe pair: every method consumes one request as the owner and one as the actor—84
+shared probes in all—and ours issues one additional read of the authorization surface on the 27 cells where a relation
+alarms and none where it does not (0.64 per cell on average, 27 reads in total). The budget is therefore matched at the
+level of the probe pair and only there: ours issues 111 requests against the baselines’ 84, and it is the only method that
+reads the target’s authorization surface, so total request count, visible information and privilege all differ. We report the
+comparison as one between adjudication trade-offs at different information costs, not as a matched-budget detection
+contest.B1 status-onlyalarms whenever the replayed request returns a non-error.B2 equality replayalarms only when
+the owner succeeded and the actor received byte-identical output—the differential rule with no authorization model.
+B3adds the strongest information a tester can hold without reading the target: it suppresses every cell covered by the
+tester’s own share log. On these cells B1 and B2 claim on all 27 allowed cells with 12 false proofs each (precision
+55.56%), B3 claims 21 with 6 false proofs (71.43%), all six on the out-of-band channel, and ours claims 10 with no
+false proof but 17 abstentions (coverage 59.52%). Recall is reported in the table under both denominators, because the
+two differ exactly where ours abstains: on the cells ours rules on, recall is 100%; over all 15 violation cells, including
+the 5 it abstains on, total recall is 66.67%. The baselines abstain on nothing, so both of their figures are 100%. Two
+readings are explicitly ruled out in the text: this isnota detection gain, because the baselines find all fifteen violations
+while ours confirms the ten whose surface is readable and declines the other five; and it isnota free improvement,
+because coverage falls to 59.52%. A corroborating observation on a real system is reported with the same qualification:
+on the Gitea snapshot the equality rule fires on all 25 legitimately allowed cells and the in-band log still leaves 24,
+because the framework log does not observe 0.96 of the effective access there—a property of the constructed topology,
+not an estimate of field prevalence.
+Action.Section VI-D and Table 18 (p. 21); the runner (experiments/run_baseline.py) and its raw output are
+in the reproducibility package, and both baseline tables are reproduced byte-identically byverify_artifact.sh
+repro.
+What remains.No per-method wall-clock time. The complete comparison—both probes per cell and the additional
+reads included—ran in 22.5 s of wall-clock harness time covering setup, probing, scoring and cleanup, and that figure
+is recorded in the run output shipped with the artefact. The runner binds no CPU and measures no per-method CPU
+time, so we make no claim about single-core cost. We do not report a time per method because all four are scored
+from the same two recorded responses in the same process, so any per-method number would measure our replay
+loop rather than the rule. What the reviewer’s question needs beyond that—the cost of the same probes against a live
+target—is reported for the real-system temporal loops only (Gitea 21.2 s, GitLab 7.3 s, of which the probes are 20.7 s
+and 6.0 s), where the requests really do reach a server.
+1.8 Channel-by-channel isolation of the oracle-validity problem
+Concern.A channel-by-channel confusion matrix separating direct membership, team-derived access, administrative
+grants, public visibility and out-of-band sharing is requested, together with a distinction between an incorrect oracle
+response and a stale reachability model.
+Response.Table 11 (Section V-B, p. 14) is that matrix: the owner-vantage introspection surface scored against the
+ledger per channel and per product, with cells, agreements in each direction, the two error directions, and a separate
+“unanswered” column for anonymous readers. Neither product produces a single falseallow: the membership surface
+errs only by omission, and public and site-administrator cells are exactly the channels that are not group or repository
+membership. The two failure mechanisms are kept apart by construction and by table: in the truth table, row 6 is the
+oracle answeringdenyon a cell the ledger allows (40 cells, an unsound oracle), row 7 is the model failing to list a cell
+the ledger allows (14 cells, a stale model), and the two verdicts disagree in precisely those rows. Gogs now carries the
+
+=== PAGE 5 ===
+Response to Reviewers — Access-2026-49387 5
+same channel decomposition (Table 14, Section V-B, p. 15), and the reason an earlier draft declared the gap instead is
+recorded in the manuscript, because it was a category error rather than a data limitation: a channel label is a property
+of the entitlement ledger—built from the lab topology, the documented inheritance rules and the recorded out-of-band
+grant events, and never from a probe response—so a product whose API exposes no per-object membership route does
+not lose the channel axis. What such a product loses is the ability toenumeratethose grants through that route, which
+is a claim about the oracle surface, not about the labelling. On the same 48 snapshot cells the surface is correct on
+every cell it can represent—all 4 direct-collaborator cells and all 27 cells with no recorded grant—and answersdeny
+on all 17 cells whose entitlement arises from team membership (4), public visibility (5) or site administration (8), with
+no falseallowanywhere (0). Panel (b) of the same table re-groups the cells by mechanism, so out-of-band sharing is
+reported as a source axis rather than as a channel mutually exclusive with team or public; 1 cell carries two ledger rules
+and is counted once, under the stronger. That the blind spot belongs to the chosen surface rather than to the product’s
+whole API is recorded rather than inferred: in the surface probe shipped with the run the per-object permission suffix
+returns 404, the per-object team route 404 and the collaboration route the oracle consults 204, while the organisation
+team listing is reachable (200). The decomposition is stable across readings (31 agreements and 17 false denials under
+the live reading), so the concentration is not an artifact of the snapshot.
+Action.Tables 11, 13 and 14; Section V-B.
+What remains.The three affected strata on Gogs are small (4, 5 and 8 cells), so the per-channel rates describe this
+topology rather than estimate field prevalence; and the mechanism labels are the ledger’s own rule text—the harness’s
+record of how each grant was made—not a second, independent audit of the product’s grant machinery.
+1.9 Detection results across independently implemented defects
+Concern.The three seeded instances share one fault pattern; the positive control should be expanded to multiple in-
+dependently implemented authorization defects, including unauthorized reads, unauthorized modifications, inherited-
+permission errors and privilege escalation, with per-defect recall and false-positive rates.
+Response.We did not implement multiple independent defects, and the manuscript says so. What was added is a
+real vulnerable/fixed pair rather than another seeded instance: a publicly fixed defect in Gitea (object-versus-path
+ownership in the comment-permission check, fixed between 1.20.5 and 1.20.6), driven through the same adjudication
+gate. The verdict uses the ledger’s entitlement and the content-level observation: on 1.20.5 the gate yields one true
+positive and no false proof; on 1.20.6 it yields no alarm and no claim; the twelve control checks (ten expected re-
+sponses across the two builds and two recovery checks) all behave as expected. The generating script is fail-closed in
+four layers, and each layer is now checked rather than asserted: the required label set and its uniqueness (one main
+probe plus five controls per build), the control responses, the recovery outcome, and—the layer that matters most—a
+recomputation ofYfrom the owner’s re-read of the comment body rather than from any cached field or status code,
+followed by a re-run of the sameclassifyand a field-by-field comparison against the record. A regression test
+(test_cve_pair_validation.py, run byreproduce.sh) applies seven perturbations, plus an unchanged-record
+control, to in-memory copies—a deleted control, a failed recovery, a re-read body reverted to the original while
+the cached verdict still says true positive, a control returning 403, duplicated and unregistered labels, and a ledger
+conflict—and requires each to be rejected. The manuscript is explicit that this is a positive control of thegate—an
+independent entitlement deny together with a content-level allow—and not evidence about the relations’ recall on real
+defects, and the conclusion states that a stronger claim needs apopulationof real defects, which a single pair cannot
+provide. The seeded control is also bounded honestly: the three instances instantiate one fault pattern, and the one
+BFLA defect we seeded (a non-privileged actor succeeding at a collaborator-write endpoint) is reported as a boundary
+of the read-oriented logic, not as a detection failure.
+Action.Section V-D and Table 16 (p. 16); Section V-C and Table 15 (p. 16) for the seeded control; the scope statement
+in Section X.
+What remains.Per-defect recall and false-positive rates across several independent defect classes. Not done, and
+stated as out of scope in the manuscript. The alternative response—the single-pair gate control plus the bounded
+seeded control, with the narrowed claims—is complete, and we do not represent it as satisfying this request: whether
+it suffices for acceptance is a scope judgement that belongs to the editor, which is why this item is reported as open
+rather than resolved.
+
+=== PAGE 6 ===
+Response to Reviewers — Access-2026-49387 6
+1.10 Control of temporal and observational effects
+Concern.The ordering of crawling, entitlement mutation, oracle querying and request execution must be specified,
+with timestamps or event logs sufficient to verify that the comparison changes only the model-reading time, and an
+account of how live-state queries avoid changing the tested state or gaining privileges.
+Response.The ordering is fixed and stated: crawl, then freeze the model att 0, then commit the transition, then query
+the oracle, then issue the request; all observations areGETrequests, so nothing in the measurement path mutates state;
+the recrawl uses the same credential as the original crawl, so it grants no privilege the detector did not have; and the
+owner oracle is reported separately from the subject-side reading rather than pooled with it. The run record carries
+the protocol digest, the event sequence numbers, the policy version, theM 0/M1 model digests and the per-request
+timestamps, and the harness versionhvis declared to be a logical version rather than an atomic server snapshot. The
+results are symmetric across the two products: Gitea 280 cells with 13 stale false proofs, all 13 repaired by a recrawl
+with the same credential and 0 mismatches under the live reading; GitLab CE 432 cells with 16 stale false proofs, all
+16 repaired and 0 under live reading.
+Action.Section V-A and Table 12 (p. 14); the pre-registered protocol file, the run records and the amendment timing
+note are in the reproducibility package.
+1.11 The specificity denominator
+Concern.The 84.62% figure assumes two follow-up inputs per case and cannot establish the numerical behaviour
+of the published 99.81% figure; the original counts or a parameterized sensitivity analysis are requested, with a clear
+distinction from conventional specificity.
+Response.The published figure is now treated as what it is: a specificity, TN/(TN+FP), over the follow-up inputsF,
+with the manual verification of the reported failures acknowledged—so the labels are not the crawler’s own answer,
+and we do not attribute the number to a circular label. The 84.62% illustration has been removed from the manuscript
+entirely, together with the claim that it agrees with the crawler. We cannot recover the engine’s exact input count, so
+instead of substituting a value we parameterize: with FN=0 the figure equals 1−FP/(F−TP), a class supplying
+a sharewof the negative inputs can move it only within[1−w,1], and no fixed thresholdt<1 can guarantee that
+a class-uniform failure pushes it belowt(Proposition 1 and Corollary 1, Section IV-E). The proposed scenario-level
+quantity is labelled an analytical construct for characterising resolution, not a replacement metric, and the text says the
+finding is about what the published figure can be asked to show, not about its arithmetic.
+Action.Section IV-E; restated in Section VI-C; the figure removed from the body.
+1.12 Heterogeneous scenario weights
+Concern.Proposition 1 assumes equal contributions per scenario; the result should be extended to unequal request
+counts, correlated inputs and different alarm counts per scenario, including the case where the number of generated
+inputs depends on scenario complexity or detector behaviour.
+Response.The fixed-weight case is derived (Proposition 1 and its corollary, Section IV-E) and the arbitrary-share case
+is bounded without any equal-weight assumption: whatever the class shares are, a failing class contributing a sharew
+of the negative inputs moves the figure only within[1−w,1](Section VI-C). Our records are a fixed enumeration in
+which the input count does not respond to the detector, so the endogenous case is not instantiated by any experiment
+here; what this revision adds is a conditional derivation of what an endogenous count can certify, stated below. Rather
+than assert a generality we cannot support, Section VIII states the limitation: records within a design cell are not
+independent, the records are a fixed enumeration, and we therefore report counts and rates rather than inferential
+intervals, with no result resting on statistical significance. In this revision we additionally give the endogenous count
+its own conditional treatment (Section VI, “What an endogenous count certifies, conditionally”): for a methodDand
+runωwithn i(D,ω)negative inputs andf i(D,ω)false proofs per scenario, the scoreS=1− ∑i fi/ ∑i ni is a counting
+identity per fixed run; for a family of runs,S k →1 if and only if ∑i fi/ ∑i ni →0 with the denominator positive.
+Two arithmetic examples bound the interpretation: a fixed number of false proofs under a growing input total gives
+Sk =1−1/k→1 (the failure persists, only its weight vanishes), while false proofs growing asαkgiveS k =1−αat
+everyk(no dilution toward 1). The derivation is conditional on the run’s scenario coverage—an unexercised failing
+class contributes nothing to either sum—and we do not use it as a detection guarantee.
+Action.Section IV-E and Section VI-C; the limitation stated in Section VIII.
+What remains.The endogenous derivation is per-run arithmetic plus an asymptotic condition; it assumes no model of
+detector-dependent generation, and the correlation of records still limits the statistical reading, as Section VIII states.
+
+=== PAGE 7 ===
+Response to Reviewers — Access-2026-49387 7
+1.13 Consistent treatment of abstentions and operational cost
+Concern.Perfect precision bought by abstention is not characterized by precision and recall alone; coverage, selective
+risk, abstention rate and performance conditional on oracle availability are requested, alongside execution time and
+request overhead, with a distinction between a safe abstention and a successful detection.
+Response.Table 4 (Section IV-D, p. 9) rescored the same 576 records on thedecisionrather than on the alarm,
+and reports coverage, the abstention count and rate split by whether the record held a true violation, false proofs,
+misses and selective risk, with the explicit warning that risk is comparable across methods only at equal coverage—
+which these methods do not have. The state-calibrated method covers 60.42% and abstains 228 times; panel (b)
+splits those abstentions by reason, and only the first row (156 surface-unreadable, 108 of them true violations) is
+the availability gate the method is named for, the other 72 being a false proof converted into a non-decision. The
+direct methods abstain under the same unreadable-means-abstain contract (coverage 54.17%, 264 abstentions), and
+the forced-negative reference—coverage 100%, 108 misses, risk 18.75%—is labelled as the price of forcing a verdict
+on unreadable cells, not as a property of any method. A passed record is defined as one on which the method did
+not fire, explicitly not a certificate of safety, and the text refuses to rank by risk alone, noting that the always-degrade
+reference has the second-lowest risk while detecting nothing. Cost is reported as request counts: 4833 enumeration
+requests (median 8, range 7–10) and 104 probeGETs (52 cells×2).
+Action.Table 4 (p. 9) and Section IV-D; the abstention semantics unified across methods in Section IV-A.
+What remains.Wall-clock execution time for the replay-based methods, for the reason given under comment 7.
+1.14 Reproducibility of the principal claims
+Concern.A version-pinned environment, exact commands, complete configuration and seed files, machine-readable
+raw outputs and scripts that regenerate every table and figure are requested, together with documentation of the two
+failed relation executions, the engine-side defect and the treatment of missing or failed observations.
+Response.The package now carries a pinned environment, the exact commands, the seed and configuration files,
+the machine-readable raw records and the scripts that regenerate every table and figure, and it was verified rather than
+asserted: in a staging copy of the committed tree—extracted withgit archive, so it cannot see the working tree—the
+pipeline regenerates all 28 number-bearing artefacts byte-identically, including the two baseline tables; and in an empty
+directory the 92-file submission package compiles (28 pages, no undefined references). The native run is reported as
+three stages rather than one number (Section VII-C, Tables 21–23, pp. 23–25):A, the engine’s owngetFailures()
+alarms, 6;H, our promotion policy applied to them, 6;T, confirmed, 0—with 6 false proofs. The content predicate
+is reported by invocation count rather than claimed clean, and the text says so. On the reviewer’s phrase “two failed
+relation executions”: the current record has one execution error, not two. Of the 11 catalog authorization relations
+evaluated against Gitea, 10 ran and 1 aborted on an engine-side defect; the number two is the count of relations that
+alarmed (2 relations, 6 alarms in all, OTG_AUTHZ_002, OTG_AUTHZ_002c). The aborted relation, the engine-side
+defect and the alarm split are each documented at source, and the treatment of missing or failed observations is written
+into the protocol file that the run record binds.
+Action.Section VII-C and Tables 20–22;reproduce.sh,verify_artifact.shand the hash manifests in the pack-
+age.
+What remains.The failure and missing-observation rules were, at resubmission time, written in the protocol file
+and the scripts; this revision additionally consolidates them in the body itself (Section III, “Unknown and failure
+handling”), stated as implemented, including the transport-retry versus transaction-refusal distinction and the separate
+accounting of unanswered-oracle cells.
+1.15 Narrowing the conclusions; an evidence-to-claim table
+Concern.Statements suggesting that adjudication of genuine violations is absent from the evaluated relations risk
+extending beyond the experiments; conclusions established by source-level dependence, by the synthetic construction
+and on real systems should be distinguished, with a final table linking each research question to its assumptions, tested
+configurations, results and limitations.
+Response.Table 19 (Section VI-E, p. 22) is that table. Each row names the assumption the claim needs, the artefact
+that carries it, and the boundary that remains; the last row is the adjudication gate and is marked as not being evidence
+about detection effectiveness. The three findings are explicitly attributed to different kinds of evidence—source-level
+functional dependence, a constructed enumeration, and two real-system studies—and the text says a reader should
+
+=== PAGE 8 ===
+Response to Reviewers — Access-2026-49387 8
+be able to see which kind carries which sentence. The sentence that extended beyond the experiments has been
+deleted, together with the mis-attribution of a constructed result to a published one; the title, abstract, running head
+and conclusion are narrowed to the two reachability-gated relations, and each finding is stated with its own falsification
+condition.
+Action.Table 19 (p. 22); Section VI-E; title, abstract and Section X.
+2 Reviewer 2
+2.1 Novelty, and whether re-crawling or live reading removes the problem
+Concern.State what is new beyond showing that a snapshot goes stale, and whether re-crawling or live reading
+removes the problem; the data show 0 mismatches under live reading on Gitea.
+Response.Live reading removes the measured false proofs on both products: 0 mismatches under the live reading
+against 13 stale false proofs on Gitea and 16 on GitLab, and a recrawl with the same credential repairs 29 of 29. We
+removed the unconditional claim that more crawling is ineffective, and the text now says when a recrawl suffices—
+when the model can be refreshed with the same credential before adjudication—and when it does not: a grant the
+surface cannot enumerate at all is invisible to any recrawl, which is the out-of-band channel where the residual false
+proofs sit. What is new is therefore not the observation that a snapshot goes stale, but the measurement of when
+staleness produces afalse proofrather than a miss, the separation of that mechanism from an unsound oracle, and the
+fact that the residual survives the strongest tester-side bookkeeping.
+Action.Section V-A (Table 12, p. 14); Section VI-A; the related-work claim restated in Section IX.
+2.2 Scope of claims: two relations of one family
+Concern.Only 2 of 76 relations were studied and only 2 of 11 authorization relations fired on Gitea; the title and
+abstract should be narrowed or the evaluation extended.
+Response.The title, the running head, the PDF title and the abstract are narrowed to the two reachability-gated
+relations in MST-wi, and the abstract opens by naming them as two relations of that framework. The native trigger
+range is stated where the run is reported rather than in the abstract, which is at its word limit: Section VII-C and
+Table 21 (p. 23) record that of the 11 catalog authorization relations evaluated against Gitea, 10 ran and 2 alarmed,
+both of them reachability-gated (OTG_AUTHZ_002, OTG_AUTHZ_002c). We did not extend the evaluation to other
+relation families; Section VIII names this as the paper’s single most important limitation and says what raising it would
+require—relations gated otherwise, which is a different experiment.
+Action.Title, running head, abstract, Section VIII.
+2.3 Proposition 2
+Concern.It is close to true by definition; separate what is empirical from what is definitional.
+Response.The same split as under Reviewer 1, comment 5, restated here so this comment stands on its own. The
+algebraic absorption is a lemma and is labelled definitional: a verdict that is a function of an oracle answer and an
+ordinary request cannot outperform the direct consumer of those same inputs. The claim thatthese tworelations
+satisfy the lemma’s premise is a separate proposition whose premise is checked against the records: their alarms
+reduce toy∧ ¬mon the domain studied, againstD=y∧ ¬o, and the truth table (Table 17, p. 19) makes the functional
+representation explicit. The lemma’s second premise—that the model isO-determined—is not claimed and fails on
+the stale cells, so the paper does not present the relations as informationally redundant in general.
+Action.Section VI-B, Table 17 (p. 19).
+2.4 Detection side: no real system was vulnerable
+Concern.Either add a real vulnerable case or remove the claim that the metamorphic step adds nothing for detection.
+Response.Both halves were done. A real vulnerable/fixed pair was added (Section V-D, Table 16, p. 16): a publicly
+fixed Gitea defect, one true positive on the vulnerable build, no claim on the fixed build, and twelve control checks
+(ten expected responses plus two recovery checks) passing under a fail-closed validator that recomputes the effect from
+the owner’s re-read. And the claim was narrowed: the manuscript no longer says the metamorphic step adds nothing
+for detection; what it supports is that the step adds no adjudication information where a readable, sound oracle exists
+
+=== PAGE 9 ===
+Response to Reviewers — Access-2026-49387 9
+(Lemma 1 and Proposition 2), and that the relations’ recall on real defects is unevaluated—which Section X states as
+the boundary of the evidence.
+Action.Section V-D and Table 16; Section VI-B; Section X.
+2.5 The 84.62% figure
+Concern.It assumes two inputs per case and is only illustrative; keep it out of the abstract and do not present it as
+quantitative support.
+Response.The figure is absent from the abstract and has now been removed from the body as well; it appears nowhere
+in the manuscript and is not used as quantitative support for anything. The denominator argument is made in parame-
+terized form instead (Section IV-E).
+Action.Section IV-E; verified absent from the compiled manuscript.
+2.6 Constructed ground truth and the reported rates
+Concern.Discuss how far the false-proof rates reflect the scenario design, such as the per-cell multipliers, rather than
+the technique.
+Response.The manuscript states in several places that the channel proportions are topology design parameters and
+not field prevalence, that the eight transitions are a designed set and not a sample of deployment changes, and that
+the out-of-band share quoted on the real system is a property of the constructed topology. The design dependence is
+also made inspectable rather than asserted: Table 5 gives the per-block record counts behind the 312/264 partition,
+Table 20 gives the per-cell census, and the matched-pair attribution (Table 2) shows exactly which cells carry each
+effect—the false-proof saving falls on one scenario, the legitimate share created through the framework’s own facility,
+while the out-of-band scenario agrees with the reference. The reported rates are therefore presented as properties of
+the construction, not as deployment rates.
+Action.Sections V-B, VI-A and VIII; Tables 2, 5 and 19.
+What remains.We did not recompute the constructed rates under equal per-cell weights in parallel with the original
+weights; the sensitivity to the weighting is described qualitatively rather than tabulated.
+3 Answers to the additional questions
+Reviewer 1.(1) Contribution to the body of knowledge: yes, in the narrowed form stated in Section IX and Ta-
+ble 19—a predicate-level account of what the two relations determine, a channel decomposition of the false proofs,
+and a resolution argument about a pooled specificity. (2) Technically sound: the algebraic part is separated from the
+empirical part and the empirical part is checked against records by script; the unsupported parts are marked as limi-
+tations. (3) Comprehensive: the design, the ablation, the real-system studies and the reproducibility package are all
+reported, with the gaps named. (4) and (5) References: applicable and sufficient; none is inappropriate.
+Reviewer 2.(1) Contribution: partly, and we have narrowed the claim accordingly rather than defending the broader
+reading. (2) Technically sound: the method is transparent and the artefacts are public; the evidence remains narrow
+and is labelled as such. (3) Comprehensive: the related work is retained and the positioning claim is now falsifiable.
+(4) and (5) References: applicable and sufficient; none is inappropriate.
+4 What this revision does not claim
+For the Associate Editor’s convenience, the items that are met only in part, with the single missing element in each.
+Four rows cover five of the twenty-one items; the concerns consolidated in this revision (the truth-table and un-
+known/failure contract of R1.2, the per-channel matrix for Gogs of R1.8, and the in-body failure rules of R1.14) are
+no longer listed here, because their previously missing elements are now in the manuscript:
+
+=== PAGE 10 ===
+Response to Reviewers — Access-2026-49387 10
+Item What was done What is still missing
+R1.4 An admission rule for clause (2), proposed in this revi-
+sion and applied conservatively to the archived exper-
+iments; per-product path evidence at the API level; all
+three products recordedreject
+The rule is retrospective and its evidence base stops
+at the server boundary; a finer-grained enumeration
+would require an internal-source audit we did not per-
+form
+R1.9 / R2.4 A real vulnerable/fixed pair through the adjudication
+gate; the seeded control bounded to one fault pattern;
+the scope objection stated in the letter
+Per-defect recall and false-positive rates across several
+independent defect classes; reported asopen, for the
+editor to judge whether the alternative response suffices
+R1.12 A conditional derivation for endogenous counts: the
+per-run identity, theS k →1⇐ ⇒ ∑ f/ ∑ n→0 con-
+dition, and the fixed-FP and proportional-FP examples
+A generative model of detector-dependent input pro-
+duction, which our fixed-enumeration pipeline does not
+instantiate
+R2.6 Design dependence stated; per-block and per-cell
+counts inspectable
+Rates recomputed under equal per-cell weights along-
+side the original weights
+We would rather submit with these four rows named than with a text that implies the five items are closed. Each is
+visible in the manuscript as a stated boundary, in Section VIII or at the point of use; R1.9 additionally remains an open
+scope question for the editor.
+5 Files in this resubmission
+1. This response to reviewers.
+2. The revised manuscript with all changes highlighted.
+3. A clean copy of the revised manuscript, as PDF and as the LaTeX source package (92 files), which compiles in an
+empty directory and reproduces every table and figure from the raw records.

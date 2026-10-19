@@ -120,7 +120,7 @@ CHECKS = [
     ("A-pages", "正文 27 页", r"revised manuscript \((\d+) pages", None),
     ("A-tables", "23 张表", r"(\d+) tables\)", None),
     ("A-zip", "源码包 90 文件", r"(\d+)-file submission package", None),
-    ("A-artefacts", "28 个数字制品逐位复现", r"all (\d+) number-bearing\s+artefacts", None),
+    ("A-artefacts", "31 个逐位复现输出", r"all (\d+) byte-reproducible\s+outputs", None),
     # ---- Gogs 渠道矩阵（R1.8）----
     ("G-ch-cells", "Gogs 渠道矩阵 48 格", r"the same \\GgChCells\{\} snapshot cells", ("GgChCells",)),
     ("G-ch-collab", "直接协作者 4 格全对", r"all \\GgChCollaboratorAgree\{\}\s+direct-collaborator cells", ("GgChCollaboratorAgree",)),

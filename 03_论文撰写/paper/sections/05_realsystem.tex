@@ -203,7 +203,11 @@ $M_0$ digests were unchanged when re-checked immediately before probing, and all
 \TmpBothVersionConsistent{} cycles were version-consistent. Across
 \TmpBothCells{} cross-credential cells (\TmpCells{} on Gitea plus \TmpGCells{} on
 GitLab), $E$ and $Y$ agree in \TmpBothEeqY{} cases, so no cell is scored on a
-modelling discrepancy.
+modelling discrepancy---under the implementation's closed-world default-deny
+reading of $E$; Table~\ref{tab:unknown-sensitivity} reconciles this with the
+protocol's literal \emph{unknown} rule, under which the scorable set is the
+\TmpBothLitKnown{} $E$-allow cells and the agreement is
+\TmpBothLitEeqY/\TmpBothLitKnown{}.
 
 The stale model produces \TmpBothStaleFP{} false proofs (\TmpStaleFP{} on Gitea,
 \TmpGStaleFP{} on GitLab), and a recrawl with the same credential removes
@@ -213,7 +217,11 @@ informative rather than uniform, and the two products agree on its shape: one
 cell for the direct grant, one for the inherited-channel attachment, five and
 six when a repository becomes public, and six and eight when a user becomes site
 administrator. The last two are the cases a single-object probe is least likely
-to anticipate, because the granting event is not about the object at all.
+to anticipate, because the granting event is not about the object at all. The
+false-proof phenomenon is also the part of the result that the
+unknown-rule divergence does not touch: every stale false proof falls on an
+$E$-allow cell, so both calibers of Table~\ref{tab:unknown-sensitivity} count
+the same \TmpBothStaleFP{}, and the zero live false proofs likewise.
 
 Revocations behave differently and must not be scored as misses. The old model
 still lists \TmpBothOverRevoke{} cells whose access was revoked (\TmpOverRevoke{}
@@ -301,9 +309,15 @@ recorded and rely on the digest carried by the run; the discrepancy is documente
 with the artifact rather than corrected in place. Inside a run, every cell carries its event sequence number, the
 harness version before and after the transition, the $M_0$ and $M_1$ digests and
 wall-clock timestamps, so the ordering---crawl, freeze, mutate, recrawl, oracle,
-probe---can be re-checked line by line rather than trusted. Every observation in
-that loop is a GET; the only mutating calls are the transitions themselves, and
-each is recorded with its status code. Failed observations are not dropped
+probe---can be re-checked line by line rather than trusted. Within the
+enumeration, oracle and read probes, every call is a GET; the only mutating
+calls are the transitions themselves, and
+each is recorded with its status code. In addition to the read path, the write
+capable transitions carry one write probe per cycle (an HTTP POST that creates
+the probe artifact) followed by an owner-side DELETE that restores the state;
+these write calls are recorded like every other call, they change no
+authorization configuration, and they are the reason ``all observations are
+GET'' would be too strong a summary of the run. Failed observations are not dropped
 silently: a transport error after two retries is recorded as such and excluded
 from the scored set, a mutation outside 2xx excludes its whole transition, and an
 unreadable oracle is recorded as \emph{unknown} with the cell still scored on $E$
@@ -322,10 +336,12 @@ themselves define what can be seen, deploy keys are outside the ledger, and we
 did not construct a channel that the recrawl is known to miss. Third, $hv$ is a
 harness-maintained logical version, not an atomic server snapshot; the harness is
 single-threaded and no concurrent writer ran, which is what makes the still
-window meaningful. Third, the eight transitions are a designed set, not a
+window meaningful. Fourth, the eight transitions are a designed set, not a
 sample of deployment changes, so none of the counts is a field rate.
 
 \input{temporal_table.tex}
+
+\input{temporal_sensitivity_table.tex}
 
 \subsection{Cross-vendor replication of the snapshot design: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}

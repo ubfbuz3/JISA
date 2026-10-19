@@ -99,6 +99,7 @@ def main() -> None:
     METHODS = ("raw", "v1", "v2", "v3", "degrade_all", "direct_only",
                "direct_observe", "obs_forced")
     tally = {m: Counter() for m in METHODS}
+    joint_decided = 0
 
     for r in rows:
         bola = r["truth"]["truth"] == "bola"
@@ -112,17 +113,34 @@ def main() -> None:
                 tally[m]["FN" if bola else "TN"] += 1
         s = state(r)
         ok = bool(r["truth"]["app_allowed"])
-        alarm = s == "none" and ok
+        # ★ 两个 direct 方法的判据必须与 compute_all.py Block 9 的原定义逐字一致：
+        #   direct_only    = 仅 oracle 报 none（不看请求是否成功）
+        #   direct_observe = oracle 报 none 且普通请求成功
+        # 早先版本把 ok 条件同时加给了两者，等于给 direct_only 偷换了判定规则
+        # （把 108 条"无实际越权效果的无效违规声明"悄悄清零）。
+        alarm_direct = s == "none"
+        alarm_obs = s == "none" and ok
         if s == "unavailable":
             # 与直接裁决代码一致：不可读 -> indeterminate，不强行判负
             for m in ("direct_only", "direct_observe"):
                 tally[m]["abstain_bola" if bola else "abstain_normal"] += 1
             tally["direct_only"]["forced"] += 1
         else:
-            for m in ("direct_only", "direct_observe"):
-                tally[m]["TP" if (bola and alarm) else "FN" if bola else "FP" if alarm else "TN"] += 1
-        # 明确命名的二值参照：不可读时判"无违规"
-        tally["obs_forced"]["TP" if (bola and alarm) else "FN" if bola else "FP" if alarm else "TN"] += 1
+            tally["direct_only"]["TP" if (bola and alarm_direct)
+                                  else "FN" if bola
+                                  else "FP" if alarm_direct else "TN"] += 1
+            if alarm_direct and not bola:
+                # FP 细分：请求实际被拒（无越权效果）= 无效违规声明；
+                # 请求实际被允许且无授权依据 = 严格假确证（E=allow 方向）。
+                tally["direct_only"]["fp_no_effect" if not ok else "fp_effect"] += 1
+            tally["direct_observe"]["TP" if (bola and alarm_obs)
+                                    else "FN" if bola
+                                    else "FP" if alarm_obs else "TN"] += 1
+        # 明确命名的二值参照：不可读时判"无违规"（与 direct_observe 同判据）
+        tally["obs_forced"]["TP" if (bola and alarm_obs) else "FN" if bola else "FP" if alarm_obs else "TN"] += 1
+        # 共同判定集合：v3 与 direct_only 都做出裁决的记录数
+        if r["verdicts"]["v3"]["verdict"] != "indeterminate" and s != "unavailable":
+            joint_decided += 1
 
     summary = {}
     for m in METHODS:
@@ -150,6 +168,18 @@ def main() -> None:
           summary["v3"]["FN"] + summary["v3"]["abst_bola"], int(macro(nums, "ResAbVThreeFN")))
     check("AbDirectObserveTP", summary["direct_observe"]["TP"], int(macro(nums, "ResAbDirectObserveTP")))
     check("AbDirectObserveFP", summary["direct_observe"]["FP"], int(macro(nums, "ResAbDirectObserveFP")))
+    # ★ 跨表方法判定一致性（R1.13 整改）：tab:coverage 与 tab:ablation 对同一方法
+    #   必须使用同一判据。tab:ablation（compute_all Block 9）把不可读记为"未告警"
+    #   （落在 FN/TN），tab:coverage 把不可读记为弃权，故两表的 decided 单元
+    #   （TP/FP）必须相等，且 FN/TN 之差必须正好等于弃权拆分。
+    stored_abl = json.loads((RES / "ablation_direct_observe.json").read_text(encoding="utf-8"))["tally"]
+    for m in ("direct_only", "direct_observe"):
+        check(f"XTable {m}.TP", summary[m]["TP"], stored_abl[m].get("TP", 0))
+        check(f"XTable {m}.FP", summary[m]["FP"], stored_abl[m].get("FP", 0))
+        check(f"XTable {m}.FN + abstain_bola", summary[m]["FN"] + summary[m]["abst_bola"],
+              stored_abl[m].get("FN", 0))
+        check(f"XTable {m}.TN + abstain_normal", summary[m]["TN"] + summary[m]["abst_normal"],
+              stored_abl[m].get("TN", 0))
     assert summary["v3"]["abstained"] == 228, summary["v3"]
 
     # ---------- v3 弃权按理由拆 ----------
@@ -245,6 +275,16 @@ def main() -> None:
          "CvgForcedObsRiskPct": f"{100 * summary['obs_forced']['risk']:.2f}",
          "CvgVthreeFNunproven": summary["v3"]["FN"] + summary["v3"]["abst_bola"],
          "CvgDetectGap": summary["direct_observe"]["TP"] - summary["v3"]["TP"],
+         # --- direct_only（原定义：仅 oracle，不看请求结果）---
+         "CvgDirOnlyDecided": summary["direct_only"]["decided"],
+         "CvgDirOnlyTP": summary["direct_only"]["TP"],
+         "CvgDirOnlyFP": summary["direct_only"]["FP"],
+         "CvgDirOnlyFN": summary["direct_only"]["FN"],
+         "CvgDirOnlyTN": summary["direct_only"]["TN"],
+         "CvgDirOnlyRiskPct": f"{100 * summary['direct_only']['risk']:.2f}",
+         "CvgDirOnlyFpNoEffect": tally["direct_only"]["fp_no_effect"],
+         "CvgDirOnlyFpEffect": tally["direct_only"]["fp_effect"],
+         "CvgJointVthreeDirect": joint_decided,
          "CvgVthreeCoverage": f2(summary["v3"]["coverage"]),
          "CvgObsDetected": summary["direct_observe"]["TP"],
          "CvgObsMissed": summary["direct_observe"]["FN"],
@@ -301,7 +341,16 @@ def main() -> None:
         r"A passed record is one on which the method did not fire, not a certificate "
         r"of safety. \texttt{direct\_only} and \texttt{direct\_observe} abstain when "
         r"the probe is unreadable, as the direct adjudicator does, so their coverage is "
-        r"\CvgObsCoveragePct{}\%; the last row is a clearly labelled binary reference "
+        r"\CvgObsCoveragePct{}\%. The two differ in adjudication rule, not in scoring "
+        r"convention: \texttt{direct\_only} asserts a violation whenever the "
+        r"authorization surface reports no granting channel, regardless of the request "
+        r"outcome; \texttt{direct\_observe} additionally requires the ordinary request "
+        r"to succeed. All \CvgDirOnlyFP{} false proofs of \texttt{direct\_only} fall on "
+        r"requests the server in fact denied: under the strict false-proof definition "
+        r"used elsewhere in this paper they are invalid violation claims without "
+        r"unauthorized-access effect rather than strict false proofs, and we report "
+        r"them as such instead of letting the request-success condition remove them. "
+        r"The last row is a clearly labelled binary reference "
         r"that forces a negative verdict on those cells, and its misses are the price "
         r"of that forcing, not a property of the method. Panel (b) splits v3's "
         r"abstentions by reason: only the first row is the availability gate the method "

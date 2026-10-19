@@ -1,0 +1,502 @@
+--- baseline/sections/06_boundaries.tex
++++ current/sections/06_boundaries.tex
+@@ -13,9 +13,14 @@
+ \label{sec:boundary1}
+ 
+ \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
+-exceptions---the adjudication reports a legitimate access granted out of band
+-after the crawl as an already-established violation, in the direction forced by
+-the two-valued predicate encoding.} On the constructed system, rate
++exceptions---the adjudication reports a legitimate access whose grant the crawl
++record does not contain as a finding that the published accounting counts as an
++established violation---the promotion policy $P$ of
++Section~\ref{sec:native-run}, which we state rather than inherit, since the
++engine's own return value asserts nothing about authorization---in the direction
++forced by the two-valued predicate encoding.} The two studies supply the grant
++in different ways: the constructed study seeds it outside the framework's
++record, and the temporal study makes it between the crawl and the request. On the constructed system, rate
+ \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{}
+ alarms) against \ResObsFwVtwoFalseProof{} for the same share created in band; on
+ Gitea, \ResRsMrBookkeepingFp{} false proofs on \ResRsAuthorizedCells{} authorized
+@@ -45,32 +50,174 @@
+ reason rather than present it as a discovered effect: its burden is an empirical
+ premise about the evaluated relations, not an algebraic identity.
+ 
+-\begin{proposition}[adjudication of the evaluated relations is oracle-determined]
++We separate the two parts, because only one of them can fail. The algebraic part
++is a lemma about function composition; the empirical part is a statement about
++what these two relations actually read, and it has a falsifier.
++
++\emph{The direct adjudicator.} Fix, before any run, the rule $D$ that issues
++\texttt{violation-proven} for $(o,s,a)$ exactly when the oracle $O$ answers
++\emph{deny} and the ordinary request $R$ succeeds. $D$ consumes $O$ and $R$ and
++nothing else. It is a definition, not a result, and it is the comparator in the
++ablation of Section~\ref{sec:synthetic-ablation} (\texttt{direct\_observe}).
++
++\begin{lemma}[absorption]
++\label{lem:absorption}
++Let a detector issue its verdict through a map $g(A,O,R)$, where $A$ is its alarm
++and $O,R$ as above. If, on the domain of cells considered, (i)~$A$ is a function
++$a(M,R)$ of the crawl-time model and the response only, and (ii)~$M$ is
++$O$-determined for the authorization proposition under test---that is, $M$ carries
++no distinction the oracle does not already make---then there is a map $g'$ with
++$g(a(M,R),O,R)=g'(O,R)$ on that domain.
++\end{lemma}
++
++\begin{proof}
++By (i) the first argument of $g$ is a function of $(M,R)$; by (ii) $M$ is a
++function of $O$ on the domain; substituting gives $A=a'(O,R)$, so $g$ factors
++through $(O,R)$ as $g'(O,R):=g(a'(O,R),O,R)$.
++\end{proof}
++
++The lemma is deliberately weak: it says that \emph{if} a detector reads nothing
++beyond the model and the response, its verdict cannot carry information the pair
++$(O,R)$ lacks. It does not say that any particular implementation satisfies (i)
++or (ii), and it does not compare two programs---it compares two functions on a
++domain.
++
++\begin{proposition}[what the relation can add once the oracle is admitted]
+ \label{lem:oracle-suff}
+-Let $O$ be an authorization oracle that is \emph{readable} (its answer can be
+-obtained from the vantage in question) and \emph{sound} (its answer equals the
+-true permission), and let $R$ be the observed outcome of an ordinary request.
+-For the authorization relations and scenarios evaluated here---whose predicates
+-read the crawl-time reachability model $M$ and the response, and nothing
+-else---once $O$ is readable, sound and complete for the proposition under test,
+-$M$ supplies no decision-relevant authorization information that $(O,R)$ does not
+-already determine: agreement with the true state is redundant, and disagreement
+-makes the verdict unsound (Finding~1). The verdict of the metamorphic family is
+-therefore a function $f(O,R)$ of $O$ and $R$ alone, and any adjudicator of that
+-form is extensionally equal to the direct consumer $D := f(O,R)$---the two are
+-the same function applied to the same arguments. A metamorphic step can be
+-\emph{shown} to be necessary only by exhibiting an observable it consumes that
+-the direct consumer does not.
++For the two relations examined here, premise~(i) of
++Lemma~\ref{lem:absorption} holds by source inspection: their predicates read the
++crawl-time reachability model and the response, and nothing else
++(Section~\ref{sec:impl}). Write $y$ for the response bit, $m$ for the model bit
++and $o$ for the oracle bit; the shipped alarm is $A=y\wedge\neg m$, the direct
++adjudicator is $D=y\wedge\neg o$, and the promoted verdict of the
++state-calibrated method is $H=A\wedge\neg o$, which abstains where $o$ is
++undefined. On the domain where $o$ is defined:
++\begin{enumerate}
++\item[(a)] $A=D$ if and only if $y=0$ or $m=o$; the two agree on every record
++whose request fails, and part exactly on the rows with $y=1$ and $m\ne o$;
++\item[(b)] $H\Rightarrow D$, because $A\Rightarrow y$ and the two share
++$\neg o$. The metamorphic step therefore cannot confirm a record that the
++direct consumer of $(y,o)$ does not confirm; it can only abstain or repeat.
++\end{enumerate}
+ \end{proposition}
+ 
+-\begin{proof}
+-The first clause is the empirical premise, established for these relations by
+-source inspection (Section~\ref{sec:impl}) and by the ablation
+-(Section~\ref{sec:synthetic-ablation}); the middle clause then follows because
+-$M$ enters the verdict only through $(O,R)$, and the remainder is the observation
+-that a function agrees pointwise with itself, the last sentence being its
+-contrapositive.
+-\end{proof}
++Part~(b) is algebra and needs no premise about the model. Part~(a) is algebra
++too, but it is informative only where $m=o$, and that equality is a measured
++condition rather than a corollary of oracle soundness: the oracle being sound
++does not make the crawl-time model sound. Row~7 of Table~\ref{tab:truth} holds
++\TvtModelWrong{} cells with
++$y=1$, $m=0$ and $o=1$---the oracle answers correctly, the model is stale, and
++the relation raises a false proof that $D$ does not. The tempting step from
++``the oracle is readable and correct'' to ``$M$ and $O$ agree'' is therefore
++invalid, and we do not take it; premise~(ii) of the lemma fails exactly on those
++cells, which is why we do not present the relation as informationally redundant
++in general, only as non-additive in confirmation once a definite oracle exists.
++What the proposition establishes is narrower
++and sufficient for the argument: once a definite oracle is available, promotion
++through the relation is a \emph{subset} of direct adjudication, so the relation
++cannot add confirmations. Whether $m=o$ holds is a measured property of each
++system, reported in Table~\ref{tab:truth} and in
++Section~\ref{sec:stratum}, not a corollary of oracle correctness.
++
++The predicates, explicitly. The two shipped predicates read
++\begin{align}
++A_{002} &= \neg\mathrm{sup}(B,A)\;\wedge\;\neg m \nonumber\\
++        &\quad\wedge\;\neg\mathrm{err}(o_1)\;\wedge\;q(o_1,o_2),\label{eq:a002}\\
++A_{004} &= y\;\wedge\;\neg m,\label{eq:a004}
++\end{align}
++where $\mathrm{err}$ is the error predicate and $q$ normalised response
++identity. On the domain evaluated here $\neg\mathrm{sup}=1$,
++$\mathrm{err}(o_1)=0$, and $q=y$ in all \TvtMrTwo{} records on which the second
++clause was computed, so both collapse to the single map
++\begin{equation}
++A \;=\; y \;\wedge\; \neg m .
++\label{eq:aflat}
++\end{equation}
++Equations~\eqref{eq:a002}--\eqref{eq:aflat} are not a paraphrase of the code;
++they reproduce the recorded alarm of all \TvtRecords{} constructed records and
++all \TvtCells{} temporal cells with no disagreement
++(\texttt{analysis/ingest\_truth.py}), and the same script checks
++part~(a) cell by cell. The three records on which the state-calibrated method
++and \texttt{direct\_observe} still differ are not a counterexample to~(b): all
++three are the same S5 write cell under the three exception settings, where the
++model lists the object for reading, the alarm stays silent, and the oracle
++reports that the write is denied. There the relation misses a violation the
++direct adjudicator confirms---a loss, not an gain, and one the reachability
++gate cannot express because it collapses read and write reachability.
++
++\input{truth_table.tex}
++
++\paragraph{Reading the table}
++Table~\ref{tab:truth} evaluates both verdicts on every combination of the four
++variables and reports how many of the \TvtCells{} temporal cells fall in each
++row, split by the ledger's entitlement. Three things are visible in it that
++prose cannot state as compactly. First, the equivalence is exactly as narrow as
++the algebra says: the two verdicts agree in \TvtAgree{} of the \TvtReadable{}
++cells with a usable oracle and part only in the two rows where $Y=1$ and
++$M\ne O$, which hold \TvtDisagree{} cells. Second, the parting is not one
++phenomenon but two, and they need different remedies. In the \TvtOracleWrong{}
++cells of row~6 the model is right and the membership surface answers \emph{deny}
++on a cell that is both entitled and readable, so the direct adjudicator alone
++raises a false proof; a better oracle would remove those. In the
++\TvtModelWrong{} cells of row~7 the model is stale and the oracle right, so the
++relation alone raises a false proof; a recrawl would remove those. Third, row~5
++shows why agreement is not a certificate of correctness: in \TvtBothWrong{}
++cells both surfaces answer \emph{deny}, the ledger says the subject is entitled,
++the request succeeds, and both verdicts are false proofs. The proposition is
++about information, so it is silent on row~5---but a reader who took $A=D$ as
++evidence that the pair decides correctly would be wrong there, and the table
++says so before the reader has to notice it.
++
++Two further readings of the same table belong here, because both bear on how far
++the result travels. The rows without an oracle are not idle: \TvtUnreadable{}
++cells return no definite answer, $D$ is undefined on all of them, and the
++relation still alarms in \TvtUnreadAlarms{}---alarms that nothing in this
++experiment can adjudicate, which is the regime the proposition's antecedent
++excludes rather than a gap in it. And the model term is not free. Recomputed over
++the two model semantics of the constructed study, the constant variant, which
++alarms on every successful access, finds \TvtBlindTP{} violations at
++\TvtBlindFP{} false proofs; the current-listing variant finds \TvtConTP{} at
++\TvtConFP{}---\TvtModelSaveFP{} fewer false proofs for \TvtModelCostTP{} fewer
++detections, over \TvtConAware{} records each. A relation with a reachability
++gate is therefore neither the alarm-free ideal of Finding~2's antecedent nor a
++free improvement on the ungated variant; it trades one error for the other, and
++the trade is the reason the gate is worth stating as a variable rather than
++folding into the oracle.
++
++\paragraph{Three differences from the ideal predicate}
++Equations~\eqref{eq:a002}--\eqref{eq:aflat} describe the predicates as written,
++and the shipped code departs from them in three places. None changes the
++algebra; each either moves cells out of the domain or corrupts a variable the
++two verdicts share, which is why none of them makes the relation beat $D$.
++(i)~\emph{The model term is a store, not a query.}
++\texttt{cannotReachThroughGUI} and \texttt{userCanRetrieveContent} are set
++membership over the crawl inputs: they issue no request and read a store loaded
++once. So $m$ is fixed at crawl time while $y$ and $o$ are read at decision time,
++and rows~6--7 are precisely the cells on which that interval carries a change.
++(ii)~\emph{The error predicate is a status code.} MST-wi asks whether an error
++page is rendered; the port asks whether the status is at least 400. A denial
++served with 200, or an error page served with 403 on the subject's own object,
++makes $y$ wrong---and $y$ enters both $A$ and $D$, so the two stay tied while
++both are wrong. This is the sense in which the tie is evidence about information
++and not about accuracy. (iii)~\emph{Response identity is not authorization
++identity.} The clause $q$ compares the whole normalised response, not the
++authorization proposition under test; a per-viewer field would make $q$ false
++while access had in fact been granted, and the relation would stay silent on a
++violation. On the evaluated domain this does not bite ($q=y$ throughout), but it
++is the one of the three that produces a miss rather than a false proof, and it
++would grow if the relation were extended to responses carrying viewer-specific
++fields.
++
++The proposition is falsifiable in one specific way: exhibit an observable $Z$,
++\emph{other than the model and the response}, that a relation consumes and that
++is decision-relevant. Then premise (i) fails, the lemma does not apply, and the
++relation could in principle beat $D$. The model itself is not such a $Z$: a
++stale model also fails to be $O$-determined, but that breaks premise (ii), and
++the direction of the break is visible in Table~\ref{tab:truth}---row~7 is a
++false proof, not an advantage. We know of no such observable for these two
++relations, and the ablation is consistent with its absence; that is the whole of
++the claim. We do not assert that no such observable could exist for other
++relations in the catalogue, and we do not assert that the relations are useless.
+ 
+ The proposition concerns \emph{adjudication} information only. It does not imply
+ that a metamorphic relation cannot improve input generation, search-space
+@@ -113,29 +260,126 @@
+ is the empirical face of the necessary condition, a statement about the
+ definitions rather than a coincidental measurement.
+ 
+-\subsection{Finding 3 (RQ3): the reported specificity is not conditioned on the correspondence it assumes}
+-
+-\emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
+-generated inputs; it is not conditioned on an explicit check that the
+-reachability model coincides with the true authorization state, and its
+-input-level denominator cannot provide stable scenario-level resolution for a
+-scenario-uniform failure.} The omission:
+-adjudication is a function of the
+-reachability model, so where model and true state diverge---the out-of-band case
+-of Finding~1---the figure measures agreement with the tool's own crawler; the
+-authors concede the mapping is ``not always
+-available''~\cite{Chaleshtari2022Metamorphic}, but the number is reported
+-without the condition. The denominator: a failure uniform across a scenario
+-class contributes only as many false positives as that class emits inputs, and
+-is diluted by the rest of the run (Proposition~\ref{prop:resolution}: in our
+-approximation the configuration that misreports a whole class of legitimate
+-access still scores \ResSpecRowOneSpecPct{}\%; Corollary~\ref{cor:resolution}:
+-no fixed threshold can guarantee that such a class forces the metric below it).
+-We are not saying
+-the figure is false or the false positives misdiagnosed; the claim is that such a
+-metric does not itself validate the reachability-to-authorization correspondence
+-on which its interpretation depends, and that a class-uniform failure can be
+-held above any fixed threshold by unaffected inputs.
++\subsection{Finding 3 (RQ3): a pooled specificity cannot register a class it did not exercise}
++
++\emph{The reported \ResLitReportedSpecPct{}\% is a specificity over follow-up
++inputs, $\mathrm{TN}/(\mathrm{TN}+\mathrm{FP})$, not a false-alarm share of all
++generated inputs; in that evaluation the MT failures were manually verified, so
++the labels are not the crawler's own. Its denominator cannot, on its own,
++provide scenario-level resolution for a failure confined to a class, and the
++inputs it counts are the ones the crawl could enumerate.} Both halves are
++consistent with the reported value. The denominator: with
++$\mathrm{FN}=0$, the figure is $1-\mathrm{FP}/(F-\mathrm{TP})$, so a failure
++uniform across a class contributes only as many false positives as that class
++emits negative inputs and is diluted by the rest of the run
++(Proposition~\ref{prop:resolution}; Corollary~\ref{cor:resolution}: no fixed
++threshold can guarantee that such a class forces the metric below it). The
++coverage: if a class of legitimate access is never reached by the crawl, it
++contributes no negative inputs, so the ratio is silent about it even though the
++adjudication that consumes the crawl is not. Nor does the report fix the
++weights: if a failing class supplies a share $w$ of the negative inputs, the
++figure moves only between $1$ and $1-w$, so telling a small-share failure apart
++from no failure requires an estimate of $w$ that the published number does not
++carry.
++
++We are not saying the figure is false, that its labels are wrong, or that the
++false positives were misdiagnosed: the manual verification is exactly what makes
++the labels credible. The claim is narrower---that a pooled figure computed on
++the crawled input set does not by itself certify that a class outside that set
++was exercised, and that a class-uniform failure can be held above any fixed
++threshold by unaffected inputs.
++
++\paragraph{What an endogenous count certifies, conditionally}
++Fix a run $\omega$ and a method $D$; let $n_i(D,\omega)$ be the number of
++negative inputs $D$ generates for scenario $i$ in that run and $f_i(D,\omega)$
++the false proofs among them. The endogenous score is
++$S(D,\omega)=1-\sum_i f_i(D,\omega)\big/\sum_i n_i(D,\omega)$ when the
++denominator is positive. Three conditional statements, and no more. (i)~For
++each fixed $\omega$, the identity holds by counting: it is a definition
++evaluated on that run's records, so it needs no distributional assumption. (ii)
++Correlation among records (a design cell shares its fixture) affects what
++confidence one may attach to $S$ if it were re-estimated on a fresh run; it does
++not move the count itself, which is why we report counts and rates and no
++interval. (iii)~For a family of runs $\omega_k$ in which the negative-input
++total stays positive, $\;S_k\to 1\;$ if and only if
++$\sum_i f_i(D,\omega_k)\big/\sum_i n_i(D,\omega_k)\to 0$; a finite-sample
++$S<1$ by itself says nothing about the limit. Two arithmetic examples fix the
++ distinction. If the false-proof count is held fixed at one while the
++negative-input total grows with $k$, then $S_k=1-1/k\to 1$: the failure never
++disappears, only its weight in the ratio does. If instead the false proofs grow
++proportionally---$f=\alpha k$ with $0<\alpha<1$ and $k$ chosen so the counts
++are integral---then $S_k=1-\alpha$ for every $k$: input growth produces no
++dilution toward~1 at all. Both mechanisms coexist with an unexercised failing
++class, which contributes no negative inputs and leaves every $S_k$ unchanged
++(the same blind spot as Proposition~\ref{prop:resolution}). These are
++statements about one run's arithmetic, conditional on its scenario coverage;
++they are not a theorem that any run detects every failure, and we do not use
++them as one.
++
++\subsection{Competing baselines: what a succeeding request cannot separate}
++\label{sec:baselines}
++
++The comparison that matters is not against our own ablations but against what a
++conventional differential prober can do with the same two observations. We
++implemented three such rules and ran them on the same \BlCells{} cells (six
++configurations crossed with S1--S7), each consuming one request as the owner and
++one as the actor. \emph{B1 status-only} alarms whenever the replayed request
++returns a non-error status---the coarsest rule a replay scanner can use.
++\emph{B2 equality replay} alarms only when the owner's request succeeded and the
++actor received byte-identical output, which is the differential rule with no
++authorization model. \emph{B3} adds the strongest information a tester can hold
++without reading the target: it suppresses every cell covered by the tester's own
++share log, so it knows each grant it created itself. The fourth row is MR-002
++with the v3 adjudication.
++
++Table~\ref{tab:baselines} reports the outcome. The cells contain
++\BlBolaCells{} true violations, \BlLegitCells{} legitimate accesses through a
++grant, and \BlDeniedCells{} denials. B1 and B2 claim on all 27 allowed cells:
++\BlBOneTP{} true positives and \BlBOneFP{} false proofs, a precision of
++\BlBTwoPrecision{}\%. On these cells the equality test adds nothing to the status
++test, because every allowed access returns the owner's bytes. B3 removes the six
++in-band grants and still issues \BlBThreeFP{} false proofs, all on S6, where the
++grant was seeded out of band. Ours issues \BlOursTP{} true positives and no false
++proof (precision \BlOursPrecision{}\%), at the cost of \BlOursAbstain{}
++abstentions: the twelve legitimate grants plus five violations in the two
++configurations whose authorization surface is unreadable.
++
++Two readings of this table would be wrong. It is not a detection gain: the
++baselines find all fifteen violations (\BlBaselineRecallAll{}\% total recall),
++whereas ours confirms ten---exactly those
++whose surface is readable---and declines the other five. The two recall figures
++for ours must be read together and are not interchangeable: on the cells where
++ours issues a verdict at all, recall is \BlOursRecallDecided{}\%, because an
++abstention is neither a hit nor a miss there; over all \BlBolaCells{} violation
++cells, including the \BlOursAbstainViol{} abstained ones, total recall is
++\BlOursRecallAll{}\%. Nor is it a free
++improvement: coverage falls to \BlOursCoverage{}\%. What the table isolates is the
++only difference the claim depends on. A succeeding request is compatible with
++both a grant and a defect, so a rule that treats it as proof must either ignore
++grants (B1, B2) or see only the grants it created (B3). The out-of-band grant is
++the residual, and it is not a corner case in the lab: on the Gitea snapshot the
++equality rule fires on all \BlRsBTwoClaims{} legitimately allowed cells, and the
++in-band log still leaves \BlRsBThreeClaims{}, because the framework log does not
++observe \ResRsChannelNotObservableRate{} of the effective access there. That
++figure is a property of the constructed topology, not an estimate of field
++prevalence. The budget is matched at the level of the probe pair and only there:
++\BlProbeReq{} requests per cell for every method, one as the owner and one as the
++actor, \BlSharedProbes{} shared probes in all, plus one additional read of the
++authorization surface for ours on the \BlOursExtraCells{} cells where a relation
++alarms and none where it does not---\BlOursExtraAvg{} per cell on average,
++\BlOursExtraTotal{} reads in total, so ours issues \BlOursRequestsTotal{} requests
++against the baselines' \BlSharedProbes{}. Total request count, visible information
++and privilege therefore differ across methods, and the comparison is between
++adjudication trade-offs at different information costs, not between detectors
++given the same budget. The
++whole comparison, both probes and the additional reads included, ran in
++\BlRunSeconds{}~s of wall-clock harness time covering setup, probing, scoring
++and cleanup; the runner binds no CPU and measures no per-method CPU time, so we
++make no claim about single-core cost. Because all four methods are
++scored from the same two recorded responses in the same process, a per-method
++timing would measure our replay loop rather than the rule, so we report none.
++
++\input{baseline_table.tex}
+ 
+ \subsection{Admissibility, and falsification}
+ \label{sec:admissibility}
+@@ -163,6 +407,41 @@
+ stratum, where the aggregate table would have ranked it best, a ranking that
+ reflects abstention rather than improved detection.
+ 
++\paragraph{An oracle-independence admission rule, applied retrospectively}
++Clause~(2) needs an operational procedure, and we give one as part of this
++revision. The pre-registered protocol pinned by digest recorded the qualitative
++judgement (\texttt{oracle\_independence=shared}; the oracle read for diagnosis
++only) but did not contain the procedure below, and we do not backdate it: the
++rule is proposed here and applied conservatively to the archived experiments.
++The rule, per target defect class (here: object-level authorization enforcement
++of read and write requests): enumerate, at the level the product's own
++documentation and observable behaviour support, the path that produces the
++enforcement answer $y$ and the path that produces the oracle answer $o$;
++\emph{admit} if neither path contains the other's decision point nor shares a
++component whose failure could co-occur with the tested defect; \emph{reject} if
++such sharing is found; \emph{unknown} if either path cannot be enumerated at
++that level, in which case independence-based promotion is refused. Applied at
++that level of evidence: on Gitea~\ResRsVersion{} the permission route the oracle
++consults and the content routes are answered by the same server binary applying
++the same permission model; on Gogs~\GgVersion{} the per-object route the oracle
++consults enumerates direct collaborators only, and the permission suffix that
++would expose the remaining channels does not exist (\GgChProbePermSuffix), so
++the oracle path cannot even be completed; on GitLab~\GlVersion{} the
++\texttt{members/all} route the oracle consults and the content routes are
++answered by the same application consulting the same membership tables. On each
++product the enumeration stops at the server boundary---below it we did not audit
++internal source, so the finer-grained verdict would be \emph{unknown}---and the
++conservative reading already available at the API level, one process and one
++authorization model on both paths, is recorded as \emph{reject}. Three
++epistemic statuses must then be kept apart: the diagnostic $O$/$H$ readings in
++the experiments (run under the recorded \texttt{shared} status); the post-hoc
++classification of every promoted verdict against the independent ledger $E$ and
++the content observation $Y$ (gate correctness, which needs no oracle
++independence); and independence-certified proofs of previously unknown defects,
++which the rule refuses here. No recorded number changes under the rule; what
++changes is the epistemic status of the promotion, which is exactly the status
++the paper's claims already use.
++
+ Read together, the two findings bound what the technique's adjudication can yield
+ for the authorization proposition studied. If the reachability stand-in is the
+ only warrant and it is wrong, a legitimate access becomes a false proof
+@@ -170,11 +449,16 @@
+ no adjudication over the direct consumer of that oracle and the outcome
+ (Finding~2). And where no readable, admissible oracle exists---the black-box
+ case---there is nothing for a sound method to consume, so it abstains rather than
+-proves. Across the statuses the oracle can take, the outcomes the evaluated
+-relations can yield are thus a false proof, a result no better than the plain
+-request (and, where the oracle is readable, worse), or an abstention;
+-adjudication of a genuinely illegal access is not among them for these
+-relations.
++proves. Across the statuses the oracle can take, the verdict the evaluated
++relations can yield is thus a false proof, a result no better than the plain
++request (and, where the oracle is readable, worse), or an abstention. None of
++those is a proof of illegal access, because the relation's alarm is not evidence
++of it: an alarm says that the relation failed, and an ordinary request that
++succeeds says that the object was served. A genuine violation becomes reportable
++only when an independent entitlement source says \emph{deny} and a content-level
++effect observation says \emph{allow}; Section~\ref{sec:cvepair} reports that gate
++producing one true positive on a vulnerable build and none on its fixed
++successor. The relation contributes to neither side of that conjunction.
+ 
+ Each finding would fall as
+ follows: Finding~1, if the predicates were defined over live rather than
+@@ -182,3 +466,69 @@
+ that a succeeding request plus a readable oracle cannot produce; Finding~3, by
+ a specificity in scenario units, or with the condition explicit, that still fails
+ to separate the configurations studied here.
++
++Table~\ref{tab:evidence-claim} states, for each research question, what is
++assumed, what was measured, and what the result does not cover. We add it because
++the three findings rest on different kinds of evidence---source-level functional
++dependence, a constructed enumeration, and two real-system studies---and a reader
++should be able to see which kind carries which sentence.
++
++\begin{table*}[t]
++\centering
++\caption{Evidence to claim. Each row names the assumption the claim needs, the
++artefact that carries it, and the boundary that remains. The last row is not a
++research question: it checks the adjudication gate used throughout, and is not
++evidence about detection effectiveness.}
++\label{tab:evidence-claim}
++\footnotesize
++\setlength{\tabcolsep}{4pt}
++\begin{tabular}{@{}p{0.055\textwidth}p{0.235\textwidth}p{0.185\textwidth}p{0.245\textwidth}p{0.205\textwidth}@{}}
++\toprule
++RQ & Claim & Assumption it needs & Evidence & What it does not cover \\
++\midrule
++1 &
++A crawl-time reading reports an out-of-band grant of legitimate access as a
++proven violation. &
++The grant occurs after the crawl, is recorded in the ledger, and is reachable
++through a channel the crawl does not enumerate. &
++\ResSynRecords{}-record constructed study; \TmpBothPolicyEvents{} committed
++transitions on Gitea and GitLab, \TmpBothStaleFP{} stale false proofs, all
++\TmpBothFixed{} removed by a same-credential recrawl. &
++Two relations of one reachability-gated family; designed transitions, not a
++sample of deployment changes; no residual miss is a completeness claim. \\
++\addlinespace
++2 &
++Once a readable, sound oracle is supplied, the relation adds no observed
++adjudication benefit over the direct consumer of the same oracle and outcome. &
++The oracle is readable and sound on the cells scored; the relation consumes no
++decision-relevant observable outside $(O,R)$. &
++Paired ablation on \ResAbNBola{} true-violation records, disagreeing on
++\ResAbDisagreementN{}; channel-level oracle fidelity over
++\TmpBothCells{} cells. &
++Conditional on the antecedent: the unreadable stratum has no oracle to consult,
++and the oracle shares its implementation with enforcement. \\
++\addlinespace
++3 &
++The published specificity is an input-level figure whose denominator cannot, on
++its own, expose a class-uniform failure. &
++Scenario classes emit comparable numbers of inputs, so a uniform failure is
++diluted by unaffected inputs; the class shares are not reported, so the
++dilution is bounded rather than estimated. &
++Proposition~\ref{prop:resolution} and its corollary; sensitivity of the example
++to the assumed inputs per case. &
++The original per-case denominators are unavailable, so the published figure is
++diagnosed rather than re-estimated. \\
++\addlinespace
++Gate &
++An independent entitlement ledger plus a content-level effect observation
++reports a real defect as a true positive and stays silent on its fix. &
++The ledger is complete for the tested object and the effect is read back by the
++owner, not inferred from a status code. &
++Gitea \CveVulnVersion{} versus \CveFixedVersion{}: \CveTruePositives{} true
++positive, \CveFalseProofs{} false proofs, \CveFixedAlarms{} alarms on the fixed
++build, \CveControls{} control probes as expected. &
++One publicly fixed defect found and supplied by us; this is a check of the gate,
++not a recall estimate. \\
++\bottomrule
++\end{tabular}
++\end{table*}

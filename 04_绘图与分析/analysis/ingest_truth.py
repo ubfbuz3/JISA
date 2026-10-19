@@ -262,8 +262,15 @@ def main() -> None:
         r"definite answer. $A$: the alarm of either relation; on this domain both "
         r"reduce to $y\wedge\neg m$. $D$: the direct adjudicator, "
         r"$y\wedge\neg o$, undefined in rows 9--12. $H$: the promoted verdict of "
-        r"the state-calibrated method, $A\wedge\neg o$, which exists only where $O$ "
-        r"is definite and is therefore a subset of $D$ by construction. The count columns split each "
+        r"the state-calibrated method, $A\wedge\neg o$---the reading the "
+        r"promotion policy $P$ gives the native alarm, not a third measurement---"
+        r"which exists only where $O$ "
+        r"is definite and is therefore a subset of $D$ by construction "
+        r"($H{=}1 \Rightarrow D{=}1$); it agrees with $D$ on every row except row 6, where "
+        r"$D$ fires and $H$ does not. The $A$/$D$ columns are the two measured "
+        r"surfaces, and the disagreement count below is an $A$/$D$ count---it must "
+        r"not be restated as an $H$/$D$ count. Rows 9--12 "
+        r"leave $H$ undefined like $D$. The count columns split each "
         r"row by the ledger's entitlement $E$, so every row states its truth "
         r"conditions for both values of $E$; a dot is an unrealised combination, "
         r"and in the verdict column the first term reads $E{=}$deny and the "
@@ -272,17 +279,20 @@ def main() -> None:
         r"$Y{=}$allow and $M\ne O$---\TvtDisagree{} of the \TvtReadable{} "
         r"readable cells. Those two rows are the two failure mechanisms that "
         r"Section~\ref{sec:gogs} keeps apart: in row 6 the model is right and the "
-        r"oracle wrong, so $D$ alone raises a false proof; in row 7 the model is "
-        r"stale and the oracle right, so the relation alone does. Row 5 is the "
+        r"oracle wrong, so $D$ alone raises a false proof ($A{=}0$, $D{=}1$, "
+        r"$H{=}0$); in row 7 the model is "
+        r"stale and the oracle right, so the relation alone does "
+        r"($A{=}1$, $D{=}0$, $H{=}0$: the promotion suppresses the alarm, which is "
+        r"why row 7 must not be read as a disagreement between $H$ and $D$). Row 5 is the "
         r"case neither explains---both surfaces answer \emph{deny} on a cell the "
         r"ledger allows, both verdicts are false proofs, and their agreement "
         r"certifies nothing.}",
         r"\label{tab:truth}",
         r"\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llllccp{1.52in}rr@{}}",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llllcccp{1.52in}rr@{}}",
         r"\toprule",
-        r"$Y$ & $M$ & $O$ & $A$ & $D$ & verdict at the ledger "
+        r"$Y$ & $M$ & $O$ & $A$ & $D$ & $H$ & verdict at the ledger "
         r"& $E{=}\mathrm{deny}$ & $E{=}\mathrm{allow}$ \\",
         r"\midrule",
     ]
@@ -292,9 +302,10 @@ def main() -> None:
             tab.append(r"\midrule")
         a = int(y and not m)
         d = r"\textemdash" if o is None else str(int(y and o == "deny"))
+        h = r"\textemdash" if o is None else str(int(a and o == "deny"))
         tab.append(
             f"{['deny','allow'][y]} & {'reach' if m else 'blocked'} & "
-            f"{o or r'\textemdash'} & {a} & {d} & {CLASS[k]} & {cell(t[k]['deny'])} & "
+            f"{o or r'\textemdash'} & {a} & {d} & {h} & {CLASS[k]} & {cell(t[k]['deny'])} & "
             f"{cell(t[k]['allow'])} \\\\")
     tab += [
 r"\bottomrule", r"\end{tabular*}", r"\end{table*}"]

@@ -78,6 +78,57 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def literal_sensitivity(d: dict) -> dict:
+    """协议字面 vs 实现的双口径敏感性（R1.2 整改）。
+
+    实现：closed-world default-deny —— 台账无授予渠道即 E=deny，全部格可评分。
+    协议字面（c_protocol.json 的 unknown_policy）：已建模无授予渠道 -> E=unknown，
+    该格不进真值表、不可评分。本函数按字面规则重标每条换凭证格，输出两种口径的
+    评分集合与陈旧假确证落点，供正文双口径对账，不得只报其一。
+    """
+    scored = unknown = 0
+    allow_cells = 0
+    ey_known = 0
+    stale_fp_recorded = stale_fp_known = live_fp = 0
+    deny_without_none_channel = 0
+    for cy in d["transitions"]:
+        for c in cy["cells"]:
+            if c["role"] != "cross" or c["abstain_reason"] is not None:
+                continue
+            scored += 1
+            e = c["expected_entitlement"]
+            ch = c["expected_channel"]
+            if e == "deny" and ch == "none":
+                # 协议字面：已建模无渠道 -> unknown，不评分
+                unknown += 1
+                # 该格在两种口径下都不可能是严格假确证（E≠allow）；
+                # 若出现 stale 告警落在这里，实现口径下也必须如实计。
+                if c["T_stale"] == "false_proof":
+                    stale_fp_recorded += 1
+                if c["T_live"] == "false_proof":
+                    live_fp += 1
+                continue
+            if e == "deny" and ch != "none":
+                deny_without_none_channel += 1
+            if e == "allow":
+                allow_cells += 1
+            # 字面口径下 E 已知且可评分的格
+            ey_known += int((e == "allow") == (c["observed_effect"] == "allow"))
+            if c["T_stale"] == "false_proof":
+                stale_fp_recorded += 1
+                if e == "allow":
+                    stale_fp_known += 1
+            if c["T_live"] == "false_proof":
+                live_fp += 1
+    return {"scored": scored, "literal_unknown": unknown,
+            "literal_known": scored - unknown, "allow_cells": allow_cells,
+            "ey_known_agree": ey_known,
+            "stale_fp_recorded": stale_fp_recorded,
+            "stale_fp_within_known": stale_fp_known,
+            "live_fp": live_fp,
+            "deny_without_none_channel": deny_without_none_channel}
+
+
 def macros(t: dict, cycles: list[dict], cal: dict, meta: dict) -> dict:
     over = sum(c["summary"]["stale_over_after_revoke"] for c in cycles)
     disagree = sum(c["summary"].get("oracle_disagrees_with_E", 0) for c in cycles)
@@ -130,6 +181,17 @@ def main() -> None:
 
     g = macros(dg["totals"], dg["transitions"], dg["calibration"], dg["meta"])
     l = macros(dl["totals"], dl["transitions"], dl["calibration"], dl["meta"])
+
+    # 双口径敏感性（协议字面 unknown vs 实现 default-deny）
+    sg = literal_sensitivity(dg)
+    sl = literal_sensitivity(dl)
+    # 交叉校验：逐格重算的陈旧假确证必须与 totals 相同；无渠道 deny 之外
+    # 不允许出现其他形态的 deny（否则字面重标规则覆盖不全，需先修本函数）。
+    assert sg["stale_fp_recorded"] == dg["totals"]["stale_false_proofs"], sg
+    assert sl["stale_fp_recorded"] == dl["totals"]["stale_false_proofs"], sl
+    assert sg["deny_without_none_channel"] == 0, sg
+    assert sl["deny_without_none_channel"] == 0, sl
+    assert sg["scored"] == dg["totals"]["cells"] and sl["scored"] == dl["totals"]["cells"]
 
     M = {
         "TmpRunId": g["RunId"],
@@ -211,6 +273,21 @@ def main() -> None:
         "TmpUnansGitea": sum(v["n"] - v["answered"] for v in channel_stats(dg).values()),
         "TmpUnansGitlab": sum(v["n"] - v["answered"] for v in channel_stats(dl).values()),
         "TmpCellsTotal": g["Cells"] + l["Cells"],
+        # ---- 协议字面 vs 实现的双口径敏感性 ----
+        "TmpLitUnk": sg["literal_unknown"],
+        "TmpLitKnown": sg["literal_known"],
+        "TmpLitKnownAllow": sg["allow_cells"],
+        "TmpLitEeqY": sg["ey_known_agree"],
+        "TmpLitStaleKnown": sg["stale_fp_within_known"],
+        "TmpGLitUnk": sl["literal_unknown"],
+        "TmpGLitKnown": sl["literal_known"],
+        "TmpGLitKnownAllow": sl["allow_cells"],
+        "TmpGLitEeqY": sl["ey_known_agree"],
+        "TmpGLitStaleKnown": sl["stale_fp_within_known"],
+        "TmpBothLitUnk": sg["literal_unknown"] + sl["literal_unknown"],
+        "TmpBothLitKnown": sg["literal_known"] + sl["literal_known"],
+        "TmpBothLitEeqY": sg["ey_known_agree"] + sl["ey_known_agree"],
+        "TmpBothLitStaleKnown": sg["stale_fp_within_known"] + sl["stale_fp_within_known"],
     }
 
     lines = ["% 由 04_绘图与分析/analysis/ingest_temporal.py 生成，勿手改"]
@@ -322,6 +399,42 @@ def main() -> None:
     ct += panel(cl, r"(b) GitLab CE \TmpGVersion")
     ct += [r"\bottomrule", r"\end{tabular}", r"\end{table*}"]
     CHANNEL.write_text("\n".join(ct) + "\n", encoding="utf-8")
+
+    # ---------------- Table: literal-protocol vs implementation dual caliber ----------------
+    # 同一批记录在两种 unknown 规则下的评分集合对账（R1.2 整改）。
+    sens = [
+        "% 由 ingest_temporal.py 生成，勿手改",
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{The same transition cells under the two \emph{unknown} rules of "
+        r"Section~\ref{sec:protocol}. The implementation scores every committed cell "
+        r"by closed-world default deny; the protocol's literal \emph{unknown} policy "
+        r"marks modelled-no-channel cells $E$-unknown and excludes them from "
+        r"scoring. The rule changes the scorable set, the $E$ classification and "
+        r"the $E/Y$ denominator; it does not move the stale false proofs, all of "
+        r"which fall on $E$-allow cells inside the literal-known set.}",
+        r"\label{tab:unknown-sensitivity}",
+        r"\small",
+        r"\begin{tabular}{@{}lrrrrrr@{}}",
+        r"\toprule",
+        r" & \multicolumn{3}{c}{implementation (default deny)} & "
+        r"\multicolumn{3}{c}{literal protocol ($E$ unknown)} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}",
+        r"Product & scored & $E$ allow & stale FP & scorable & $E/Y$ agree & stale FP \\",
+        r"\midrule",
+        f"Gitea \\TmpVersion & \\TmpCells & \\TmpEAllow & \\TmpStaleFP & "
+        f"\\TmpLitKnown & \\TmpLitEeqY & \\TmpLitStaleKnown \\\\",
+        f"GitLab CE \\TmpGVersion & \\TmpGCells & \\TmpGEAllow & \\TmpGStaleFP & "
+        f"\\TmpGLitKnown & \\TmpGLitEeqY & \\TmpGLitStaleKnown \\\\",
+        r"\midrule",
+        f"Total & \\TmpBothCells & --- & \\TmpBothStaleFP & "
+        f"\\TmpBothLitKnown & \\TmpBothLitEeqY & \\TmpBothLitStaleKnown \\\\",
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{table}",
+    ]
+    (PROJ / "04_绘图与分析" / "results" / "temporal_sensitivity_table.tex").write_text(
+        "\n".join(sens) + "\n", encoding="utf-8")
 
     print("=== temporal numbers ===")
     for k, v in M.items():

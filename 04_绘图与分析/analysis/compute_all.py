@@ -21,8 +21,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
+import os
+import subprocess
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -332,17 +335,60 @@ def main():
     # ================= 制品清单（原生引擎源码，2026-09-18 克隆） ============
     # 目的：把"门控谓词锚在采集期快照"的论证从**论文文字定义**升级为**实现源码**。
     # 全部数字与事实由本块**扫描源码得出**，不手敲。
-    # 该源码在包外（绝对路径），是**外部依赖**：缺失时这里直接失败，而不是静默
-    # 跳过——静默跳过会让 numbers.tex 少一组宏，把"缺依赖"伪装成"数字变了"。
+    # 该源码在包外，是**外部依赖**。R1.14 整改：
+    #   1) 路径参数化（环境变量 MST_SRC_PATH）；
+    #   2) 扫描输入与冻结清单 frozen_source_state.json 核验（HEAD、文件集、
+    #      摘要）——不一致即失败，绝不让"源码变了"伪装成"数字变了"；
+    #   3) 缺失时直接失败，而不是静默跳过。
     import re as _re
-    MST_SRC = Path(r"C:/Users/Administrator/WorkBuddy/mst_engine/MST")
+    MST_SRC = Path(os.environ.get(
+        "MST_SRC_PATH", r"C:/Users/Administrator/WorkBuddy/mst_engine/MST"))
     if not MST_SRC.exists():
         raise SystemExit(
             "[FATAL] 缺少外部依赖 MST 引擎源码: " + str(MST_SRC) + "\n"
             "         ResLit*/ResArt* 宏由扫描该源码得出，无法在缺失时 regenerated。\n"
             "         若在无该源码的机器上复现，请先按其 README 克隆到同一路径，\n"
             "         或明确记录本次复算不含源码派生宏（不得静默降级）。")
+    _FROZEN = (PROJ / "experiments" / "native_engine" / "results"
+               / "frozen_source_state.json")
+    if not _FROZEN.exists():
+        raise SystemExit(
+            "[FATAL] 缺少冻结的上游源码清单: " + str(_FROZEN) + "\n"
+            "         源码扫描输入必须先由 freeze_native_sources.py 冻结，\n"
+            "         否则扫描结果不是归档记录的确定函数（不得静默降级）。")
+    _frozen_doc = json.loads(_FROZEN.read_text(encoding="utf-8"))
+
+    def _sha(p: Path) -> str:
+        return hashlib.sha256(p.read_bytes()).hexdigest()
+
+    _hd = subprocess.run(["git", "-C", str(MST_SRC), "log", "-1", "--format=%H"],
+                         capture_output=True, text=True, timeout=60)
+    if _hd.returncode != 0 or \
+            _hd.stdout.strip() != (_frozen_doc.get("head") or {}).get("commit"):
+        raise SystemExit(
+            "[FATAL] 上游 HEAD 与冻结清单不一致: live="
+            f"{_hd.stdout.strip()[:12]} frozen={(_frozen_doc.get('head') or {}).get('commit', '')[:12]}\n"
+            "         上游仓库已移动；历史事实必须锚在冻结版本上。")
+    _kf = _frozen_doc.get("key_files_sha256") or {}
+    for _rel, _want in _kf.items():
+        _p = MST_SRC / _rel
+        if _p.is_file() and _sha(_p) != _want:
+            raise SystemExit(
+                f"[FATAL] 源文件与冻结清单不一致: {_rel}\n"
+                "         扫描输入已偏离归档状态；请恢复冻结版本或重新审计。")
+    _mf = _frozen_doc.get("mr_dir_files_sha256") or {}
     mr_dir = MST_SRC / "src-mrs-icst2020"
+    _live_mr = {str(f.relative_to(MST_SRC)).replace("\\", "/"): _sha(f)
+                for f in sorted(mr_dir.rglob("*.java"))}
+    if _live_mr != _mf:
+        _only_live = sorted(set(_live_mr) - set(_mf))
+        _only_frozen = sorted(set(_mf) - set(_live_mr))
+        _changed = sorted(k for k in set(_live_mr) & set(_mf)
+                          if _live_mr[k] != _mf[k])
+        raise SystemExit(
+            "[FATAL] MR 目录与冻结清单不一致: "
+            f"新增 {_only_live} 缺失 {_only_frozen} 变更 {_changed}\n"
+            "         源码扫描输入已偏离归档状态（ResLit*/ResArt* 会漂移）。")
     cls_re = _re.compile(r"class\s+(\w+)\s+extends\s+MR\b")
     mr_cls = {}
     for f in sorted(mr_dir.rglob("*.java")):
@@ -378,9 +424,9 @@ def main():
 
     # F6 上游 pom 是否把 MR 目录配为源码根。
     # 必须核对 git 里的 pristine 版本——工作区 pom 已被本地修补，直接读会得到假阳性。
+    # （上游 HEAD 已在上方与冻结清单核验一致，此处读取的是已锚定的版本。）
     f6 = None
     try:
-        import subprocess
         _r = subprocess.run(["git", "-C", str(MST_SRC), "show", "HEAD:pom.xml"],
                             capture_output=True, text=True, timeout=60)
         if _r.returncode == 0:

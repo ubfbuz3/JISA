@@ -183,13 +183,36 @@ true violations, and with the \CvgVthreeMissed{} records on which no alarm is
 raised at all, v3 leaves \CvgVthreeFNunproven{} of \CvgViolations{} violations
 unproven---the count the review derived from the pooled table.
 
+\texttt{direct\_only} is scored under its own adjudication rule, which is also
+the rule Table~\ref{tab:ablation} uses: assert a violation whenever the
+authorization surface reports no granting channel, regardless of the request
+outcome. On the \CvgN{} records it decides \CvgDirOnlyDecided{} (the same
+abstention set as \texttt{direct\_observe}, so the two differ in rule, not in
+coverage) and it is right on \CvgDirOnlyTP{} true violations. Its
+\CvgDirOnlyFP{} false proofs are not, however, strict false proofs in the sense
+defined in Section~\ref{sec:protocol}: every one of them falls on a request the
+server in fact denied, so no unauthorized access resulted
+(\CvgDirOnlyFpNoEffect{} of \CvgDirOnlyFP{} without violation effect,
+\CvgDirOnlyFpEffect{} on allowed requests). They are invalid violation
+claims---the oracle's ``no granting channel'' read as a violation claim that the
+request outcome contradicts---and its selective risk over the decided set is
+\CvgDirOnlyRiskPct\%, not zero. Keeping the rule fixed across both tables is what
+exposes this cost; a table that silently added the request-success condition to
+this row would have reported a zero risk that the method never earned.
+The overlap of v3's decisions with \texttt{direct\_only}'s covers
+\CvgJointVthreeDirect{} records---the \CvgObsDecided{} records on which the direct
+method decides minus the \CvgVthreeCover{} records on which v3 additionally
+declines on a readable covering surface---and the violation-detection difference
+on comparable denominators is stated with its own denominator, not with the
+\CvgObsDecided{} oracle-readable count.
+
 \texttt{direct\_observe} is scored on the same contract, and that changes what
 its earlier numbers meant. It abstains when the probe is unreadable, exactly as
 the direct adjudicator does, so it decides \CvgObsDecided{} records---coverage
 \CvgObsCoveragePct{}\%---and abstains on \CvgObsAbstain{}, \CvgObsAbstBola{} of
 them true violations. Within the records it decides it detects
-\CvgObsDetected{} and raises no false proof. On the \CvgObsDecided{} records both
-methods can decide, it detects \CvgDetectGap{} more violations than v3; the
+\CvgObsDetected{} and raises no false proof. On the \CvgJointVthreeDirect{} records
+both methods decide, it detects \CvgDetectGap{} more violations than v3; the
 remaining difference in pooled recall is coverage, not accuracy. The last row of
 Table~\ref{tab:coverage} is the binary version that was implicit before: it
 forces a negative verdict where the probe is unreadable, covers all
