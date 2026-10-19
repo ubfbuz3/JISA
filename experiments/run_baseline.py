@@ -70,7 +70,13 @@ def inband_covers(client, doc_id: str, actor: str, op: str) -> list[dict]:
             if s["grantee"] == actor and s["permission"] in OP_COVERED_BY[op]]
 
 
-def run_cell(cfg, scenario: str) -> dict:
+def run_cell(cfg, scenario: str, budget_cap: int | None = None) -> dict:
+    """budget_cap=None：原有「探测对匹配」口径（不改动已有产物）。
+
+    budget_cap=k：**总请求预算上限**口径（R1.7）。每个方法在同一格上最多花 k 次
+    请求，花多少、花在什么上由方法自己决定并在下面逐项记账；上限相同、实际支出
+    如实报告，不靠给基线补发无用请求凑数。
+    """
     srv, state, port = make_server(cfg)
     try:
         client = TargetClient(port)
@@ -107,10 +113,30 @@ def run_cell(cfg, scenario: str) -> dict:
                 "isError_out1": not owner_ok,
                 "out1_equals_out2": equal}
         before = client.request_count
-        v3 = ba.adjudicate(mres, client, setup, version="v3")
-        ours_extra = client.request_count - before
-        claimed = (v3.verdict == "violation-proven")
-        abstained = (v3.verdict == "indeterminate")
+        if budget_cap is not None and budget_cap < 3:
+            # 预算只够探测对：没有余量读授权面 ⇒ 只能弃权，不得凭关系本身确证。
+            v3 = None
+            claimed = False
+            abstained = True
+            ours_extra = 0
+        else:
+            v3 = ba.adjudicate(mres, client, setup, version="v3")
+            ours_extra = client.request_count - before
+            claimed = (v3.verdict == "violation-proven")
+            abstained = (v3.verdict == "indeterminate")
+
+        # ---- B3r：把同一份额外预算花在**可达性**上（黑箱可达的最强常规差分）----
+        # 只多花 1 次请求（列出 actor 可见对象），用它压制"本来就能通过 GUI 看到"的格。
+        b3r = None
+        reach_cost = 0
+        if budget_cap is not None and budget_cap >= 3:
+            before_r = client.request_count
+            listing = client.request(actor, "GET", "/doc")
+            reach_cost = client.request_count - before_r
+            items = listing.body.get("items", []) if isinstance(listing.body, dict) else []
+            visible_ids = {it.get("id") for it in items if isinstance(it, dict)}
+            actor_cannot_reach = setup.target_doc not in visible_ids
+            b3r = bool(b3 and actor_cannot_reach)
 
         def score(alarm: bool, abstain: bool = False) -> dict:
             if abstain:
@@ -143,12 +169,17 @@ def run_cell(cfg, scenario: str) -> dict:
                 "B1_status_only": {"alarm": b1, **score(b1)},
                 "B2_diff_equal": {"alarm": b2, **score(b2)},
                 "B3_diff_inband": {"alarm": b3, **score(b3)},
-                "ours_mr_v3": {"alarm": claimed, "verdict": v3.verdict,
-                               "reason": v3.reason,
+                **({"B3r_diff_reach": {"alarm": bool(b3r), **score(bool(b3r))}}
+                   if b3r is not None else {}),
+                "ours_mr_v3": {"alarm": claimed,
+                               "verdict": (v3.verdict if v3 else "indeterminate"),
+                               "reason": (v3.reason if v3 else "budget: no room to read the authorization surface"),
                                **score(claimed, abstained)},
             },
             "budget": {"probe_requests": probe_requests,
-                       "ours_extra_requests": ours_extra},
+                       "ours_extra_requests": ours_extra,
+                       "reach_extra_requests": reach_cost,
+                       "cap": budget_cap},
         }
     finally:
         srv.shutdown()
@@ -157,7 +188,11 @@ def run_cell(cfg, scenario: str) -> dict:
 
 def aggregate(recs: list[dict]) -> dict:
     out = {}
-    for name in ("B1_status_only", "B2_diff_equal", "B3_diff_inband", "ours_mr_v3"):
+    fixed = ("B1_status_only", "B2_diff_equal", "B3_diff_inband",
+             "B3r_diff_reach", "ours_mr_v3")
+    seen = {k for r in recs for k in r.get("methods", {})}
+    names = [n for n in fixed if n in seen] + sorted(seen - set(fixed))
+    for name in names:
         c = {"tp": 0, "fp": 0, "fn": 0, "tn": 0, "abstain": 0}
         for r in recs:
             m = r["methods"][name]
@@ -188,6 +223,12 @@ def aggregate(recs: list[dict]) -> dict:
             # 总召回：分母是全部真违规格，含被弃权的那些。
             "recall_all_violations": round(c["tp"] / n_viol, 4) if n_viol else None,
             "false_proof_rate": round(c["fp"] / n, 4) if n else None,
+            # 成本：探测对 + 该方法自己声明的那一次额外观测（没有就是 0）。
+            "requests_total": sum(
+                r["budget"]["probe_requests"]
+                + (r["budget"].get("ours_extra_requests", 0) if name == "ours_mr_v3" else 0)
+                + (r["budget"].get("reach_extra_requests", 0) if name == "B3r_diff_reach" else 0)
+                for r in recs),
         }
     # 预算口径：匹配的是"探测对"（owner 一次 + actor 一次），不是总请求数。
     shared = 2 * len(recs)
@@ -202,6 +243,53 @@ def aggregate(recs: list[dict]) -> dict:
                  "because only ours adds introspection reads"),
     }
     return out
+
+
+def run_budget_sweep(caps: tuple[int, ...] = (2, 3)) -> dict:
+    """R1.7：同一总请求预算上限下的横向比较 + 预算曲线。
+
+    cap=2：只够一对探测请求 ⇒ 任何依赖授权面的方法都必须弃权；
+    cap=3：多出的一次额外观测，各方法自己决定怎么花（ours 读授权面，B3r 读可达性）。
+    """
+    t0 = time.time()
+    payload = {
+        "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "design": {
+            "budget": "每个方法在同一格上的**总请求数上限**相同；实际支出如实记账，"
+                      "不向基线补发无用请求。",
+            "credentials": "所有方法使用同一组账户与同一组凭证；真值仍用动作级构造式真值。",
+            "extra_by_method": {"ours_mr_v3": "1 次授权面读取（cap>=3 才有）",
+                                "B3r_diff_reach": "1 次 actor 可见性列举（cap>=3 才有）",
+                                "B1/B2/B3": "不使用额外预算（支出低于上限，如实报告）"},
+        },
+        "sweeps": {},
+    }
+    for cap in caps:
+        recs = []
+        for cfg in BASE_CONFIGS:
+            for sc in SCENARIOS:
+                try:
+                    recs.append(run_cell(cfg, sc, budget_cap=cap))
+                except Exception as e:
+                    recs.append({"config": cfg.as_dict(), "scenario": sc,
+                                 "error": f"{type(e).__name__}: {e}"})
+        ok = [r for r in recs if "error" not in r]
+        payload["sweeps"][str(cap)] = {"cells": len(ok),
+                                       "errors": len(recs) - len(ok),
+                                       "summary": aggregate(ok)}
+        print(f"[cap={cap}] {len(ok)} cells")
+        for k, v in payload["sweeps"][str(cap)]["summary"].items():
+            if k.startswith("_"):
+                continue
+            print(f"  {k:18s} TP={v['tp']:2d} FP={v['fp']:2d} FN={v['fn']:2d} "
+                  f"abstain={v['abstain']:2d} recall_all={v['recall_all_violations']} "
+                  f"reqs={v['requests_total']}")
+    payload["elapsed_sec"] = round(time.time() - t0, 1)
+    # 不写进 baseline_compare.json：那是「探测对匹配」口径，数字被正文引用。
+    (RESULTS / "baseline_budget.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[done] -> {RESULTS / 'baseline_budget.json'} ({payload['elapsed_sec']}s)")
+    return payload
 
 
 def main() -> None:
@@ -252,4 +340,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if "--budget" in sys.argv:
+        run_budget_sweep()
+    else:
+        main()

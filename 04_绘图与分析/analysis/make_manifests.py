@@ -46,6 +46,7 @@ RAW_INPUTS = [
     "experiments/real_system/results/m1_matched_gitea.json",
     "experiments/real_system/results/gitlab_real_system.json",
     "experiments/real_system/results/seeded.json",
+    "experiments/real_system/results/seeded_multiclass.json",
     # ingest_cve_pair.py
     "experiments/real_system/results/cve_pair.json",
     # protocol and its amendments: the digests the run records bind
@@ -58,6 +59,7 @@ RAW_INPUTS = [
     "experiments/real_system/results/temporal/pilot_cascade/temporal_gitlab_pilot.json",
     # ingest_baseline.py  (R1.7 competitive baseline: 42 controlled cells)
     "experiments/results/baseline_compare.json",
+    "experiments/results/baseline_budget.json",
     # 冻结的上游源码状态（R1.14：历史事实的输入，freeze_native_sources.py 产出）
     "experiments/native_engine/results/frozen_source_state.json",
 ]

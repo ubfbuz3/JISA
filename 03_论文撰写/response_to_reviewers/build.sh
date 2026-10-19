@@ -15,7 +15,8 @@ mkdir -p "$BUILD"
 cp "$SRC" "$BUILD/"
 # 回信引用的数字宏必须来自生成器，不能手抄
 cp "$NUM/native_engine_numbers.tex" "$NUM/temporal_numbers.tex" \
-   "$NUM/baseline_numbers.tex" "$NUM/gogs_channel_numbers.tex" "$BUILD/"
+   "$NUM/baseline_numbers.tex" "$NUM/gogs_channel_numbers.tex" \
+   "$NUM/multiclass_numbers.tex" "$NUM/budget_numbers.tex" "$BUILD/"
 cd "$BUILD"
 pdflatex -interaction=nonstopmode response_to_reviewers.tex >p1.log 2>&1 || true
 pdflatex -interaction=nonstopmode response_to_reviewers.tex >p2.log 2>&1 || true

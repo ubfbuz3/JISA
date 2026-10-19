@@ -1,0 +1,205 @@
+{
+  "generated_at": "2026-10-19 22:06:51",
+  "design": {
+    "budget": "每个方法在同一格上的**总请求数上限**相同；实际支出如实记账，不向基线补发无用请求。",
+    "credentials": "所有方法使用同一组账户与同一组凭证；真值仍用动作级构造式真值。",
+    "extra_by_method": {
+      "ours_mr_v3": "1 次授权面读取（cap>=3 才有）",
+      "B3r_diff_reach": "1 次 actor 可见性列举（cap>=3 才有）",
+      "B1/B2/B3": "不使用额外预算（支出低于上限，如实报告）"
+    }
+  },
+  "sweeps": {
+    "2": {
+      "cells": 42,
+      "errors": 0,
+      "summary": {
+        "B1_status_only": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B2_diff_equal": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B3_diff_inband": {
+          "tp": 15,
+          "fp": 6,
+          "fn": 0,
+          "tn": 21,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 21,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.7143,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.1429,
+          "requests_total": 84
+        },
+        "ours_mr_v3": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "abstain": 42,
+          "cells": 42,
+          "claimed": 0,
+          "violation_cells": 15,
+          "abstained_violations": 15,
+          "coverage": 0.0,
+          "precision_on_claims": null,
+          "recall_on_decided": null,
+          "recall_all_violations": 0.0,
+          "false_proof_rate": 0.0,
+          "requests_total": 84
+        },
+        "_budget": {
+          "probe_requests_per_cell": [
+            2
+          ],
+          "ours_extra_per_cell": [
+            0
+          ],
+          "shared_probe_requests": 84,
+          "ours_extra_requests_total": 0,
+          "ours_total_requests": 84,
+          "note": "probe pair matched across methods; total requests are not, because only ours adds introspection reads"
+        }
+      }
+    },
+    "3": {
+      "cells": 42,
+      "errors": 0,
+      "summary": {
+        "B1_status_only": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B2_diff_equal": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B3_diff_inband": {
+          "tp": 15,
+          "fp": 6,
+          "fn": 0,
+          "tn": 21,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 21,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.7143,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.1429,
+          "requests_total": 84
+        },
+        "B3r_diff_reach": {
+          "tp": 14,
+          "fp": 4,
+          "fn": 1,
+          "tn": 23,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 18,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.7778,
+          "recall_on_decided": 0.9333,
+          "recall_all_violations": 0.9333,
+          "false_proof_rate": 0.0952,
+          "requests_total": 126
+        },
+        "ours_mr_v3": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 17,
+          "cells": 42,
+          "claimed": 10,
+          "violation_cells": 15,
+          "abstained_violations": 5,
+          "coverage": 0.5952,
+          "precision_on_claims": 1.0,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 0.6667,
+          "false_proof_rate": 0.0,
+          "requests_total": 111
+        },
+        "_budget": {
+          "probe_requests_per_cell": [
+            2
+          ],
+          "ours_extra_per_cell": [
+            0,
+            1
+          ],
+          "shared_probe_requests": 84,
+          "ours_extra_requests_total": 27,
+          "ours_total_requests": 111,
+          "note": "probe pair matched across methods; total requests are not, because only ours adds introspection reads"
+        }
+      }
+    }
+  },
+  "elapsed_sec": 44.2
+}

@@ -17,6 +17,16 @@
       "bytes": 1893
     },
     {
+      "path": "04_绘图与分析\\results\\budget_numbers.tex",
+      "sha256": "58e84013e88768b6bc2fb7db212f3651cd67bf9178a33abd9c92a4a21be4e583",
+      "bytes": 1490
+    },
+    {
+      "path": "04_绘图与分析\\results\\budget_table.tex",
+      "sha256": "2f6dbbd92eeb25c6a4cc662717be1b7921b2ba51729071ec78bc048254f86fab",
+      "bytes": 1750
+    },
+    {
       "path": "04_绘图与分析\\results\\coverage_numbers.tex",
       "sha256": "efb064a4bd376573c4e4cb29f3b58d31f9344d4568c6bffa999f4ac87b25c0f9",
       "bytes": 2584
@@ -80,6 +90,16 @@
       "path": "04_绘图与分析\\results\\m2_stratum.tex",
       "sha256": "c0319f39e16688de90f77ceb389188b5150be211abec1e42883fecb6a30466f0",
       "bytes": 8337
+    },
+    {
+      "path": "04_绘图与分析\\results\\multiclass_numbers.tex",
+      "sha256": "bd11bbdbb55a594f88bb138afc838afd61341a7fdf7c897ed837cdc8e710a9b1",
+      "bytes": 630
+    },
+    {
+      "path": "04_绘图与分析\\results\\multiclass_table.tex",
+      "sha256": "2f2670a48109ff8f4adea51ec062fcfae5f0afed74ab168ff5d324fbcaca829a",
+      "bytes": 1764
     },
     {
       "path": "04_绘图与分析\\results\\native_engine_numbers.tex",

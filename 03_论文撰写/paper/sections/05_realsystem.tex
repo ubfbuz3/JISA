@@ -501,6 +501,55 @@ posture. Its source, seed list and run script are in the
 reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
 \texttt{artifact-v1}).
 
+\subsection{Four defect classes on the controlled target}
+\label{sec:multiclass}
+
+One fault pattern answers whether the detector finds the defect it was designed
+for; it does not answer whether the chain transfers across authorization defects.
+We therefore seed four classes on the same target, two independent instances
+each, and drive them with the same crawl, introspection and adjudication code.
+C1 is the read bypass already used. C2 is a write bypass: a subject whose true
+permission is \texttt{none} changes the object's metadata with \texttt{PATCH}
+and the change is observable afterwards. C3 is a faulty inheritance expansion: an
+organization member outside the team is served the team's repository, and---this
+is the point---the defect lives in the expansion itself, so the listing, the
+search results and the object read all agree that the subject may see it. C4 is
+an escalation: a subject that is neither owner nor administrator grants a third
+party access it should not have, and the grantee can then reach the object; the
+grant is recorded in the target's state but marked as obtained through the
+defect, so the correct model still answers \texttt{none}. The classes are not
+interchangeable: they stress different premises of the relation.
+
+\input{multiclass_table.tex}
+
+Table~\ref{tab:multiclass} reports per-class recall against the seeded truth. The
+studied relation covers C1 and nothing else. C2 is invisible to it because the
+relation is defined on whether the object is \emph{served}, not on whether it can
+be \emph{changed}; moving the same relation to the channel the defect breaks
+recovers both instances, which says something about the relation family rather
+than about the relation we studied. C3 and C4 are worse than missed: in both the
+subject already sees the object, so \texttt{cannotReachThroughGUI} is false and
+the antecedent of the relation does not hold. The gate is not failing to notice
+them; it reads its own premise and concludes there is nothing to test. That is a
+property of reachability-gated testing against inheritance and escalation, not a
+tuning problem, and it is the clearest evidence we have for why the gate cannot
+be the whole adjudication.
+
+The oracle-consuming adjudicator fires on all \McInstances{} instances once the
+probe is channel-matched, and on \McOracleReadHits{} of \McInstances{} when
+confined to the read channel. Its \McFpOracle{} false alarms on the
+\McAuthorizedCells{} authorized cells are conditional on this target's oracle
+being sound, and Section~\ref{sec:admissibility} reports what happens when it is
+not. Two caveats belong here. First, the target's oracle shares the decision
+function with the content path, so under the admission rule of
+Section~\ref{sec:admissibility} every class is refused promotion: the
+\McInstances{} hits are recall against known truth, not independence-certified
+proofs. Second, these are four mechanisms on one emulator, not four discoveries
+in production systems. Disabling any one class removes that class's alarms and
+leaves every other class's alarms in place---each leave-one-out run returns zero
+alarms on the disabled class---so an alarm is attributable to its own defect
+rather than to a shared root cause.
+
 \subsection{A publicly fixed defect}
 \label{sec:cvepair}
 
@@ -543,11 +592,13 @@ suppressor. It
 does not show that we can \emph{find} such defects: the identifier is given, the
 defect is public and already fixed, and the exercise is a positive control for
 the gate, not a discovery. Nor is it an evaluation on a population---one defect,
-one fault pattern (object versus path ownership), one product line---and a
-multi-defect recall study, with independent read, write, inheritance and
-privilege-escalation faults and their negative controls, is not attempted here.
-The claim this pair supports is about the gate's correctness on a real
-vulnerable/fixed pair, not about detection coverage.
+one fault pattern (object versus path ownership), one product line. The
+multi-defect coverage the same reviewer asked for is not obtained from this pair
+but from the controlled target: Section~\ref{sec:multiclass} seeds read, modify,
+inheritance and escalation faults and reports per-class recall, with the limits
+of that construction stated there. The claim this pair supports is about the
+gate's correctness on a real vulnerable/fixed pair, not about detection
+coverage.
 
 \begin{table}[t]
 \centering

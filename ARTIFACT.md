@@ -7,9 +7,9 @@ to `reproduce.sh`.
 > Status (updated 2026-10-19): the artifact is **published**. The repository is
 > on GitHub (tag `artifact-v1`, commit `a86cd4c`, archived with Zenodo DOI
 > `10.5281/zenodo.22859942`); the resubmission freeze is tag
-> `access-resubmission-v3` and later. Input/output integrity: SHA-256
-> manifests over **23 raw records** (including the frozen upstream source
-> state) and **30 byte-reproducible outputs**, enforced at pipeline entry by
+> `access-resubmission-v8` and later. Input/output integrity: SHA-256
+> manifests over **25 raw records** (including the frozen upstream source
+> state) and **35 byte-reproducible outputs**, enforced at pipeline entry by
 > `reproduce.sh` step 0 (`make_manifests.py --check`). The historical
 > source-state facts of the native run are generated from
 > `experiments/native_engine/results/frozen_source_state.json` (produced by
@@ -186,8 +186,8 @@ and reproducible:
 
 - `bash verify_artifact.sh`  (or `bash reproduce.sh check`) — pre-flight of the
   toolchain (Python + svglib/reportlab/matplotlib/pandas, pdflatex, bibtex;
-  Docker is noted as optional for re-running the live labs); SHA-256 of all 23
-  raw records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 30
+  Docker is noted as optional for re-running the live labs); SHA-256 of all 25
+  raw records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 35
   byte-reproducible outputs (every number-bearing `.tex`, `metrics.json`, and the
   two vector diagrams) vs `provenance/OUTPUTS_SHA256.json`; plus a git
   working-tree status note. The same input check runs at the entry of every

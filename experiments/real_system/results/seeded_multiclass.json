@@ -1,0 +1,2606 @@
+{
+  "meta": {
+    "experiment": "R1.9 multi-class seeded authorization defects",
+    "target": "seeded_target.py (controlled Gitea API emulator)",
+    "active_classes": {
+      "all": [
+        "C1",
+        "C3",
+        "C4",
+        "C2"
+      ]
+    },
+    "classes": {
+      "C1": {
+        "label": "read enforcement",
+        "instances": [
+          [
+            "eve",
+            "alice/r1"
+          ],
+          [
+            "bob",
+            "dave/r5"
+          ],
+          [
+            "carol",
+            "acme/t2"
+          ]
+        ]
+      },
+      "C2": {
+        "label": "modify enforcement",
+        "instances": [
+          [
+            "dave",
+            "alice/r2"
+          ],
+          [
+            "eve",
+            "dave/r5"
+          ]
+        ]
+      },
+      "C3": {
+        "label": "inheritance",
+        "instances": [
+          [
+            "carol",
+            "acme/t1"
+          ],
+          [
+            "eve",
+            "acme/t2"
+          ]
+        ]
+      },
+      "C4": {
+        "label": "privilege escalation",
+        "instances": [
+          [
+            "carol",
+            "alice/r3"
+          ],
+          [
+            "frank",
+            "dave/r5"
+          ]
+        ]
+      }
+    },
+    "truth_source": "ST.Model.intended_perm (tainted grants excluded)",
+    "fp_definition": "alarm on a cell whose intended permission is not none",
+    "elapsed_s": 6.9
+  },
+  "summary": {
+    "per_class": {
+      "C1": {
+        "label": "read enforcement",
+        "n": 3,
+        "detected": {
+          "mr_bookkeeping": 3,
+          "v3": 3,
+          "v3_channel": 3,
+          "direct_observe": 3,
+          "direct_observe_channel": 3,
+          "direct_only": 3
+        },
+        "mr_read": 3,
+        "mr_channel": 3
+      },
+      "C2": {
+        "label": "modify enforcement",
+        "n": 2,
+        "detected": {
+          "mr_bookkeeping": 0,
+          "v3": 0,
+          "v3_channel": 2,
+          "direct_observe": 0,
+          "direct_observe_channel": 2,
+          "direct_only": 2
+        },
+        "mr_read": 0,
+        "mr_channel": 2
+      },
+      "C3": {
+        "label": "inheritance",
+        "n": 2,
+        "detected": {
+          "mr_bookkeeping": 0,
+          "v3": 0,
+          "v3_channel": 0,
+          "direct_observe": 2,
+          "direct_observe_channel": 2,
+          "direct_only": 2
+        },
+        "mr_read": 0,
+        "mr_channel": 0
+      },
+      "C4": {
+        "label": "privilege escalation",
+        "n": 2,
+        "detected": {
+          "mr_bookkeeping": 0,
+          "v3": 0,
+          "v3_channel": 0,
+          "direct_observe": 2,
+          "direct_observe_channel": 2,
+          "direct_only": 2
+        },
+        "mr_read": 0,
+        "mr_channel": 0
+      }
+    },
+    "leave_one_out": {
+      "C1": {
+        "own_alarms_after_disable": 0,
+        "other_alarms_retained": 2
+      },
+      "C2": {
+        "own_alarms_after_disable": 0,
+        "other_alarms_retained": 3
+      },
+      "C3": {
+        "own_alarms_after_disable": 0,
+        "other_alarms_retained": 5
+      },
+      "C4": {
+        "own_alarms_after_disable": 0,
+        "other_alarms_retained": 5
+      }
+    },
+    "fp": {
+      "mr_bookkeeping": 8,
+      "v3": 0,
+      "v3_channel": 0,
+      "direct_observe": 0,
+      "direct_observe_channel": 0,
+      "direct_only": 0
+    },
+    "fp_denominator": 23
+  },
+  "runs": {
+    "all": {
+      "instances": [
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "eve",
+          "object": "alice/r1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "bob",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "carol",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "dave",
+          "object": "alice/r2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-dave"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "eve",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-eve"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "carol",
+          "object": "acme/t1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "eve",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "carol",
+          "object": "alice/r3",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "frank",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        }
+      ],
+      "fp": {
+        "mr_bookkeeping": 8,
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe": 0,
+        "direct_observe_channel": 0,
+        "direct_only": 0
+      },
+      "port": 3331,
+      "escalation_grants": [
+        {
+          "actor": "bob",
+          "grantee": "carol",
+          "object": "alice/r3",
+          "status": 204
+        },
+        {
+          "actor": "carol",
+          "grantee": "frank",
+          "object": "dave/r5",
+          "status": 204
+        }
+      ],
+      "fp_denominator": 23,
+      "setup": {
+        "phaseA": {
+          "steps": [
+            {
+              "step": "user:alice",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:bob",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:carol",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:dave",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:eve",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:frank",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "org:acme",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:dev",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:ops",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r3",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r4",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/pub1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:dave/r5",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += bob",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += repo acme/t1",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline in-band share alice/r1 <- bob",
+              "status": 204,
+              "error": null
+            }
+          ],
+          "team_ids": {
+            "dev": 1,
+            "ops": 2
+          },
+          "failures": []
+        },
+        "phaseC": {
+          "mutations": [
+            {
+              "mutation": "admin_grant_collaborator:alice/r2<-carol",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r2",
+              "subject": "carol"
+            },
+            {
+              "mutation": "admin_grant_collaborator:alice/r3<-eve",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r3",
+              "subject": "eve"
+            },
+            {
+              "mutation": "team_grant_repo:acme/t2 -> team dev",
+              "executed_by": "dave",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme/t2",
+              "subject": "(team dev members)"
+            },
+            {
+              "mutation": "admin_flip_visibility:alice/r4 -> public",
+              "executed_by": "root",
+              "status": 200,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r4",
+              "subject": "(everyone)"
+            },
+            {
+              "mutation": "admin_add_org_member:acme<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme",
+              "subject": "frank"
+            },
+            {
+              "mutation": "admin_add_team_member:dev<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "team:1",
+              "subject": "frank"
+            }
+          ],
+          "failures": []
+        },
+        "c3_setup": [
+          {
+            "add_org_member": "carol",
+            "status": 204
+          },
+          {
+            "add_org_member": "eve",
+            "status": 204
+          }
+        ]
+      }
+    },
+    "without_C1": {
+      "instances": [
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "eve",
+          "object": "alice/r1",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "bob",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "carol",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "dave",
+          "object": "alice/r2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-dave"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "eve",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-eve"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "carol",
+          "object": "acme/t1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "eve",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "carol",
+          "object": "alice/r3",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "frank",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        }
+      ],
+      "fp": {
+        "mr_bookkeeping": 8,
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe": 0,
+        "direct_observe_channel": 0,
+        "direct_only": 0
+      },
+      "port": 3332,
+      "escalation_grants": [
+        {
+          "actor": "bob",
+          "grantee": "carol",
+          "object": "alice/r3",
+          "status": 204
+        },
+        {
+          "actor": "carol",
+          "grantee": "frank",
+          "object": "dave/r5",
+          "status": 204
+        }
+      ],
+      "fp_denominator": 23,
+      "setup": {
+        "phaseA": {
+          "steps": [
+            {
+              "step": "user:alice",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:bob",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:carol",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:dave",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:eve",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:frank",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "org:acme",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:dev",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:ops",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r3",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r4",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/pub1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:dave/r5",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += bob",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += repo acme/t1",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline in-band share alice/r1 <- bob",
+              "status": 204,
+              "error": null
+            }
+          ],
+          "team_ids": {
+            "dev": 1,
+            "ops": 2
+          },
+          "failures": []
+        },
+        "phaseC": {
+          "mutations": [
+            {
+              "mutation": "admin_grant_collaborator:alice/r2<-carol",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r2",
+              "subject": "carol"
+            },
+            {
+              "mutation": "admin_grant_collaborator:alice/r3<-eve",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r3",
+              "subject": "eve"
+            },
+            {
+              "mutation": "team_grant_repo:acme/t2 -> team dev",
+              "executed_by": "dave",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme/t2",
+              "subject": "(team dev members)"
+            },
+            {
+              "mutation": "admin_flip_visibility:alice/r4 -> public",
+              "executed_by": "root",
+              "status": 200,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r4",
+              "subject": "(everyone)"
+            },
+            {
+              "mutation": "admin_add_org_member:acme<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme",
+              "subject": "frank"
+            },
+            {
+              "mutation": "admin_add_team_member:dev<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "team:1",
+              "subject": "frank"
+            }
+          ],
+          "failures": []
+        },
+        "c3_setup": [
+          {
+            "add_org_member": "carol",
+            "status": 204
+          },
+          {
+            "add_org_member": "eve",
+            "status": 204
+          }
+        ]
+      }
+    },
+    "without_C2": {
+      "instances": [
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "eve",
+          "object": "alice/r1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "bob",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "carol",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "dave",
+          "object": "alice/r2",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 403,
+            "pre": "lab",
+            "post": "lab"
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "eve",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 403,
+            "pre": "lab",
+            "post": "lab"
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "carol",
+          "object": "acme/t1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "eve",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "carol",
+          "object": "alice/r3",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "frank",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        }
+      ],
+      "fp": {
+        "mr_bookkeeping": 8,
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe": 0,
+        "direct_observe_channel": 0,
+        "direct_only": 0
+      },
+      "port": 3333,
+      "escalation_grants": [
+        {
+          "actor": "bob",
+          "grantee": "carol",
+          "object": "alice/r3",
+          "status": 204
+        },
+        {
+          "actor": "carol",
+          "grantee": "frank",
+          "object": "dave/r5",
+          "status": 204
+        }
+      ],
+      "fp_denominator": 23,
+      "setup": {
+        "phaseA": {
+          "steps": [
+            {
+              "step": "user:alice",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:bob",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:carol",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:dave",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:eve",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:frank",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "org:acme",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:dev",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:ops",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r3",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r4",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/pub1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:dave/r5",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += bob",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += repo acme/t1",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline in-band share alice/r1 <- bob",
+              "status": 204,
+              "error": null
+            }
+          ],
+          "team_ids": {
+            "dev": 1,
+            "ops": 2
+          },
+          "failures": []
+        },
+        "phaseC": {
+          "mutations": [
+            {
+              "mutation": "admin_grant_collaborator:alice/r2<-carol",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r2",
+              "subject": "carol"
+            },
+            {
+              "mutation": "admin_grant_collaborator:alice/r3<-eve",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r3",
+              "subject": "eve"
+            },
+            {
+              "mutation": "team_grant_repo:acme/t2 -> team dev",
+              "executed_by": "dave",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme/t2",
+              "subject": "(team dev members)"
+            },
+            {
+              "mutation": "admin_flip_visibility:alice/r4 -> public",
+              "executed_by": "root",
+              "status": 200,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r4",
+              "subject": "(everyone)"
+            },
+            {
+              "mutation": "admin_add_org_member:acme<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme",
+              "subject": "frank"
+            },
+            {
+              "mutation": "admin_add_team_member:dev<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "team:1",
+              "subject": "frank"
+            }
+          ],
+          "failures": []
+        },
+        "c3_setup": [
+          {
+            "add_org_member": "carol",
+            "status": 204
+          },
+          {
+            "add_org_member": "eve",
+            "status": 204
+          }
+        ]
+      }
+    },
+    "without_C3": {
+      "instances": [
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "eve",
+          "object": "alice/r1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "bob",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "carol",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "dave",
+          "object": "alice/r2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-dave"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "eve",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-eve"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "carol",
+          "object": "acme/t1",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "eve",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "carol",
+          "object": "alice/r3",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "frank",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        }
+      ],
+      "fp": {
+        "mr_bookkeeping": 8,
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe": 0,
+        "direct_observe_channel": 0,
+        "direct_only": 0
+      },
+      "port": 3334,
+      "escalation_grants": [
+        {
+          "actor": "bob",
+          "grantee": "carol",
+          "object": "alice/r3",
+          "status": 204
+        },
+        {
+          "actor": "carol",
+          "grantee": "frank",
+          "object": "dave/r5",
+          "status": 204
+        }
+      ],
+      "fp_denominator": 23,
+      "setup": {
+        "phaseA": {
+          "steps": [
+            {
+              "step": "user:alice",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:bob",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:carol",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:dave",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:eve",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:frank",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "org:acme",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:dev",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:ops",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r3",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r4",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/pub1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:dave/r5",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += bob",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += repo acme/t1",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline in-band share alice/r1 <- bob",
+              "status": 204,
+              "error": null
+            }
+          ],
+          "team_ids": {
+            "dev": 1,
+            "ops": 2
+          },
+          "failures": []
+        },
+        "phaseC": {
+          "mutations": [
+            {
+              "mutation": "admin_grant_collaborator:alice/r2<-carol",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r2",
+              "subject": "carol"
+            },
+            {
+              "mutation": "admin_grant_collaborator:alice/r3<-eve",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r3",
+              "subject": "eve"
+            },
+            {
+              "mutation": "team_grant_repo:acme/t2 -> team dev",
+              "executed_by": "dave",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme/t2",
+              "subject": "(team dev members)"
+            },
+            {
+              "mutation": "admin_flip_visibility:alice/r4 -> public",
+              "executed_by": "root",
+              "status": 200,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r4",
+              "subject": "(everyone)"
+            },
+            {
+              "mutation": "admin_add_org_member:acme<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme",
+              "subject": "frank"
+            },
+            {
+              "mutation": "admin_add_team_member:dev<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "team:1",
+              "subject": "frank"
+            }
+          ],
+          "failures": []
+        },
+        "c3_setup": [
+          {
+            "add_org_member": "carol",
+            "status": 204
+          },
+          {
+            "add_org_member": "eve",
+            "status": 204
+          }
+        ]
+      }
+    },
+    "without_C4": {
+      "instances": [
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "eve",
+          "object": "alice/r1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "bob",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C1",
+          "class_label": "read enforcement",
+          "subject": "carol",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": true,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": true,
+            "v3": true,
+            "v3_channel": true,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "dave",
+          "object": "alice/r2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-dave"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C2",
+          "class_label": "modify enforcement",
+          "subject": "eve",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "write",
+            "status": 200,
+            "pre": "lab",
+            "post": "written-by-eve"
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": true,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": true,
+            "direct_observe": false,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "carol",
+          "object": "acme/t1",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C3",
+          "class_label": "inheritance",
+          "subject": "eve",
+          "object": "acme/t2",
+          "truth_permission": "none",
+          "defect_active": true,
+          "cannot_reach": false,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "read",
+            "status": 200
+          },
+          "channel_effect": true,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": true,
+            "direct_observe_channel": true,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "carol",
+          "object": "alice/r3",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "alice",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        },
+        {
+          "class": "C4",
+          "class_label": "privilege escalation",
+          "subject": "frank",
+          "object": "dave/r5",
+          "truth_permission": "none",
+          "defect_active": false,
+          "cannot_reach": true,
+          "introspection": {
+            "vantage_credential": "dave",
+            "status": 200,
+            "permission": "none",
+            "readable": true,
+            "says_none": true
+          },
+          "probe": {
+            "channel": "grant",
+            "status": 404
+          },
+          "channel_effect": false,
+          "mr_read": false,
+          "mr_channel": false,
+          "alarms": {
+            "mr_bookkeeping": false,
+            "v3": false,
+            "v3_channel": false,
+            "direct_observe": false,
+            "direct_observe_channel": false,
+            "direct_only": true
+          }
+        }
+      ],
+      "fp": {
+        "mr_bookkeeping": 8,
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe": 0,
+        "direct_observe_channel": 0,
+        "direct_only": 0
+      },
+      "port": 3335,
+      "escalation_grants": [],
+      "fp_denominator": 23,
+      "setup": {
+        "phaseA": {
+          "steps": [
+            {
+              "step": "user:alice",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:bob",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:carol",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:dave",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:eve",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "user:frank",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "org:acme",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:dev",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "team:ops",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r3",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/r4",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:alice/pub1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t1",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:acme/t2",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "repo:dave/r5",
+              "status": 201,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += bob",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline team dev += repo acme/t1",
+              "status": 204,
+              "error": null
+            },
+            {
+              "step": "baseline in-band share alice/r1 <- bob",
+              "status": 204,
+              "error": null
+            }
+          ],
+          "team_ids": {
+            "dev": 1,
+            "ops": 2
+          },
+          "failures": []
+        },
+        "phaseC": {
+          "mutations": [
+            {
+              "mutation": "admin_grant_collaborator:alice/r2<-carol",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r2",
+              "subject": "carol"
+            },
+            {
+              "mutation": "admin_grant_collaborator:alice/r3<-eve",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r3",
+              "subject": "eve"
+            },
+            {
+              "mutation": "team_grant_repo:acme/t2 -> team dev",
+              "executed_by": "dave",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme/t2",
+              "subject": "(team dev members)"
+            },
+            {
+              "mutation": "admin_flip_visibility:alice/r4 -> public",
+              "executed_by": "root",
+              "status": 200,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "alice/r4",
+              "subject": "(everyone)"
+            },
+            {
+              "mutation": "admin_add_org_member:acme<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "acme",
+              "subject": "frank"
+            },
+            {
+              "mutation": "admin_add_team_member:dev<-frank",
+              "executed_by": "root",
+              "status": 204,
+              "error": null,
+              "observed_by_framework_log": false,
+              "object": "team:1",
+              "subject": "frank"
+            }
+          ],
+          "failures": []
+        },
+        "c3_setup": [
+          {
+            "add_org_member": "carol",
+            "status": 204
+          },
+          {
+            "add_org_member": "eve",
+            "status": 204
+          }
+        ]
+      }
+    }
+  }
+}

@@ -98,14 +98,30 @@ class Model:
         for o, n, priv, isorg, cr in REPOS:
             self.repos[f"{o}/{n}"] = dict(owner=o, name=n, private=priv,
                                           org=(o if isorg else None), creator=cr,
-                                          collab={})  # user -> perm
+                                          collab={},  # user -> perm
+                                          description="lab")
+        # ---- multi-class defect registry (empty = legacy behaviour) ----
+        # read_bypass : (user, obj) -> 运行期 GET 放行，正确模型仍为 none
+        # write_bypass: (user, obj) -> 运行期 PATCH 放行，正确模型仍为 none
+        # inherit_perm: (user, obj) -> perm，错误的继承扩展（列表与对象读都走它）
+        # escalate_bypass: (actor, obj) -> 该 actor 可越权授予他人
+        # tainted     : (obj, grantee) 由越权授予产生的协作者记录；正确模型不认
+        self.read_bypass: set = set()
+        self.write_bypass: set = set()
+        self.inherit_perm: dict = {}
+        self.escalate_bypass: set = set()
+        self.tainted: set = set()
         # 基线授权
         for obj, subj, perm in BASELINE_GRANT:
             self.repos[obj]["collab"][subj] = perm
 
     # ---- 正确授权判定 ----
     def intended_perm(self, user: str, obj: str) -> str:
-        """返回 none/read/write/admin（基于正确模型）。"""
+        """返回 none/read/write/admin（基于正确模型）。
+
+        由越权授予（C4）产生的协作者记录被标记为 tainted，正确模型**不认**它：
+        该访问是缺陷的产物，不是被授予的权利。
+        """
         if user == ADMIN_USER:
             return "admin"
         r = self.repos.get(obj)
@@ -113,7 +129,7 @@ class Model:
             return "none"
         if r["owner"] == user or r["creator"] == user:
             return "admin"
-        if user in r["collab"]:
+        if user in r["collab"] and (obj, user) not in self.tainted:
             return r["collab"][user]
         # 组织团队授权
         if r["org"]:
@@ -124,6 +140,24 @@ class Model:
                     if user in self.orgs[r["org"]]["members"]:
                         # 组织成员对私有团队仓库默认无权限，除非在团队
                         return "none"
+        return "none"
+
+    def runtime_perm(self, user: str, obj: str) -> str:
+        """运行期实际生效的权限 = 正确模型 + 继承类缺陷（C3）。
+
+        C3 的缺陷在**继承扩展**里，而不是在某个端点上做运行期绕过：因此列表、
+        搜索与对象读看到的是同一个（错误的）权限，被测关系无法靠"爬不到"识别它。
+        """
+        p = self.intended_perm(user, obj)
+        if p != "none":
+            return p
+        if (user, obj) in self.inherit_perm:
+            return self.inherit_perm[(user, obj)]
+        # C4：越权授予产生的协作者记录在运行期**真的**生效（这正是提权的危害），
+        # 但正确模型不认它 —— 真值与生效权限在此分离。
+        r = self.repos.get(obj)
+        if r is not None and user in r["collab"]:
+            return r["collab"][user]
         return "none"
 
     def can_see_list(self, user: str, obj: str) -> bool:
@@ -141,6 +175,8 @@ class Model:
             for tid, t in self.teams.items():
                 if t["org"] == r["org"] and obj in t["repos"] and user in t["members"]:
                     return True
+        if (user, obj) in self.inherit_perm:      # ★ C3：错误的继承扩展
+            return True
         return False
 
     # ---- 阶段 C 带外变更（写进正确模型） ----
@@ -211,6 +247,7 @@ class Handler(BaseHTTPRequestHandler):
             "full_name": obj, "private": r["private"],
             "owner": {"login": r["owner"]}, "empty": False,
             "default_branch": "main", "size": 1,
+            "description": r.get("description", "lab"),
             "created_at": "2026-01-01T00:00:00Z",
             "updated_at": "2026-01-01T00:00:00Z",
         }
@@ -250,13 +287,13 @@ class Handler(BaseHTTPRequestHandler):
             obj = f"{o}/{r}"
             if obj not in m.repos:
                 return self._send(404, {"message": "Not Found"})
-            # 正确鉴权
-            perm = m.intended_perm(u, obj) if u else "none"
+            # 正确鉴权 + C3 继承缺陷（运行期生效权限）
+            perm = m.runtime_perm(u, obj) if u else "none"
             if perm != "none":
                 return self._send(200, self._repo_json(obj))
-            # 植入绕过：特定 (u, obj) 非法放行
-            if u and (u, obj) in Handler.seeded:
-                return self._send(200, self._repo_json(obj))   # ★ BOLA 缺陷
+            # 植入绕过：特定 (u, obj) 非法放行（旧 BOLA 与 C1 读缺陷）
+            if u and ((u, obj) in Handler.seeded or (u, obj) in m.read_bypass):
+                return self._send(200, self._repo_json(obj))   # ★ C1 缺陷
             # 匿名或无权限
             if u is None:
                 return self._send(401, {"message": "Unauthorized"})
@@ -362,6 +399,12 @@ class Handler(BaseHTTPRequestHandler):
                 if obj in m.repos:
                     m.repos[obj]["collab"][subj] = body.get("permission", "read")
                     return self._send(204)   # ★ BFLA 缺陷：越权写成功
+            # ★ C4：提权植入 —— 非 owner/非 admin 的 actor 也能授予，且被授予者
+            # 由此获得访问；该协作者记录标记为 tainted，正确模型不认。
+            if u and (u, obj) in m.escalate_bypass and obj in m.repos:
+                m.repos[obj]["collab"][subj] = body.get("permission", "read")
+                m.tainted.add((obj, subj))
+                return self._send(204)
             # 正确路径：只有 owner/admin 可授予
             if u == ADMIN_USER or (obj in m.repos and m.repos[obj]["owner"] == u):
                 if obj in m.repos:
@@ -403,10 +446,15 @@ class Handler(BaseHTTPRequestHandler):
         mm = re.match(r"^/api/v1/repos/([^/]+)/([^/]+)$", path)
         if mm:
             obj = f"{mm.group(1)}/{mm.group(2)}"
-            if obj in m.repos and (u == ADMIN_USER or m.repos[obj]["owner"] == u):
-                if "private" in body:
-                    m.repos[obj]["private"] = bool(body["private"])
-                return self._send(200, self._repo_json(obj))
+            if obj in m.repos:
+                legit = (u == ADMIN_USER or m.repos[obj]["owner"] == u)
+                # ★ C2：写越权植入 —— 非 owner 的 PATCH 被放行并真的改了对象
+                if legit or (u and (u, obj) in m.write_bypass):
+                    if "private" in body:
+                        m.repos[obj]["private"] = bool(body["private"])
+                    if "description" in body:
+                        m.repos[obj]["description"] = str(body["description"])
+                    return self._send(200, self._repo_json(obj))
             return self._send(403)
         return self._send(404)
 
@@ -425,15 +473,29 @@ class Handler(BaseHTTPRequestHandler):
 # --------------------------------------------------------------------------
 # 启动（供 run_seeded.py import 用）
 # --------------------------------------------------------------------------
-def make_server(port: int = 3319):
+def make_server(port: int = 3319, legacy: bool = True):
+    """legacy=True 时装载旧的单缺陷阳性对照（SEED_FLAWS/BFLA_FLAW）。
+
+    R1.9 的多类实验用 legacy=False：缺陷只由 install_multiclass() 登记，避免
+    旧 BOLA 表与 C1 重叠、使 leave-one-out 失效。
+    """
     Handler.model = Model()
     Handler.seeded_flaws = SEED_FLAWS
     Handler.bfla_flaw = BFLA_FLAW
-    Handler.seeded = {(s, o) for (k, s, o) in SEED_FLAWS if k == "BOLA"}
-    Handler.bfla_actor = BFLA_FLAW[1]
-    Handler.bfla_obj = BFLA_FLAW[2]
+    Handler.seeded = ({(s, o) for (k, s, o) in SEED_FLAWS if k == "BOLA"}
+                      if legacy else set())
+    Handler.bfla_actor = BFLA_FLAW[1] if legacy else None
+    Handler.bfla_obj = BFLA_FLAW[2] if legacy else None
     srv = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     return srv
+
+
+def install_multiclass(model, *, read=(), write=(), inherit=None, escalate=()):
+    """安装多类缺陷登记表（R1.9）。默认空 ⇒ 行为与旧阳性对照一致。"""
+    model.read_bypass = set(read)
+    model.write_bypass = set(write)
+    model.inherit_perm = dict(inherit or {})
+    model.escalate_bypass = set(escalate)
 
 
 if __name__ == "__main__":

@@ -85,6 +85,10 @@ pushd "$ANA" >/dev/null
 "$PYBIN" ingest_coverage.py
 # 竞争基线：常规多账户差分 vs 关系感知裁决（baseline_compare.json 随包提供）
 "$PYBIN" ingest_baseline.py
+# 等总预算比较（baseline_budget.json，run_baseline.py --budget）
+"$PYBIN" ingest_budget.py
+# 多类独立缺陷（seeded_multiclass.json，run_multiclass.py）
+"$PYBIN" ingest_multiclass.py
 "$PYBIN" make_diagrams.py
 popd >/dev/null
 

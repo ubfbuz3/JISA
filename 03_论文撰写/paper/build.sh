@@ -36,6 +36,10 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/gogs_channel_table.tex" \
          "$PROJ/04_绘图与分析/results/gitlab_numbers.tex" \
          "$PROJ/04_绘图与分析/results/seeded_table.tex" \
+         "$PROJ/04_绘图与分析/results/multiclass_table.tex" \
+         "$PROJ/04_绘图与分析/results/multiclass_numbers.tex" \
+         "$PROJ/04_绘图与分析/results/budget_numbers.tex" \
+         "$PROJ/04_绘图与分析/results/budget_table.tex" \
          "$PROJ/04_绘图与分析/results/m2_stratum.tex" \
          "$PROJ/04_绘图与分析/results/truth_numbers.tex" \
          "$PROJ/04_绘图与分析/results/truth_table.tex" \
@@ -103,6 +107,10 @@ cp "$PROJ/04_绘图与分析/results/gogs_channel_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_channel_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gitlab_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/seeded_table.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/multiclass_table.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/multiclass_numbers.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/budget_numbers.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/budget_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/m2_stratum.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/truth_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/truth_table.tex" "$BUILD/"

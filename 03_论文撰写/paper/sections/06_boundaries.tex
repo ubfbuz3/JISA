@@ -385,10 +385,10 @@ actor, \BlSharedProbes{} shared probes in all, plus one additional read of the
 authorization surface for ours on the \BlOursExtraCells{} cells where a relation
 alarms and none where it does not---\BlOursExtraAvg{} per cell on average,
 \BlOursExtraTotal{} reads in total, so ours issues \BlOursRequestsTotal{} requests
-against the baselines' \BlSharedProbes{}. Total request count, visible information
-and privilege therefore differ across methods, and the comparison is between
-adjudication trade-offs at different information costs, not between detectors
-given the same budget. The
+against the baselines' \BlSharedProbes{}. Total request count therefore differs
+across methods in this table, which is why it is read as a comparison of
+adjudication trade-offs at different information costs; the matched-total-budget
+comparison is reported separately below, and it does not reverse that reading. The
 whole comparison, both probes and the additional reads included, ran in
 \BlRunSeconds{}~s of wall-clock harness time covering setup, probing, scoring
 and cleanup; the runner binds no CPU and measures no per-method CPU time, so we
@@ -397,6 +397,32 @@ scored from the same two recorded responses in the same process, a per-method
 timing would measure our replay loop rather than the rule, so we report none.
 
 \input{baseline_table.tex}
+
+\input{budget_table.tex}
+
+\paragraph{The same comparison at a matched total budget}
+Table~\ref{tab:baselines} matches the probe pair, not the bill: our method issues
+one further request per cell to read the authorization surface, so a reviewer may
+reasonably ask whether its precision is bought with requests the baselines were
+not allowed to spend. Table~\ref{tab:budget} answers that with a total-request
+ceiling per cell instead of a probe-pair match, on the same \BgtCells{} cells,
+with the same accounts and the same credentials. At a ceiling of two, only the
+owner/actor pair fits, and our method abstains on all \BgtCells{} cells: a method
+that must read the surface cannot claim anything when the budget does not reach
+it, and the table records that rather than letting the relation stand in for the
+surface. At a ceiling of three, each method may spend one further observation of
+its own choosing, declared in advance---ours reads the authorization surface, a
+strengthened baseline B3r enumerates the actor's visible objects---while B1--B3
+spend nothing extra, which is reported as under-spend rather than padded. Under
+that ceiling our method does not dominate: B3r reaches \BgtBthreeRTpCapThree{} of
+\BgtViolations{} violations with \BgtBthreeRFpCapThree{} false proofs, ours
+\BgtOursTpCapThree{} with \BgtOursFpCapThree{} and \BgtOursAbstainCapThree{}
+abstentions, and ours spends \BgtOursReqCapThree{} of the
+\BgtCells{}$\times$3 requests the ceiling allows because an abstaining cell costs
+nothing. What survives a matched budget is the trade the paper describes---a
+higher precision on the claims actually made, paid for in coverage where the
+surface cannot be read---not a detection advantage over the differential
+baselines, and we claim none.
 
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}
@@ -424,13 +450,18 @@ where it does not, the honest method abstains---as v3 does on the unreadable
 stratum, where the aggregate table would have ranked it best, a ranking that
 reflects abstention rather than improved detection.
 
-\paragraph{An oracle-independence admission rule, applied retrospectively}
+\paragraph{An oracle-independence admission rule, applied before and after}
 Clause~(2) needs an operational procedure, and we give one as part of this
-revision. The pre-registered protocol pinned by digest recorded the qualitative
-judgement (\texttt{oracle\_independence=shared}; the oracle read for diagnosis
-only) but did not contain the procedure below, and we do not backdate it: the
-rule is proposed here and applied conservatively to the archived experiments.
-The rule, per target defect class (here: object-level authorization enforcement
+revision. It is fixed as a standalone protocol---defect classes, four evidence
+levels, an ordered \emph{admit}/\emph{reject}/\emph{unknown} rule, and what each
+status licenses---before the multi-class and equal-budget runs of
+Sections~\ref{sec:multiclass} and~\ref{sec:baselines}, and applied both to them
+and, conservatively, to the archived experiments. It was not part of the original
+submission and we do not backdate it: the pre-registered protocol pinned by
+digest recorded the qualitative judgement
+(\texttt{oracle\_independence=shared}; the oracle read for diagnosis
+only) but did not contain the procedure below. The rule, per target defect class
+(here: object-level authorization enforcement
 of read and write requests): enumerate, at the level the product's own
 documentation and observable behaviour support, the path that produces the
 enforcement answer $y$ and the path that produces the oracle answer $o$;
@@ -449,9 +480,13 @@ answered by the same application consulting the same membership tables. On each
 product the enumeration stops at the server boundary---below it we did not audit
 internal source, so the finer-grained verdict would be \emph{unknown}---and the
 conservative reading already available at the API level, one process and one
-authorization model on both paths, is recorded as \emph{reject}. Three
-epistemic statuses must then be kept apart: the diagnostic $O$/$H$ readings in
-the experiments (run under the recorded \texttt{shared} status); the post-hoc
+authorization model on both paths, is recorded as \emph{reject}. On the
+controlled target, where we can read the source, the finer verdict is available
+and is also \emph{reject}: its content decision calls the same function the
+oracle answers from, so the shared decision point is visible at level~L2 rather
+than inferred. The protocol and the per-system register ship with the artifact.
+Three epistemic statuses must then be kept apart: the diagnostic $O$/$H$ readings in
+the experiments (run under the recorded \texttt{shared} status); the
 classification of every promoted verdict against the independent ledger $E$ and
 the content observation $Y$ (gate correctness, which needs no oracle
 independence); and independence-certified proofs of previously unknown defects,

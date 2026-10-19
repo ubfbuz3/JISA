@@ -38,8 +38,10 @@ register a failure confined to a class the run did not exercise.
 Support evidence: reading the implementation confirmed the semantics and added
 the mechanism---the crawl model is frozen by a cache never invalidated, and a
 missing crawl defaults to ``unreachable''---and the positive control is a sanity check that closes the loop: on a seeded
-vulnerable target, for one fault pattern, the surface-gated adjudicator detects
-all planted instances with zero false positives.
+vulnerable target the surface-gated adjudicator detects all planted instances of
+the fault pattern it was built for with zero false positives, and on four seeded
+defect classes it detects the read bypass and nothing else, because the other
+three are reached through objects the subject can already see.
 
 \paragraph{What the two added experiments carry} The temporal finding is not
 confined to one product. Under the same pre-registered protocol, frozen before
