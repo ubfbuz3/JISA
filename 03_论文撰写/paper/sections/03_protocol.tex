@@ -56,6 +56,32 @@ authorization (the per-system validation procedure is described in
 Section~\ref{sec:realsystem}) for Gitea, Gogs and GitLab; the pinned route tables for the grant census;
 and the seed list for the seeded target.
 
+\paragraph{Unknown and failure handling}
+Each predicate can fail to yield a bit, and the handling is fixed by the
+pre-registered protocol before any cell is observed, not negotiated per result.
+$E$ is undefined if the entitlement-changing transaction does not commit; the
+procedure retries once, and a cell that still fails is marked \emph{failed} and
+excluded from every denominator, with the exclusion count reported alongside the
+result. $Y$ is undefined on an execution error or timeout; such a cell is
+likewise unscored, never coerced to \emph{allow} or \emph{deny}---in the native
+engine run, \NtMrTotal{} relations were attempted, \NtMrExecuted{} executed and
+\NtMrErrored{} errored, and the errored one is reported rather than silently
+dropped from the attempted count. $O$ is undefined wherever the introspection
+surface returns no definite answer; the state-calibrated method abstains on
+those cells by construction, and the channel table reports them in an explicit
+\emph{unanswered} column (\TmpUnansGitea{} Gitea and \TmpUnansGitlab{} GitLab
+cells for the anonymous reader, \GgChUnans{} on Gogs' authenticated reader)
+instead of absorbing them into \emph{deny}. The twelve-row truth table is
+defined over $E\in\{\text{allow},\text{deny}\}$; an $E$-undefined cell would
+fall outside its rows and be reported as excluded, not reassigned. In the
+reported runs no cell exercised these exits: all \TmpCellsTotal{} temporal cells
+and both Gogs readings committed, answered and matched ($E{=}Y$ throughout, zero
+abstentions), so the contract is stated, exercised on no cell, and would bind
+any rerun on a degraded deployment. Missing or modified input records fail the
+pipeline outright (SHA-256 manifests over inputs and outputs are shipped with
+the artefact); the pipeline never substitutes a default value for an absent
+record.
+
 \paragraph{Scenarios and design cells}
 Seven scenarios separate the reasons an MR can misfire: no shared object (S1,
 S2); an in-band legitimate share visible in the framework log (S3); an unshared

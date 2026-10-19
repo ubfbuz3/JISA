@@ -28,3 +28,4 @@ Thumbs.db
 
 # ---- one-off readiness check output ----
 main_check.txt
+.tmpwork/

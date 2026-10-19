@@ -6,6 +6,9 @@
 # Steps
 #   1. analysis pipeline  -> results/*.tex (all counts, Table 2-11 numbers)
 #   2. paper build        -> 03_论文撰写/paper/main.pdf
+#   3. response letter    -> response_to_reviewers.pdf, plus the hard gate
+#                            that re-checks every load-bearing number in the
+#                            letter against the regenerated macros
 #
 # Prerequisites
 #   - Python 3.13 (managed runtime used by the scripts).
@@ -56,10 +59,14 @@ pushd "$ANA" >/dev/null
 "$PYBIN" compute_all.py
 "$PYBIN" ingest_native_engine.py
 "$PYBIN" ingest_gogs.py
+# Gogs 按渠道/按机制的 oracle 保真矩阵（R1.8；只用既有 phaseE 记录）
+"$PYBIN" ingest_gogs_channel.py
 "$PYBIN" ingest_gitlab.py
 "$PYBIN" ingest_seeded.py
 # 真实 vulnerable/fixed 配对的数字（cve_pair.json 随包提供，不需重跑实例）
 "$PYBIN" ingest_cve_pair.py
+# 配对 fail-closed 校验的回归测试（扰动副本，不碰原始 JSON）
+"$PYBIN" test_cve_pair_validation.py
 # 真时序实验的数字（temporal_gitea.json 随包提供，不需重跑实例）
 "$PYBIN" ingest_temporal.py
 # 两条关系的显式判定式复核 + 真值表（只读既有 raw_matrix / temporal JSON）
@@ -93,9 +100,14 @@ if [ -f "$SEED_DIR/run_seeded.py" ]; then
   fi
 fi
 
-echo "[2/2] Building the paper (main.pdf)..."
+echo "[2/3] Building the paper (main.pdf)..."
 pushd "$PAPER" >/dev/null
 bash build.sh
 popd >/dev/null
 
-echo "Done. Inspect main.pdf and the per-table .tex under results/."
+# 回复信与稿件引用同一批生成宏；这一步重建回信，并硬性核对回信里的每个
+# 承重数字与刚重算出来的宏一致（check_letter_numbers.py，build.sh 内调用）。
+echo "[3/3] Building the response letter + letter-number check..."
+bash "$ROOT/03_论文撰写/response_to_reviewers/build.sh"
+
+echo "Done. Inspect main.pdf, response_to_reviewers.pdf and the per-table .tex under results/."

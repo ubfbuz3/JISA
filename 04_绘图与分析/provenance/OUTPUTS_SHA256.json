@@ -8,13 +8,13 @@
     },
     {
       "path": "04_绘图与分析\\results\\baseline_numbers.tex",
-      "sha256": "dae856c19fc88855d02fd263a7d6340857ea6b2dd4b82b6cafca6c32c568e683",
-      "bytes": 983
+      "sha256": "01d1acfc4fcb27a8b8c7f6beaf303c6f5699f22bfbdb708d8a5f81d173ec41fe",
+      "bytes": 1253
     },
     {
       "path": "04_绘图与分析\\results\\baseline_table.tex",
-      "sha256": "c1807cef8aa17ab9997e19abdbd232aade0481d59e540f4c7cac78d403e2a139",
-      "bytes": 1398
+      "sha256": "6f0e2acaf09c0680345e3ff39e46e65da7acd7ce99f3efe07047e427d1b5eb56",
+      "bytes": 1893
     },
     {
       "path": "04_绘图与分析\\results\\coverage_numbers.tex",
@@ -28,8 +28,8 @@
     },
     {
       "path": "04_绘图与分析\\results\\cve_pair_numbers.tex",
-      "sha256": "ad9402fdb382d18a2cc58e947650f0ea4ea91a891c45d991147d985d47804253",
-      "bytes": 729
+      "sha256": "aac5a15ce3940232f16419a296d39c512f81f37c5a8c54b6c08c71af0f83bde6",
+      "bytes": 764
     },
     {
       "path": "04_绘图与分析\\results\\cve_pair_table.tex",
@@ -55,6 +55,16 @@
       "path": "04_绘图与分析\\results\\gitlab_numbers.tex",
       "sha256": "c097889aa5c4ac062715f44e7a63c5f5c867080c38eaec03ed6fd50746ec0b38",
       "bytes": 1206
+    },
+    {
+      "path": "04_绘图与分析\\results\\gogs_channel_numbers.tex",
+      "sha256": "0e71cc473ba03d77dbbd198bb25d7a7f1f2d438c0514d109ebcbb1d78ff6fcdd",
+      "bytes": 1841
+    },
+    {
+      "path": "04_绘图与分析\\results\\gogs_channel_table.tex",
+      "sha256": "f97f5a82cb503219f4c7b481e8722b92e9f5bb4f279d113baa34f6a6aa430350",
+      "bytes": 2683
     },
     {
       "path": "04_绘图与分析\\results\\gogs_cross_table.tex",
@@ -108,8 +118,8 @@
     },
     {
       "path": "04_绘图与分析\\results\\temporal_numbers.tex",
-      "sha256": "7bffd1d2982fcd5cfea78b8500f96c1e5ce28023e701e6867771e62f21190c4c",
-      "bytes": 2518
+      "sha256": "af78240ad9c7d6feeb906ac20dc67230bd2e144fc73b6b81a1ebc6f77c7c559a",
+      "bytes": 2619
     },
     {
       "path": "04_绘图与分析\\results\\temporal_table.tex",

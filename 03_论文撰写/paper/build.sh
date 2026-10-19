@@ -31,6 +31,8 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/temporal_channel_table.tex" \
          "$PROJ/04_绘图与分析/results/gogs_numbers.tex" \
          "$PROJ/04_绘图与分析/results/gogs_cross_table.tex" \
+         "$PROJ/04_绘图与分析/results/gogs_channel_numbers.tex" \
+         "$PROJ/04_绘图与分析/results/gogs_channel_table.tex" \
          "$PROJ/04_绘图与分析/results/gitlab_numbers.tex" \
          "$PROJ/04_绘图与分析/results/seeded_table.tex" \
          "$PROJ/04_绘图与分析/results/m2_stratum.tex" \
@@ -95,6 +97,8 @@ cp "$PROJ/04_绘图与分析/results/temporal_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/temporal_channel_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gogs_cross_table.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/gogs_channel_numbers.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/gogs_channel_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/gitlab_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/seeded_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/m2_stratum.tex" "$BUILD/"

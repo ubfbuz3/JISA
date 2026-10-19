@@ -46,10 +46,24 @@ Each of these papers reports detections against an oracle it holds
 privately---a policy, a seeded defect, a differential response---and none of them
 is our comparison class, because we do not measure detection rates. What this
 paper adds is three claims about one published adjudication, each with a
-falsifier. First, a gate that reads a crawl-time model misreports a grant the
-record does not contain, deterministically rather than intermittently, and the
-misreport survives recrawling of the same interface (Finding~1; the constructed
-enumeration and the two-product temporal replication). Second, once a readable,
+falsifier. Two of the ingredients are already known---that a crawl-time model
+can go stale, and that an authorization oracle can be unsound; the claims below
+differ in that the first failure is deterministic and attributable to a
+representation choice, the second is bounded by an explicit equivalence rather
+than argued case by case, and the third is a property of the published metric's
+denominator. First, a gate that reads a crawl-time model misreports a grant the
+record does not contain, deterministically rather than intermittently
+(Finding~1; the constructed enumeration). Re-reading the surface repairs that
+misreport only when the grant is one the surface would have shown on a second
+reading: across the two products a same-credential recrawl removes
+\TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs, leaving
+\TmpBothLiveFP{} live ones. When the grant arrived through a channel the
+surface never exposes, no re-reading of that surface repairs it---on Gogs
+\GgMismatchLive{} of \GgMismatchSnap{} mismatching cells and \GgFpVthreeLive{}
+of \GgFpVthree{} surface-gated false proofs persist under live reading, all on
+public-visibility or team-derived grants that never enter a subject's personal
+crawl. Staleness is repairable and channel blindness is not, and the two call
+for different remedies. Second, once a readable,
 sound oracle is supplied, the promoted verdict is a subset of direct adjudication
 on the evaluated domain, so the metamorphic step adds no confirmation there
 (Proposition~\ref{lem:oracle-suff}(b)); the falsifier is a record the relation

@@ -265,11 +265,15 @@ A channel-by-channel view makes the mechanism explicit
 (Table~\ref{tab:oracle-channel}), for Gitea and GitLab. Each cell is assigned to
 exactly one channel, and the rows sum to the cell count, so no cell is counted
 twice; the grouping is by the strongest channel that grants it, not a
-multi-label count. Gogs is absent from this table and we do not claim a
-per-channel account for it: its API exposes no per-object membership route that
-separates direct from inherited grants, so the four-channel decomposition could
-not be built there, and Gogs enters only the system-level comparison of
-Table~\ref{tab:gogs-cross}. Both tabulated products answer every
+multi-label count. The same decomposition is available for Gogs
+(Table~\ref{tab:gogs-channel}), and the reason an earlier draft omitted it is
+worth recording, because it is a category error rather than a data limitation:
+a channel label is a property of the entitlement ledger---built from the lab
+topology, the documented inheritance rules and the recorded out-of-band grant
+events, never from a probe response---so a product whose API exposes no
+per-object membership route does not lose the channel axis. What such a product
+loses is the ability to \emph{enumerate} those grants through that route, which
+is a claim about the oracle surface, not about the labelling. Both tabulated products answer every
 direct-collaborator and group cell correctly, and Gitea also answers its public
 and site-administrator cells correctly. GitLab errs only by omission, and only on the two channels that
 are not membership: it answers \emph{deny} on \TmpGOracleDisagreePublic{} public
@@ -350,6 +354,49 @@ and site administration confer none: \GlOracleWrong{} false negatives
 (\GlOracleWrongPct\%). What a surface cannot see is predictable from what it
 measures---why clause~(2) of the admissibility condition
 (Section~\ref{sec:admissibility}) cannot be automated from readability alone.
+
+\input{gogs_channel_table.tex}
+
+Table~\ref{tab:gogs-channel} locates those \GgOracleWrong{} errors instead of
+leaving them as a single unsoundness figure, and it does so on the ledger axis
+that the product's own API does not have to provide. Panel~(a) groups the same
+\GgChCells{} cells by the granting channel recorded in the ledger. The surface
+is correct on every cell it can represent: all \GgChCollaboratorAgree{} of the
+\GgChCollaborator{} direct-collaborator cells and all \GgChNone{} cells with no
+recorded grant. It answers \emph{deny} on all \GgChFalseDeny{} cells whose
+entitlement arises from team membership (\GgChTeamFalseDeny{}), public
+visibility (\GgChPublicFalseDeny{}) or site administration
+(\GgChSiteAdminFalseDeny{}), and it never answers allow where the ledger denies
+(\GgChFalseAllow{}). The error is therefore one-sided and located: exactly the
+three mechanisms that the owner-vantage per-object collaboration route does not
+represent. Panel~(b) re-groups the same cells by mechanism and shows the same
+concentration as a rate rather than a count, which matters because the three
+affected strata are small: \GgChSrcTeam{} team, \GgChSrcPublic{} visibility and
+\GgChSrcSiteAdmin{} site-administrator cells, all wrong, against
+\GgChSrcCollaborator{} and \GgChSrcNone{} cells, all right.
+
+That the blind spot belongs to the chosen surface rather than to the product's
+whole API is recorded, not inferred: in the surface probe shipped with the run,
+the per-object permission suffix returns \GgChProbePermSuffix{}, the per-object
+team route \GgChProbeTeamMember{} and the collaboration route the oracle
+consults \GgChProbeCollabGet{}, while the organisation team listing is reachable
+(\GgChProbeOrgTeams{}). A team listing is not a per-object authorization surface
+and a surface-gated adjudicator does not consult it; the measurement therefore
+reports what the gated surface licenses, not what the product could in principle
+expose. The decomposition is also stable across readings: the live reading of
+the same cells gives \GgChLiveAgree{} agreements and \GgChLiveFalseDeny{} false
+denials, so the concentration is not an artifact of the snapshot reading.
+
+Two labelling caveats are part of the table. First, \GgChMultiBasis{} cell
+carries two ledger rules (site administrator and public visibility); it is
+counted once, under the stronger rule, so the rows sum to \GgChCells{} cells
+rather than to the \GgChRules{} recorded rules---the grouping is a partition of
+cells, not of mechanisms. Second, the runner's provenance bucket is a heuristic
+that files a collaborator grant made outside one particular repository as
+out-of-band; the table therefore takes its labels from the ledger, and as a
+cross-check the channel attribution of the \GgOracleWrong{} error cells agrees
+between the two sources
+(\GgChFnSiteAdminLedger{}/\GgChFnPublicLedger{}/\GgChFnTeamLedger{}).
 The consequence is measurable: on Gitea the surface-gated adjudicators produced no
 false proofs (\GtFpVthree{} v3, \GtFpDirectObserve{} direct-observe), while on
 Gogs they manufacture them (\GgFpVthree{} snapshot, \GgFpVthreeLive{} live,
@@ -465,7 +512,11 @@ the fixed cell raises no alarm: \CveTruePositives{} true positive and
 writes behave as expected in both versions---bob's own comment is editable, the
 correct path is refused, a third user is refused, anonymous is refused, an
 absent identifier is refused---and alice's restore returns the body to the
-original in \CveRestored{} of \CveVersions{} instances.
+original in \CveRestored{} of \CveVersions{} instances. The generating script is
+fail-closed rather than trusting these fields: it requires the complete label
+set with no duplicates, checks the recovery outcome, and recomputes $Y$ from
+alice's re-read of the comment body before re-running the same
+\texttt{classify}, refusing to emit a number if any layer disagrees.
 
 What this establishes is narrow, and worth stating plainly. The relation is not
 executed on this pair: the alarm recorded here is the $E/Y$ gate's own verdict,

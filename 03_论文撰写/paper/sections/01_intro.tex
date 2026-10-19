@@ -36,7 +36,8 @@ three findings, one per research question (Section~\ref{sec:findings}).
 (1)~\emph{Temporal (RQ1).} Does the crawl-time reachability model remain sound
 for authorization decisions after an out-of-band authorization change? No: the
 adjudication as designed produces \emph{deterministic false proofs}---a legitimate
-access the model cannot see is reported as a proven violation: at rate
+access the model cannot see is reported, under the promotion policy $P$ stated in
+Section~\ref{sec:native-run}, as a proven violation: at rate
 \ResObsOobVtwoFpRate{} in the constructed study, where the share is seeded
 outside the framework's record, and at rate \ResRsMrBookkeepingFpRate{} on
 Gitea, where the grant is made between the crawl and the request. The

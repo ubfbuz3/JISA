@@ -165,19 +165,41 @@ def aggregate(recs: list[dict]) -> dict:
                 c[k] += int(m[k])
         n = len(recs)
         claimed = c["tp"] + c["fp"]
+        # 真违规格总数：由每格的 truth 直接数，不依赖任何方法的裁决
+        n_viol = sum(1 for r in recs if r.get("truth") == "bola")
+        # 被弃权掉的真违规格：召回率的分母必须包含它们
+        abstained_viol = sum(
+            1 for r in recs
+            if r.get("truth") == "bola"
+            and r["methods"][name]["abstain"]
+        )
+        decided = c["tp"] + c["fn"]
         out[name] = {
             **c,
             "cells": n,
             "claimed": claimed,
+            "violation_cells": n_viol,
+            "abstained_violations": abstained_viol,
             "coverage": round((n - c["abstain"]) / n, 4) if n else None,
             "precision_on_claims": round(c["tp"] / claimed, 4) if claimed else None,
-            "recall": round(c["tp"] / (c["tp"] + c["fn"]), 4)
-            if (c["tp"] + c["fn"]) else None,
+            # 条件召回：只在"作出了裁决"的格子上算。弃权既不算命中也不算漏报，
+            # 所以这个数会系统性偏高，引用它必须带上 on_decided 限定。
+            "recall_on_decided": round(c["tp"] / decided, 4) if decided else None,
+            # 总召回：分母是全部真违规格，含被弃权的那些。
+            "recall_all_violations": round(c["tp"] / n_viol, 4) if n_viol else None,
             "false_proof_rate": round(c["fp"] / n, 4) if n else None,
         }
+    # 预算口径：匹配的是"探测对"（owner 一次 + actor 一次），不是总请求数。
+    shared = 2 * len(recs)
+    extra = sum(r["budget"]["ours_extra_requests"] for r in recs)
     out["_budget"] = {
         "probe_requests_per_cell": sorted({r["budget"]["probe_requests"] for r in recs}),
         "ours_extra_per_cell": sorted({r["budget"]["ours_extra_requests"] for r in recs}),
+        "shared_probe_requests": shared,
+        "ours_extra_requests_total": extra,
+        "ours_total_requests": shared + extra,
+        "note": ("probe pair matched across methods; total requests are not, "
+                 "because only ours adds introspection reads"),
     }
     return out
 
@@ -222,7 +244,9 @@ def main() -> None:
             continue
         print(f"{k:16s} TP={v['tp']:2d} FP={v['fp']:2d} FN={v['fn']:2d} "
               f"TN={v['tn']:2d} abstain={v['abstain']:2d} "
-              f"prec={v['precision_on_claims']} recall={v['recall']} "
+              f"prec={v['precision_on_claims']} "
+              f"recall_decided={v['recall_on_decided']} "
+              f"recall_all={v['recall_all_violations']} "
               f"cov={v['coverage']}")
     print(f"\n[done] {len(ok)}/{len(recs)} cells in {time.time()-t0:.1f}s")
 

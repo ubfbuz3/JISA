@@ -14,7 +14,10 @@ further claim and are collected as support evidence in Section~\ref{sec:support}
 
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
 exceptions---the adjudication reports a legitimate access whose grant the crawl
-record does not contain as an already-established violation, in the direction
+record does not contain as a finding that the published accounting counts as an
+established violation---the promotion policy $P$ of
+Section~\ref{sec:native-run}, which we state rather than inherit, since the
+engine's own return value asserts nothing about authorization---in the direction
 forced by the two-valued predicate encoding.} The two studies supply the grant
 in different ways: the constructed study seeds it outside the framework's
 record, and the temporal study makes it between the crawl and the request. On the constructed system, rate
@@ -286,6 +289,25 @@ the crawled input set does not by itself certify that a class outside that set
 was exercised, and that a class-uniform failure can be held above any fixed
 threshold by unaffected inputs.
 
+\paragraph{What an endogenous count certifies, conditionally}
+The reviewer asks what our own per-run count certifies. Fix a run $\omega$ and a
+method $D$; let $n_i(D,\omega)$ be the number of negative inputs $D$ generates
+for scenario $i$ in that run and $f_i(D,\omega)$ the false proofs among them.
+The endogenous score is
+$S(D,\omega)=1-\sum_i f_i(D,\omega)\big/\sum_i n_i(D,\omega)$ when the
+denominator is positive. Three conditional statements, and no more. (i)~For
+each fixed $\omega$, the identity holds by counting: it is a definition
+evaluated on that run's records, so it needs no distributional assumption. (ii)
+Correlation among records (a design cell shares its fixture) affects what
+confidence one may attach to $S$ if it were re-estimated on a fresh run; it does
+not move the count itself, which is why we report counts and rates and no
+interval. (iii)~$S\to 1$ if every exercised class has $f_i=0$; the converse
+fails---a single large class with $f_i>0$ keeps $S$ below $1$ even while an
+unexercised failing class contributes nothing, which is the same dilution
+mechanism as Proposition~\ref{prop:resolution}. These are statements about one
+run's arithmetic, conditional on its scenario coverage; they are not a theorem
+that any run detects every failure, and we do not use them as one.
+
 \subsection{Competing baselines: what a succeeding request cannot separate}
 \label{sec:baselines}
 
@@ -315,8 +337,14 @@ abstentions: the twelve legitimate grants plus five violations in the two
 configurations whose authorization surface is unreadable.
 
 Two readings of this table would be wrong. It is not a detection gain: the
-baselines find all fifteen violations, whereas ours confirms ten---exactly those
-whose surface is readable---and declines the other five. Nor is it a free
+baselines find all fifteen violations (\BlBaselineRecallAll{}\% total recall),
+whereas ours confirms ten---exactly those
+whose surface is readable---and declines the other five. The two recall figures
+for ours must be read together and are not interchangeable: on the cells where
+ours issues a verdict at all, recall is \BlOursRecallDecided{}\%, because an
+abstention is neither a hit nor a miss there; over all \BlBolaCells{} violation
+cells, including the \BlOursAbstainViol{} abstained ones, total recall is
+\BlOursRecallAll{}\%. Nor is it a free
 improvement: coverage falls to \BlOursCoverage{}\%. What the table isolates is the
 only difference the claim depends on. A succeeding request is compatible with
 both a grant and a defect, so a rule that treats it as proof must either ignore
@@ -326,13 +354,22 @@ equality rule fires on all \BlRsBTwoClaims{} legitimately allowed cells, and the
 in-band log still leaves \BlRsBThreeClaims{}, because the framework log does not
 observe \ResRsChannelNotObservableRate{} of the effective access there. That
 figure is a property of the constructed topology, not an estimate of field
-prevalence. The budget is matched: \BlProbeReq{} requests per cell for every
-method, one as the owner and one as the actor, plus one additional read of the
+prevalence. The budget is matched at the level of the probe pair and only there:
+\BlProbeReq{} requests per cell for every method, one as the owner and one as the
+actor, \BlSharedProbes{} shared probes in all, plus one additional read of the
 authorization surface for ours on the \BlOursExtraCells{} cells where a relation
-alarms and none where it does not---\BlOursExtraAvg{} per cell on average. The
+alarms and none where it does not---\BlOursExtraAvg{} per cell on average,
+\BlOursExtraTotal{} reads in total, so ours issues \BlOursRequestsTotal{} requests
+against the baselines' \BlSharedProbes{}. Total request count, visible information
+and privilege therefore differ across methods, and the comparison is between
+adjudication trade-offs at different information costs, not between detectors
+given the same budget. The
 whole comparison, both probes and the additional reads included, ran in
-\BlRunSeconds{}~s of harness time on a single core; because all four methods are
-scored from the same two recorded responses, we report no per-method timing.
+\BlRunSeconds{}~s of wall-clock harness time covering setup, probing, scoring
+and cleanup; the runner binds no CPU and measures no per-method CPU time, so we
+make no claim about single-core cost. Because all four methods are
+scored from the same two recorded responses in the same process, a per-method
+timing would measure our replay loop rather than the rule, so we report none.
 
 \input{baseline_table.tex}
 
@@ -361,6 +398,30 @@ holds, the honest method consumes the oracle directly and drops the relation;
 where it does not, the honest method abstains---as v3 does on the unreadable
 stratum, where the aggregate table would have ranked it best, a ranking that
 reflects abstention rather than improved detection.
+
+\paragraph{Pre-registered oracle-independence admission}
+Clause~(2) is applied by a rule fixed before the run, per target defect class.
+The target class is fixed first (here: object-level authorization enforcement of
+read and write requests). Then the two implementation paths are enumerated from
+the system under test: the path that produces the enforcement answer $y$, and
+the path that produces the oracle answer $o$; for each, the components consulted
+(middleware, membership store, policy cache) are recorded. The rule is:
+\emph{admit} if the oracle's answer-producing path neither contains the
+enforcement decision under test nor shares with it a component whose failure
+could co-occur with the tested defect; \emph{reject} if such a shared component
+exists; \emph{unknown} if either path cannot be enumerated from documentation
+and observable behaviour, in which case the method abstains from
+independence-based promotion. Applying the rule to the three real systems yields
+no admission: on each product the introspection endpoint is answered by the same
+server-side authorization subsystem whose decision $y$ is being tested, so the
+oracle and enforcement are path-coupled and clause~(2) cannot be satisfied by
+construction. That outcome is why every promoted verdict in this paper is
+claimed as a gate-correctness control---the promoted alarm is checked against
+the ledger, never as evidence that the relations discover previously unknown
+defects---and why the positive control of Section~\ref{sec:realsystem} stops at
+gate correctness. The `oracle\_independence=shared' trials reported earlier are
+readings under this same rule (the rule's \emph{reject} outcome): diagnostic to
+run, but not a soundness certificate, and we do not present them as one.
 
 Read together, the two findings bound what the technique's adjudication can yield
 for the authorization proposition studied. If the reachability stand-in is the

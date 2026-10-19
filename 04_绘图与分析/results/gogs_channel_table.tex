@@ -1,0 +1,33 @@
+% 由 analysis/ingest_gogs_channel.py 自动生成 —— 勿手改
+% 来源: experiments/real_system/results/gogs_real_system.json (phaseE_cells)
+\begin{table*}[t]
+\centering
+\caption{Oracle fidelity by granting channel on Gogs \GgVersion{}, over the same \GgChCells{} snapshot cells as Table~\ref{tab:gogs-cross}. Channel labels come from the entitlement ledger, which is built from the lab topology, the documented inheritance rules and the recorded out-of-band grant events, and never from a probe response; they are therefore available even though the product's own API exposes no per-object membership route that separates direct from inherited grants. \emph{allow} and \emph{deny} count cells where the owner-vantage introspection surface agrees with the ledger; \emph{f.\ deny} is the surface answering deny on a cell the ledger allows; \emph{unans.} counts cells with no definite answer. On this product the observed effect $E$ coincides with the ledger entitlement on every cell, so the same table reads as $E{\times}O$. Panel~(b) re-groups the same cells by the mechanism that produced the entitlement: the owner-vantage per-object collaboration route that the oracle consults represents direct collaborators only, so team membership, the repository visibility flag and site-administrator status are invisible to it. Whether some other endpoint in the same API could represent those grants is a separate question, and not the one a surface-gated adjudicator asks. One cell carries two ledger rules (site administrator and public visibility) and is counted once, under the stronger rule, so the rows sum to \GgChCells{} cells rather than to the \GgChRules{} recorded rules.}
+\label{tab:gogs-channel}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+\multicolumn{6}{l}{(a) by granting channel (ledger)}\\
+\addlinespace[2pt]
+Channel & cells & allow & deny & f.\ deny & unans. \\
+\addlinespace[2pt]
+site administrator & 8 & 0 & 0 & 8 & 0 \\
+public visibility & 5 & 0 & 0 & 5 & 0 \\
+team / group & 4 & 0 & 0 & 4 & 0 \\
+direct collaborator & 4 & 4 & 0 & 0 & 0 \\
+no channel & 27 & 0 & 27 & 0 & 0 \\
+\addlinespace[2pt]
+\emph{total} & 48 & 4 & 27 & 17 & 0 \\
+\midrule
+\multicolumn{6}{l}{(b) by granting mechanism (same cells)}\\
+\addlinespace[2pt]
+Mechanism & cells & agree & f.\ allow & f.\ deny & f.\ deny (\%) \\
+\addlinespace[2pt]
+direct collaborator (collaboration endpoint) & 4 & 4 & 0 & 0 & 0.00 \\
+team membership (inherited) & 4 & 0 & 0 & 4 & 100.00 \\
+repository visibility flag & 5 & 0 & 0 & 5 & 100.00 \\
+site-administrator status & 8 & 0 & 0 & 8 & 100.00 \\
+no grant recorded & 27 & 27 & 0 & 0 & 0.00 \\
+\bottomrule
+\end{tabular}
+\end{table*}

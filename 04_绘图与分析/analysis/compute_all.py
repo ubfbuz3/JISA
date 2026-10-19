@@ -331,93 +331,99 @@ def main():
 
     # ================= 制品清单（原生引擎源码，2026-09-18 克隆） ============
     # 目的：把"门控谓词锚在采集期快照"的论证从**论文文字定义**升级为**实现源码**。
-    # 全部数字与事实由本块**扫描源码得出**，不手敲；源码不存在时整块跳过（正文宏随之缺失，
-    # 由 check_macros.py 报错，而不是静默降级）。
+    # 全部数字与事实由本块**扫描源码得出**，不手敲。
+    # 该源码在包外（绝对路径），是**外部依赖**：缺失时这里直接失败，而不是静默
+    # 跳过——静默跳过会让 numbers.tex 少一组宏，把"缺依赖"伪装成"数字变了"。
     import re as _re
     MST_SRC = Path(r"C:/Users/Administrator/WorkBuddy/mst_engine/MST")
-    if MST_SRC.exists():
-        mr_dir = MST_SRC / "src-mrs-icst2020"
-        cls_re = _re.compile(r"class\s+(\w+)\s+extends\s+MR\b")
-        mr_cls = {}
-        for f in sorted(mr_dir.rglob("*.java")):
-            t = f.read_text(encoding="utf-8", errors="replace")
-            for m in cls_re.finditer(t):
-                mr_cls[m.group(1)] = t
-        owasp_cls = sorted(k for k in mr_cls if k.startswith("OTG_"))
-        authz_cls = [k for k in owasp_cls if k.startswith("OTG_AUTHZ")]
-        fam = Counter(k.split("_")[1] for k in owasp_cls)
-        g_crtg = [k for k in authz_cls if "cannotReachThroughGUI" in mr_cls[k]]
-        g_ucrc = [k for k in authz_cls if "userCanRetrieveContent" in mr_cls[k]]
-        gate_union = sorted(set(g_crtg) | set(g_ucrc))
-        gate_none = sorted(set(authz_cls) - set(gate_union))
+    if not MST_SRC.exists():
+        raise SystemExit(
+            "[FATAL] 缺少外部依赖 MST 引擎源码: " + str(MST_SRC) + "\n"
+            "         ResLit*/ResArt* 宏由扫描该源码得出，无法在缺失时 regenerated。\n"
+            "         若在无该源码的机器上复现，请先按其 README 克隆到同一路径，\n"
+            "         或明确记录本次复算不含源码派生宏（不得静默降级）。")
+    mr_dir = MST_SRC / "src-mrs-icst2020"
+    cls_re = _re.compile(r"class\s+(\w+)\s+extends\s+MR\b")
+    mr_cls = {}
+    for f in sorted(mr_dir.rglob("*.java")):
+        t = f.read_text(encoding="utf-8", errors="replace")
+        for m in cls_re.finditer(t):
+            mr_cls[m.group(1)] = t
+    owasp_cls = sorted(k for k in mr_cls if k.startswith("OTG_"))
+    authz_cls = [k for k in owasp_cls if k.startswith("OTG_AUTHZ")]
+    fam = Counter(k.split("_")[1] for k in owasp_cls)
+    g_crtg = [k for k in authz_cls if "cannotReachThroughGUI" in mr_cls[k]]
+    g_ucrc = [k for k in authz_cls if "userCanRetrieveContent" in mr_cls[k]]
+    gate_union = sorted(set(g_crtg) | set(g_ucrc))
+    gate_none = sorted(set(authz_cls) - set(gate_union))
 
-        wp = (MST_SRC / "src/smrl/mr/crawljax/WebProcessor.java").read_text(
-            encoding="utf-8", errors="replace")
-        wop = (MST_SRC / "src/smrl/mr/crawljax/WebOperationsProvider.java").read_text(
-            encoding="utf-8", errors="replace")
-        sc = (MST_SRC / "src/smrl/mr/language/SystemConfig.java").read_text(
-            encoding="utf-8", errors="replace")
+    wp = (MST_SRC / "src/smrl/mr/crawljax/WebProcessor.java").read_text(
+        encoding="utf-8", errors="replace")
+    wop = (MST_SRC / "src/smrl/mr/crawljax/WebOperationsProvider.java").read_text(
+        encoding="utf-8", errors="replace")
+    sc = (MST_SRC / "src/smrl/mr/language/SystemConfig.java").read_text(
+        encoding="utf-8", errors="replace")
 
-        # F1 缓存从不失效：字段有声明与写入，但全仓无 clear()
-        f1 = ("urlsAccessedByUsers" in wp) and ("urlsAccessedByUsers.clear" not in wp)
-        # F2 缺数据默认判"不可达"（fail-open to alarm）
-        f2_empty = bool(_re.search(r"if\s*\(\s*inputList\.isEmpty\(\)\s*\)", wp))
-        f2_null = bool(_re.search(r"if\s*\(\s*user\s*==\s*null\s*\|\|\s*url\s*==\s*null", wp))
-        # F4 输出仓库来自文件系统目录且只装载一次
-        f4_fs = "getOutputStore()" in wop
-        f4_once = "already loaded" in wop
-        # F5 角色关系来自静态 JSON 配置
-        f5_conf = ('"supervisedUser"' in sc) or ("supervisedUser" in sc and "jsonObject" in sc)
-        f5_self = bool(_re.search(r"equals\(\s*username2\.trim\(\)\s*\)", sc))
+    # F1 缓存从不失效：字段有声明与写入，但全仓无 clear()
+    f1 = ("urlsAccessedByUsers" in wp) and ("urlsAccessedByUsers.clear" not in wp)
+    # F2 缺数据默认判"不可达"（fail-open to alarm）
+    f2_empty = bool(_re.search(r"if\s*\(\s*inputList\.isEmpty\(\)\s*\)", wp))
+    f2_null = bool(_re.search(r"if\s*\(\s*user\s*==\s*null\s*\|\|\s*url\s*==\s*null", wp))
+    # F4 输出仓库来自文件系统目录且只装载一次
+    f4_fs = "getOutputStore()" in wop
+    f4_once = "already loaded" in wop
+    # F5 角色关系来自静态 JSON 配置
+    f5_conf = ('"supervisedUser"' in sc) or ("supervisedUser" in sc and "jsonObject" in sc)
+    f5_self = bool(_re.search(r"equals\(\s*username2\.trim\(\)\s*\)", sc))
 
-        # F6 上游 pom 是否把 MR 目录配为源码根。
-        # 必须核对 git 里的 pristine 版本——工作区 pom 已被本地修补，直接读会得到假阳性。
+    # F6 上游 pom 是否把 MR 目录配为源码根。
+    # 必须核对 git 里的 pristine 版本——工作区 pom 已被本地修补，直接读会得到假阳性。
+    f6 = None
+    try:
+        import subprocess
+        _r = subprocess.run(["git", "-C", str(MST_SRC), "show", "HEAD:pom.xml"],
+                            capture_output=True, text=True, timeout=60)
+        if _r.returncode == 0:
+            f6 = "src-mrs-icst2020" in _r.stdout
+    except Exception:
         f6 = None
-        try:
-            import subprocess
-            _r = subprocess.run(["git", "-C", str(MST_SRC), "show", "HEAD:pom.xml"],
-                                capture_output=True, text=True, timeout=60)
-            if _r.returncode == 0:
-                f6 = "src-mrs-icst2020" in _r.stdout
-        except Exception:
-            f6 = None
 
-        M["artifact_inventory"] = {
-            "source_root": str(MST_SRC),
-            "mr_dir": str(mr_dir.relative_to(MST_SRC)).replace("\\", "/"),
-            "owasp_mr_total": len(owasp_cls),
-            "authz_mr_total": len(authz_cls),
-            "authz_mrs": authz_cls,
-            "family_counts": dict(fam),
-            "gates_on_cannotReachThroughGUI": len(g_crtg),
-            "gates_on_cannotReachThroughGUI_names": g_crtg,
-            "gates_on_userCanRetrieveContent": len(g_ucrc),
-            "gates_on_userCanRetrieveContent_names": g_ucrc,
-            "authz_gated_on_either": len(gate_union),
-            "authz_gated_on_neither": len(gate_none),
-            "authz_gated_on_neither_names": gate_none,
-            "facts": {
-                "F1_url_set_memoized_never_invalidated": f1,
-                "F2_failopen_when_crawl_input_empty": f2_empty,
-                "F2_failopen_when_user_or_url_null": f2_null,
-                "F4_output_store_read_from_fs": f4_fs,
-                "F4_output_store_loaded_once": f4_once,
-                "F5_supervisor_from_static_config": f5_conf,
-                "F5_supervisor_true_when_same_account": f5_self,
-                # 注：此项为 True 表示**上游**pom 已声明 MR 源码根；False 表示未声明
-                #（后者即实测情形：默认 jar 里没有任何 OTG_* 类）。
-                **({"F6_upstream_pom_declares_mr_source_root": bool(f6)}
-                   if f6 is not None else {}),
-            },
-            "caveat": ("源码级证据已有运行级补充：本工作在自建 harness（无浏览器，仅替换 HTTP 观测通道）"
-                       "下执行了上游 OTG_AUTHZ_* 关系本身；产物与消化脚本见 "
-                       "experiments/native_engine/results/native_engine.json 与 "
-                       "analysis/ingest_native_engine.py。上游 Java 源码零改动"
-                       "（git status 仅 pom.xml，且其改动为一行 <source> 声明）。"
-                       "「同一 URL 对拥有者与受让者响应逐字节相同」这条断言另有摘要级凭据："
-                       "experiments/native_engine/verify_channel_bytes.py 产出 "
-                       "results/channel_bytes.json（sha256 逐格比对，含无权者 404 对照）。"),
-        }
+    M["artifact_inventory"] = {
+        "source_root": str(MST_SRC),
+        "mr_dir": str(mr_dir.relative_to(MST_SRC)).replace("\\", "/"),
+        "owasp_mr_total": len(owasp_cls),
+        "authz_mr_total": len(authz_cls),
+        "authz_mrs": authz_cls,
+        "family_counts": dict(fam),
+        "gates_on_cannotReachThroughGUI": len(g_crtg),
+        "gates_on_cannotReachThroughGUI_names": g_crtg,
+        "gates_on_userCanRetrieveContent": len(g_ucrc),
+        "gates_on_userCanRetrieveContent_names": g_ucrc,
+        "authz_gated_on_either": len(gate_union),
+        "authz_gated_on_neither": len(gate_none),
+        "authz_gated_on_neither_names": gate_none,
+        "facts": {
+            "F1_url_set_memoized_never_invalidated": f1,
+            "F2_failopen_when_crawl_input_empty": f2_empty,
+            "F2_failopen_when_user_or_url_null": f2_null,
+            "F4_output_store_read_from_fs": f4_fs,
+            "F4_output_store_loaded_once": f4_once,
+            "F5_supervisor_from_static_config": f5_conf,
+            "F5_supervisor_true_when_same_account": f5_self,
+            # 注：此项为 True 表示**上游**pom 已声明 MR 源码根；False 表示未声明
+            #（后者即实测情形：默认 jar 里没有任何 OTG_* 类）。
+            **({"F6_upstream_pom_declares_mr_source_root": bool(f6)}
+               if f6 is not None else {}),
+        },
+        "caveat": ("源码级证据已有运行级补充：本工作在自建 harness（无浏览器，仅替换 HTTP 观测通道）"
+                   "下执行了上游 OTG_AUTHZ_* 关系本身；产物与消化脚本见 "
+                   "experiments/native_engine/results/native_engine.json 与 "
+                   "analysis/ingest_native_engine.py。上游 Java 源码零改动"
+                   "（git status 仅 pom.xml，且其改动为一行 <source> 声明）。"
+                   "「同一 URL 对拥有者与受让者响应逐字节相同」这条断言另有摘要级凭据："
+                   "experiments/native_engine/verify_channel_bytes.py 产出 "
+                   "results/channel_bytes.json（sha256 逐格比对，含无权者 404 对照）。"),
+    }
 
     M["block4_verdict_quality_fp_config"] = {
         a: with_rates(grades(a, "V-E3-vuln0-unlisted"))

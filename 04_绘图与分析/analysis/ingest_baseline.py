@@ -84,6 +84,10 @@ def main() -> None:
     b2 = tally(recs, "B2_diff_equal")
     b3 = tally(recs, "B3_diff_inband")
     ours = tally(recs, "ours_mr_v3")
+    # 汇总层的条件召回/总召回/弃权真违规，与逐格 tally 分开取
+    sm = data["summary"]
+    ours_s = sm["ours_mr_v3"]
+    b1_s = sm["B1_status_only"]
 
     # ---- 断言：任何一格与正文口径不符都在这里炸掉 ----------------------
     check("cells", N, 42)
@@ -98,6 +102,14 @@ def main() -> None:
     check("ours false proofs", ours["fp"], 0)
     check("ours abstain", ours["abstain"], 17)
     check("ours coverage", round(ours["coverage"], 4), round(25 / 42, 4))
+    # 两个召回口径必须分开：条件召回（只在作出裁决的格上算）与总召回
+    # （分母含被弃权的真违规格）。二者相等仅当没有弃权。
+    check("ours recall on decided", round(ours_s["recall_on_decided"], 4), 1.0)
+    check("ours total recall", round(ours_s["recall_all_violations"], 4),
+          round(10 / 15, 4))
+    check("ours abstained violations", ours_s["abstained_violations"], 5)
+    check("baselines total recall", round(b1_s["recall_all_violations"], 4), 1.0)
+    check("baselines abstain nothing", b1["abstain"], 0)
 
     # ---- 真实系统：同一规则套到 Gitea 快照 -----------------------------
     rs = json.loads((REAL / "real_system.json").read_text(encoding="utf-8"))
@@ -123,6 +135,12 @@ def main() -> None:
     check("extra reads on the alarming cells",
           extra_cells, b2["claims"])
     check("harness run time recorded", run_seconds > 0, True)
+    # 预算口径：匹配的是探测对，不是总请求数
+    check("shared probe requests", budget["shared_probe_requests"], 2 * N)
+    check("ours extra requests total",
+          budget["ours_extra_requests_total"], extra_cells)
+    check("ours total requests", budget["ours_total_requests"],
+          budget["shared_probe_requests"] + budget["ours_extra_requests_total"])
 
     macros = {
         "BlCells": str(N),
@@ -150,6 +168,15 @@ def main() -> None:
         "BlOursAbstain": str(ours["abstain"]),
         "BlOursCoverage": pc(ours["coverage"]),
         "BlOursPrecision": pc(ours["precision"]),
+        # 两个召回口径必须同时出现，否则 1.0 会被读成总召回
+        "BlOursRecallDecided": pc(ours_s["recall_on_decided"]),
+        "BlOursRecallAll": pc(ours_s["recall_all_violations"]),
+        "BlOursAbstainViol": str(ours_s["abstained_violations"]),
+        "BlBaselineRecallAll": pc(b1_s["recall_all_violations"]),
+        # 预算：探测对匹配，总请求数不匹配
+        "BlSharedProbes": str(budget["shared_probe_requests"]),
+        "BlOursExtraTotal": str(budget["ours_extra_requests_total"]),
+        "BlOursRequestsTotal": str(budget["ours_total_requests"]),
         "BlRsCells": str(len(snap)),
         "BlRsAllow": str(rs_allow),
         "BlRsBTwoClaims": str(rs_equal),
@@ -181,23 +208,36 @@ def main() -> None:
         r"probe pair. The cells comprise \BlBolaCells{} true violations, "
         r"\BlLegitCells{} legitimate accesses through a grant (in-band or "
         r"out-of-band), and \BlDeniedCells{} denials. Every method consumes one "
-        r"owner request and one actor request; ours issues one additional read "
+        r"owner request and one actor request (\BlSharedProbes{} shared probes); "
+        r"ours issues one additional read "
         r"of the authorization surface on the \BlOursExtraCells{} cells where a "
         r"relation alarms, and none where it does not "
-        r"(\BlOursExtraAvg{} per cell on average). A false proof is a cell with "
-        r"$E=\text{allow}$ that the method still reports as a proven violation.}",
+        r"(\BlOursExtraAvg{} per cell on average, \BlOursExtraTotal{} in total, "
+        r"\BlOursRequestsTotal{} against the baselines' \BlSharedProbes{}), so "
+        r"total requests and visible information are not matched. A false proof "
+        r"is a cell with "
+        r"$E=\text{allow}$ that the method still reports as a proven violation. "
+        r"Recall is reported twice because the two figures differ exactly where "
+        r"a method abstains: \emph{decided} counts only the cells the method "
+        r"ruled on, \emph{all} keeps every violation cell in the denominator.}",
         r"\label{tab:baselines}",
         r"\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}p{0.155\textwidth}p{0.335\textwidth}rrrrr@{}}",
+        r"\begin{tabular}{@{}p{0.155\textwidth}p{0.335\textwidth}rrrrrrr@{}}",
         r"\toprule",
-        r"Method & Decision rule & Claims & TP & False proofs & Abstain & Coverage (\%) \\",
+        r"Method & Decision rule & Claims & TP & False proofs & Abstain & "
+        r"Coverage (\%) & Recall: decided / all (\%) \\",
         r"\midrule",
     ]
     for name, rule, c in rows:
+        s = sm[{"B1 status-only": "B1_status_only",
+                "B2 equality replay": "B2_diff_equal",
+                "B3 B2 + in-band log": "B3_diff_inband",
+                "Ours: MR-002 + v3": "ours_mr_v3"}[name]]
         tab.append(
             f"{name} & {rule} & {c['claims']} & {c['tp']} & {c['fp']} & "
-            f"{c['abstain']} & {pc(c['coverage'])} \\\\")
+            f"{c['abstain']} & {pc(c['coverage'])} & "
+            f"{pc(s['recall_on_decided'])} / {pc(s['recall_all_violations'])} \\\\")
     tab += [
         r"\bottomrule",
         r"\end{tabular}",

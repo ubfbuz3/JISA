@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-19 11:24:10",
-  "elapsed_sec": 22.3,
+  "generated_at": "2026-10-19 15:33:31",
+  "elapsed_sec": 22.5,
   "cells": 42,
   "errors": 0,
   "design": {
@@ -20,9 +20,12 @@
       "abstain": 0,
       "cells": 42,
       "claimed": 27,
+      "violation_cells": 15,
+      "abstained_violations": 0,
       "coverage": 1.0,
       "precision_on_claims": 0.5556,
-      "recall": 1.0,
+      "recall_on_decided": 1.0,
+      "recall_all_violations": 1.0,
       "false_proof_rate": 0.2857
     },
     "B2_diff_equal": {
@@ -33,9 +36,12 @@
       "abstain": 0,
       "cells": 42,
       "claimed": 27,
+      "violation_cells": 15,
+      "abstained_violations": 0,
       "coverage": 1.0,
       "precision_on_claims": 0.5556,
-      "recall": 1.0,
+      "recall_on_decided": 1.0,
+      "recall_all_violations": 1.0,
       "false_proof_rate": 0.2857
     },
     "B3_diff_inband": {
@@ -46,9 +52,12 @@
       "abstain": 0,
       "cells": 42,
       "claimed": 21,
+      "violation_cells": 15,
+      "abstained_violations": 0,
       "coverage": 1.0,
       "precision_on_claims": 0.7143,
-      "recall": 1.0,
+      "recall_on_decided": 1.0,
+      "recall_all_violations": 1.0,
       "false_proof_rate": 0.1429
     },
     "ours_mr_v3": {
@@ -59,9 +68,12 @@
       "abstain": 17,
       "cells": 42,
       "claimed": 10,
+      "violation_cells": 15,
+      "abstained_violations": 5,
       "coverage": 0.5952,
       "precision_on_claims": 1.0,
-      "recall": 1.0,
+      "recall_on_decided": 1.0,
+      "recall_all_violations": 0.6667,
       "false_proof_rate": 0.0
     },
     "_budget": {
@@ -71,7 +83,11 @@
       "ours_extra_per_cell": [
         0,
         1
-      ]
+      ],
+      "shared_probe_requests": 84,
+      "ours_extra_requests_total": 27,
+      "ours_total_requests": 111,
+      "note": "probe pair matched across methods; total requests are not, because only ours adds introspection reads"
     }
   },
   "records": [

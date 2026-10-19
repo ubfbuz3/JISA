@@ -1,0 +1,450 @@
+{
+  "head": "92c33b58150e206bb26af750773b53e12ec7805a",
+  "revision_tag_local": {
+    "commit": "ba704e3d19e951819703473840a654b3c377d224",
+    "missing_current_files": [
+      "experiments/results/baseline_compare.json",
+      "experiments/run_baseline.py",
+      "04_绘图与分析/analysis/ingest_baseline.py",
+      "03_论文撰写/response_to_reviewers/response_to_reviewers.pdf"
+    ],
+    "remote_verification": "Not established by this local check"
+  },
+  "response_blocks": {
+    "Concern": 21,
+    "Response": 21,
+    "Action": 21
+  },
+  "baselines": [
+    {
+      "rev": "bc3752e",
+      "commit": "bc3752edc9ecdc8e998d897897d76d0fcfbcde2d 2026-09-28T19:22:23+08:00 Pin shell scripts to LF so a fresh checkout can run them",
+      "pages": 16,
+      "publicly_fixed_defect_in_pdf": false,
+      "cve_input_in_source": false,
+      "temporal_input_in_source": false,
+      "pdf_sha256": "d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c"
+    },
+    {
+      "rev": "89f3f96",
+      "commit": "89f3f96cc9d940397d68d42ec28c21470068528d 2026-10-19T02:29:14+08:00 Temporal experiment, second product: GitLab CE 17.11.7",
+      "pages": 18,
+      "publicly_fixed_defect_in_pdf": true,
+      "cve_input_in_source": true,
+      "temporal_input_in_source": true,
+      "pdf_sha256": "0dca69accfe7f48b841fdb8100a2195bc6c61de3804568bcf3f4511297e35afc"
+    },
+    {
+      "rev": "HEAD",
+      "commit": "92c33b58150e206bb26af750773b53e12ec7805a 2026-10-19T14:19:46+08:00 Docs: record the three-way independent review of the response letter and the four fixes",
+      "pages": 26,
+      "publicly_fixed_defect_in_pdf": true,
+      "cve_input_in_source": true,
+      "temporal_input_in_source": true,
+      "pdf_sha256": "de7fa7dac5d25f48d8ebb9b8dadd4904761926350a4b872671551fbfca1d5c02"
+    }
+  ],
+  "pdfs": {
+    "clean": {
+      "pages": 26,
+      "annotations": {
+        "/Link": 200
+      }
+    },
+    "response": {
+      "pages": 8,
+      "annotations": {
+        "/Link": 1
+      }
+    },
+    "highlighted": {
+      "pages": 26,
+      "annotations": {
+        "/Link": 200,
+        "/Highlight": 875
+      }
+    }
+  },
+  "clean_highlighted_same_text": true,
+  "table_pages": {
+    "1": [
+      4
+    ],
+    "2": [
+      5
+    ],
+    "3": [
+      7
+    ],
+    "4": [
+      8
+    ],
+    "5": [
+      9
+    ],
+    "6": [
+      10
+    ],
+    "7": [
+      10
+    ],
+    "8": [
+      10
+    ],
+    "9": [
+      11
+    ],
+    "10": [
+      11
+    ],
+    "11": [
+      13
+    ],
+    "12": [
+      14
+    ],
+    "13": [
+      14
+    ],
+    "14": [
+      14
+    ],
+    "15": [
+      15
+    ],
+    "16": [
+      17
+    ],
+    "17": [
+      19
+    ],
+    "18": [
+      20
+    ],
+    "19": [
+      20
+    ],
+    "20": [
+      21
+    ],
+    "21": [
+      21
+    ],
+    "22": [
+      22
+    ]
+  },
+  "hash_manifests": {
+    "RAW_RECORDS_SHA256": {
+      "count": 22,
+      "mismatches": []
+    },
+    "OUTPUTS_SHA256": {
+      "count": 28,
+      "mismatches": []
+    }
+  },
+  "source_zip": {
+    "files": 90,
+    "bad_zip_member": null,
+    "sha256": "34d8e3b44b6bcf79b6e5ca0c18fb22ad27dbc9d01862313228e834d209cd0042"
+  },
+  "temporal": {
+    "gitea": {
+      "transitions": [
+        "grant_collaborator",
+        "revoke_collaborator",
+        "team_repo_attach",
+        "team_member_remove",
+        "visibility_public",
+        "visibility_private",
+        "role_write",
+        "site_admin"
+      ],
+      "totals": {
+        "cycles": 8,
+        "cycles_scored": 8,
+        "cells": 280,
+        "E_allow": 77,
+        "E_deny": 203,
+        "E_unknown": 0,
+        "Y_allow": 77,
+        "E_eq_Y": 280,
+        "stale_false_proofs": 13,
+        "live_false_proofs": 0,
+        "stale_missing_legit": 13,
+        "live_missing_legit": 0,
+        "recrawl_fixed": 13,
+        "recrawl_still_misses": 0,
+        "true_positives": 0,
+        "oracle_readable": 224,
+        "oracle_self_readable": 7,
+        "abstained_cells": 0
+      }
+    },
+    "gitlab": {
+      "transitions": [
+        "grant_collaborator",
+        "revoke_collaborator",
+        "group_share",
+        "group_member_remove",
+        "visibility_public",
+        "visibility_private",
+        "role_write",
+        "site_admin"
+      ],
+      "totals": {
+        "cycles": 8,
+        "cycles_scored": 8,
+        "cells": 432,
+        "E_allow": 94,
+        "E_deny": 338,
+        "E_unknown": 0,
+        "Y_allow": 94,
+        "E_eq_Y": 432,
+        "stale_false_proofs": 16,
+        "live_false_proofs": 0,
+        "stale_missing_legit": 16,
+        "live_missing_legit": 0,
+        "recrawl_fixed": 16,
+        "recrawl_still_misses": 0,
+        "true_positives": 0,
+        "oracle_readable": 360,
+        "oracle_self_readable": 360,
+        "oracle_disagrees_with_E": 53,
+        "abstained_cells": 0
+      }
+    }
+  },
+  "native_mrs": [
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_001",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 47
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_001b",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 16
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_001b2",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 35533
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_002",
+      "status": "executed",
+      "fired": 3,
+      "failure_samples": [
+        "Input(2) [FOLLOW-UP INPUT] : \nInput(2)=[\n\t[Action 54168582481300 : log in with (bob,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582512300 : click on http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md]\n]\nInput(1) [SOURCE INPUT] : \nInput(1)=[\n\t[Action 54168582481300 : log in with (alice,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582512300 : click on http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md]\n]\nUser(1) [SOURCE INPUT] : \nUser(1)=[Account: username=bob pwd=LabPass123!]\n\n **Inputs processed: \nInput(1) (action position: 1)\nInput(1) (acti",
+        "Input(2) [FOLLOW-UP INPUT] : \nInput(2)=[\n\t[Action 54168582586200 : log in with (frank,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582593200 : click on http://127.0.0.1:3311/api/v1/repos/acme/t1/raw/README.md]\n]\nInput(1) [SOURCE INPUT] : \nInput(1)=[\n\t[Action 54168582586200 : log in with (alice,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582593200 : click on http://127.0.0.1:3311/api/v1/repos/acme/t1/raw/README.md]\n]\nUser(1) [SOURCE INPUT] : \nUser(1)=[Account: username=frank pwd=LabPass123!]\n\n **Inputs processed: \nInput(1) (action position: 1)\nInput(1) (ac",
+        "Input(2) [FOLLOW-UP INPUT] : \nInput(2)=[\n\t[Action 54168584156000 : log in with (eve,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168584159700 : click on http://127.0.0.1:3311/api/v1/repos/carol/s1/raw/README.md]\n]\nInput(1) [SOURCE INPUT] : \nInput(1)=[\n\t[Action 54168584156000 : log in with (carol,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168584159700 : click on http://127.0.0.1:3311/api/v1/repos/carol/s1/raw/README.md]\n]\nUser(1) [SOURCE INPUT] : \nUser(1)=[Account: username=eve pwd=LabPass123!]\n\n **Inputs processed: \nInput(1) (action position: 1)\nInput(1) (acti"
+      ],
+      "http_calls": 270,
+      "ms": 346262
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_002a",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 228070
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_002b",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 216080
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_002c",
+      "status": "executed",
+      "fired": 3,
+      "failure_samples": [
+        "Input(2) [FOLLOW-UP INPUT] : \nInput(2)=[\n\t[Action 54168582481300 : log in with (bob,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582512300 : click on http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md]\n]\nInput(1) [SOURCE INPUT] : \nInput(1)=[\n\t[Action 54168582481300 : log in with (alice,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582512300 : click on http://127.0.0.1:3311/api/v1/repos/alice/s1/raw/README.md]\n]\nUser(1) [SOURCE INPUT] : \nUser(1)=[Account: username=bob pwd=LabPass123!]\n\n **Inputs processed: \nInput(1) (action position: 1)\nInput(1) (acti",
+        "Input(2) [FOLLOW-UP INPUT] : \nInput(2)=[\n\t[Action 54168582481300 : log in with (frank,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582593200 : click on http://127.0.0.1:3311/api/v1/repos/acme/t1/raw/README.md]\n]\nInput(1) [SOURCE INPUT] : \nInput(1)=[\n\t[Action 54168582586200 : log in with (alice,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168582593200 : click on http://127.0.0.1:3311/api/v1/repos/acme/t1/raw/README.md]\n]\nUser(1) [SOURCE INPUT] : \nUser(1)=[Account: username=frank pwd=LabPass123!]\n\n **Inputs processed: \nInput(1) (action position: 1)\nInput(1) (ac",
+        "Input(2) [FOLLOW-UP INPUT] : \nInput(2)=[\n\t[Action 54168582481300 : log in with (eve,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168584159700 : click on http://127.0.0.1:3311/api/v1/repos/carol/s1/raw/README.md]\n]\nInput(1) [SOURCE INPUT] : \nInput(1)=[\n\t[Action 54168584156000 : log in with (carol,LabPass123!) at http://127.0.0.1:3311/user/login]\n\t[Action 54168584159700 : click on http://127.0.0.1:3311/api/v1/repos/carol/s1/raw/README.md]\n]\nUser(1) [SOURCE INPUT] : \nUser(1)=[Account: username=eve pwd=LabPass123!]\n\n **Inputs processed: \nInput(1) (action position: 1)\nInput(1) (acti"
+      ],
+      "http_calls": 0,
+      "ms": 214818
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_002d",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 24
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_002e",
+      "status": "error",
+      "error": "java.lang.NullPointerException: null",
+      "error_at": "smrl.mr.language.MR.extractExecutionInformation(MR.java:984)",
+      "http_calls": 0,
+      "ms": 3783
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_003",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 240185
+    },
+    {
+      "mr": "smrl.mr.owasp.OTG_AUTHZ_004",
+      "status": "executed",
+      "fired": 0,
+      "failure_samples": [],
+      "http_calls": 0,
+      "ms": 26905
+    }
+  ],
+  "native_counters": {
+    "cannotReachThroughGUI_url_calls": 7321,
+    "cannotReachThroughGUI_url_true": 1149,
+    "cannotReachThroughGUI_input_calls": 0,
+    "cannotReachThroughGUI_input_true": 0,
+    "isSupervisorOf_calls": 8642,
+    "isSupervisorOf_true": 1321,
+    "userCanRetrieveContent_calls": 0,
+    "userCanRetrieveContent_true": 0,
+    "http_calls_total": 270,
+    "http_memo_hits": 922
+  },
+  "baseline": {
+    "cells": 42,
+    "errors": 0,
+    "elapsed_sec": 22.3,
+    "summary": {
+      "B1_status_only": {
+        "tp": 15,
+        "fp": 12,
+        "fn": 0,
+        "tn": 15,
+        "abstain": 0,
+        "cells": 42,
+        "claimed": 27,
+        "coverage": 1.0,
+        "precision_on_claims": 0.5556,
+        "recall": 1.0,
+        "false_proof_rate": 0.2857
+      },
+      "B2_diff_equal": {
+        "tp": 15,
+        "fp": 12,
+        "fn": 0,
+        "tn": 15,
+        "abstain": 0,
+        "cells": 42,
+        "claimed": 27,
+        "coverage": 1.0,
+        "precision_on_claims": 0.5556,
+        "recall": 1.0,
+        "false_proof_rate": 0.2857
+      },
+      "B3_diff_inband": {
+        "tp": 15,
+        "fp": 6,
+        "fn": 0,
+        "tn": 21,
+        "abstain": 0,
+        "cells": 42,
+        "claimed": 21,
+        "coverage": 1.0,
+        "precision_on_claims": 0.7143,
+        "recall": 1.0,
+        "false_proof_rate": 0.1429
+      },
+      "ours_mr_v3": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 0,
+        "tn": 15,
+        "abstain": 17,
+        "cells": 42,
+        "claimed": 10,
+        "coverage": 0.5952,
+        "precision_on_claims": 1.0,
+        "recall": 1.0,
+        "false_proof_rate": 0.0
+      },
+      "_budget": {
+        "probe_requests_per_cell": [
+          2
+        ],
+        "ours_extra_per_cell": [
+          0,
+          1
+        ]
+      }
+    },
+    "probes": 84,
+    "ours_additional": 27,
+    "extra_cells": {
+      "0": 15,
+      "1": 27
+    },
+    "positives": 15,
+    "positive_abstentions": 5,
+    "global_recall": 0.6666666666666666
+  },
+  "gogs_groupable_existing_cells": {
+    "collaborator": {
+      "E=allow,O=allow": 4
+    },
+    "none": {
+      "E=deny,O=deny": 27
+    },
+    "site_admin": {
+      "E=allow,O=deny": 8
+    },
+    "public": {
+      "E=allow,O=deny": 5
+    },
+    "team": {
+      "E=allow,O=deny": 4
+    }
+  },
+  "isolated_ingester_checks": {
+    "unchanged": {
+      "returncode": 0,
+      "stdout": "真实配对（Gitea comment permissions）\n  1.20.5: PATCH=200  owner_body='TAMPERED-BY-BOB'  changed=True  -> true_positive\n  1.20.6: PATCH=404  owner_body='SECRET-COMMENT-MARKER-ORIGINAL'  changed=False  -> no_alarm\n  true positives=1  false proofs=0  alarms on fixed=0\n  对照 10 条全部符合预期；恢复 2/2\n写出 C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\unchanged\\04_绘图与分析\\results\\cve_pair_numbers.tex\n     C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\unchanged\\04_绘图与分析\\results\\cve_pair_table.tex\n",
+      "stderr": ""
+    },
+    "missing_own_comment": {
+      "returncode": 0,
+      "stdout": "真实配对（Gitea comment permissions）\n  1.20.5: PATCH=200  owner_body='TAMPERED-BY-BOB'  changed=True  -> true_positive\n  1.20.6: PATCH=404  owner_body='SECRET-COMMENT-MARKER-ORIGINAL'  changed=False  -> no_alarm\n  true positives=1  false proofs=0  alarms on fixed=0\n  对照 9 条全部符合预期；恢复 2/2\n写出 C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\missing_own_comment\\04_绘图与分析\\results\\cve_pair_numbers.tex\n     C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\missing_own_comment\\04_绘图与分析\\results\\cve_pair_table.tex\n",
+      "stderr": ""
+    },
+    "restore_false": {
+      "returncode": 0,
+      "stdout": "真实配对（Gitea comment permissions）\n  1.20.5: PATCH=200  owner_body='TAMPERED-BY-BOB'  changed=True  -> true_positive\n  1.20.6: PATCH=404  owner_body='SECRET-COMMENT-MARKER-ORIGINAL'  changed=False  -> no_alarm\n  true positives=1  false proofs=0  alarms on fixed=0\n  对照 10 条全部符合预期；恢复 1/2\n写出 C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\restore_false\\04_绘图与分析\\results\\cve_pair_numbers.tex\n     C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\restore_false\\04_绘图与分析\\results\\cve_pair_table.tex\n",
+      "stderr": ""
+    },
+    "owner_state_disagrees_with_stored_Y": {
+      "returncode": 0,
+      "stdout": "真实配对（Gitea comment permissions）\n  1.20.5: PATCH=200  owner_body='SECRET-COMMENT-MARKER-ORIGINAL'  changed=True  -> true_positive\n  1.20.6: PATCH=404  owner_body='SECRET-COMMENT-MARKER-ORIGINAL'  changed=False  -> no_alarm\n  true positives=1  false proofs=0  alarms on fixed=0\n  对照 10 条全部符合预期；恢复 2/2\n写出 C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\owner_state_disagrees_with_stored_Y\\04_绘图与分析\\results\\cve_pair_numbers.tex\n     C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_重投包严肃复核_92c33b5\\isolated_ingester\\owner_state_disagrees_with_stored_Y\\04_绘图与分析\\results\\cve_pair_table.tex\n",
+      "stderr": ""
+    },
+    "wrong_control_status": {
+      "returncode": 3,
+      "stdout": "!! 对照探针偏离预期，拒绝生成数字：\n   1.20.5 own_comment: 403 != ok\n",
+      "stderr": ""
+    }
+  }
+}

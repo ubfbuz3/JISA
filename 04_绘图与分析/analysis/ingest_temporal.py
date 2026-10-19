@@ -207,6 +207,10 @@ def main() -> None:
         "TmpOracleFalseDeny": sum(v["false_deny"] for v in channel_stats(dg).values()),
         "TmpGOracleAnswered": sum(v["answered"] for v in channel_stats(dl).values()),
         "TmpOracleAnswered": sum(v["answered"] for v in channel_stats(dg).values()),
+        # 未作答格（oracle 无确定答案，anonymous 视点）：显式披露，不并入 deny
+        "TmpUnansGitea": sum(v["n"] - v["answered"] for v in channel_stats(dg).values()),
+        "TmpUnansGitlab": sum(v["n"] - v["answered"] for v in channel_stats(dl).values()),
+        "TmpCellsTotal": g["Cells"] + l["Cells"],
     }
 
     lines = ["% 由 04_绘图与分析/analysis/ingest_temporal.py 生成，勿手改"]
