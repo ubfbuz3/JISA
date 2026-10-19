@@ -63,18 +63,21 @@ the abstract, the running head and every claim are now restricted to the two
 reachability-gated relations that were actually examined. Three statements that
 were previously argued in prose are now computed from records and reproduced by
 script---the complete factorial design and its reconciliation, the truth table of
-the two relations, and a competitive differential baseline. The baseline is
-matched to ours at the level of the probe pair only: total request and
-information budgets differ (111 requests against the baselines' 84 shared
-probes), and the manuscript states the comparison in those terms rather than as
-an equal-budget contest. One experiment that had not been run at all (a
-competing differential
-baseline) has now been run and reported. Where a request could not be met with
-the evidence we have, we say so in the manuscript instead of softening the text;
-three of the twenty-one items are met only in part, and Section~\ref{sec:partial}
-of this letter lists them together with what is missing and why. One of the
-three (R1.9) is reported as an open scope question for the editor rather than
-as resolved.
+the two relations, and a competitive differential baseline. The baseline
+comparison is now reported on two footings: matched at the level of the probe
+pair, where our information budget is the larger one (111 requests against the
+baselines' 84 shared probes), and under a matched total-request ceiling per
+cell, where neither side may spend more than the other and each extra
+observation has to be declared in advance. One experiment that had not been run
+at all (a competing differential
+baseline) has now been run and reported. Three items that earlier drafts of this
+letter left as scope objections---an admission rule for new oracle evidence
+(R1.4), a budget-matched comparison (R1.7) and detection across more than one
+defect class (R1.9)---now carry results;
+Section~\ref{sec:partial} lists them together with what each result does
+\emph{not} establish. No requested experiment is left unrun and none is put to
+the editor as a scope question: where the evidence stops short, the limit is
+stated in the manuscript next to the number it qualifies.
 
 References below are to the revised manuscript (31 pages, 26 tables). Table and
 section numbers are stable; page numbers are given for the tables most often at
@@ -511,9 +514,11 @@ function with the content path, so under the admission rule of Section~VI-E ever
 class is refused promotion and the \McInstances{} hits are recall against known truth rather
 than independence-certified proofs; and these are four mechanisms on one
 emulator, not four discoveries in production systems. Each class is also
-leave-one-out checked: disabling it removes its own alarms and leaves every other
-class's alarms in place, so an alarm is attributable to its defect rather than to
-a shared root cause. The publicly fixed CVE pair is retained alongside this, as a
+leave-one-out checked: disabling its fault injection removes that class's alarms
+and leaves the other classes' alarms in place, so an alarm is attributable to its
+defect rather than to a shared root cause; for C3 and C4, where the gate never
+fires, the check only shows that removing the mechanism creates no alarms
+elsewhere. The publicly fixed CVE pair is retained alongside this, as a
 control of the gate rather than of recall: Section~V-C and Table~18 (p.~18), one
 true positive on 1.20.5 and no claim on 1.20.6, with the seven-perturbation
 regression test unchanged.}
@@ -822,7 +827,7 @@ judgement on each item belongs to the reviewers and the editor.
 \label{sec:partial}
 
 For the Associate Editor's convenience, this section records the three items
-that earlier drafts of this letter listed as met only in part. All three have now
+that earlier drafts of this letter left as scope objections. All three have now
 been addressed by experiment, and the table states what was run and what each
 result does \emph{not} establish. No row records a requested experiment that was
 not run. Several items that earlier drafts listed here are no longer listed,

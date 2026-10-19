@@ -506,8 +506,9 @@ reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
 
 One fault pattern answers whether the detector finds the defect it was designed
 for; it does not answer whether the chain transfers across authorization defects.
-We therefore seed four classes on the same target, two independent instances
-each, and drive them with the same crawl, introspection and adjudication code.
+We therefore seed four classes on the same target---the read bypass already in
+use, with three instances, plus two instances each of three new classes---and
+drive them with the same crawl, introspection and adjudication code.
 C1 is the read bypass already used. C2 is a write bypass: a subject whose true
 permission is \texttt{none} changes the object's metadata with \texttt{PATCH}
 and the change is observable afterwards. C3 is a faulty inheritance expansion: an
@@ -545,10 +546,11 @@ function with the content path, so under the admission rule of
 Section~\ref{sec:admissibility} every class is refused promotion: the
 \McInstances{} hits are recall against known truth, not independence-certified
 proofs. Second, these are four mechanisms on one emulator, not four discoveries
-in production systems. Disabling any one class removes that class's alarms and
-leaves every other class's alarms in place---each leave-one-out run returns zero
-alarms on the disabled class---so an alarm is attributable to its own defect
-rather than to a shared root cause.
+in production systems. Disabling one class's fault injection removes that
+class's alarms and leaves the other classes' alarms in place, so an alarm is
+attributable to its own defect rather than to a shared root cause; for C3 and C4,
+where the gate never fires, the same check only shows that the mechanism's
+removal introduces no alarms elsewhere.
 
 \subsection{A publicly fixed defect}
 \label{sec:cvepair}

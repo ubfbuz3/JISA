@@ -1,6 +1,6 @@
 % 由 analysis/ingest_multiclass.py 自动生成 —— 勿手改
-\input{multiclass_numbers.tex}
-
+% 宏由调用方在导言区 \input{multiclass_numbers.tex} 加载；此处不再重复
+% （\newcommand 重复定义会报 Command already defined）。
 \begin{table*}[t]
 \centering
 \caption{Per-defect recall of the studied chain on the controlled target, by defect class. Each instance is a cell whose true (correct-model) permission is \emph{none} and on which the defect nevertheless lets the access succeed. \emph{read gate} is the reachability-gated relation as studied in this paper; \emph{channel gate} is the same relation moved to the channel the defect actually breaks; the last two columns are the oracle-consuming adjudicator on the read channel and on the channel-matched probe. Every instance here is one the gate was designed for except C3 and C4, which it cannot see: in both, the object is visible to the subject, so the antecedent of the relation is false and no alarm is raised---not a tuning problem but the gate reading its own premise. The oracle-based adjudicator reaches all \McInstances{} instances once the probe is channel-matched. False alarms on the \McAuthorizedCells{} authorized cells: \McFpBookkeeping{} for the relation's bookkeeping variant, \McFpOracle{} for the oracle-based adjudicator, whose zero is conditional on this target's oracle being sound (Section~VI-C reports what happens when it is not).}

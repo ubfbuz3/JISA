@@ -111,7 +111,9 @@ def main() -> None:
         header + "\n".join(lines) + "\n", encoding="utf-8")
     (OUT / "multiclass_table.tex").write_text(
         "% 由 analysis/ingest_multiclass.py 自动生成 —— 勿手改\n"
-        "\\input{multiclass_numbers.tex}\n\n" + "\n".join(body) + "\n", encoding="utf-8")
+        "% 宏由调用方在导言区 \\input{multiclass_numbers.tex} 加载；此处不再重复\n"
+        "% （\\newcommand 重复定义会报 Command already defined）。\n"
+        + "\n".join(body) + "\n", encoding="utf-8")
     print(f"[ok] -> {OUT / 'multiclass_table.tex'}")
     print(f"instances={n_total} read={read_hits} channel={chan_hits} "
           f"oracle_read={oracle_read} oracle_channel={oracle_chan} "

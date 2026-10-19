@@ -87,6 +87,10 @@
 \input{coverage_numbers.tex}
 % ---- 竞争基线：常规多账户差分（由 analysis/ingest_baseline.py 生成） ----
 \input{baseline_numbers.tex}
+% ---- 等总预算比较与多类缺陷（由 ingest_budget.py / ingest_multiclass.py 生成） ----
+% 摘要引用了 \McInstances，故 multiclass 宏必须在正文之前加载；
+% budget 宏只被 budget_table.tex 使用，由该表自行加载，这里不重复。
+\input{multiclass_numbers.tex}
 
 % 图形搜索路径：figures/ 放正文插图；./ 供 ieeeaccess.cls 内部取 bullet.png
 % （摘要/关键词前的圆点、\EOD 结尾标记）。若只写 {figures/} 会让类找不到 ./bullet.png。
@@ -186,7 +190,9 @@ recrawl with the same credentials removes \TmpBothFixed{}. A real
 vulnerable/fixed pair (Gitea \CveVulnVersion{} to \CveFixedVersion{}) shows the
 independent entitlement/effect gate reporting \CveTruePositives{} true positive
 on the vulnerable build, \CveFalseProofs{} false proofs, and no alarm on the
-fixed build---a check of the gate, not a measure of detection effectiveness.
+fixed build---a check of the gate, not a measure of detection effectiveness;
+across four seeded defect classes (\McInstances{} instances) the studied relation
+fires only on the read class, a boundary rather than a tuning gap.
 \end{abstract}
 
 \begin{keywords}
