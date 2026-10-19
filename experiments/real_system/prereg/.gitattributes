@@ -1,0 +1,4 @@
+# Preserve the frozen protocol byte-for-byte: the SHA256SUMS digest is
+# computed over these exact bytes, so git must not normalise line endings.
+*.md -text
+SHA256SUMS -text
