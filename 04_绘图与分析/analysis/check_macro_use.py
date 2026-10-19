@@ -14,10 +14,9 @@ PROJ = HERE.parent.parent
 PAPER = PROJ / "03_论文撰写" / "paper"
 RES = PROJ / "04_绘图与分析" / "results"
 
-GEN_FILES = [
-    "numbers.tex", "native_engine_numbers.tex", "gitlab_numbers.tex",
-    "gogs_numbers.tex", "seeded_table.tex", "m2_stratum.tex",
-]
+# 扫描 results/ 下全部生成文件：早期清单只列了 6 个，truth/design/coverage 等
+# 后来新增的宏文件因此不被校验（漏检不会报错，只会给假保证）。
+GEN_FILES = sorted(p.name for p in RES.glob("*.tex"))
 
 available: dict[str, str] = {}
 dup: list[str] = []
@@ -42,7 +41,7 @@ for t in sorted(PAPER.joinpath("sections").glob("*.tex")) + [PAPER / "main.tex"]
         for m in re.findall(r"\\[A-Z][A-Za-z]+", line):
             used.setdefault("\\" + m[1:], set()).add(t.name)
 
-MACRO_PREFIX = re.compile(r"^(Mii|Res|Nt|Gl|Gg|Gt|Seed|Ssz)")
+MACRO_PREFIX = re.compile(r"^(Mii|Res|Nt|Gl|Gg|Gt|Seed|Ssz|Tmp|Cve|Cvg|Tvt|Dsg)")
 missing = sorted(k for k in used
                  if MACRO_PREFIX.match(k.lstrip("\\"))
                  and k not in available and k != "\\S")
