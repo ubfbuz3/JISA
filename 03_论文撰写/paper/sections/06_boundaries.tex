@@ -329,7 +329,10 @@ figure is a property of the constructed topology, not an estimate of field
 prevalence. The budget is matched: \BlProbeReq{} requests per cell for every
 method, one as the owner and one as the actor, plus one additional read of the
 authorization surface for ours on the \BlOursExtraCells{} cells where a relation
-alarms and none where it does not---\BlOursExtraAvg{} per cell on average.
+alarms and none where it does not---\BlOursExtraAvg{} per cell on average. The
+whole comparison, both probes and the additional reads included, ran in
+\BlRunSeconds{}~s of harness time on a single core; because all four methods are
+scored from the same two recorded responses, we report no per-method timing.
 
 \input{baseline_table.tex}
 

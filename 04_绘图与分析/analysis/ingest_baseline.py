@@ -114,6 +114,7 @@ def main() -> None:
     # ---- 宏 -------------------------------------------------------------
     budget = data["summary"]["_budget"]
     probe_req = budget["probe_requests_per_cell"][0]
+    run_seconds = data["elapsed_sec"]
     extra_cells = sum(1 for r in recs if r["budget"]["ours_extra_requests"] >= 1)
     extra_avg = extra_cells / len(recs)
     check("matched probe budget", budget["probe_requests_per_cell"], [2])
@@ -121,9 +122,11 @@ def main() -> None:
           sorted({r["budget"]["ours_extra_requests"] for r in recs}), [0, 1])
     check("extra reads on the alarming cells",
           extra_cells, b2["claims"])
+    check("harness run time recorded", run_seconds > 0, True)
 
     macros = {
         "BlCells": str(N),
+        "BlRunSeconds": f"{run_seconds:.1f}",
         "BlOursExtraCells": str(extra_cells),
         "BlOursExtraAvg": f"{extra_avg:.2f}",
         "BlBolaCells": str(bola),

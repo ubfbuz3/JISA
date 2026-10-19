@@ -5,14 +5,14 @@ R1.3,R1.3 状态转移,CLOSED_IN_TEXT,§V 作用域补“请求—判定窗口�
 R1.4,R1.4 oracle admissibility,PARTIAL,A2 时间链改为按摘要绑定并披露 written_at 矛盾；admissibility 仍未给出可照做的判定程序,no,internal
 R1.5,R1.5 命题2,CLOSED_IN_TEXT,等价式改为 A=D ⇔ y=0 或 m=o；删去外延相等，改证 H⇒D；3 条差异归为 S5 写场景漏报,yes,internal
 R1.6,R1.6 枚举设计,CLOSED_IN_TEXT,blind/aware 命名复原；对账改以 S3–S7 原网格为起点并逐记录校验；每格 12/6 条；listed+unreadable 改称未测,yes,internal
-R1.7,R1.7 竞争基线,CLOSED_IN_EXPERIMENT,新增 run_baseline.py：42 格受控实验，三种常规差分（status-only / 等值重放 / +框架账本压制）与 MR-002+v3 同一对探测请求对比；B1/B2 12 个假确证、B3 6 个（全在 S6 带外）、ours 0 个但 17 弃权（覆盖 59.52%）；Table 17 + §D,no,internal
+R1.7,R1.7 竞争基线,CLOSED_IN_EXPERIMENT,新增 run_baseline.py：42 格受控实验，三种常规差分（status-only / 等值重放 / +框架账本压制）与 MR-002+v3 同一对探测请求对比；B1/B2 12 个假确证、B3 6 个（全在 S6 带外）、ours 0 个但 17 弃权（覆盖 59.52%）；预算匹配（每格 2 请求 + 27 个报警格多 1 次自省读取，均值 0.64/格）、整轮 22.3 s 机时已入原始记录；Table 17 + §D 明写"非检测增益、非免费改进",yes,internal
 R1.8,R1.8 渠道混淆,PARTIAL,Gitea/GitLab 渠道表 + 单渠道互斥分组已写明；Gogs 缺逐渠道四格表，已明确声明,no,internal
 R1.9,R1.9 独立缺陷,PARTIAL,真实配对改为“只检验闸门、未跑 MR”；多缺陷 recall 明确未做,no,internal
 R1.10,R1.10 live对照控制,CLOSED_IN_TEXT,A2 先后改由 run 记录摘要绑定；written_at 矛盾单列说明，不改原件,yes,internal
 R1.11,R1.11 specificity分母,CLOSED_IN_TEXT,specificity 改回 TN/(TN+FP) 并承认人工核验；删 84.62 与“与爬虫一致”的说法,yes,internal
 R1.12,R1.12 异质权重,PARTIAL,分母写为 N⁻=TN+FP，给出 ΣFP_i/ΣN_i⁻ 形式；权重内生性仅作说明,no,internal
 R1.13,R1.13 弃权与成本,CLOSED_IN_TEXT,direct 与 v3 统一为“不可读即弃权”，coverage 54.17%；forced-negative 另列并命名,yes,internal
-R1.14,R1.14 复现,PARTIAL,reproduce/verify 补 3 个 ingest，清单扩到 21 输入/26 输出并重算；未在干净副本跑 repro,no,internal
+R1.14,R1.14 复现,PARTIAL,reproduce/verify 补 ingest_baseline；manifest 22 原始输入/28 产物；干净副本（git archive HEAD 到临时目录）实跑 repro 28/28 逐字节一致、空目录编译 90 文件源码包 26 页 0 未定义引用；失败与缺失观测规则仍在协议文件与脚本里、正文只部分陈述,no,internal
 R1.15,R1.15 证据到主张,CLOSED_IN_TEXT,删除“as published … after the crawl”的构造实验误读，改按两类供给方式表述,yes,internal
 R2.1,R2.1 新颖性与recrawl,CLOSED_IN_TEXT,29/29 recrawl 修复进入解释；删“more crawling 无效”的无条件说法,yes,internal
 R2.2,R2.2 标题与范围,CLOSED_IN_TEXT,摘要去除构造实验的 after-crawl 误读,yes,internal

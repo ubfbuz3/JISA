@@ -149,19 +149,27 @@ Section~VIII.}
 investigation---remains a qualitative judgement; a reproducible procedure for
 determining admissibility \emph{before} examining outcomes is requested.}
 \Response{We agree this is the weakest link, and we have not solved it. What we
-did do: the candidate surfaces, the granting channels and the defect classes were
-fixed in a protocol file whose digest is bound into the run record before the
-reported run; the primary-vantage gate was checked (4 of 4) before that run; and
-the one amendment made afterwards is bound by digest to the run record, with the
-contradiction in its own timestamp disclosed rather than back-dated---the
-amendment file's \texttt{written\_at} postdates the last probe, and the
-manuscript says so and gives the commands to re-check it. What we did \emph{not}
-do is supply a mechanical, implementation-independent test of independence from
-the tested mechanism. Section~VI-E now says explicitly that clause~(2) is a
-per-system judgement and is not automatable from readability alone, and it makes
-the judgement concrete instead of abstract: Gogs and GitLab fail it, and the
-failure is observable as false proofs on identifiable channels (Tables~11
-and~13). We would rather state the limit than imply a procedure we do not have.}
+can now offer is the procedure we actually follow, step by step, so that the
+judgement is at least auditable rather than retrospective:
+(1)~\emph{before} any outcome is examined, the candidate introspection surfaces,
+the granting channels and the defect classes are fixed in a protocol file, and
+its digest is recorded;
+(2)~that digest is bound into the run record before the reported run, so the
+choices cannot be edited afterwards without detection;
+(3)~the primary-vantage gate---readability from the owner or administrator
+vantage---is checked and passes 4 of 4 before the run;
+(4)~any amendment made after the fact is bound by its own digest and timestamp to
+the run record, and the contradiction in that timestamp is disclosed rather than
+back-dated: the amendment file's \texttt{written\_at} postdates the last probe,
+and the manuscript says so and gives the commands to re-check it;
+(5)~clause~(2) itself is then supported by the per-channel evidence of
+Table~11, which shows the surface answering \emph{deny} on cells the ledger
+allows exactly on the channels that are not group or repository membership.
+What we did \emph{not} do is supply a mechanical, implementation-independent test
+of independence from the tested mechanism: step~(5) is evidence, not a decision
+rule, and Section~VI-E now says explicitly that clause~(2) is a per-system
+judgement and is not automatable from readability alone. We would rather state
+the limit than imply a procedure we do not have.}
 \Action{Section~VI-E; the pre-registered protocol and the amendment timing note
 are in the reproducibility package.}
 \Remains{No mechanical independence criterion. This is listed as a limitation in
@@ -250,11 +258,15 @@ prevalence.}
 (\texttt{experiments/run\_baseline.py}) and its raw output are in the
 reproducibility package, and both baseline tables are reproduced byte-identically
 by \texttt{verify\_artifact.sh repro}.}
-\Remains{Execution cost is reported as request counts, not wall-clock time, for
-these four methods: all of them replay the same recorded tape, so a timing
-comparison would measure our replay loop. End-to-end timing is reported only for
-the real-system temporal loops (Gitea 21.2~s, GitLab 7.3~s, of which the probes
-are 20.7~s and 6.0~s).}
+\Remains{No per-method wall-clock time. The complete comparison---both probes per
+cell and the additional reads included---ran in 22.3~s of harness time on a
+single core, and that figure is recorded in the run output shipped with the
+artefact. We do not report a time per method because all four are scored from the
+same two recorded responses in the same process, so any per-method number would
+measure our replay loop rather than the rule. What the reviewer's question needs
+beyond that---the cost of the same probes against a live target---is reported for
+the real-system temporal loops only (Gitea 21.2~s, GitLab 7.3~s, of which the
+probes are 20.7~s and 6.0~s), where the requests really do reach a server.}
 
 \subsection{Channel-by-channel isolation of the oracle-validity problem}
 \Concern{A channel-by-channel confusion matrix separating direct membership,
@@ -392,7 +404,7 @@ not as a property of any method. A passed record is defined as one on which the
 method did not fire, explicitly not a certificate of safety, and the text refuses
 to rank by risk alone, noting that the always-degrade reference has the
 second-lowest risk while detecting nothing. Cost is reported as request counts:
-4833 enumeration requests (median 8, range 1--17) and 104 probe \texttt{GET}s
+4833 enumeration requests (median 8, range 7--10) and 104 probe \texttt{GET}s
 (52 cells $\times$ 2).}
 \Action{Table~4 (p.~8) and Section~IV-D; the abstention semantics unified across
 methods in Section~IV-A.}
@@ -407,11 +419,12 @@ executions, the engine-side defect and the treatment of missing or failed
 observations.}
 \Response{The package now carries a pinned environment, the exact commands, the
 seed and configuration files, the machine-readable raw records and the scripts
-that regenerate every table and figure, and it was verified from a clean copy
-rather than asserted: in an empty directory the submission package compiles
-(26 pages, no undefined references), and \texttt{verify\_artifact.sh repro}
-reproduces all 28 generated artefacts byte-identically, including the two
-baseline tables. The native run is reported as three stages rather than one
+that regenerate every table and figure, and it was verified rather than asserted: in a
+staging copy of the committed tree---extracted with \texttt{git archive}, so it
+cannot see the working tree---the pipeline regenerates all 28 number-bearing
+artefacts byte-identically, including the two baseline tables; and in an empty
+directory the 90-file submission package compiles (26 pages, no undefined
+references). The native run is reported as three stages rather than one
 number (Section~VII-C, Tables~20--22, pp.~21--22): $A$, the engine's own
 \texttt{getFailures()} alarms, 6; $H$, our promotion policy applied to them, 6;
 $T$, confirmed, 0---with 6 false proofs. The content predicate is reported by
