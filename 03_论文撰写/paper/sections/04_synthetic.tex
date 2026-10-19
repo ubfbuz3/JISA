@@ -62,9 +62,10 @@ make (Fig.~\ref{fig:scenarios}).
 \includegraphics[width=0.78\textwidth]{fig2_scenarios.pdf}
 \caption{The errors are scenario-structured. The bookkeeping oracle's false proofs
 concentrate on~S6, the legitimate share created out of band and so invisible to
-the framework's own log, while the state-calibrated v3 abstains exactly where its
-surface is not readable. Both panels are recomputed from the same records as
-Table~\ref{tab:ablation}.}
+the framework's own log, while the state-calibrated v3 abstains in two places:
+where its surface is not readable, and where a readable surface shows a covering
+grant it declines to override. Both panels are recomputed from the same records
+as Table~\ref{tab:ablation}.}
 \label{fig:scenarios}
 \end{figure*}
 
@@ -178,25 +179,36 @@ and \CvgVtwoFPCover{} because it is readable and shows the grant. Only the first
 a false proof converted into a non-decision.
 
 The other side of the ledger is dearer. \CvgVthreeAbstBola{} abstentions fall on
-true violations, and with the \CvgVthreeMissed{} records on which no method
-alarms, v3 leaves \CvgVthreeFNunproven{} of \CvgViolations{} violations
+true violations, and with the \CvgVthreeMissed{} records on which no alarm is
+raised at all, v3 leaves \CvgVthreeFNunproven{} of \CvgViolations{} violations
 unproven---the count the review derived from the pooled table.
-\texttt{direct\_observe}, at full coverage and with no abstention channel,
-detects \CvgObsDetected{} and misses \CvgObsMissed{} with no false proofs. At the
-operating points measured, the plain request therefore detects \CvgDetectGap{} more
-violations than v3, abstains on none, and its higher selective risk
-(\CvgObsRiskPct{}\%) consists entirely of missed violations rather than of false
-proofs.
+
+\texttt{direct\_observe} is scored on the same contract, and that changes what
+its earlier numbers meant. It abstains when the probe is unreadable, exactly as
+the direct adjudicator does, so it decides \CvgObsDecided{} records---coverage
+\CvgObsCoveragePct{}\%---and abstains on \CvgObsAbstain{}, \CvgObsAbstBola{} of
+them true violations. Within the records it decides it detects
+\CvgObsDetected{} and raises no false proof. On the \CvgObsDecided{} records both
+methods can decide, it detects \CvgDetectGap{} more violations than v3; the
+remaining difference in pooled recall is coverage, not accuracy. The last row of
+Table~\ref{tab:coverage} is the binary version that was implicit before: it
+forces a negative verdict where the probe is unreadable, covers all
+\CvgN{} records, detects the same \CvgObsDetected{}, and misses
+\CvgForcedObsFN{}. Its selective risk of \CvgForcedObsRiskPct{}\% is entirely
+missed violations, produced by the forcing rather than by the method; we report
+it as a reference point, not as a comparator.
 
 Selective risk is not a ranking either, and we do not use it as one.
-\texttt{degrade\_all}, which alarms on nothing, has the second-lowest risk
-(\CvgDegradeRiskPct{}\%) at \CvgDegradeCoveragePct{}\% coverage and detects no
+\texttt{degrade\_all}, which alarms on nothing, has a selective risk of
+\CvgDegradeRiskPct{}\% at \CvgDegradeCoveragePct{}\% coverage and detects no
 violation at all; an ordering by risk alone would place it above v2. We therefore
-report precision and selective risk with coverage attached, never compare them
-across methods at unequal coverage, and make the comparison that matters inside a
-stratum, where coverage is common by construction
-(Section~\ref{sec:stratum}). A safe abstention is not a detection and we never
-count it as one.
+report precision and selective risk with coverage attached and never compare them
+across methods at unequal coverage. The stratified analysis
+(Section~\ref{sec:stratum}) equalises the \emph{availability} of the oracle, not
+the decision rate: v3 still declines \CvgVthreeCover{} readable records that show
+a covering grant, so the two strata do not make coverage common, and we say so
+wherever the comparison is made. A safe abstention is not a detection and we
+never count it as one.
 
 \paragraph{Cost} The enumeration issues \CvgReqTotal{} requests over \CvgN{}
 records (median \CvgReqMedian{} per record, range \CvgReqMin--\CvgReqMax). The
@@ -218,75 +230,69 @@ every credential is what costs.
 
 \input{coverage_table.tex}
 
-\subsection{A published metric's resolution: what the reported specificity does not condition on}
+\subsection{A published metric's resolution: what a pooled specificity cannot register}
+\label{sec:resolution}
 
-The practical content of this finding is a diagnosis of a specific published
-figure, not a general property of ratios. Under the input-level specificity
-convention used by \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic}, the reported
-specificity has the form
-\[ S_{\text{input}} = 1 - \frac{\text{false alarms}}{\text{inputs}}, \]
-and the figure of \ResLitReportedSpecPct{}\% is reported without an explicit
-check that the reachability model whose readings drive adjudication coincides
-with the true authorization state. Where the two diverge---the out-of-band case
-of Finding~1---the metric records agreement with the tool's own crawler rather
-than with entitlement, so a high value certifies the correspondence it silently
-assumes. The predecessor itself concedes the role-to-resource mapping is ``not
-always available'' and attributes its residual false alarms to crawler coverage
-of ``all URLs for all users''~\cite{Mai2019Metamorphic}. The dilution below is
-elementary arithmetic, offered only to make the second half of the
-diagnosis---that the denominator cannot register a class-uniform failure---precise;
-we do not present it as the contribution.
+The published figure is a specificity, not a false-alarm share of all inputs.
+\mbox{MST-wi} defines it as $\mathrm{TN}/(\mathrm{TN}+\mathrm{FP})$ over the
+follow-up inputs $F$, and states that each reported MT failure was manually
+verified~\cite{Chaleshtari2022Metamorphic}; the labels are therefore not the
+crawler's own answer. With $\mathrm{FN}=0$ throughout that evaluation,
+$\mathrm{TN}=F-\mathrm{TP}-\mathrm{FP}$ and the figure equals
+$1-\mathrm{FP}/(F-\mathrm{TP})$: the denominator is the \emph{negative}
+follow-up inputs, not every generated input. We use that form below, and we do
+not attribute the published number to a circular label.
 
-We cannot reproduce the engine's exact input count, so we approximate two
-follow-up inputs per case---enough to exhibit the denominator's resolution, the
-only point at issue. In that approximation the configuration in which a whole
-class of legitimate access is misreported still yields a specificity of
-\ResSpecRowOneSpec{} (\ResSpecRowOneSpecPct{}\%)\footnote{This value is
-illustrative of the denominator's resolution only. It rests on an assumed two
-follow-up inputs per case, an approximation we cannot ground in the engine's
-exact input count; what matters is the \emph{form} of the denominator, not the
-value.}.
+What such a figure cannot do is register a failure confined to a class, and the
+two reasons are arithmetic and coverage rather than labelling. First, the figure
+is pooled: a class contributing a share $w$ of the negative inputs can move it
+by at most $w$, so a real class-uniform failure is diluted by unaffected
+inputs. Second, the follow-up inputs are those the crawl could enumerate; a
+class of legitimate access the crawl never reaches contributes no negative
+inputs and therefore cannot enter the ratio at all. The second point is the
+measurement face of Finding~1, and it is a statement about the coverage of the
+input set, not about the correctness of the human labels. We cannot reproduce
+the engine's exact input count, so we substitute no value for the published
+figure; the argument below is about the form of the denominator only.
 
 \paragraph{A bounded formal remark on the denominator}
-Define $S_{\mathrm{input}} = 1 - \mathit{FP}_{\mathrm{inputs}} / N_{\mathrm{inputs}}$
-and $S_{\mathrm{scenario}} = 1 - N_{\mathrm{failed}} / N_{\mathrm{scenarios}}$,
-where $\mathit{FP}_{\mathrm{inputs}}$ counts false alarms over all generated
-inputs and $N_{\mathrm{failed}}$ the scenarios in which the failure is uniform.
-$S_{\mathrm{scenario}}$ is introduced only as an analytical construct for
-characterising resolution; it is not proposed as a replacement evaluation
-metric. The remark concerns metric resolution, not estimator consistency or
-statistical power.
+Write $S=1-\mathit{FP}/N^{-}$, where $N^{-}=\mathrm{TN}+\mathrm{FP}$ is the
+number of negative follow-up inputs the run generated, and define
+$S_{\mathrm{scenario}} = 1 - N_{\mathrm{failed}} / N_{\mathrm{scenarios}}$,
+where $N_{\mathrm{failed}}$ is the number of scenarios in which the failure is
+uniform. $S_{\mathrm{scenario}}$ is an analytical construct for characterising
+resolution; it is not proposed as a replacement metric. The remark concerns
+resolution, not estimator consistency or power.
 
 \begin{proposition}
 \label{prop:resolution}
-Fix $f \ge 1$ failed scenarios, each producing a
-fixed number $a \ge 1$ of false-alarm inputs, and $s \ge 1$ successful
-scenarios each contributing $m$ additional, alarm-free inputs. Then
-$S_{\mathrm{input}} = 1 - (f a) / (f a + s m)$, which tends to $1$ as
-$m \to \infty$, while $S_{\mathrm{scenario}} = 1 - f / (f + s)$ is independent
-of $m$ and strictly less than $1$.
+Fix $f \ge 1$ failed scenarios, each producing a fixed number $a \ge 1$ of
+false-alarm inputs, and $s \ge 1$ successful scenarios each contributing $m$
+additional alarm-free negative inputs. Then
+$S = 1 - (f a) / (f a + s m)$, which tends to $1$ as $m \to \infty$, while
+$S_{\mathrm{scenario}} = 1 - f/(f+s)$ is independent of $m$ and strictly less
+than $1$.
 \end{proposition}
 
 \begin{proof}
-$N_{\mathrm{inputs}} = f a + s m$ and
-$\mathit{FP}_{\mathrm{inputs}} = f a$; substitution gives
-$S_{\mathrm{input}} = 1 - (f a) / (f a + s m) \to 1$ as $m \to \infty$, whereas
-the scenario-level figure depends only on the fixed counts $f$ and $s$.
+$N^{-} = f a + s m$ and $\mathit{FP} = f a$; substitution gives the first
+expression, which increases monotonically in $m$ to $1$, whereas the
+scenario-level figure depends only on the fixed counts $f$ and $s$.
 \end{proof}
 
 \begin{corollary}
 \label{cor:resolution}
 No fixed input-level specificity threshold $t < 1$ can guarantee that a
 scenario-uniform failure will push the metric below it: choosing
-$m > (f a/s)\cdot t/(1-t)$ drives $S_{\mathrm{input}}$ above $t$ while
-the $f$ failing scenarios remain failing.
+$m > (f a/s)\cdot t/(1-t)$ drives $S$ above $t$ while the $f$ failing
+scenarios remain failing.
 \end{corollary}
 
-\smallskip
-The two halves of the finding are about the specific reported figure, not about
-ratios in the abstract: its value records agreement with the tool's own crawler
-where model and authorization state diverge, and its denominator cannot register
-a class-uniform failure even when one occurs.
+The finding is therefore about what the published figure can be asked to show,
+not about its arithmetic: it is pooled over classes, and it is computed on the
+inputs the crawl reached. Neither point disputes the reported value or its
+labels; both limit what a high value certifies about a class the run did not
+exercise.
 
 \paragraph{Implementation robustness}
 An independently written implementation of the same predicates was compared on a

@@ -78,17 +78,19 @@ wherever a combination is undefined. Two dimensions are nested rather than
 crossed, and we state them here instead of letting the tables imply a factorial
 that was not run: channel visibility exists only where the application offers a
 sharing facility, so the two no-exception configurations sit outside it; and the
-listed level is instantiated only with introspection on, so the corner
-\emph{listed and unreadable} is empty.
+listed level was instantiated only with introspection on, so the combination
+\emph{listed and unreadable} is untested rather than shown to be impossible:
+a product can list a share and still refuse to answer the per-object
+introspection query, and this enumeration would not see it.
 
 \input{design_table.tex}
 
 \subsection{What the design varies, and what it can identify}
 \label{sec:identify}
 
-Because the exception policy and the crawl reading are thrown per record rather
-than held per configuration, every record has a partner that differs in that
-switch alone. Table~\ref{tab:attribution} uses that: it pairs records on
+Because the exception policy and the reachability reading are thrown per record
+rather than held per configuration, every record has a partner that differs in
+that switch alone. Table~\ref{tab:attribution} uses that: it pairs records on
 configuration, scenario, relation and the other switch, and reports the
 discordant pairs. A contrast carried by some other factor would show up as
 movement in the paired cells; a contrast that is not there shows up as a zero.
@@ -96,11 +98,15 @@ movement in the paired cells; a contrast that is not there shows up as a zero.
 \input{attribution_table.tex}
 
 Three results come out of it, and they are stronger than the aggregate rates
-they explain. First, the crawl reading moves the outcome in one direction only:
-of \DsgGuiPairs{} frozen--live pairs, \DsgGuiFixedFP{} lose a false proof when
-the reading is live and \DsgGuiNewFP{} gain one, while the same switch costs
-\DsgGuiLostTP{} detections and gains none. The live reading is therefore a trade
-in a fixed direction, not noise around a rate. Second, the exception ladder has
+they explain. First, the reachability reading moves the outcome in one direction only:
+of \DsgGuiPairs{} blind--aware pairs, \DsgGuiFixedFP{} lose a false proof when
+the reading is aware and \DsgGuiNewFP{} gain one, while the same switch costs
+\DsgGuiLostTP{} detections and gains none. The aware reading is therefore a
+trade in a fixed direction, not noise around a rate. It is a statement about
+what the gate can see, not about when authorization changed: the constructed
+study seeds the out-of-band share before the run and never mutates entitlement
+inside it, so the temporal reading of this contrast belongs to
+Section~\ref{sec:realsystem}, not here. Second, the exception ladder has
 \emph{no} discordant pair at either step: raw and e1 differ on no individual
 record, and neither do e1 and e1e2. That is a stronger statement than the
 aggregate rate not moving---\DsgExcKeptFP{} records carry a false proof under all
@@ -113,14 +119,14 @@ the correct configuration \DsgReadNullPairs{} pairs change not at all.
 
 What the design cannot identify follows from the two nested dimensions, and we
 prefer to name it. The interaction between channel visibility and readability is
-not estimable, because the listed-and-unreadable cell does not exist; the
+not estimable, because the listed-and-unreadable cell was not run; the
 readability contrast is identified within unlisted only, and we make no claim
 that readability moderates the listed channel. The legitimate-sharing mechanism
 is not identified under S6--S7, where it is undefined by construction, so the
 out-of-band estimates are for the e3 configurations alone. The two relations are
 not orthogonal to scenario---S5 carries MR-002 only---so we never compare
 relations with each other. What remains is balanced: every
-(exception policy, crawl reading) slice holds \DsgBalOn{} readable and
+(exception policy, reachability reading) slice holds \DsgBalOn{} readable and
 \DsgBalOff{} unreadable records, so the readability contrast cannot be carried by
 either thrown switch.
 
@@ -129,9 +135,9 @@ The \ResSynRecords{} records are not independent observations. Each admissible
 cell is expanded deterministically by the factors that are actually varied:
 \ResDesignMrs{} metamorphic relations (MR-002, MR-004), \ResDesignPrecondVariants{}
 exception-policy variants (raw, one level, two levels---the first deliberately
-thrown switch), and \ResDesignGuiModes{} reachability readings (the frozen
-crawl-time snapshot and the live execution-time state---the second deliberately
-thrown switch). The two relations do not both apply to every cell: only MR-002 applies
+thrown switch), and \ResDesignGuiModes{} reachability readings (a constant
+unreachable list and the listing current at execution---the second deliberately
+thrown switch). The second is a visibility manipulation, not a temporal one. The two relations do not both apply to every cell: only MR-002 applies
 under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while
 the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
 \[

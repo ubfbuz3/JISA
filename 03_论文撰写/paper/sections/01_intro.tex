@@ -20,9 +20,11 @@ by the user interface'' permits---with the role-to-resource mapping
 that sentence as premise, not discovery. Delegating adjudication to a reachability
 model makes the moment the model was read part of the specification, so we
 instantiate the predicates \emph{as defined}---over a model recorded at crawl
-time---and drive the system through three phases: crawl, change authorization
-out of band, execute. The middle phase is the one the original evaluation does
-not exercise.
+time---and drive the real systems through three phases: crawl, change
+authorization out of band, execute. The middle phase is the one the original
+evaluation does not exercise. The constructed study isolates the same defect
+without time: it seeds a share outside the framework's record and asks whether
+a gate that cannot see it still calls the access legal.
 
 We ran a \ResSynRecords{}-record scenario/configuration study on a constructed
 system and a controlled study on Gitea \ResRsVersion{}, extended, with a
@@ -34,10 +36,11 @@ three findings, one per research question (Section~\ref{sec:findings}).
 (1)~\emph{Temporal (RQ1).} Does the crawl-time reachability model remain sound
 for authorization decisions after an out-of-band authorization change? No: the
 adjudication as designed produces \emph{deterministic false proofs}---a legitimate
-access granted out of band after the crawl is reported as a proven violation, at
-rate \ResObsOobVtwoFpRate{} on the constructed system and
-\ResRsMrBookkeepingFpRate{} on Gitea, because the predicate's two representations
-cannot describe an out-of-band grant. The error is a property of the
+access the model cannot see is reported as a proven violation: at rate
+\ResObsOobVtwoFpRate{} in the constructed study, where the share is seeded
+outside the framework's record, and at rate \ResRsMrBookkeepingFpRate{} on
+Gitea, where the grant is made between the crawl and the request. The
+predicate's two representations cannot describe either grant. The error is a property of the
 \emph{reading}, not of the system.
 (2)~\emph{Oracle (RQ2).} When a readable, sound authorization oracle fully
 resolves the proposition under test, does the metamorphic step add incremental
@@ -51,12 +54,12 @@ paired methods disagree on only \ResAbDisagreementN{} records, all favoring
 vs.~\ResAbVThreeFP{}, recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}; a
 descriptive, point-estimate comparison, not a formal hypothesis test, no margin
 pre-specified, not domination).
-(3)~\emph{Measurement (RQ3).} Can an input-level specificity metric provide
-stable scenario-level resolution for a scenario-uniform failure? No: the reported
-specificity is not conditioned on an explicit check that the reachability model
-coincides with the authorization state, and its input-level denominator cannot
-register a class-uniform failure, which unaffected inputs can dilute arbitrarily
-(Proposition~\ref{prop:resolution}).
+(3)~\emph{Measurement (RQ3).} Can a pooled specificity over follow-up inputs
+provide stable scenario-level resolution for a failure confined to a class? No:
+unaffected inputs dilute it, and a class the crawl never reaches contributes no
+negative inputs at all, so the figure is silent about that class
+(Proposition~\ref{prop:resolution}). The published labels are manually
+verified; the limit is the denominator and the input set, not the labels.
 
 The native execution, the seeded target and the second implementation are support
 evidence for these findings, not further headline findings

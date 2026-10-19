@@ -30,10 +30,10 @@ On Gitea the comparison is limited to false-proof behavior, because no
 vulnerability was present on the tested surface.
 
 \paragraph{Finding 3 (measurement)} The reported specificity of
-\ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is not
-conditioned on an explicit check that the reachability model equals the
-authorization state, and its input-level denominator cannot register a
-class-uniform failure.
+\ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is
+$\mathrm{TN}/(\mathrm{TN}+\mathrm{FP})$ over the follow-up inputs the crawl
+could enumerate, with manually verified labels, and that denominator cannot
+register a failure confined to a class the run did not exercise.
 
 Support evidence: reading the implementation confirmed the semantics and added
 the mechanism---the crawl model is frozen by a cache never invalidated, and a

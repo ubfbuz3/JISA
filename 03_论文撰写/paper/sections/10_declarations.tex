@@ -10,30 +10,37 @@
 
 \subsection*{Data availability}
 
-The raw records of the studies reported here are publicly available under the
-version-pinned snapshot \texttt{artifact-v1} of the companion repository
-\url{https://github.com/ubfbuz3/JISA} (re-anchored to the submission commit):
+The raw records of the studies reported here are publicly available in the
+companion repository \url{https://github.com/ubfbuz3/JISA}, version-pinned by the
+tag \texttt{access-resubmission-v1} at the commit that carries this revision.
+The earlier tag \texttt{artifact-v1} remains in place as the previously reviewed
+version; it does not contain the temporal or vulnerable/fixed records added here,
+and the two tags should not be conflated. The revision adds, under
+\texttt{experiments/}:
 (1)~the scenario/configuration study
-(\texttt{experiments/results/raw\_matrix.jsonl},
-\texttt{ablation\_direct*.json}, \texttt{alt\_matrix.jsonl});
+(\texttt{results/raw\_matrix.jsonl}, \texttt{ablation\_direct*.json},
+\texttt{alt\_matrix.jsonl});
 (2)~the real-system cell study across Gitea~\ResRsVersion{}, Gogs~\GgVersion{} and
-GitLab~\GlVersion{} (\texttt{experiments/real\_system\allowbreak/results/*.json});
-(3)~the execution of the published relations on the native engine
-(\texttt{experiments/native\_engine\allowbreak/results/*.json});
-(4)~the seeded positive control (\texttt{seeded.json}).
-The analysis pipeline (\texttt{analysis/*.py}: \texttt{compute\_all.py} and the
-ingest scripts) recomputes every number, table and figure in this paper from those
-records; the stratified ablation of Section~\ref{sec:stratum} adds no new
-experiment---it re-aggregates the same scenario/configuration records by whether
-the introspection surface returned a reading, and is recomputed, together with
-every macro it defines, by \texttt{ingest\_m2\_stratum.py};
+GitLab~\GlVersion{} (\texttt{real\_system\allowbreak/results/*.json});
+(3)~the temporal loop and its archived pilot, with the protocol and both
+amendments by digest (\texttt{real\_system\allowbreak/results\allowbreak/temporal/},
+\texttt{c\_protocol*.json}); (4)~the real vulnerable/fixed pair
+(\texttt{real\_system\allowbreak/results\allowbreak/cve\_pair.json});
+(5)~the execution of the published relations on the native engine
+(\texttt{native\_engine\allowbreak/results/*.json});
+and (6)~the seeded positive control (\texttt{seeded.json}).
+The analysis pipeline (\texttt{analysis/*.py}) recomputes every number, table and
+figure from those records, including the design audit
+(\texttt{ingest\_design.py}), the decision-scored coverage table
+(\texttt{ingest\_coverage.py}) and the truth table (\texttt{ingest\_truth.py});
 \texttt{check\_macro\_use.py} asserts that every macro cited in the manuscript
-has exactly one definition. Running \texttt{bash reproduce.sh} regenerates all
-outputs and the PDF, and
-\texttt{bash verify\_artifact.sh} asserts the SHA-256 integrity of every raw record
-and byte-reproducible output. The manuscript \LaTeX{} source ships in the same
-repository. A persistent archival copy with a citable DOI is deposited at
-Zenodo: \url{https://doi.org/10.5281/zenodo.22859942}.
+has exactly one definition. \texttt{bash reproduce.sh} regenerates all outputs
+and the PDF, and \texttt{bash verify\_artifact.sh} checks the SHA-256 of every raw
+record and of every byte-reproducible output. The manuscript \LaTeX{} source ships
+in the same repository. The DOI \url{https://doi.org/10.5281/zenodo.22859942}
+archives the previously reviewed version; a new Zenodo version covering this
+revision will be deposited at acceptance, and the git tag above is the
+version-pinned copy in the meantime.
 
 \subsection*{Competing interests}
 

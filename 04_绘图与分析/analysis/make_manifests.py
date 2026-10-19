@@ -25,12 +25,14 @@ PROV = ROOT / "04_绘图与分析" / "provenance"
 PROV.mkdir(parents=True, exist_ok=True)
 
 # --- (a) raw records consumed by the pipeline (input integrity) ----------
-# compute_all.py  (RES = experiments/results)
+# Explicit for the files that existed before; the temporal directory is globbed
+# so that a new run cannot enter the pipeline without entering the manifest.
 RAW_INPUTS = [
     "experiments/results/raw_matrix.jsonl",
     "experiments/results/ablation_direct.json",
     "experiments/results/ablation_direct_observe.json",
     "experiments/results/alt_matrix.jsonl",
+    "experiments/results/sanity_matrix.jsonl",
     # compute_all.py  (REAL = experiments/real_system/results)
     "experiments/real_system/results/real_system.json",
     # ingest_native_engine.py  (ENGINE_RESULTS = experiments/native_engine/results)
@@ -40,22 +42,28 @@ RAW_INPUTS = [
     # ingest_gogs.py / ingest_gitlab.py / ingest_seeded.py
     #   (RS = experiments/real_system/results)
     "experiments/real_system/results/gogs_real_system.json",
+    "experiments/real_system/results/gogs_api_surface.json",
     "experiments/real_system/results/m1_matched_gitea.json",
     "experiments/real_system/results/gitlab_real_system.json",
     "experiments/real_system/results/seeded.json",
+    # ingest_cve_pair.py
+    "experiments/real_system/results/cve_pair.json",
+    # protocol and its amendments: the digests the run records bind
+    "experiments/real_system/c_protocol.json",
+    "experiments/real_system/c_protocol_amendment_a1.json",
+    "experiments/real_system/c_protocol_amendment_a2.json",
+    # ingest_temporal.py  (the reported run and the archived pilot)
+    "experiments/real_system/results/temporal/temporal_gitea.json",
+    "experiments/real_system/results/temporal/temporal_gitlab.json",
+    "experiments/real_system/results/temporal/pilot_cascade/temporal_gitlab_pilot.json",
 ]
 
 # --- (b) byte-reproducible outputs the pipeline emits (output integrity) -
-# All number-bearing .tex tables + the machine-readable summary, plus the
-# two reportlab-invariant vector diagrams (see ARTIFACT.md §2).
-REPRO_OUTPUTS = [
-    "04_绘图与分析/results/numbers.tex",
-    "04_绘图与分析/results/native_engine_numbers.tex",
-    "04_绘图与分析/results/native_engine_table.tex",
-    "04_绘图与分析/results/gogs_numbers.tex",
-    "04_绘图与分析/results/gogs_cross_table.tex",
-    "04_绘图与分析/results/gitlab_numbers.tex",
-    "04_绘图与分析/results/seeded_table.tex",
+# Every .tex under results/ is generated, so it is globbed rather than listed:
+# a hand-maintained list is exactly how the earlier manifest went stale. Each
+# file is checked for the generator header before it is admitted.
+REPRO_OUTPUTS = []   # filled in main() from the glob below
+EXTRA_OUTPUTS = [
     "04_绘图与分析/results/metrics.json",
     "04_绘图与分析/figures/fig1_protocol.pdf",
     "04_绘图与分析/figures/fig7_boundaries.pdf",
@@ -89,9 +97,21 @@ def build(group: str, rel_paths) -> dict:
     return {"generated_by": "make_manifests.py", "files": files}
 
 
+def _generated_outputs():
+    res = ROOT / "04_绘图与分析" / "results"
+    files = []
+    for p in sorted(res.glob("*.tex")):
+        head = p.read_text(encoding="utf-8", errors="replace").splitlines()[:1]
+        if not head or not ("生成" in head[0] or "来源" in head[0]):
+            sys.exit(f"[make_manifests] {p.name} has no generator header; "
+                     "refusing to certify an unclassified file")
+        files.append(str(p.relative_to(ROOT)))
+    return files + EXTRA_OUTPUTS
+
+
 def main() -> None:
     raw = build("raw", RAW_INPUTS)
-    out = build("output", REPRO_OUTPUTS)
+    out = build("output", _generated_outputs())
     (PROV / "RAW_RECORDS_SHA256.json").write_text(
         json.dumps(raw, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (PROV / "OUTPUTS_SHA256.json").write_text(

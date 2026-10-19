@@ -1,22 +1,22 @@
 ﻿id,concern,verified_current_status,next_action,fully_closed,audience
-R1.1,R1.1 新颖性,待系统重写,结构化相关工作比较，明确已有认识和具体新增证据,no,internal
-R1.2,R1.2 完整真值定义,E/Y 分开（A 包）＋真值表 Table 12 给出 E×Y×M×O 全部组合下的真值与各自落格数,—,yes,internal
-R1.3,R1.3 状态转移,Gitea+GitLab 各 8 类转移完成，逐事件 hv/M0/M1 摘要可核验；A2 记录 GitLab 连带删除语义,补请求→裁决期间并发变更的处置规则（现只在讨论中说明静止窗口）,no,internal
-R1.4,R1.4 oracle admissibility,C 协议结果前冻结；A1 改主视点 4/4 闸门、A2 观察前落盘；渠道可读性已量化,补结果揭晓前可执行的独立性判据（现有闸门仍依赖同源实现）,no,internal
-R1.5,R1.5 命题2,两条关系写成 Eq.(1)(2)，在本域上化为 A=y∧¬m（576 条构造记录 + 712 格零不符）；真值表逐行比对 D=y∧¬o；三处实现差异（模型是存量非查询／isError 是状态码／q 是响应等同）已写明,—,yes,internal
-R1.6,R1.6 枚举设计,已补齐：Table 1 全因子表（7 场景×8 配置×2 关系×3 例外策略×2 抓取读数，逐级记录数/交叉项）；Table 2 匹配对归因（唯一开关配对，给出一/二侧不一致数与单向性）；Table 18 配置×场景普查（每格 52+44，8 配置全覆盖）；Table 5 把 36/18 代表格与 312/264 全分区加性对账（+270/+144/+108）。§III-A 新增识别层与「设计不能识别什么」,—,yes,internal
-R1.7,R1.7 竞争基线,未完成,D，多账户及常规差分，同预算与成本,no,internal
-R1.8,R1.8 渠道混淆,表 VII 已改为逐渠道四格混淆矩阵（Gitea/GitLab 双栏），oracle 错误与 stale 模型分离,—,yes,internal
-R1.9,R1.9 独立缺陷,E有1个真实配对，仍为部分,多种独立故障、实际MR结果与逐缺陷指标,no,internal
-R1.10,R1.10 live对照控制,双产品 8 轮同权限 recrawl、观测全 GET、event_seq/hv/M0/M1 摘要与版本一致 8/8,—,yes,internal
-R1.11,R1.11 specificity分母,已给参数化敏感性：失败类占输入比 w 时报出值在 1 与 1-w 之间；原始分母不可得已明写,—,yes,internal
-R1.12,R1.12 异质权重,异质权重已给边界式 $1-w$ 与稀释条件（§VI-C）,如需更强可补按场景等权并列数值（现有 96 条切片每场景仅 1–2 例，不宜出数）,yes,internal
-R1.13,R1.13 弃权与成本,已补齐：Table 4 按决策重打分（coverage/decided 分母选择性风险/FP/FN/弃权数/请求数），v3 覆盖 60.42%（348/576）而选择性风险 0.86% 明确写成「该覆盖下的性质」；228 次弃权按原因拆分 156 结构性（108 落在真违规）+72 可读但被覆盖授权；111 条违规未证；direct_observe 全覆盖对照多检出 3 条；成本 4833 次请求（中位 8）、探针 104 次 GET、并说明不复报墙钟；明确不以 risk 单独排名,—,yes,internal
-R1.14,R1.14 复现,native分段、配对数据和re-ingest已加入，部分,干净环境、全部生成入口、失败/未触发/未执行区分及异常日志,no,internal
-R1.15,R1.15 证据到主张,已加证据—主张表 tab:evidence-claim；结论逐项对应源码/构造/真实系统三类证据,—,yes,internal
-R2.1,R2.1 新颖性与recrawl,Gitea：13/13 陈旧漏列被同权限 recrawl 修好，0 残留（本拓扑计数）,跨厂商复核；写清 crawl 源与 deploy key 的边界，不作 recrawl 完备性声明,no,internal
-R2.2,R2.2 标题与范围,标题、running head、摘要首句均限定两条 reachability-gated 关系,—,yes,internal
-R2.3,R2.3 命题2,"定义性与经验性已分开：A=D 是代数（共享因子 y），命题内容是 m=o 这一经验前提；证伪条件修为『(M,R) 之外的可观测量』，并说明陈旧模型只破坏前提 (ii)",—,yes,internal
-R2.4,R2.4 真实检测面,真实 vuln/fixed 配对已入文（E/Y 闸门），并明确它不是检测率,—,yes,internal
-R2.5,R2.5 84.62,84.62% 全文降为示例，摘要不含该数，且不再作 99.81% 的数值佐证,—,yes,internal
-R2.6,R2.6 构造设计与比例,E 来源已改进；比例对设计的依赖已有讨论,未按场景等权与原权重并列给出 1.00/0.44,no,internal
+R1.1,R1.1 新颖性,CLOSED_IN_TEXT,相关工作改为三条可证伪的具体增量（谓词/子集/分母），删去 orthogonal 表述并声明不比较检测率；未做对照表,yes,internal
+R1.2,R1.2 完整真值定义,PARTIAL,真值表补 H=A∧¬o 定义与弃权合同，direct/v3 统一；E=unknown 的完整合同仍分散在正文,no,internal
+R1.3,R1.3 状态转移,CLOSED_IN_TEXT,§V 作用域补“请求—判定窗口静止”条款：区间内发生新变更则结论不适用须重测,yes,internal
+R1.4,R1.4 oracle admissibility,PARTIAL,A2 时间链改为按摘要绑定并披露 written_at 矛盾；admissibility 仍未给出可照做的判定程序,no,internal
+R1.5,R1.5 命题2,CLOSED_IN_TEXT,等价式改为 A=D ⇔ y=0 或 m=o；删去外延相等，改证 H⇒D；3 条差异归为 S5 写场景漏报,yes,internal
+R1.6,R1.6 枚举设计,CLOSED_IN_TEXT,blind/aware 命名复原；对账改以 S3–S7 原网格为起点并逐记录校验；每格 12/6 条；listed+unreadable 改称未测,yes,internal
+R1.7,R1.7 竞争基线,OPEN,未执行多账号/差分基线；仅在 related work 与 threats 说明未做且不主张检测优势,no,internal
+R1.8,R1.8 渠道混淆,PARTIAL,Gitea/GitLab 渠道表 + 单渠道互斥分组已写明；Gogs 缺逐渠道四格表，已明确声明,no,internal
+R1.9,R1.9 独立缺陷,PARTIAL,真实配对改为“只检验闸门、未跑 MR”；多缺陷 recall 明确未做,no,internal
+R1.10,R1.10 live对照控制,CLOSED_IN_TEXT,A2 先后改由 run 记录摘要绑定；written_at 矛盾单列说明，不改原件,yes,internal
+R1.11,R1.11 specificity分母,CLOSED_IN_TEXT,specificity 改回 TN/(TN+FP) 并承认人工核验；删 84.62 与“与爬虫一致”的说法,yes,internal
+R1.12,R1.12 异质权重,PARTIAL,分母写为 N⁻=TN+FP，给出 ΣFP_i/ΣN_i⁻ 形式；权重内生性仅作说明,no,internal
+R1.13,R1.13 弃权与成本,CLOSED_IN_TEXT,direct 与 v3 统一为“不可读即弃权”，coverage 54.17%；forced-negative 另列并命名,yes,internal
+R1.14,R1.14 复现,PARTIAL,reproduce/verify 补 3 个 ingest，清单扩到 21 输入/26 输出并重算；未在干净副本跑 repro,no,internal
+R1.15,R1.15 证据到主张,CLOSED_IN_TEXT,删除“as published … after the crawl”的构造实验误读，改按两类供给方式表述,yes,internal
+R2.1,R2.1 新颖性与recrawl,CLOSED_IN_TEXT,29/29 recrawl 修复进入解释；删“more crawling 无效”的无条件说法,yes,internal
+R2.2,R2.2 标题与范围,CLOSED_IN_TEXT,摘要去除构造实验的 after-crawl 误读,yes,internal
+R2.3,R2.3 命题2,CLOSED_IN_TEXT,同 R1.5,yes,internal
+R2.4,R2.4 真实检测面,PARTIAL,真实 TP 归属明确为 E/Y 闸门；MR 在真实配对上的 recall 未评价,no,internal
+R2.5,R2.5 84.62,CLOSED_IN_TEXT,84.62 已从正文移除，不再作数值背书,yes,internal
+R2.6,R2.6 构造设计与比例,PARTIAL,构造研究改称可见性而非时间因子；每格权重影响已写,no,internal

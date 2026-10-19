@@ -1,7 +1,7 @@
 % 由 ingest_coverage.py 生成，勿手改
 \begin{table*}[t]
 \centering
-\caption{The same \CvgN{} records scored on the decision rather than on the alarm. Coverage is the share of records on which a method asserts either a violation or its absence; the abstention column gives the count and, in parentheses, its rate, split by whether the record held a true violation. \emph{False proofs} and \emph{misses} are the two error counts among decided records, and \emph{risk} is their sum over that denominator---comparable across methods only at equal coverage, which these methods do not have. Panel (b) splits v3's abstentions by reason: only the first row is the availability gate the method is named for. \texttt{direct\_only} and \texttt{direct\_observe} are two-valued and have no abstention channel, so their coverage is $1$ by construction and \CvgForced{} of their decisions are forced on an unreadable surface.}
+\caption{The same \CvgN{} records scored on the decision rather than on the alarm. Coverage is the share of records on which a method asserts either a violation or its absence; the abstention column gives the count and, in parentheses, its rate, split by whether the record held a true violation. \emph{False proofs} and \emph{misses} are the two error counts among decided records, and \emph{risk} is their sum over that denominator---comparable across methods only at equal coverage, which these methods do not have. A passed record is one on which the method did not fire, not a certificate of safety. \texttt{direct\_only} and \texttt{direct\_observe} abstain when the probe is unreadable, as the direct adjudicator does, so their coverage is \CvgObsCoveragePct{}\%; the last row is a clearly labelled binary reference that forces a negative verdict on those cells, and its misses are the price of that forcing, not a property of the method. Panel (b) splits v3's abstentions by reason: only the first row is the availability gate the method is named for.}
 \label{tab:coverage}
 \small
 \setlength{\tabcolsep}{4pt}
@@ -14,8 +14,9 @@ v1 (existence filter) & 86.98 & 75 (13.02) & 15 & 60 & 60 & 3 & 12.57 \\
 v2 (existence + coverage) & 89.58 & 60 (10.42) & 0 & 60 & 60 & 3 & 12.21 \\
 v3 (state-calibrated) & 60.42 & 228 (39.58) & 108 & 120 & 0 & 3 & 0.86 \\
 \texttt{degrade\_all} & 42.19 & 333 (57.81) & 213 & 120 & 0 & 3 & 1.23 \\
-\texttt{direct\_only} & 100.00 & 0 (0.00) & 0 & 0 & 108 & 108 & 37.50 \\
-\texttt{direct\_observe} & 100.00 & 0 (0.00) & 0 & 0 & 0 & 108 & 18.75 \\
+\texttt{direct\_only} & 54.17 & 264 (45.83) & 108 & 156 & 0 & 0 & 0.00 \\
+\texttt{direct\_observe} & 54.17 & 264 (45.83) & 108 & 156 & 0 & 0 & 0.00 \\
+\quad\texttt{direct\_observe}, forced negative & 100.00 & 0 (0.00) & 0 & 0 & 0 & 108 & 18.75 \\
 \midrule
 \multicolumn{8}{@{}l}{(b) v3's abstentions by reason}\\[1pt]
 reason & \multicolumn{4}{@{}l}{abstentions (on violation / on normal)} & \multicolumn{3}{l}{} \\

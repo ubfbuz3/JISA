@@ -210,6 +210,12 @@ do_repro() {
   "$PYBIN" ingest_gogs.py >/dev/null 2>&1
   "$PYBIN" ingest_gitlab.py >/dev/null 2>&1
   "$PYBIN" ingest_seeded.py >/dev/null 2>&1
+  "$PYBIN" ingest_cve_pair.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_cve_pair.py"; popd >/dev/null; return 1; }
+  "$PYBIN" ingest_temporal.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_temporal.py"; popd >/dev/null; return 1; }
+  "$PYBIN" ingest_truth.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_truth.py"; popd >/dev/null; return 1; }
+  "$PYBIN" ingest_m2_stratum.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_m2_stratum.py"; popd >/dev/null; return 1; }
+  "$PYBIN" ingest_design.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_design.py"; popd >/dev/null; return 1; }
+  "$PYBIN" ingest_coverage.py >/dev/null 2>&1 || { echo "  [FAIL] ingest_coverage.py"; popd >/dev/null; return 1; }
   "$PYBIN" make_diagrams.py >/dev/null 2>&1 || { echo "  [WARN] make_diagrams.py (figures)"; }
   popd >/dev/null
 

@@ -25,9 +25,11 @@ R1.13 · 弃权、覆盖率、选择性风险与运行成本
         - 自省面不可读                      -> 结构性弃权
         - 自省面可读，且显示存在可覆盖授权   -> 把本会是假确证的告警降级
       后一种不是"没得读"，恰恰是精度 1.00 的另一半来源，必须单列。
-    * direct_only / direct_observe 是二值判据，没有弃权通道；探针不可读时它们
-      返回"不告警"。故 coverage = 1，其中 264 条是**被迫裁决**——这不是优点，
-      它让这两个方法在不可读层白拿 156 个 TN，也白丢 108 个违规。
+    * direct_only / direct_observe 与 v3 共用同一条"不可读则弃权"合同：
+      探针返回 unavailable 时它们**不裁决**（原直接裁决代码即如此，真值表也
+      把该层的 D 记为 undefined）。故 coverage = 312/576。
+      若需要二值参照，另列 direct_observe（forced negative）：不可读时判"无违规"，
+      coverage 才是 1，其 108 个漏报是**被迫判负**的产物，不能当作该方法的能力。
     * 运行时间：构造研究是离线重放同一条记录交换，墙钟时间只反映重放循环，
       不作为系统成本上报。真正端到端跑过的是时序闭环，其分段耗时从
       temporal_*.json 的 t_freeze/t_mutation/t_recrawl/t_probe 直接算出。
@@ -94,7 +96,8 @@ def main() -> None:
         return probe.get(f'{r["config"]["label"]}|{r["scenario"]}', {}).get(r["action"]["op"], "unavailable")
 
     # ---------- 逐方法计分 ----------
-    METHODS = ("raw", "v1", "v2", "v3", "degrade_all", "direct_only", "direct_observe")
+    METHODS = ("raw", "v1", "v2", "v3", "degrade_all", "direct_only",
+               "direct_observe", "obs_forced")
     tally = {m: Counter() for m in METHODS}
 
     for r in rows:
@@ -109,10 +112,17 @@ def main() -> None:
                 tally[m]["FN" if bola else "TN"] += 1
         s = state(r)
         ok = bool(r["truth"]["app_allowed"])
-        for m, alarm in (("direct_only", s == "none"), ("direct_observe", s == "none" and ok)):
-            tally[m]["TP" if (bola and alarm) else "FN" if bola else "FP" if alarm else "TN"] += 1
+        alarm = s == "none" and ok
         if s == "unavailable":
+            # 与直接裁决代码一致：不可读 -> indeterminate，不强行判负
+            for m in ("direct_only", "direct_observe"):
+                tally[m]["abstain_bola" if bola else "abstain_normal"] += 1
             tally["direct_only"]["forced"] += 1
+        else:
+            for m in ("direct_only", "direct_observe"):
+                tally[m]["TP" if (bola and alarm) else "FN" if bola else "FP" if alarm else "TN"] += 1
+        # 明确命名的二值参照：不可读时判"无违规"
+        tally["obs_forced"]["TP" if (bola and alarm) else "FN" if bola else "FP" if alarm else "TN"] += 1
 
     summary = {}
     for m in METHODS:
@@ -221,9 +231,18 @@ def main() -> None:
          "CvgVthreeCoveragePct": f"{100 * summary['v3']['coverage']:.2f}",
          "CvgVthreeRiskPct": f"{100 * summary['v3']['risk']:.2f}",
          "CvgObsRiskPct": f"{100 * summary['direct_observe']['risk']:.2f}",
+         "CvgForcedObsRisk": f2(summary["obs_forced"]["risk"]),
          "CvgDegradeRiskPct": f"{100 * summary['degrade_all']['risk']:.2f}",
          "CvgDegradeCoveragePct": f"{100 * summary['degrade_all']['coverage']:.2f}",
          "CvgObsDecided": summary["direct_observe"]["decided"],
+         "CvgObsCoveragePct": f"{100 * summary['direct_observe']['coverage']:.2f}",
+         "CvgObsAbstain": summary["direct_observe"]["abstained"],
+         "CvgObsAbstBola": summary["direct_observe"]["abst_bola"],
+         "CvgObsAbstNormal": summary["direct_observe"]["abst_normal"],
+         "CvgForcedObsTP": summary["obs_forced"]["TP"],
+         "CvgForcedObsFN": summary["obs_forced"]["FN"],
+         "CvgForcedObsFP": summary["obs_forced"]["FP"],
+         "CvgForcedObsRiskPct": f"{100 * summary['obs_forced']['risk']:.2f}",
          "CvgVthreeFNunproven": summary["v3"]["FN"] + summary["v3"]["abst_bola"],
          "CvgDetectGap": summary["direct_observe"]["TP"] - summary["v3"]["TP"],
          "CvgVthreeCoverage": f2(summary["v3"]["coverage"]),
@@ -263,6 +282,7 @@ def main() -> None:
         "degrade_all": r"\texttt{degrade\_all}",
         "direct_only": r"\texttt{direct\_only}",
         "direct_observe": r"\texttt{direct\_observe}",
+        "obs_forced": r"\quad\texttt{direct\_observe}, forced negative",
     }
     def pc(x: float) -> str:
         return f"{100 * x:.2f}"
@@ -278,11 +298,14 @@ def main() -> None:
         r"\emph{False proofs} and \emph{misses} are the two error counts among decided "
         r"records, and \emph{risk} is their sum over that denominator---comparable "
         r"across methods only at equal coverage, which these methods do not have. "
-        r"Panel (b) splits v3's abstentions by reason: only the first row is the "
-        r"availability gate the method is named for. \texttt{direct\_only} and "
-        r"\texttt{direct\_observe} are two-valued and have no abstention channel, so "
-        r"their coverage is $1$ by construction and \CvgForced{} of their decisions are "
-        r"forced on an unreadable surface.}"
+        r"A passed record is one on which the method did not fire, not a certificate "
+        r"of safety. \texttt{direct\_only} and \texttt{direct\_observe} abstain when "
+        r"the probe is unreadable, as the direct adjudicator does, so their coverage is "
+        r"\CvgObsCoveragePct{}\%; the last row is a clearly labelled binary reference "
+        r"that forces a negative verdict on those cells, and its misses are the price "
+        r"of that forcing, not a property of the method. Panel (b) splits v3's "
+        r"abstentions by reason: only the first row is the availability gate the method "
+        r"is named for.}"
         ,
         r"\label{tab:coverage}",
         r"\small",

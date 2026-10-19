@@ -262,9 +262,16 @@ known cells on Gitea, and on GitLab \TmpGCalGateChecks{} gated cells plus two
 recorded diagnostics for the secondary vantage (amendment A1).
 
 A channel-by-channel view makes the mechanism explicit
-(Table~\ref{tab:oracle-channel}). Both products answer every direct-collaborator
-and group cell correctly, and Gitea also answers its public and site-administrator
-cells correctly. GitLab errs only by omission, and only on the two channels that
+(Table~\ref{tab:oracle-channel}), for Gitea and GitLab. Each cell is assigned to
+exactly one channel, and the rows sum to the cell count, so no cell is counted
+twice; the grouping is by the strongest channel that grants it, not a
+multi-label count. Gogs is absent from this table and we do not claim a
+per-channel account for it: its API exposes no per-object membership route that
+separates direct from inherited grants, so the four-channel decomposition could
+not be built there, and Gogs enters only the system-level comparison of
+Table~\ref{tab:gogs-cross}. Both tabulated products answer every
+direct-collaborator and group cell correctly, and Gitea also answers its public
+and site-administrator cells correctly. GitLab errs only by omission, and only on the two channels that
 are not membership: it answers \emph{deny} on \TmpGOracleDisagreePublic{} public
 cells that a non-member may read and on \TmpGOracleDisagreeAdmin{}
 site-administrator cells. Neither product returns a single false allow. A
@@ -278,10 +285,16 @@ Section~\ref{sec:gogs}, now located in a named channel rather than attributed to
 
 Two properties of the run are recorded because they are what an external check can
 verify. The protocol was frozen before the first Gitea transition, and its digest
-is carried in both run records; the two amendments were written, with timestamps
-and the base-protocol digest, before the first GitLab transition, and the pilot
-that motivated the second is archived with its cells excluded from every
-denominator. Inside a run, every cell carries its event sequence number, the
+is carried in both run records. For the amendments we establish the ordering by
+content binding rather than by a self-reported clock: the archived pilot records
+only A1, and the reported GitLab run records the digests of both A1 and A2, so
+A2's content was in place when that run executed. The pilot is archived with its
+cells excluded from every denominator. One recorded field does not support the
+stronger reading and we do not use it: A2's \texttt{written\_at} says 02:32,
+later than the run's last probe at 02:26:14, so the file's own timestamp cannot
+establish that it was written before the first transition. We retain the field as
+recorded and rely on the digest carried by the run; the discrepancy is documented
+with the artifact rather than corrected in place. Inside a run, every cell carries its event sequence number, the
 harness version before and after the transition, the $M_0$ and $M_1$ digests and
 wall-clock timestamps, so the ordering---crawl, freeze, mutate, recrawl, oracle,
 probe---can be re-checked line by line rather than trusted. Every observation in
@@ -292,10 +305,17 @@ from the scored set, a mutation outside 2xx excludes its whole transition, and a
 unreadable oracle is recorded as \emph{unknown} with the cell still scored on $E$
 and $Y$.
 
-Three scope limits are part of the result. First, \TmpBothStillMiss{} residual is
+Three scope limits are part of the result. First, the verdict is anchored to the
+request outcome, and the transitions are serialised: no mutation is issued
+between a cell's request and its probe, so the window between them is static by
+construction. A deployment in which a grant or revoke lands between the request
+and the adjudication is outside what these cells measure; for such a case the
+cell's conclusion does not apply and the observation has to be repeated, and we
+do not claim that the harness would detect the interleaving. Second,
+\TmpBothStillMiss{} residual is
 a count on these surfaces, not a completeness claim: the crawl sources
 themselves define what can be seen, deploy keys are outside the ledger, and we
-did not construct a channel that the recrawl is known to miss. Second, $hv$ is a
+did not construct a channel that the recrawl is known to miss. Third, $hv$ is a
 harness-maintained logical version, not an atomic server snapshot; the harness is
 single-threaded and no concurrent writer ran, which is what makes the still
 window meaningful. Third, the eight transitions are a designed set, not a
@@ -447,13 +467,20 @@ correct path is refused, a third user is refused, anonymous is refused, an
 absent identifier is refused---and alice's restore returns the body to the
 original in \CveRestored{} of \CveVersions{} instances.
 
-What this establishes is narrow, and worth stating plainly. It shows that the
-$E/Y$ gate can issue a correct violation claim and stops issuing it once the
-vendor fixes the defect, so the gate is not merely a false-alarm suppressor. It
+What this establishes is narrow, and worth stating plainly. The relation is not
+executed on this pair: the alarm recorded here is the $E/Y$ gate's own verdict,
+so the result measures the gate, not the relations' recall on a real defect. It
+shows that the gate can issue a correct violation claim and stops issuing it
+once the vendor fixes the defect, so the gate is not merely a false-alarm
+suppressor. It
 does not show that we can \emph{find} such defects: the identifier is given, the
 defect is public and already fixed, and the exercise is a positive control for
 the gate, not a discovery. Nor is it an evaluation on a population---one defect,
-one fault pattern (object versus path ownership), one product line.
+one fault pattern (object versus path ownership), one product line---and a
+multi-defect recall study, with independent read, write, inheritance and
+privilege-escalation faults and their negative controls, is not attempted here.
+The claim this pair supports is about the gate's correctness on a real
+vulnerable/fixed pair, not about detection coverage.
 
 \begin{table}[t]
 \centering

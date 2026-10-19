@@ -13,9 +13,11 @@ further claim and are collected as support evidence in Section~\ref{sec:support}
 \label{sec:boundary1}
 
 \emph{Taken as published---raw alarms, or alarms filtered by bookkeeping
-exceptions---the adjudication reports a legitimate access granted out of band
-after the crawl as an already-established violation, in the direction forced by
-the two-valued predicate encoding.} On the constructed system, rate
+exceptions---the adjudication reports a legitimate access whose grant the crawl
+record does not contain as an already-established violation, in the direction
+forced by the two-valued predicate encoding.} The two studies supply the grant
+in different ways: the constructed study seeds it outside the framework's
+record, and the temporal study makes it between the crawl and the request. On the constructed system, rate
 \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{}
 alarms) against \ResObsFwVtwoFalseProof{} for the same share created in band; on
 Gitea, \ResRsMrBookkeepingFp{} false proofs on \ResRsAuthorizedCells{} authorized
@@ -77,24 +79,44 @@ $(O,R)$ lacks. It does not say that any particular implementation satisfies (i)
 or (ii), and it does not compare two programs---it compares two functions on a
 domain.
 
-\begin{proposition}[the two relations fall in the lemma's domain]
+\begin{proposition}[what the relation can add once the oracle is admitted]
 \label{lem:oracle-suff}
-For the two relations examined here, premise (i) holds by source inspection: their
-predicates read the crawl-time reachability model and the response, and nothing
-else (Section~\ref{sec:impl}). Premise (ii) holds on the cells tested, where the
-oracle is readable and sound: $M$ and $O$ agree on the authorization proposition,
-so $M$ adds no distinction. Consequently the verdict of each relation is
-extensionally the direct adjudicator $D$ on those cells, and the equality is
-checked, not assumed, by the paired ablation: the two methods disagree on
-\ResAbDisagreementN{} of \ResAbNBola{} true-violation records
-(Section~\ref{sec:synthetic-ablation}).
+For the two relations examined here, premise~(i) of
+Lemma~\ref{lem:absorption} holds by source inspection: their predicates read the
+crawl-time reachability model and the response, and nothing else
+(Section~\ref{sec:impl}). Write $y$ for the response bit, $m$ for the model bit
+and $o$ for the oracle bit; the shipped alarm is $A=y\wedge\neg m$, the direct
+adjudicator is $D=y\wedge\neg o$, and the promoted verdict of the
+state-calibrated method is $H=A\wedge\neg o$, which abstains where $o$ is
+undefined. On the domain where $o$ is defined:
+\begin{enumerate}
+\item[(a)] $A=D$ if and only if $y=0$ or $m=o$; the two agree on every record
+whose request fails, and part exactly on the rows with $y=1$ and $m\ne o$;
+\item[(b)] $H\Rightarrow D$, because $A\Rightarrow y$ and the two share
+$\neg o$. The metamorphic step therefore cannot confirm a record that the
+direct consumer of $(y,o)$ does not confirm; it can only abstain or repeat.
+\end{enumerate}
 \end{proposition}
 
-\paragraph{The predicates, explicitly}
-Write $y$ for the response bit, $y=1$ when the ordinary request returns no
-error; $m$ for the model bit, $m=1$ when the crawl-time reachability model lists
-the object for the subject; and $o$ for the oracle bit, $o=1$ when the
-introspection surface answers \emph{allow}. The two shipped predicates then read
+Part~(b) is algebra and needs no premise about the model. Part~(a) is algebra
+too, but it is informative only where $m=o$, and that equality is a measured
+condition rather than a corollary of oracle soundness: the oracle being sound
+does not make the crawl-time model sound. Row~7 of Table~\ref{tab:truth} holds
+\TvtModelWrong{} cells with
+$y=1$, $m=0$ and $o=1$---the oracle answers correctly, the model is stale, and
+the relation raises a false proof that $D$ does not. The tempting step from
+``the oracle is readable and correct'' to ``$M$ and $O$ agree'' is therefore
+invalid, and we do not take it; premise~(ii) of the lemma fails exactly on those
+cells, which is why we do not present the relation as informationally redundant
+in general, only as non-additive in confirmation once a definite oracle exists.
+What the proposition establishes is narrower
+and sufficient for the argument: once a definite oracle is available, promotion
+through the relation is a \emph{subset} of direct adjudication, so the relation
+cannot add confirmations. Whether $m=o$ holds is a measured property of each
+system, reported in Table~\ref{tab:truth} and in
+Section~\ref{sec:stratum}, not a corollary of oracle correctness.
+
+The predicates, explicitly. The two shipped predicates read
 \begin{align}
 A_{002} &= \neg\mathrm{sup}(B,A)\;\wedge\;\neg m \nonumber\\
         &\quad\wedge\;\neg\mathrm{err}(o_1)\;\wedge\;q(o_1,o_2),\label{eq:a002}\\
@@ -108,13 +130,17 @@ clause was computed, so both collapse to the single map
 A \;=\; y \;\wedge\; \neg m .
 \label{eq:aflat}
 \end{equation}
-The direct adjudicator is $D=y\wedge\neg o$, so $A=D$ exactly when $m=o$: the two
-expressions share the factor $y$, and that step is algebra.
 Equations~\eqref{eq:a002}--\eqref{eq:aflat} are not a paraphrase of the code;
 they reproduce the recorded alarm of all \TvtRecords{} constructed records and
 all \TvtCells{} temporal cells with no disagreement
-(\texttt{analysis/ingest\_truth.py}). What the proposition adds to the algebra is
-the empirical premise that $m=o$ wherever the oracle is readable and sound.
+(\texttt{analysis/ingest\_truth.py}), and the same script checks
+part~(a) cell by cell. The three records on which the state-calibrated method
+and \texttt{direct\_observe} still differ are not a counterexample to~(b): all
+three are the same S5 write cell under the three exception settings, where the
+model lists the object for reading, the alarm stays silent, and the oracle
+reports that the write is denied. There the relation misses a violation the
+direct adjudicator confirms---a loss, not an gain, and one the reachability
+gate cannot express because it collapses read and write reachability.
 
 \input{truth_table.tex}
 
@@ -147,7 +173,7 @@ experiment can adjudicate, which is the regime the proposition's antecedent
 excludes rather than a gap in it. And the model term is not free. Recomputed over
 the two model semantics of the constructed study, the constant variant, which
 alarms on every successful access, finds \TvtBlindTP{} violations at
-\TvtBlindFP{} false proofs; the crawl-time term finds \TvtConTP{} at
+\TvtBlindFP{} false proofs; the current-listing variant finds \TvtConTP{} at
 \TvtConFP{}---\TvtModelSaveFP{} fewer false proofs for \TvtModelCostTP{} fewer
 detections, over \TvtConAware{} records each. A relation with a reachability
 gate is therefore neither the alarm-free ideal of Finding~2's antecedent nor a
@@ -231,33 +257,34 @@ direct-consumer construction $D$ of Proposition~\ref{lem:oracle-suff}, so the ti
 is the empirical face of the necessary condition, a statement about the
 definitions rather than a coincidental measurement.
 
-\subsection{Finding 3 (RQ3): the reported specificity is not conditioned on the correspondence it assumes}
+\subsection{Finding 3 (RQ3): a pooled specificity cannot register a class it did not exercise}
 
-\emph{The reported \ResLitReportedSpecPct{}\% is a statement about a corpus of
-generated inputs; it is not conditioned on an explicit check that the
-reachability model coincides with the true authorization state, and its
-input-level denominator cannot, on its own, provide stable scenario-level
-resolution for a scenario-uniform failure.} The omission:
-adjudication is a function of the
-reachability model, so where model and true state diverge---the out-of-band case
-of Finding~1---the figure measures agreement with the tool's own crawler; the
-authors concede the mapping is ``not always
-available''~\cite{Chaleshtari2022Metamorphic}, but the number is reported
-without the condition. The denominator: a failure uniform across a scenario
-class contributes only as many false positives as that class emits inputs, and
-is diluted by the rest of the run (Proposition~\ref{prop:resolution}: in our
-approximation the configuration that misreports a whole class of legitimate
-access still scores \ResSpecRowOneSpecPct{}\%; Corollary~\ref{cor:resolution}:
-no fixed threshold can guarantee that such a class forces the metric below it).
-Nor does the report fix the weights: if a failing class supplies a share $w$ of the
-follow-up inputs, the figure moves only between $1$ and $1-w$, so telling a
-small-share class failure apart from no failure at all requires an estimate of $w$
-that the published number does not carry.
-We are not saying
-the figure is false or the false positives misdiagnosed; the claim is that such a
-metric does not itself validate the reachability-to-authorization correspondence
-on which its interpretation depends, and that a class-uniform failure can be
-held above any fixed threshold by unaffected inputs.
+\emph{The reported \ResLitReportedSpecPct{}\% is a specificity over follow-up
+inputs, $\mathrm{TN}/(\mathrm{TN}+\mathrm{FP})$, not a false-alarm share of all
+generated inputs; in that evaluation the MT failures were manually verified, so
+the labels are not the crawler's own. Its denominator cannot, on its own,
+provide scenario-level resolution for a failure confined to a class, and the
+inputs it counts are the ones the crawl could enumerate.} Both halves are
+consistent with the reported value. The denominator: with
+$\mathrm{FN}=0$, the figure is $1-\mathrm{FP}/(F-\mathrm{TP})$, so a failure
+uniform across a class contributes only as many false positives as that class
+emits negative inputs and is diluted by the rest of the run
+(Proposition~\ref{prop:resolution}; Corollary~\ref{cor:resolution}: no fixed
+threshold can guarantee that such a class forces the metric below it). The
+coverage: if a class of legitimate access is never reached by the crawl, it
+contributes no negative inputs, so the ratio is silent about it even though the
+adjudication that consumes the crawl is not. Nor does the report fix the
+weights: if a failing class supplies a share $w$ of the negative inputs, the
+figure moves only between $1$ and $1-w$, so telling a small-share failure apart
+from no failure requires an estimate of $w$ that the published number does not
+carry.
+
+We are not saying the figure is false, that its labels are wrong, or that the
+false positives were misdiagnosed: the manual verification is exactly what makes
+the labels credible. The claim is narrower---that a pooled figure computed on
+the crawled input set does not by itself certify that a class outside that set
+was exercised, and that a class-uniform failure can be held above any fixed
+threshold by unaffected inputs.
 
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}

@@ -1,22 +1,22 @@
 ﻿id,concern,severity,proposed_action,work_status,required_input_or_work,expected_output,blocks_finalization,audience
-R1.1,R1.1 新颖性,major,接受核心意见。用结构对照说明已知问题与具体机制证据，弱化一般性 claim，修正 BACFuzz 分类,PARTIAL,文献核对；不必为此新增系统,引言、相关工作与对照表,yes,internal/editor only
-R1.2,R1.2 假证明定义,major,接受。E 与 Y 分开；A 为 raw alarm，H 为 promotion，H⇒A；给全真值组合与独立依据,CLOSED_IN_TEXT,需重建/验证真实系统真值,方法主文＋SI 真值表,yes,internal/editor only
-R1.3,R1.3 状态转移,major,接受。明确 grant/revoke、继承、public、role 和并发语义，固定 enforcement 版本,PARTIAL,是,方法＋时间线和日志,yes,internal/editor only
-R1.4,R1.4 admissibility,major,接受。预先冻结候选、渠道、缺陷类与共享依赖审查；不从 outcome 反选好 oracle,PARTIAL,是，独立校准/挑战,方法＋校准协议,yes,internal/editor only
-R1.5,R1.5 命题2,major,接受且重写。充分性与实际实现等价分开，保留3条差异，写两个 MR 的显式谓词,CLOSED_IN_TEXT,已有差异可复核，新实验再验证,形式化＋ablation,yes,internal/editor only
-R1.6,R1.6 576设计,major,部分已有内容，应增强可读性；同时纠正 blind/aware 与 snapshot/live 的错配，列完整8配置,DONE,已由 ingest_design.py 生成 Table 1/2/5/18，配对归因与普查均可复算,设计表(Table 1)、匹配对归因(Table 2)、普查(Table 18)、36/18→312/264 对账(Table 5),yes,internal/editor only
-R1.7,R1.7 竞争基线,major,接受比较不足。公平多账户与常规差分，按候选和预算匹配；direct_only 移至诊断附录,OPEN,是,新对照表＋成本表,yes,internal/editor only
-R1.8,R1.8 跨厂商渠道,major,接受。按直接、继承、admin、public、带外分别报 E/O confusion 和 stale M；多来源允许多标签,CLOSED_IN_TEXT,先重标真值，再缺项补跑,真实系统结果＋SI逐格表,yes,internal/editor only
-R1.9,R1.9 多种缺陷,major,接受限制。多条独立故障实现，per-defect recall，合法配对控制的FP/FPR；BFLA与BOLA分开,OPEN,是,阳性对照＋限制,yes,internal/editor only
-R1.10,R1.10 时间观测控制,major,接受。recrawl 用相同subject权限，owner oracle单独列；保存事件、policy version、token角色、只读操作,CLOSED,是，现有粗日志不足,方法＋日志,yes,internal/editor only
-R1.11,R1.11 84.62及分母,major,接受。先纠正引用公式与人工核验描述；示例变参数图；不声称重现99.81,PARTIAL,分析即可，不需重新部署,指标方法、结果、相关批评,yes,internal/editor only
-R1.12,R1.12 异质权重,major,接受。以Σp_i/Σn_i推广，区分固定FP与生成行为内生改变情形,CLOSED,不需系统运行,形式化简述＋SI证明,yes,internal/editor only
-R1.13,R1.13 弃权/成本,major,接受。228次全部弃权与156不可读弃权分开；定义pass、coverage/risk；逐法计数,DONE,已由 ingest_coverage.py 生成 Table 4；请求数与探针数从 raw_matrix 复算，墙钟不报,"决策式指标表(Table 4, a/b 两栏)＋成本段与时间循环说明",yes,internal/editor only
-R1.14,R1.14 复现与失败,major,接受可复现流程不足；原始记录1 error与意见2 failed executions须据实核对；不能把0报警当完整覆盖,PARTIAL,干净环境及缺内容分支需要运行,Artifact、逐MR表、日志,yes,internal/editor only
-R1.15,R1.15 结论校准,major,接受。删“真实非法访问裁决不在其中”；证据到claim表区分源码、合成、真实系统,CLOSED,依赖上述验证完成,摘要、发现、讨论、结论,yes,internal/editor only
-R2.1,R2.1 新颖性/recrawl,major,接受。公开Gitea live 0 mismatch；staleness和无法枚举渠道分开，说明recrawl何时足够,PARTIAL,时序校准运行,引言、机制、结果,yes,internal/editor only
-R2.2,R2.2 范围/标题,major,接受。标题明确MST-wi案例，摘要写2条、同族及原生触发范围,CLOSED,不需运行,标题、摘要、结论,yes,internal/editor only
-R2.3,R2.3 命题2,major,接受。删除功能自我等同包装，明确充分性前提和实际门控差异,CLOSED_IN_TEXT,同R1.5任务，但回复独立完整,形式化及消融,yes,internal/editor only
-R2.4,R2.4 检测面,major,真实vulnerable/fixed案例优先；若不做，撤销一般检测结论，不能把三seed实例充当3独立漏洞,CLOSED,推荐新运行,阳性评估、摘要和结论,yes,internal/editor only
-R2.5,R2.5 84.62,major,当前摘要无此数值，据实说明；正文去除定量背书，改假设性敏感性图,CLOSED,分析即可,指标节、finding3,yes,internal/editor only
-R2.6,R2.6 构造真值/率,major,接受。1.00和0.44仅特定设计比例；给各格与等权敏感性，避免作真实部署发生率,PARTIAL,重算＋独立真值验证,方法、真实结果、讨论,yes,internal/editor only
+R1.1,R1.1 新颖性,major,接受核心意见。用结构对照说明已知问题与具体机制证据，弱化一般性 claim，修正 BACFuzz 分类,CLOSED_IN_TEXT,相关工作改为三条可证伪的具体增量（谓词/子集/分母），删去 orthogonal 表述并声明不比较检测率；未做对照表,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.2,R1.2 假证明定义,major,接受。E 与 Y 分开；A 为 raw alarm，H 为 promotion，H⇒A；给全真值组合与独立依据,PARTIAL,真值表补 H=A∧¬o 定义与弃权合同，direct/v3 统一；E=unknown 的完整合同仍分散在正文,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.3,R1.3 状态转移,major,接受。明确 grant/revoke、继承、public、role 和并发语义，固定 enforcement 版本,CLOSED_IN_TEXT,§V 作用域补“请求—判定窗口静止”条款：区间内发生新变更则结论不适用须重测,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.4,R1.4 admissibility,major,接受。预先冻结候选、渠道、缺陷类与共享依赖审查；不从 outcome 反选好 oracle,PARTIAL,A2 时间链改为按摘要绑定并披露 written_at 矛盾；admissibility 仍未给出可照做的判定程序,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.5,R1.5 命题2,major,接受且重写。充分性与实际实现等价分开，保留3条差异，写两个 MR 的显式谓词,CLOSED_IN_TEXT,等价式改为 A=D ⇔ y=0 或 m=o；删去外延相等，改证 H⇒D；3 条差异归为 S5 写场景漏报,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.6,R1.6 576设计,major,部分已有内容，应增强可读性；同时纠正 blind/aware 与 snapshot/live 的错配，列完整8配置,CLOSED_IN_TEXT,blind/aware 命名复原；对账改以 S3–S7 原网格为起点并逐记录校验；每格 12/6 条；listed+unreadable 改称未测,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.7,R1.7 竞争基线,major,接受比较不足。公平多账户与常规差分，按候选和预算匹配；direct_only 移至诊断附录,OPEN,未执行多账号/差分基线；仅在 related work 与 threats 说明未做且不主张检测优势,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.8,R1.8 跨厂商渠道,major,接受。按直接、继承、admin、public、带外分别报 E/O confusion 和 stale M；多来源允许多标签,PARTIAL,Gitea/GitLab 渠道表 + 单渠道互斥分组已写明；Gogs 缺逐渠道四格表，已明确声明,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.9,R1.9 多种缺陷,major,接受限制。多条独立故障实现，per-defect recall，合法配对控制的FP/FPR；BFLA与BOLA分开,PARTIAL,真实配对改为“只检验闸门、未跑 MR”；多缺陷 recall 明确未做,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.10,R1.10 时间观测控制,major,接受。recrawl 用相同subject权限，owner oracle单独列；保存事件、policy version、token角色、只读操作,CLOSED_IN_TEXT,A2 先后改由 run 记录摘要绑定；written_at 矛盾单列说明，不改原件,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.11,R1.11 84.62及分母,major,接受。先纠正引用公式与人工核验描述；示例变参数图；不声称重现99.81,CLOSED_IN_TEXT,specificity 改回 TN/(TN+FP) 并承认人工核验；删 84.62 与“与爬虫一致”的说法,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.12,R1.12 异质权重,major,接受。以Σp_i/Σn_i推广，区分固定FP与生成行为内生改变情形,PARTIAL,分母写为 N⁻=TN+FP，给出 ΣFP_i/ΣN_i⁻ 形式；权重内生性仅作说明,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.13,R1.13 弃权/成本,major,接受。228次全部弃权与156不可读弃权分开；定义pass、coverage/risk；逐法计数,CLOSED_IN_TEXT,direct 与 v3 统一为“不可读即弃权”，coverage 54.17%；forced-negative 另列并命名,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.14,R1.14 复现与失败,major,接受可复现流程不足；原始记录1 error与意见2 failed executions须据实核对；不能把0报警当完整覆盖,PARTIAL,reproduce/verify 补 3 个 ingest，清单扩到 21 输入/26 输出并重算；未在干净副本跑 repro,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R1.15,R1.15 结论校准,major,接受。删“真实非法访问裁决不在其中”；证据到claim表区分源码、合成、真实系统,CLOSED_IN_TEXT,删除“as published … after the crawl”的构造实验误读，改按两类供给方式表述,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R2.1,R2.1 新颖性/recrawl,major,接受。公开Gitea live 0 mismatch；staleness和无法枚举渠道分开，说明recrawl何时足够,CLOSED_IN_TEXT,29/29 recrawl 修复进入解释；删“more crawling 无效”的无条件说法,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R2.2,R2.2 范围/标题,major,接受。标题明确MST-wi案例，摘要写2条、同族及原生触发范围,CLOSED_IN_TEXT,摘要去除构造实验的 after-crawl 误读,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R2.3,R2.3 命题2,major,接受。删除功能自我等同包装，明确充分性前提和实际门控差异,CLOSED_IN_TEXT,同 R1.5,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R2.4,R2.4 检测面,major,真实vulnerable/fixed案例优先；若不做，撤销一般检测结论，不能把三seed实例充当3独立漏洞,PARTIAL,真实 TP 归属明确为 E/Y 闸门；MR 在真实配对上的 recall 未评价,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R2.5,R2.5 84.62,major,当前摘要无此数值，据实说明；正文去除定量背书，改假设性敏感性图,CLOSED_IN_TEXT,84.62 已从正文移除，不再作数值背书,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only
+R2.6,R2.6 构造真值/率,major,接受。1.00和0.44仅特定设计比例；给各格与等权敏感性，避免作真实部署发生率,PARTIAL,构造研究改称可见性而非时间因子；每格权重影响已写,见 2026-10-19_终轮核查/本轮修正清单.md,yes,internal/editor only

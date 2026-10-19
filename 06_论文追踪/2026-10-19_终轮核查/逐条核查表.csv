@@ -1,0 +1,22 @@
+﻿id,reviewer_concern,independent_assessment,remaining_action,baseline,audience
+R1.1,R1.1 新颖性,未解决,结构比较、具体增量及已知/新增边界,36090b7,internal
+R1.2,R1.2 完整真值定义,部分回应,A/H/T 已拆，但真值表主要比较A与D；补H、弃权、E unknown合同，并全篇统一,36090b7,internal
+R1.3,R1.3 状态转移,基本回应，限静止窗口,明确请求至判定间发生新变更时结论不适用/需重试，不将hv称服务器原子版本,36090b7,internal
+R1.4,R1.4 admissibility,部分回应,操作化独立性条件；核实A2时间链,36090b7,internal
+R1.5,R1.5 命题2,未解决,修正错误等价式、函数推断和实际3条差异,36090b7,internal
+R1.6,R1.6 枚举设计,部分回应,census已补；修blind/frozen错配、代表网格换样、每格96错误和未测组合说法,36090b7,internal
+R1.7,R1.7 竞争基线,未解决,实做多账户/常规差分与匹配预算，或有依据回应范围并承认未执行,36090b7,internal
+R1.8,R1.8 渠道矩阵,部分回应,两产品新矩阵已补；补Gogs及多来源分组说明，统一诊断O与admissible O,36090b7,internal
+R1.9,R1.9 多缺陷,部分回应，核心扩展未完成,实际方法的真实配对表现及多独立故障，或撤销检测总体主张后说明未做,36090b7,internal
+R1.10,R1.10 live控制,基本回应，需修时间记录,同权限recrawl和快照校验已补；修A2先后主张，区分只读矩阵与写控制,36090b7,internal
+R1.11,R1.11 specificity,未解决,原文公式与人工标签描述纠错；84.62退出实证背书,36090b7,internal
+R1.12,R1.12 异质权重,部分回应,ΣFP_i/ΣN_i^-完整表达，解释相关性与生成行为内生权重,36090b7,internal
+R1.13,R1.13 弃权和成本,部分回应,228分解正确；统一direct弃权定义、coverage与风险，区分总体成本与逐法成本,36090b7,internal
+R1.14,R1.14 可复现,部分回应,补全入口、清单、环境与失败规则；native未触发/error/已执行分开解释,36090b7,internal
+R1.15,R1.15 结论校准,部分回应,新证据表已加，但旧“as published false proofs”等表述及错误机制仍需清除,36090b7,internal
+R2.1,R2.1 novelty/recrawl,部分回应,29/29修复结果已补，纠正“more crawling无效”和新颖性论证,36090b7,internal
+R2.2,R2.2 标题摘要范围,基本回应,标题已限定两条关系，摘要仍需去除构造实验的after-crawl误读,36090b7,internal
+R2.3,R2.3 命题2,未解决,同R1.5，不能仅以拆lemma/proposition宣布解决,36090b7,internal
+R2.4,R2.4 真实检测面,部分回应,真实gate配对已补，未评价MR；统一有限claim及真实TP归属,36090b7,internal
+R2.5,R2.5 84.62,部分回应,摘要无此值，但Finding3仍将其用于数值背书,36090b7,internal
+R2.6,R2.6 构造率,部分回应,已有不外推声明，需准确说明visibility而非时间因子及每格权重影响,36090b7,internal

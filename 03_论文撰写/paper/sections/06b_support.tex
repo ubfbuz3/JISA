@@ -19,11 +19,13 @@ Table~\ref{tab:design-census} is the mapping the review asked for: every
 configuration against every scenario, with the number of records under each
 populated cell and a dash where the combination is undefined. The eight
 configurations are the full cross of instantiation mode, enforcement
-correctness, channel visibility and introspection availability, less the two
-corners that do not exist (no exception mechanism to list a share under, and no
-listed share to read with the surface off). Each populated cell holds
-$\DsgBalOn{}+\DsgBalOff{}$ records: three exception policies and two crawl
-readings for each relation that applies there.
+correctness, channel visibility and introspection availability, less two
+corners. The first is undefined: with no exception mechanism there is no share
+to list. The second---listed with the introspection surface off---was simply
+not instantiated, and Section~\ref{sec:identify} treats it as untested rather
+than impossible. Each populated cell holds twelve records---three exception
+policies and two reachability readings for each of the two relations---and six
+where only one relation applies, as under S5.
 
 \input{design_census_table.tex}
 

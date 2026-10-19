@@ -3,8 +3,8 @@
   "files": [
     {
       "path": "experiments/results/raw_matrix.jsonl",
-      "sha256": "c72a3083975f24cf5d51f68e813670e55f7ea511b62f33acee612d216ab47e6c",
-      "bytes": 1654743
+      "sha256": "d5fbf7dea7a07ebd8cbf9974cfb7ec1cfce3f37ae5d03a7450fad0fc304255f7",
+      "bytes": 1809687
     },
     {
       "path": "experiments/results/ablation_direct.json",
@@ -22,9 +22,14 @@
       "bytes": 10823
     },
     {
+      "path": "experiments/results/sanity_matrix.jsonl",
+      "sha256": "0b8b30ebe749e0e495f88b7d9f3b06e5edc1bf204ab3566be585763e6a0cf316",
+      "bytes": 312600
+    },
+    {
       "path": "experiments/real_system/results/real_system.json",
-      "sha256": "db9669436bfb4eacc5836f11128cde68239a7fd6ae6b48c398e190e51efa6c68",
-      "bytes": 137132
+      "sha256": "891b1b6816a31e69386c275b4653c94d95015960c8d888f158a65d4c2b6fb01a",
+      "bytes": 294520
     },
     {
       "path": "experiments/native_engine/results/native_engine.json",
@@ -43,8 +48,13 @@
     },
     {
       "path": "experiments/real_system/results/gogs_real_system.json",
-      "sha256": "c0ac40c988e5a169f6b14410c7a5ee953425e63e145b8444c00ca3dbb7583579",
-      "bytes": 151991
+      "sha256": "5c5ae465b16a78a8f15582f3e052429d4961496614ac6e559c1216ad2012dc6d",
+      "bytes": 309602
+    },
+    {
+      "path": "experiments/real_system/results/gogs_api_surface.json",
+      "sha256": "327189869ddac28445a8492f6634efc303550fe891209318cf668c426a41ecc3",
+      "bytes": 3826
     },
     {
       "path": "experiments/real_system/results/m1_matched_gitea.json",
@@ -53,13 +63,48 @@
     },
     {
       "path": "experiments/real_system/results/gitlab_real_system.json",
-      "sha256": "8e8d00ea253693b1c44a87db0654373a03de638df98ffeac680e8643ae849a80",
-      "bytes": 145243
+      "sha256": "f62e600e30bdf9e495f9ccc9607780a6cf29297677d93104c787260bc5dd7ff4",
+      "bytes": 302564
     },
     {
       "path": "experiments/real_system/results/seeded.json",
       "sha256": "53f12da4ceaf42d72379b4480c426213239a4ef3545af51ce6bb9b42d9603d11",
       "bytes": 45300
+    },
+    {
+      "path": "experiments/real_system/results/cve_pair.json",
+      "sha256": "a090393bbf088b44e628301d5817579c554202f3b44084e45e48090c3ae2c1a8",
+      "bytes": 6953
+    },
+    {
+      "path": "experiments/real_system/c_protocol.json",
+      "sha256": "d09d904707aaf8e0464192d6d54df2680a9a6c8e185d856afdd5a88469c7f2f5",
+      "bytes": 7164
+    },
+    {
+      "path": "experiments/real_system/c_protocol_amendment_a1.json",
+      "sha256": "3ea06da14382e7cfcfd28d058292df09b5b322b9c84d1c4cde69dd11b075eafe",
+      "bytes": 2179
+    },
+    {
+      "path": "experiments/real_system/c_protocol_amendment_a2.json",
+      "sha256": "c84f5bc08eda7f89708965a005e63ad81e81c9aa2bf6956aa753ce765ac63d06",
+      "bytes": 2930
+    },
+    {
+      "path": "experiments/real_system/results/temporal/temporal_gitea.json",
+      "sha256": "40179ebd436f9ede3b18d034357148ba60643d3931f556157ac121565bb1a4f7",
+      "bytes": 487603
+    },
+    {
+      "path": "experiments/real_system/results/temporal/temporal_gitlab.json",
+      "sha256": "2e52ae846f1a163a5e8f46a6412897ae62637b645509aa0bc2bb3659b824443d",
+      "bytes": 766085
+    },
+    {
+      "path": "experiments/real_system/results/temporal/pilot_cascade/temporal_gitlab_pilot.json",
+      "sha256": "ed3381d155429e23b88ebe38d1d05413bd68f3c43ade51d945c1385f83fb457d",
+      "bytes": 683570
     }
   ]
 }

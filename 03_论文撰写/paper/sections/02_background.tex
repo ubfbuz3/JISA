@@ -23,10 +23,13 @@ subject cannot reach it; the relation then treats the successful response as a
 violation. Every step is exactly as specified, so no guard is miswritten: the
 predicate's two representations---``reachable as recorded'' and ``not reachable
 as recorded''---cannot express ``reachable, but only after the record was
-taken''. More crawling does not remove the false proof, because the grant need
-not be visible through the subject's interface at all, and the reported
-specificity never registers it, because the error is a property of the
-adjudication's \emph{reading moment} rather than of any single generated input.
+taken''. Recrawling the \emph{same} interface does not remove the false proof,
+because the grant need not be visible through the subject's interface at all;
+only a recrawl that can observe the granting channel removes it, which is what
+the temporal experiment does when a privileged recrawl repairs all
+\TmpBothFixed{} stale cells. The reported specificity does not register the
+failure either, because it is a property of the adjudication's \emph{reading
+moment} rather than of any single generated input.
 This is the mechanism the rest of the paper measures, and the reason we speak of
 a boundary of the specification rather than a defect of an implementation.
 
@@ -40,5 +43,7 @@ finds \ResCatalogAuthzStateHits{} occurrences. Within the examined vocabulary,
 then, the authorization MRs have no authorization-artifact state observable to
 decide on, and the reading moment enters the specification: if an entitlement
 changes after the crawl, the MR evaluates reachability against a world that no
-longer exists. This is a statement about what the relations \emph{mean}; our
-experiments are built so that the crawl-time and live readings can be told apart.
+longer exists. This is a statement about what the relations \emph{mean}. Our experiments
+separate the two ways the world can move under the model: the constructed study
+varies what the gate can see, and the temporal study varies when the model was
+read.

@@ -1,0 +1,426 @@
+{
+  "source_revision": "36090b7",
+  "live_experiments_rerun": false,
+  "synthetic": {
+    "records": 576,
+    "design_cells": 52,
+    "records_per_cell": {
+      "12": 44,
+      "6": 8
+    },
+    "gui_modes": {
+      "blind": 288,
+      "aware": 288
+    }
+  },
+  "representative_reconciliation": {
+    "original_n": 54,
+    "reconciliation_n": 54,
+    "shared": 30,
+    "only_original": 24,
+    "only_new": 24,
+    "original_v2_false_proofs": 8,
+    "new_v2_false_proofs": 0
+  },
+  "v3_direct_differences": [
+    {
+      "scenario": "S5",
+      "mr": "MR-002",
+      "gui_mode": "aware",
+      "precond_variant": "raw",
+      "truth": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      }
+    },
+    {
+      "scenario": "S5",
+      "mr": "MR-002",
+      "gui_mode": "aware",
+      "precond_variant": "e1",
+      "truth": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      }
+    },
+    {
+      "scenario": "S5",
+      "mr": "MR-002",
+      "gui_mode": "aware",
+      "precond_variant": "e1e2",
+      "truth": {
+        "actor": "B",
+        "doc_id": "doc0001",
+        "op": "write",
+        "doc_owner": "A",
+        "should_allow": false,
+        "app_allowed": true,
+        "truth": "bola",
+        "is_own_object": false
+      }
+    }
+  ],
+  "direct_semantics": {
+    "unreadable_rows": 264,
+    "coverage_if_unreadable_is_abstention": 0.5416666666666666
+  },
+  "equality_counterexamples": [
+    {
+      "y": 0,
+      "m": 0,
+      "o": 1,
+      "A": 0,
+      "D": 0
+    },
+    {
+      "y": 0,
+      "m": 1,
+      "o": 0,
+      "A": 0,
+      "D": 0
+    }
+  ],
+  "temporal": {
+    "gitea": {
+      "stored_totals": {
+        "cycles": 8,
+        "cycles_scored": 8,
+        "cells": 280,
+        "E_allow": 77,
+        "E_deny": 203,
+        "E_unknown": 0,
+        "Y_allow": 77,
+        "E_eq_Y": 280,
+        "stale_false_proofs": 13,
+        "live_false_proofs": 0,
+        "stale_missing_legit": 13,
+        "live_missing_legit": 0,
+        "recrawl_fixed": 13,
+        "recrawl_still_misses": 0,
+        "true_positives": 0,
+        "oracle_readable": 224,
+        "oracle_self_readable": 7,
+        "abstained_cells": 0
+      },
+      "recomputed": {
+        "cells": 280,
+        "E_eq_Y": 280,
+        "stale_false_proofs": 13,
+        "live_false_proofs": 0,
+        "recrawl_fixed": 13,
+        "true_positives": 0
+      },
+      "mismatched_totals": {},
+      "snapshot_checks": [
+        {
+          "file": "M0_01_grant_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_01_grant_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_02_revoke_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_02_revoke_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_03_team_repo_attach.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_03_team_repo_attach.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_04_team_member_remove.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_04_team_member_remove.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_05_visibility_public.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_05_visibility_public.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_06_visibility_private.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_06_visibility_private.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_07_role_write.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_07_role_write.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M0_08_site_admin.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "M1_08_site_admin.json",
+          "exists": true,
+          "matches": true
+        }
+      ],
+      "base_protocol_hash_matches": true
+    },
+    "gitlab": {
+      "stored_totals": {
+        "cycles": 8,
+        "cycles_scored": 8,
+        "cells": 432,
+        "E_allow": 94,
+        "E_deny": 338,
+        "E_unknown": 0,
+        "Y_allow": 94,
+        "E_eq_Y": 432,
+        "stale_false_proofs": 16,
+        "live_false_proofs": 0,
+        "stale_missing_legit": 16,
+        "live_missing_legit": 0,
+        "recrawl_fixed": 16,
+        "recrawl_still_misses": 0,
+        "true_positives": 0,
+        "oracle_readable": 360,
+        "oracle_self_readable": 360,
+        "oracle_disagrees_with_E": 53,
+        "abstained_cells": 0
+      },
+      "recomputed": {
+        "cells": 432,
+        "E_eq_Y": 432,
+        "stale_false_proofs": 16,
+        "live_false_proofs": 0,
+        "recrawl_fixed": 16,
+        "true_positives": 0
+      },
+      "mismatched_totals": {},
+      "snapshot_checks": [
+        {
+          "file": "GL_M0_01_grant_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_01_grant_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_02_revoke_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_02_revoke_collaborator.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_03_group_share.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_03_group_share.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_04_group_member_remove.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_04_group_member_remove.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_05_visibility_public.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_05_visibility_public.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_06_visibility_private.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_06_visibility_private.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_07_role_write.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_07_role_write.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M0_08_site_admin.json",
+          "exists": true,
+          "matches": true
+        },
+        {
+          "file": "GL_M1_08_site_admin.json",
+          "exists": true,
+          "matches": true
+        }
+      ],
+      "base_protocol_hash_matches": true
+    }
+  },
+  "protocol_chronology": {
+    "gitlab_first_freeze": "2026-10-19T02:25:08.445+08:00",
+    "gitlab_last_probe": "2026-10-19T02:26:14.920+08:00",
+    "amendments": [
+      {
+        "file": "c_protocol_amendment_a1.json",
+        "written_at": "2026-10-19T02:20:00+08:00",
+        "hash_matches_run": true
+      },
+      {
+        "file": "c_protocol_amendment_a2.json",
+        "written_at": "2026-10-19T02:32:00+08:00",
+        "hash_matches_run": true
+      }
+    ]
+  },
+  "native_split": {
+    "A": 6,
+    "H": 6,
+    "T_true": 0,
+    "T_false": 6,
+    "T_unobserved": 0
+  },
+  "real_pair": [
+    {
+      "version": "1.20.5",
+      "E": "deny",
+      "Y": true,
+      "category": "true_positive",
+      "owner_read_status": 200,
+      "restored": true
+    },
+    {
+      "version": "1.20.6",
+      "E": "deny",
+      "Y": false,
+      "category": "no_alarm",
+      "owner_read_status": 200,
+      "restored": true
+    }
+  ],
+  "manifests": [
+    {
+      "manifest": "RAW_RECORDS_SHA256.json",
+      "entries": 12,
+      "missing": [],
+      "mismatched": [
+        "experiments/results/raw_matrix.jsonl",
+        "experiments/real_system/results/real_system.json",
+        "experiments/real_system/results/gogs_real_system.json",
+        "experiments/real_system/results/gitlab_real_system.json"
+      ]
+    },
+    {
+      "manifest": "OUTPUTS_SHA256.json",
+      "entries": 10,
+      "missing": [],
+      "mismatched": [
+        "04_绘图与分析/results/numbers.tex",
+        "04_绘图与分析/results/native_engine_numbers.tex",
+        "04_绘图与分析/results/metrics.json"
+      ]
+    }
+  ],
+  "submission_zip": {
+    "entries": 88,
+    "source_differences": []
+  },
+  "pdf": {
+    "pages": 24,
+    "title": "Two Reachability-Gated Relations in MST-wi: Temporal Mismatch, Oracle Admissibility, and Measurement Limits"
+  },
+  "isolated_ingests": [
+    {
+      "script": "ingest_truth.py",
+      "exit_code": 0
+    },
+    {
+      "script": "ingest_design.py",
+      "exit_code": 0
+    },
+    {
+      "script": "ingest_coverage.py",
+      "exit_code": 0
+    },
+    {
+      "script": "ingest_temporal.py",
+      "exit_code": 0
+    },
+    {
+      "script": "ingest_cve_pair.py",
+      "exit_code": 0
+    }
+  ],
+  "regenerated_tex_differences": [],
+  "reproduce_missing_ingests": [
+    "ingest_design.py",
+    "ingest_coverage.py",
+    "ingest_m2_stratum.py"
+  ]
+}

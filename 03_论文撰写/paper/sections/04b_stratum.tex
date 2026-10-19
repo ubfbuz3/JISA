@@ -22,17 +22,24 @@ against which the metamorphic family can be scored where no oracle exists.
 \paragraph{Reconciling the representative grid with this partition}
 The 36/18 grid of Section~\ref{sec:synthetic} is not a miniature of the
 312/264 partition, and the two should not be read as one number at two sizes.
-The grid is a single point of the switch space: it fixes the exception policy at
-raw and the crawl reading at live, keeps the six e3 configurations, and stops at
-S5, which leaves \DsgGridN{} records---\DsgGridOn{} readable and \DsgGridOff{}
-unreadable. Table~\ref{tab:reconcile} closes the gap additively: the other five
-switch settings on the same configurations and scenarios contribute
-\DsgOtherN{}, S6--S7 for those configurations \DsgSixSevenN{}, and the two
-no-exception configurations \DsgNoeThreeN{}, all of them unreadable. The readable
-count runs \DsgGridOn{} in the grid, \DsgGridOn{}+\DsgOtherOn{} once the other
-switch settings are added, \DsgEthreeOn{} across all e3 records, and
-\DsgFullOn{} overall: the S6--S7 block is the only step that contributes readable
-records, and the arithmetic is exact at every step.
+The grid is a single point of the switch space: it keeps the e3
+configurations, fixes the exception policy at raw and the reading at aware,
+and covers S3--S7, which leaves \DsgGridN{} records---\DsgGridOn{} readable and
+\DsgGridOff{} unreadable. That starting set is the original selection, and it
+already contains \DsgGridVtwoFP{} v2 false proofs; a reconciliation that
+started elsewhere would be a different sample with the same headcount.
+Table~\ref{tab:reconcile} closes the gap additively and record by record: the
+two other exception policies add \DsgStepPvN{} (\DsgStepPvOn{} readable), the
+blind reading adds \DsgStepGuiN{} (\DsgStepGuiOn{} readable), S1--S2 add
+\DsgStepSXN{} (\DsgStepSXOn{} readable), and the two no-exception
+configurations add \DsgStepNoeThreeN{}, all of them unreadable. The blocks are
+disjoint, their union is the full \DsgRecords{} records, and the readable count
+runs \DsgGridOn{} $\rightarrow$ \DsgBaseTwoOn{} $\rightarrow$
+\DsgAllSwOn{} $\rightarrow$ \DsgEthreeOn{} $\rightarrow$ \DsgFullOn{}
+(unreadable \DsgGridOff{} $\rightarrow$ \DsgBaseTwoOff{} $\rightarrow$
+\DsgAllSwOff{} $\rightarrow$ \DsgEthreeOff{} $\rightarrow$ \DsgFullOff{}).
+The arithmetic is exact at every step, and each step was checked on record
+identifiers rather than on totals alone.
 
 \input{reconcile_table.tex}
 
@@ -104,9 +111,9 @@ mixed in records where the oracle-bearing methods could not run.
 The \MiiNOff{} unreadable records contain \MiiOffNBola{} true violations and
 \MiiOffNNormal{} correct cases, a violation base rate of
 \MiiOffPrevalencePct{}\%. Every oracle-bearing method---v3,
-\texttt{direct\_observe}, \texttt{direct\_only}---detects \MiiOffVThreeTP{} of
-them, not because the relations are weak but because those methods have nothing
-to consult and, by their own definition, abstain. The metamorphic family does
+\texttt{direct\_observe}, \texttt{direct\_only}---detects none of them
+(\MiiOffVThreeTP{}), not because the relations are weak but because those
+methods have nothing to consult and, by the same contract, abstain. The metamorphic family does
 not abstain: v2 reaches all \MiiOffVTwoTP{} true violations
 (recall \MiiOffVTwoRec{}) with \MiiOffVTwoFP{} false proofs, precision
 \MiiOffVTwoPrec{}, a lift of \MiiLiftVTwo{}$\times$ over the base rate. Against

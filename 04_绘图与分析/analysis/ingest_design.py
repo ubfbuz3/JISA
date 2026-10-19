@@ -158,11 +158,11 @@ def main() -> None:
     key_no_gui = lambda r: (r["config"]["label"], r["scenario"], r["mr"], r["precond_variant"])
     key_no_pv = lambda r: (r["config"]["label"], r["scenario"], r["mr"], r["gui_mode"])
 
-    frozen = [r for r in rows if r["gui_mode"] == "blind"]
-    live = [r for r in rows if r["gui_mode"] == "aware"]
+    blind = [r for r in rows if r["gui_mode"] == "blind"]
+    aware = [r for r in rows if r["gui_mode"] == "aware"]
 
-    c_fp, n_gui = paired(frozen, live, key_no_gui, fp)
-    c_tp, _ = paired(frozen, live, key_no_gui, hit)
+    c_fp, n_gui = paired(blind, aware, key_no_gui, fp)
+    c_tp, _ = paired(blind, aware, key_no_gui, hit)
     print("gui fp", dict(c_fp), "tp", dict(c_tp), n_gui)
 
     exc = {}
@@ -189,30 +189,56 @@ def main() -> None:
         assert c[(True, False)] == 0 and c[(False, True)] == 0, (ab, dict(c))
     assert read[0][0][(True, True)] == 0 and read[0][0][(False, True)] == 0
 
-    # ---------------- 对账阶梯 ----------------
+    # ---------------- 对账阶梯（以原 S3–S7 代表网格为起点） ----------------
+    # 原 compute_all.py::v3_by_intro() 的"代表网格"是 e3 & S3–S7 & raw & aware。
+    # 早期版本从 S1–S5 起步，人数虽同为 36/18，记录却换了 24 条（v2 假证明 8→0），
+    # 这不是对账而是换样本。此处的阶梯严格从原筛选集合出发，逐块补开关，
+    # 并对每一步做"互斥 + 并集 = 全量"的逐记录校验。
+    def rkey(r):
+        return (r["config"]["label"], r["scenario"], r["mr"],
+                r["precond_variant"], r["gui_mode"])
+
     def tally(sel):
-        r = sum(1 for x in sel if readable(x))
-        return r, len(sel) - r, len(sel)
+        on = sum(1 for x in sel if readable(x))
+        return on, len(sel) - on, len(sel)
 
-    grid = [x for x in rows if x["config"]["mode"] == "e3" and x["scenario"] in ("S1", "S2", "S3", "S4", "S5")
+    grid = [x for x in rows if x["config"]["mode"] == "e3"
+            and x["scenario"] in ("S3", "S4", "S5", "S6", "S7")
             and x["precond_variant"] == "raw" and x["gui_mode"] == "aware"]
-    other_sw = [x for x in rows if x["config"]["mode"] == "e3" and x["scenario"] in ("S1", "S2", "S3", "S4", "S5")
-                and not (x["precond_variant"] == "raw" and x["gui_mode"] == "aware")]
-    s67 = [x for x in rows if x["config"]["mode"] == "e3" and x["scenario"] in ("S6", "S7")]
-    noe3 = [x for x in rows if x["config"]["mode"] == "noe3"]
+    step_pv = [x for x in rows if x["config"]["mode"] == "e3"
+               and x["scenario"] in ("S3", "S4", "S5", "S6", "S7")
+               and x["precond_variant"] in ("e1", "e1e2")
+               and x["gui_mode"] == "aware"]
+    step_gui = [x for x in rows if x["config"]["mode"] == "e3"
+                and x["scenario"] in ("S3", "S4", "S5", "S6", "S7")
+                and x["gui_mode"] == "blind"]
+    step_s12 = [x for x in rows if x["config"]["mode"] == "e3"
+                and x["scenario"] in ("S1", "S2")]
+    step_noe3 = [x for x in rows if x["config"]["mode"] == "noe3"]
 
-    ladder = [("representative grid", tally(grid)),
-              ("other switch settings", tally(other_sw)),
-              ("S6--S7, six e3 configurations", tally(s67)),
-              ("all e3 records", tally([x for x in rows if x["config"]["mode"] == "e3"])),
-              ("two no-exception configurations", tally(noe3)),
-              ("all records", tally(rows))]
+    seen = {rkey(x) for x in grid}
+    assert len(seen) == len(grid) == 54, len(grid)
+    ladder = [("representative grid", tally(grid))]
+    cum = list(grid)
+    for label, sel in (("other exception policies", step_pv),
+                       ("blind reading", step_gui),
+                       ("S1--S2", step_s12),
+                       ("two no-exception configurations", step_noe3)):
+        new = [x for x in sel if rkey(x) not in seen]
+        assert len(new) == len(sel), (label, len(sel), len(new))   # 互斥
+        seen |= {rkey(x) for x in new}
+        cum += new
+        ladder.append(("+" + label, tally(new)))
+        ladder.append(("=" + label, tally(cum)))
     for name, t in ladder:
         print(f"  ladder {name}: {t}")
     assert ladder[0][1] == (36, 18, 54), ladder[0]
-    assert ladder[3][1] == (312, 156, 468), ladder[3]
-    assert ladder[5][1] == (312, 264, 576), ladder[5]
-    assert sum(x[1][2] for x in ladder[:2]) == 324
+    assert ladder[-1][1] == (312, 264, 576), ladder[-1]
+    assert len(seen) == len(rows) == 576 and len(cum) == 576          # 并集 = 全量
+    assert len({rkey(x) for x in rows}) == 576                        # 键唯一
+    grid_fp = sum(1 for x in grid if fp(x))
+    print(f"  representative grid v2 false proofs = {grid_fp}")
+    assert grid_fp == 8, grid_fp
 
     # ---------------- 宏 ----------------
     M = {
@@ -245,20 +271,30 @@ def main() -> None:
         "DsgGridN": ladder[0][1][2],
         "DsgGridOn": ladder[0][1][0],
         "DsgGridOff": ladder[0][1][1],
-        "DsgOtherN": ladder[1][1][2],
-        "DsgOtherOn": ladder[1][1][0],
-        "DsgOtherOff": ladder[1][1][1],
-        "DsgSixSevenN": ladder[2][1][2],
-        "DsgSixSevenOn": ladder[2][1][0],
-        "DsgSixSevenOff": ladder[2][1][1],
-        "DsgEthreeN": ladder[3][1][2],
-        "DsgEthreeOn": ladder[3][1][0],
-        "DsgEthreeOff": ladder[3][1][1],
-        "DsgNoeThreeN": ladder[4][1][2],
-        "DsgNoeThreeOn": ladder[4][1][0],
-        "DsgNoeThreeOff": ladder[4][1][1],
-        "DsgFullOn": ladder[5][1][0],
-        "DsgFullOff": ladder[5][1][1],
+        "DsgGridVtwoFP": grid_fp,
+        "DsgStepPvN": ladder[1][1][2],
+        "DsgStepPvOn": ladder[1][1][0],
+        "DsgStepPvOff": ladder[1][1][1],
+        "DsgBaseTwoN": ladder[2][1][2],
+        "DsgBaseTwoOn": ladder[2][1][0],
+        "DsgBaseTwoOff": ladder[2][1][1],
+        "DsgStepGuiN": ladder[3][1][2],
+        "DsgStepGuiOn": ladder[3][1][0],
+        "DsgStepGuiOff": ladder[3][1][1],
+        "DsgAllSwN": ladder[4][1][2],
+        "DsgAllSwOn": ladder[4][1][0],
+        "DsgAllSwOff": ladder[4][1][1],
+        "DsgStepSXN": ladder[5][1][2],
+        "DsgStepSXOn": ladder[5][1][0],
+        "DsgStepSXOff": ladder[5][1][1],
+        "DsgEthreeN": ladder[6][1][2],
+        "DsgEthreeOn": ladder[6][1][0],
+        "DsgEthreeOff": ladder[6][1][1],
+        "DsgStepNoeThreeN": ladder[7][1][2],
+        "DsgStepNoeThreeOn": ladder[7][1][0],
+        "DsgStepNoeThreeOff": ladder[7][1][1],
+        "DsgFullOn": ladder[8][1][0],
+        "DsgFullOff": ladder[8][1][1],
         "DsgBalOn": bal[("raw", "aware", True)],
         "DsgBalOff": bal[("raw", "aware", False)],
     }
@@ -283,7 +319,7 @@ def main() -> None:
         r"\centering",
         r"\caption{The complete design. Every record is one point of the cross "
         r"scenario $\times$ configuration $\times$ relation $\times$ exception "
-        r"policy $\times$ crawl reading; the last two are deliberately thrown "
+        r"policy $\times$ reachability reading; the last two are deliberately thrown "
         r"switches, not replicates, so the enumeration carries no sampling error. "
         r"``Records'' gives the count at each level of the factor, and the last "
         r"column states what the factor is crossed with. Only the "
@@ -336,9 +372,10 @@ def main() -> None:
              "how many MST-wi exception predicates are thrown before the "
              "relation fires: none (raw), one (e1), two (e1e2)",
              f"{lv['pv']['raw']} / {lv['pv']['e1']} / {lv['pv']['e1e2']}", "full"),
-        rrow("crawl reading", "2",
-             "whether the reachability model is the frozen crawl-time snapshot "
-             "(frozen) or the execution-time state (live)",
+        rrow("reachability reading", "2",
+             "whether the gate consults a constant unreachable list (blind) or the "
+             "listing current when the relation runs (aware). The two differ in what "
+             "the model can see, not in when authorization changed",
              f"{lv['gui']['blind']} / {lv['gui']['aware']}", "full"),
         r"\midrule",
         r"\multicolumn{5}{@{}l}{$"
@@ -363,7 +400,8 @@ def main() -> None:
         r"no-exception configurations have no legitimate-sharing facility, so S6 and "
         r"S7, which are defined by a share the facility did not record, are "
         r"undefined for them. Each populated cell holds six exception-policy "
-        r"$\times$ crawl-reading records per relation.}"
+        r"$\times$ reachability-reading records per relation, so twelve in all "
+        r"except under S5, which carries MR-002 only.}"
         ,
         r"\label{tab:design-census}",
         r"\small",
@@ -402,7 +440,7 @@ def main() -> None:
         r"\centering",
         r"\caption{Attribution by matched pairs. Each row compares two records that "
         r"differ in exactly one switch, holding configuration, scenario, relation and "
-        r"exception policy (or crawl reading) fixed, so the contrast cannot be carried "
+        r"exception policy (or reachability reading) fixed, so the contrast cannot be carried "
         r"by any other factor. ``First only'' and ``second only'' are the discordant "
         r"pairs: a one-way count means the switch moves the outcome in one direction "
         r"only, and a zero means it does not move it at all. The two switches that "
@@ -417,9 +455,9 @@ def main() -> None:
         r"\toprule",
         r"contrast & outcome & pairs & first only & second only & both & neither & reading \\",
         r"\midrule",
-        row("frozen $\\rightarrow$ live", "false proof", c_fp, n_gui,
-            f"live reading removes {c_fp[(True, False)]} false proofs, adds {c_fp[(False, True)]}"),
-        row("frozen $\\rightarrow$ live", "violation detected", c_tp, n_gui,
+        row("blind $\\rightarrow$ aware", "false proof", c_fp, n_gui,
+            f"the aware reading removes {c_fp[(True, False)]} false proofs, adds {c_fp[(False, True)]}"),
+        row("blind $\\rightarrow$ aware", "violation detected", c_tp, n_gui,
             f"and costs {c_tp[(True, False)]} detections"),
         r"\addlinespace[3pt]",
         row("raw $\\rightarrow$ e1", "false proof", exc[("raw", "e1")][0], exc[("raw", "e1")][1],
@@ -445,23 +483,29 @@ def main() -> None:
         "% 由 ingest_design.py 生成，勿手改",
         r"\begin{table}[t]",
         r"\centering",
-        r"\caption{Reconciling the representative grid with the full partition. The "
-        r"grid of Section~\ref{sec:synthetic} is one point of the switch space, not a "
-        r"smaller version of the partition: it fixes the exception policy at raw and "
-        r"the crawl reading at live, keeps the six e3 configurations, and stops at S5. "
-        r"Adding the rest of the enumeration reproduces the 312/264 partition exactly.}"
+        r"\caption{Reconciling the representative grid with the full partition, "
+        r"record by record. The grid of Section~\ref{sec:synthetic} is the original "
+        r"selection---e3 configurations, S3--S7, exception policy raw, aware "
+        r"reading---not a smaller version of the partition. Each block below adds "
+        r"records that were not already counted and the subtotal is the running "
+        r"union; the blocks are disjoint and their union is the full \DsgRecords{} "
+        r"records. The grid itself contains \DsgGridVtwoFP{} v2 false proofs, so the "
+        r"start of the ladder is not a false-proof-free sample.}"
         ,
         r"\label{tab:reconcile}",
         r"\footnotesize",
-        r"\begin{tabular}{@{}p{0.47\columnwidth}rrr@{}}",
+        r"\begin{tabular}{@{}p{0.50\columnwidth}rrr@{}}",
         r"\toprule",
         r"subset & readable & unreadable & records \\",
         r"\midrule",
-        f"representative grid & {M['DsgGridOn']} & {M['DsgGridOff']} & {M['DsgGridN']}" + END,
-        f"$+$ other five switch settings & {M['DsgOtherOn']} & {M['DsgOtherOff']} & {M['DsgOtherN']}" + END,
-        f"$+$ S6--S7, six e3 configurations & {M['DsgSixSevenOn']} & {M['DsgSixSevenOff']} & {M['DsgSixSevenN']}" + END,
+        f"representative grid (S3--S7, raw, aware) & {M['DsgGridOn']} & {M['DsgGridOff']} & {M['DsgGridN']}" + END,
+        f"$+$ other exception policies & +{M['DsgStepPvOn']} & +{M['DsgStepPvOff']} & +{M['DsgStepPvN']}" + END,
+        f"$=$ both switches, S3--S7 & {M['DsgBaseTwoOn']} & {M['DsgBaseTwoOff']} & {M['DsgBaseTwoN']}" + END,
+        f"$+$ blind reading & +{M['DsgStepGuiOn']} & +{M['DsgStepGuiOff']} & +{M['DsgStepGuiN']}" + END,
+        f"$=$ all S3--S7 records & {M['DsgAllSwOn']} & {M['DsgAllSwOff']} & {M['DsgAllSwN']}" + END,
+        f"$+$ S1--S2 & +{M['DsgStepSXOn']} & +{M['DsgStepSXOff']} & +{M['DsgStepSXN']}" + END,
         f"$=$ all e3 records & {M['DsgEthreeOn']} & {M['DsgEthreeOff']} & {M['DsgEthreeN']}" + END,
-        f"$+$ two no-exception configurations & {M['DsgNoeThreeOn']} & {M['DsgNoeThreeOff']} & {M['DsgNoeThreeN']}" + END,
+        f"$+$ no-exception configurations & +{M['DsgStepNoeThreeOn']} & +{M['DsgStepNoeThreeOff']} & +{M['DsgStepNoeThreeN']}" + END,
         f"$=$ all records & {M['DsgFullOn']} & {M['DsgFullOff']} & {N}" + END,
         r"\bottomrule",
         r"\end{tabular}",

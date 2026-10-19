@@ -64,6 +64,12 @@ pushd "$ANA" >/dev/null
 "$PYBIN" ingest_temporal.py
 # 两条关系的显式判定式复核 + 真值表（只读既有 raw_matrix / temporal JSON）
 "$PYBIN" ingest_truth.py
+# 分层表（m2_stratum.tex）：ingest_design.py 会拿它的 Mii* 宏做交叉校验，必须先跑
+"$PYBIN" ingest_m2_stratum.py
+# 设计审计：完整因子表、匹配对归因、配置×情景普查、36/18→312/264 对账
+"$PYBIN" ingest_design.py
+# 决策口径：coverage / 弃权拆分 / 选择性风险 / 请求成本
+"$PYBIN" ingest_coverage.py
 "$PYBIN" make_diagrams.py
 popd >/dev/null
 
@@ -71,13 +77,18 @@ popd >/dev/null
 echo "[1b] Seeded positive-control experiment (regenerates seeded.json)..."
 SEED_DIR="$ROOT/experiments/real_system"
 if [ -f "$SEED_DIR/run_seeded.py" ]; then
-  ( cd "$SEED_DIR" && "$PYBIN" run_seeded.py ) \
-    && echo "    seeded.json regenerated" \
-    || echo "    (seeded run skipped: port busy or dependency missing)"
-  # re-ingest so the table reflects the freshly generated record
-  pushd "$ANA" >/dev/null
-  "$PYBIN" ingest_seeded.py
-  popd >/dev/null
+  if ( cd "$SEED_DIR" && "$PYBIN" run_seeded.py ); then
+    echo "    seeded.json regenerated"
+    pushd "$ANA" >/dev/null
+    "$PYBIN" ingest_seeded.py
+    popd >/dev/null
+  elif [ "${ALLOW_STALE:-0}" = "1" ]; then
+    echo "    [WARN] seeded run failed; ALLOW_STALE=1, keeping the shipped record"
+  else
+    echo "    [FAIL] seeded run failed: the positive control would silently reuse" >&2
+    echo "           a stale record. Fix it, or set ALLOW_STALE=1 to accept that." >&2
+    exit 1
+  fi
 fi
 
 echo "[2/2] Building the paper (main.pdf)..."

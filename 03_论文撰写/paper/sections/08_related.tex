@@ -41,13 +41,25 @@ truth, and a recent turn delegates generation or probing to language
 models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. A concurrent line
 reframes BOLA under a zero-trust model, in which each request must carry an
 explicit authorization decision rather than one inferred from endpoint
-reachability~\cite{Wu2026Rethinking}; our question sits at that decision level,
-asking what an oracle-substituting technique can establish about it. Our question is
-orthogonal to all of these. Each reports detections against an oracle it holds
-privately---a policy, a seeded defect, a differential response; we ask what an
-existing oracle-substituting technique \emph{decides} when the entitlement
-information it needs is not among its observables, and we make that a measurable
-property of the technique rather than of a system.
+reachability~\cite{Wu2026Rethinking}; our question sits at that decision level.
+Each of these papers reports detections against an oracle it holds
+privately---a policy, a seeded defect, a differential response---and none of them
+is our comparison class, because we do not measure detection rates. What this
+paper adds is three claims about one published adjudication, each with a
+falsifier. First, a gate that reads a crawl-time model misreports a grant the
+record does not contain, deterministically rather than intermittently, and the
+misreport survives recrawling of the same interface (Finding~1; the constructed
+enumeration and the two-product temporal replication). Second, once a readable,
+sound oracle is supplied, the promoted verdict is a subset of direct adjudication
+on the evaluated domain, so the metamorphic step adds no confirmation there
+(Proposition~\ref{lem:oracle-suff}(b)); the falsifier is a record the relation
+confirms and the direct consumer does not. Third, the published specificity's
+denominator is pooled over the inputs a crawl could enumerate, so a failure
+confined to a class outside that set does not move it
+(Proposition~\ref{prop:resolution}). We claim no new detector, no new oracle,
+and no recall advantage over the access-control line; what we claim is a
+statement about what an oracle-substituting technique can establish, and where
+that statement stops.
 
 \paragraph{Direct authorization oracles, and what is at stake here} Comparing
 responses across principals or privilege states is an established way to obtain
@@ -76,8 +88,8 @@ built on---for instance the observation that vulnerability datasets are
 frequently mislabeled, duplicated or otherwise unfit for the claims drawn from
 them~\cite{Croft2023Data}. The artifact we report is of the same family but
 inside a study rather than a dataset: a specificity figure whose
-\emph{denominator} is structurally unable to register a whole class of failure,
-and whose operating point silently assumes a reachability model equals the
-authorization state. We therefore read a testing technique's own reported metric
+\emph{denominator} is pooled over the inputs a crawl could enumerate, so it
+cannot register a failure confined to a class that crawl never reached, while
+the adjudication that consumes the same crawl can. We therefore read a testing technique's own reported metric
 as a measurement instrument, stating explicitly what its denominator can and
 cannot resolve.

@@ -1,0 +1,14 @@
+% 由 analysis/ingest_native_engine.py 自动生成 —— 请勿手改
+% A=原生报警（引擎 getFailures）；H=本文声明的升格策略；E=台账真值；Y=内容复读（sha256 与拥有者相同）；T=独立判定
+\begin{tabular}{lllccc}
+\toprule
+MR & subject & object & $E$ & $Y$ & $T$ \\
+\midrule
+002 & frank & acme/t1 & allow & allow$^{\dagger}$ & false proof \\
+002 & bob & alice/s1 & allow & allow$^{\dagger}$ & false proof \\
+002 & eve & carol/s1 & allow & allow$^{\dagger}$ & false proof \\
+002c & frank & acme/t1 & allow & allow$^{\dagger}$ & false proof \\
+002c & bob & alice/s1 & allow & allow$^{\dagger}$ & false proof \\
+002c & eve & carol/s1 & allow & allow$^{\dagger}$ & false proof \\
+\bottomrule
+\end{tabular}

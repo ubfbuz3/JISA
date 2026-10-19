@@ -1,18 +1,21 @@
 % 由 ingest_design.py 生成，勿手改
 \begin{table}[t]
 \centering
-\caption{Reconciling the representative grid with the full partition. The grid of Section~\ref{sec:synthetic} is one point of the switch space, not a smaller version of the partition: it fixes the exception policy at raw and the crawl reading at live, keeps the six e3 configurations, and stops at S5. Adding the rest of the enumeration reproduces the 312/264 partition exactly.}
+\caption{Reconciling the representative grid with the full partition, record by record. The grid of Section~\ref{sec:synthetic} is the original selection---e3 configurations, S3--S7, exception policy raw, aware reading---not a smaller version of the partition. Each block below adds records that were not already counted and the subtotal is the running union; the blocks are disjoint and their union is the full \DsgRecords{} records. The grid itself contains \DsgGridVtwoFP{} v2 false proofs, so the start of the ladder is not a false-proof-free sample.}
 \label{tab:reconcile}
 \footnotesize
-\begin{tabular}{@{}p{0.47\columnwidth}rrr@{}}
+\begin{tabular}{@{}p{0.50\columnwidth}rrr@{}}
 \toprule
 subset & readable & unreadable & records \\
 \midrule
-representative grid & 36 & 18 & 54\\
-$+$ other five switch settings & 180 & 90 & 270\\
-$+$ S6--S7, six e3 configurations & 96 & 48 & 144\\
+representative grid (S3--S7, raw, aware) & 36 & 18 & 54\\
+$+$ other exception policies & +72 & +36 & +108\\
+$=$ both switches, S3--S7 & 108 & 54 & 162\\
+$+$ blind reading & +108 & +54 & +162\\
+$=$ all S3--S7 records & 216 & 108 & 324\\
+$+$ S1--S2 & +96 & +48 & +144\\
 $=$ all e3 records & 312 & 156 & 468\\
-$+$ two no-exception configurations & 0 & 108 & 108\\
+$+$ no-exception configurations & +0 & +108 & +108\\
 $=$ all records & 312 & 264 & 576\\
 \bottomrule
 \end{tabular}
