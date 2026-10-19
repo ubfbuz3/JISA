@@ -1,6 +1,7 @@
 % 由 analysis/ingest_budget.py 自动生成 —— 勿手改
-\input{budget_numbers.tex}
-
+% 宏由调用方在导言区 \input{budget_numbers.tex} 加载（main.tex 已加载）；
+% 此处不再重复：\newcommand 重复定义会报 Command already defined，
+% 而 ZIP 打包器只从 main.tex 的 \input 推导依赖，表内 \input 会让宏文件漏装。
 \begin{table*}[t]
 \centering
 \caption{Equal-budget comparison on the same \BgtCells{} cells and the same credentials. \emph{cap} is the total request budget per cell. At cap~2 only the owner/actor probe pair fits: our method keeps its own order---it passes on the \BgtOursPassCapTwo{} cells where the relation does not trigger, reading no surface, and abstains on the rest, where the relation does trigger and no request is left to read the surface. At cap~3 each method may spend one further observation of its own choosing---ours reads the authorization surface, B3r enumerates the actor's visible objects---while B1--B3 spend nothing extra and are reported as under budget. No method is given padding requests. Ours therefore does not dominate: at the same ceiling B3r reaches \BgtBthreeRTpCapThree{} of \BgtViolations{} with \BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with \BgtOursFpCapThree{} and \BgtOursAbstainCapThree{} abstentions, and where the surface is unreadable ours refuses to claim rather than guessing. Ours spends \BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests the ceiling allows because the \BgtOursPassCapTwo{} untriggered cells never read the surface---not because an abstaining cell is free: it still pays for its probe pair, and for the surface read whenever the relation triggers under a ceiling that reaches it.}

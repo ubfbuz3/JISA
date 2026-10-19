@@ -88,8 +88,9 @@
 % ---- 竞争基线：常规多账户差分（由 analysis/ingest_baseline.py 生成） ----
 \input{baseline_numbers.tex}
 % ---- 等总预算比较与多类缺陷（由 ingest_budget.py / ingest_multiclass.py 生成） ----
-% 摘要引用了 \McInstances，故 multiclass 宏必须在正文之前加载；
-% budget 宏只被 budget_table.tex 使用，由该表自行加载，这里不重复。
+% 两个宏文件都在导言区加载：正文与摘要在前面就用到，ZIP 打包器也只从这里的
+% \input 推导依赖（表内再 \input 既会重复定义，也会让宏文件漏进 zip）。
+\input{budget_numbers.tex}
 \input{multiclass_numbers.tex}
 
 % 图形搜索路径：figures/ 放正文插图；./ 供 ieeeaccess.cls 内部取 bullet.png
