@@ -59,25 +59,48 @@ and the seed list for the seeded target.
 \paragraph{Unknown and failure handling}
 Each predicate can fail to yield a bit, and the handling is fixed by the
 pre-registered protocol before any cell is observed, not negotiated per result.
-$E$ is undefined if the entitlement-changing transaction does not commit; the
-procedure retries once, and a cell that still fails is marked \emph{failed} and
-excluded from every denominator, with the exclusion count reported alongside the
-result. $Y$ is undefined on an execution error or timeout; such a cell is
-likewise unscored, never coerced to \emph{allow} or \emph{deny}---in the native
-engine run, \NtMrTotal{} relations were attempted, \NtMrExecuted{} executed and
+The three failure modes are distinct and are stated as implemented.
+\emph{Transport-level retries:} an HTTP request that fails to connect (status~0)
+is re-issued up to two more times; this retry exists for the network, not for
+the transaction. \emph{$E$ undefined:} an entitlement-changing transaction that
+is refused or otherwise does not commit is \emph{not} retried at the
+transaction level---the runner issues it once, and the cell is marked
+\emph{failed} (reason \texttt{mutation\_failed}) and excluded from every
+denominator, with the exclusion count reported alongside the result.
+\emph{$Y$ undefined:} an execution error or timeout leaves the cell unscored,
+never coerced to \emph{allow} or \emph{deny}---in the native engine run,
+\NtMrTotal{} relations were attempted, \NtMrExecuted{} executed and
 \NtMrErrored{} errored, and the errored one is reported rather than silently
-dropped from the attempted count. $O$ is undefined wherever the introspection
-surface returns no definite answer; the state-calibrated method abstains on
+dropped from the attempted count. \emph{$O$ undefined:} the introspection
+surface may return no definite answer; the state-calibrated method abstains on
 those cells by construction, and the channel table reports them in an explicit
 \emph{unanswered} column (\TmpUnansGitea{} Gitea and \TmpUnansGitlab{} GitLab
 cells for the anonymous reader, \GgChUnans{} on Gogs' authenticated reader)
-instead of absorbing them into \emph{deny}. The twelve-row truth table is
-defined over $E\in\{\text{allow},\text{deny}\}$; an $E$-undefined cell would
-fall outside its rows and be reported as excluded, not reassigned. In the
-reported runs no cell exercised these exits: all \TmpCellsTotal{} temporal cells
-and both Gogs readings committed, answered and matched ($E{=}Y$ throughout, zero
-abstentions), so the contract is stated, exercised on no cell, and would bind
-any rerun on a degraded deployment. Missing or modified input records fail the
+instead of absorbing them into \emph{deny}. On those cells $E$ and $Y$ remain
+scoreable---an unanswered oracle removes the oracle-based adjudicators, not the
+cell. The twelve-row truth table is defined over
+$E\in\{\text{allow},\text{deny}\}$; an $E$-undefined cell would fall outside
+its rows and be reported as excluded, not reassigned. $E$ itself is
+\texttt{unknown} when an object is absent from the ledger model. For a
+modelled object with no recorded granting channel, the pre-registered policy
+promised \texttt{unknown} (``the ledger models no channel for the triple''),
+while the shipped implementation returns a genuine \emph{deny} for that case,
+reserving \texttt{unknown} for the absent-object case and for the one channel
+the protocol singles out as unmodellable (deploy keys, which would have to
+surface as unknown). We disclose this protocol-to-implementation divergence
+rather than reconcile it silently. In the reported runs the two readings
+coincide in effect: the channel space of every modelled object is fixed by the
+setup ledger, no deploy-key-reachable cell exists in the topology, and the
+\TmpEDeny{} Gitea and \TmpGEDeny{} GitLab deny cells under the
+default-deny stratum are exactly the cells whose grant rows are absent---so no
+cell's verdict depends on which reading is taken. Were an unmodelled channel to
+arise, the contract marks the cell \texttt{unknown} rather than guessing. In
+the reported runs the
+failure-exclusion exits were never taken: all \TmpCellsTotal{} temporal cells
+and both Gogs readings committed, $E{=}Y$ throughout, and zero cells were
+excluded as failed; the \emph{unanswered-oracle} exits, by contrast, were
+taken, and their counts are the ones given above. The contract would bind any
+rerun on a degraded deployment. Missing or modified input records fail the
 pipeline outright (SHA-256 manifests over inputs and outputs are shipped with
 the artefact); the pipeline never substitutes a default value for an absent
 record.

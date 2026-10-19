@@ -61,8 +61,10 @@ the two relations, and a competitive differential baseline on a matched request
 budget. One experiment that had not been run at all (a competing differential
 baseline) has now been run and reported. Where a request could not be met with
 the evidence we have, we say so in the manuscript instead of softening the text;
-eight of the twenty-one items are met only in part, and Section~\ref{sec:partial}
-of this letter lists them together with what is missing and why.
+five of the twenty-one items are met only in part, and Section~\ref{sec:partial}
+of this letter lists them together with what is missing and why. One of the
+five (R1.9) is reported as an open scope question for the editor rather than
+as resolved.
 
 References below are to the revised manuscript (28 pages, 23 tables). Table and
 section numbers are stable; page numbers are given for the tables most often at
@@ -108,7 +110,7 @@ outcome, actual entitlement, oracle response and detector verdict, together with
 an account of how a legitimate successful request is distinguished from
 unauthorized access without letting the tested reachability model determine its
 own ground truth.}
-\Response{Table~17 (Section~VI-B, p.~18) is now that table. It defines four
+\Response{Table~17 (Section~VI-B, p.~19) is now that table. It defines four
 quantities over the 712 temporal cells: $Y$ (the ordinary request succeeds), $M$
 (the crawl-time model lists the object for the subject), $O$ (the introspection
 surface's answer, with an explicit ``no definite answer'' value), $A$ (the alarm
@@ -132,7 +134,13 @@ unknown contract is additionally consolidated in the body itself
 transaction, a $Y$-undefined execution error and an $O$-undefined surface are
 each classified, when the method abstains, which denominators exclude such
 cells, and how the exclusions are disclosed---fixed before the run by the
-pre-registered protocol, not negotiated per result.}
+pre-registered protocol, not negotiated per result. That section also discloses
+one protocol-to-implementation divergence rather than reconciling it silently:
+the protocol promised $E{=}$unknown for a modelled object with no recorded
+granting channel, while the implementation returns a genuine \emph{deny} there;
+the two readings coincide on every reported cell because the channel space of
+each modelled object is fixed by the setup ledger and no deploy-key-reachable
+cell exists, and the text says so.}
 
 \subsection{Characterization of authorization-state transitions}
 \Concern{The three-phase protocol does not comprehensively model revocation,
@@ -173,32 +181,44 @@ Section~VIII.}
 \Concern{Clause~(2)---that the oracle is not affected by the same defect under
 investigation---remains a qualitative judgement; a reproducible procedure for
 determining admissibility \emph{before} examining outcomes is requested.}
-\Response{We agree this is the weakest link, and we have not solved it. What we
-can now offer is the procedure we actually follow, step by step, so that the
-judgement is at least auditable rather than retrospective:
-(1)~\emph{before} any outcome is examined, the candidate introspection surfaces,
-the granting channels and the defect classes are fixed in a protocol file, and
-its digest is recorded;
-(2)~that digest is bound into the run record before the reported run, so the
-choices cannot be edited afterwards without detection;
-(3)~the primary-vantage gate---readability from the owner or administrator
-vantage---is checked and passes 4 of 4 before the run;
-(4)~any amendment made after the fact is bound by its own digest and timestamp to
-the run record, and the contradiction in that timestamp is disclosed rather than
-back-dated: the amendment file's \texttt{written\_at} postdates the last probe,
-and the manuscript says so and gives the commands to re-check it;
-(5)~clause~(2) itself is then supported by the per-channel evidence of
-Table~11, which shows the surface answering \emph{deny} on cells the ledger
-allows exactly on the channels that are not group or repository membership.
-What we did \emph{not} do is supply a mechanical, implementation-independent test
-of independence from the tested mechanism: step~(5) is evidence, not a decision
-rule, and Section~VI-E now says explicitly that clause~(2) is a per-system
-judgement and is not automatable from readability alone. We would rather state
-the limit than imply a procedure we do not have.}
-\Action{Section~VI-E; the pre-registered protocol and the amendment timing note
-are in the reproducibility package.}
-\Remains{No mechanical independence criterion. This is listed as a limitation in
-Section~VIII.}
+\Response{We agree this is the weakest link. In this revision we give
+clause~(2) an operational procedure---an \emph{admission rule}---and apply it
+conservatively to the archived experiments
+(Section~VI-E, ``An oracle-independence admission rule, applied
+retrospectively''). We state its epistemic status plainly: the rule is
+\emph{proposed in this revision}, not extracted from the pre-registered
+protocol. The protocol pinned by digest did record the qualitative judgement
+(\texttt{oracle\_independence=shared}; the oracle read for diagnosis only),
+but it did not contain the procedure, and we do not backdate it. The rule
+itself: fix the target defect class; enumerate, at the level the product's own
+documentation and observable behaviour support, the path that produces the
+enforcement answer and the path that produces the oracle answer; \emph{admit}
+if neither path contains the other's decision point nor shares a component
+whose failure could co-occur with the tested defect; \emph{reject} on such
+sharing; \emph{unknown}---refusing independence-based promotion---where either
+path cannot be enumerated at that level. Applying it: on Gitea the permission
+route the oracle consults and the content routes are answered by the same
+server binary applying the same permission model; on Gogs the per-object route
+enumerates direct collaborators only and the permission suffix that would
+expose the remaining channels does not exist (\GgChProbePermSuffix); on GitLab
+the \texttt{members/all} route and the content routes are answered by the same
+application consulting the same membership tables. The enumeration stops at
+each server boundary---we did not audit internal source, so the finer-grained
+verdict would be \emph{unknown}---and the conservative reading available at
+the API level is recorded as \emph{reject} on all three products. Three
+epistemic statuses are kept apart in the manuscript: the diagnostic
+$O$/$H$ readings (run under the recorded \texttt{shared} status); the post-hoc
+gate-correctness classification against the independent ledger and content
+observation (which needs no oracle independence); and
+independence-certified proofs of previously unknown defects, which the rule
+refuses here. No recorded number changes under the rule.}
+\Action{Section~VI-E (admission rule, per-product path evidence, and the three
+epistemic statuses); the pre-registered protocol and the amendment timing note
+remain in the reproducibility package as the earlier, qualitative record.}
+\Remains{The rule is retrospective and its evidence base is API-observable
+behaviour, not an internal-source audit; a finer-grained per-component
+enumeration would be needed for anything beyond the conservative reject
+recorded here. This is listed as a limitation in Section~VIII.}
 
 \subsection{Proposition 2: separating the definitional from the empirical}
 \Concern{The proposition risks being tautological; the formal identity should be
@@ -231,7 +251,7 @@ and the oracle right. Those two rows are the two failure mechanisms the
 cross-vendor section keeps apart. The falsification condition is stated: produce
 an observable, outside what a succeeding request plus a readable oracle can
 determine, on which an authorization metamorphic relation still decides.}
-\Action{Section~VI-B with Lemma~1, Proposition~2, Table~17 (p.~18) and the
+\Action{Section~VI-B with Lemma~1, Proposition~2, Table~17 (p.~19) and the
 corrected equivalence; the earlier claim of extensional equality is deleted.}
 
 \subsection{Coverage and identifiability of the 576-record enumeration}
@@ -242,7 +262,7 @@ varied, attribution of the reported effects, and an explicit reconciliation of t
 \Response{The enumeration is now inspectable end to end. Table~1 (p.~5) is the
 complete design: seven factors, their levels, how each level is varied, the record
 count per level and what it crosses with, with the additive identity
-$44\cdot2\cdot3\cdot2+8\cdot3\cdot2=576$ in the footnote. Table~20 (p.~22) is the
+$44\cdot2\cdot3\cdot2+8\cdot3\cdot2=576$ in the footnote. Table~20 (p.~23) is the
 configuration-by-scenario census, where a dash marks an inadmissible combination
 and the caption says why (a configuration with no share has nothing to list; the
 listed-and-unreadable combination was not run, so it is untested rather than
@@ -387,7 +407,7 @@ the owner's re-read of the comment body rather than from any cached field or
 status code, followed by a re-run of the same \texttt{classify} and a
 field-by-field comparison against the record. A regression test
 (\texttt{test\_cve\_pair\_validation.py}, run by \texttt{reproduce.sh}) applies
-eight perturbations to in-memory copies---a deleted control, a failed recovery, a
+seven perturbations, plus an unchanged-record control, to in-memory copies---a deleted control, a failed recovery, a
 re-read body reverted to the original while the cached verdict still says true
 positive, a control returning 403, duplicated and unregistered labels, and a
 ledger conflict---and requires each to be rejected. The manuscript is explicit that this is a positive control of the
@@ -399,15 +419,15 @@ honestly: the three instances instantiate one fault pattern, and the one BFLA
 defect we seeded (a non-privileged actor succeeding at a collaborator-write
 endpoint) is reported as a boundary of the read-oriented logic, not as a
 detection failure.}
-\Action{Section~V-D and Table~16 (p.~16); Section~V-C and Table~15 (p.~15) for
+\Action{Section~V-D and Table~16 (p.~16); Section~V-C and Table~15 (p.~16) for
 the seeded control; the scope statement in Section~X.}
 \Remains{Per-defect recall and false-positive rates across several independent
-defect classes. Not done, and stated as out of scope in the manuscript. We
-therefore leave this concern \emph{open} rather than marking it resolved: whether
-a single-pair gate control plus a bounded seeded control suffices for acceptance
-is a scope judgement that belongs to the editor, and we would rather have it
-decided on the narrowed claims than appear to have closed it with evidence that
-does not carry per-defect detection rates.}
+defect classes. Not done, and stated as out of scope in the manuscript. The
+alternative response---the single-pair gate control plus the bounded seeded
+control, with the narrowed claims---is complete, and we do not represent it as
+satisfying this request: whether it suffices for acceptance is a scope
+judgement that belongs to the editor, which is why this item is reported as
+open rather than resolved.}
 
 \subsection{Control of temporal and observational effects}
 \Concern{The ordering of crawling, entitlement mutation, oracle querying and
@@ -460,17 +480,32 @@ inputs depends on scenario complexity or detector behaviour.}
 Section~IV-E) and the arbitrary-share case is bounded without any equal-weight
 assumption: whatever the class shares are, a failing class contributing a share
 $w$ of the negative inputs moves the figure only within $[1-w,1]$
-(Section~VI-C). We did \emph{not} derive the endogenous case in which the number
-of generated inputs is itself a function of detector behaviour, because our
-records are a fixed enumeration in which the input count does not respond to the
-detector; deriving it would require a pipeline whose generation is
-detector-dependent, which we did not build. Rather than assert a generality we
+(Section~VI-C). Our records are a fixed enumeration in which the input count
+does not respond to the detector, so the endogenous case is not instantiated by
+any experiment here; what this revision adds is a conditional derivation of
+what an endogenous count can certify, stated below. Rather than assert a
+generality we
 cannot support, Section~VIII states the limitation: records within a design cell
 are not independent, the records are a fixed enumeration, and we therefore report
 counts and rates rather than inferential intervals, with no result resting on
-statistical significance.}
+statistical significance. In this revision we additionally give the endogenous
+count its own conditional treatment (Section~VI, ``What an endogenous count
+certifies, conditionally''): for a method $D$ and run $\omega$ with
+$n_i(D,\omega)$ negative inputs and $f_i(D,\omega)$ false proofs per scenario,
+the score $S=1-\sum_i f_i/\sum_i n_i$ is a counting identity per fixed run; for
+a family of runs, $S_k\to 1$ if and only if
+$\sum_i f_i/\sum_i n_i\to 0$ with the denominator positive. Two arithmetic
+examples bound the interpretation: a fixed number of false proofs under a
+growing input total gives $S_k=1-1/k\to 1$ (the failure persists, only its
+weight vanishes), while false proofs growing as $\alpha k$ give $S_k=1-\alpha$
+at every $k$ (no dilution toward~1). The derivation is conditional on the
+run's scenario coverage---an unexercised failing class contributes nothing to
+either sum---and we do not use it as a detection guarantee.}
 \Action{Section~IV-E and Section~VI-C; the limitation stated in Section~VIII.}
-\Remains{No derivation for detector-endogenous input counts.}
+\Remains{The endogenous derivation is per-run arithmetic plus an asymptotic
+condition; it assumes no model of detector-dependent generation, and the
+correlation of records still limits the statistical reading, as Section~VIII
+states.}
 
 \subsection{Consistent treatment of abstentions and operational cost}
 \Concern{Perfect precision bought by abstention is not characterized by precision
@@ -478,7 +513,7 @@ and recall alone; coverage, selective risk, abstention rate and performance
 conditional on oracle availability are requested, alongside execution time and
 request overhead, with a distinction between a safe abstention and a successful
 detection.}
-\Response{Table~4 (Section~IV-D, p.~8) rescored the same 576 records on the
+\Response{Table~4 (Section~IV-D, p.~9) rescored the same 576 records on the
 \emph{decision} rather than on the alarm, and reports coverage, the abstention
 count and rate split by whether the record held a true violation, false proofs,
 misses and selective risk, with the explicit warning that risk is comparable
@@ -496,7 +531,7 @@ to rank by risk alone, noting that the always-degrade reference has the
 second-lowest risk while detecting nothing. Cost is reported as request counts:
 4833 enumeration requests (median 8, range 7--10) and 104 probe \texttt{GET}s
 (52 cells $\times$ 2).}
-\Action{Table~4 (p.~8) and Section~IV-D; the abstention semantics unified across
+\Action{Table~4 (p.~9) and Section~IV-D; the abstention semantics unified across
 methods in Section~IV-A.}
 \Remains{Wall-clock execution time for the replay-based methods, for the reason
 given under comment~7.}
@@ -515,7 +550,7 @@ cannot see the working tree---the pipeline regenerates all 28 number-bearing
 artefacts byte-identically, including the two baseline tables; and in an empty
 directory the 92-file submission package compiles (28 pages, no undefined
 references). The native run is reported as three stages rather than one
-number (Section~VII-C, Tables~21--23, pp.~22--24): $A$, the engine's own
+number (Section~VII-C, Tables~21--23, pp.~23--25): $A$, the engine's own
 \texttt{getFailures()} alarms, 6; $H$, our promotion policy applied to them, 6;
 $T$, confirmed, 0---with 6 false proofs. The content predicate is reported by
 invocation count rather than claimed clean, and the text says so. On the
@@ -529,8 +564,12 @@ at source, and the treatment of missing or failed observations is written into
 the protocol file that the run record binds.}
 \Action{Section~VII-C and Tables~20--22; \texttt{reproduce.sh},
 \texttt{verify\_artifact.sh} and the hash manifests in the package.}
-\Remains{The failure and missing-observation rules live in the protocol file and
-the scripts; Section~VII states them only in part.}
+\Remains{The failure and missing-observation rules were, at resubmission time,
+written in the protocol file and the scripts; this revision additionally
+consolidates them in the body itself (Section~III, ``Unknown and failure
+handling''), stated as implemented, including the transport-retry versus
+transaction-refusal distinction and the separate accounting of
+unanswered-oracle cells.}
 
 \subsection{Narrowing the conclusions; an evidence-to-claim table}
 \Concern{Statements suggesting that adjudication of genuine violations is absent
@@ -580,7 +619,7 @@ evaluation extended.}
 narrowed to the two reachability-gated relations in MST-wi, and the abstract
 opens by naming them as two relations of that framework. The native trigger
 range is stated where the run is reported rather than in the abstract, which is
-at its word limit: Section~VII-C and Table~21 (p.~22) record that of the
+at its word limit: Section~VII-C and Table~21 (p.~23) record that of the
 \NtMrTotal{} catalog authorization relations evaluated against Gitea,
 \NtMrExecuted{} ran and \NtMrFired{} alarmed, both of them reachability-gated
 (\NtKeyMrNames{}). We did not extend the evaluation to other relation
@@ -599,11 +638,11 @@ request cannot outperform the direct consumer of those same inputs. The claim
 that \emph{these two} relations satisfy the lemma's premise is a separate
 proposition whose premise is checked against the records: their alarms reduce to
 $y\wedge\neg m$ on the domain studied, against $D=y\wedge\neg o$, and the truth
-table (Table~17, p.~18) makes the functional representation explicit. The
+table (Table~17, p.~19) makes the functional representation explicit. The
 lemma's second premise---that the model is $O$-determined---is not claimed and
 fails on the stale cells, so the paper does not present the relations as
 informationally redundant in general.}
-\Action{Section~VI-B, Table~17 (p.~18).}
+\Action{Section~VI-B, Table~17 (p.~19).}
 
 \subsection{Detection side: no real system was vulnerable}
 \Concern{Either add a real vulnerable case or remove the claim that the
@@ -672,40 +711,43 @@ applicable and sufficient; none is inappropriate.
 \section{What this revision does not claim}
 \label{sec:partial}
 
-For the Associate Editor's convenience, the eight items that are met only in
-part, with the single missing element in each:
+For the Associate Editor's convenience, the items that are met only in part,
+with the single missing element in each. Four rows cover five of the
+twenty-one items; the concerns consolidated in this revision (the truth-table
+and unknown/failure contract of R1.2, the per-channel matrix for Gogs of R1.8,
+and the in-body failure rules of R1.14) are no longer listed here, because
+their previously missing elements are now in the manuscript:
 
 \begin{center}\small
 \begin{tabular}{@{}p{0.09\textwidth}p{0.42\textwidth}p{0.42\textwidth}@{}}
 \toprule
 \textbf{Item} & \textbf{What was done} & \textbf{What is still missing} \\
 \midrule
-R1.2 & Truth table over $(Y,M,O)$ with $E$ split; $A$, $D$ and $H$ defined; the
-engine-versus-policy split reported & The $E{=}$unknown contract is stated across
-several sections rather than collected in one place \\
-R1.4 & Pre-registered protocol bound by digest; primary-vantage gate checked
-before the run; amendment timing disclosed & A mechanical, implementation-
-independent test of independence from the tested mechanism \\
-R1.8 & Per-channel four-cell matrix for Gitea and GitLab; the two failure
-mechanisms separated & The same matrix for Gogs, whose surface exposes no
-equivalent decomposition \\
+R1.4 & An admission rule for clause~(2), proposed in this revision and applied
+conservatively to the archived experiments; per-product path evidence at the
+API level; all three products recorded \emph{reject} & The rule is
+retrospective and its evidence base stops at the server boundary; a
+finer-grained enumeration would require an internal-source audit we did not
+perform \\
 R1.9 / R2.4 & A real vulnerable/fixed pair through the adjudication gate; the
-seeded control bounded to one fault pattern & Per-defect recall and false-positive
-rates across several independent defect classes \\
-R1.12 & Fixed-weight derivation; arbitrary class-share bound & A derivation for
-detector-endogenous input counts \\
-R1.14 & Pinned environment, commands, seeds, raw outputs, regeneration scripts,
-clean-copy verification & The failure and missing-observation rules stated in the
-body rather than only in the protocol file and scripts \\
+seeded control bounded to one fault pattern; the scope objection stated in the
+letter & Per-defect recall and false-positive rates across several independent
+defect classes; reported as \emph{open}, for the editor to judge whether the
+alternative response suffices \\
+R1.12 & A conditional derivation for endogenous counts: the per-run identity,
+the $S_k\to 1\iff \sum f/\sum n\to 0$ condition, and the fixed-FP and
+proportional-FP examples & A generative model of detector-dependent input
+production, which our fixed-enumeration pipeline does not instantiate \\
 R2.6 & Design dependence stated; per-block and per-cell counts inspectable &
 Rates recomputed under equal per-cell weights alongside the original weights \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent We would rather submit with these eight named than with a text that
-implies they are closed. Each is visible in the manuscript as a stated boundary,
-in Section~VIII or at the point of use.
+\noindent We would rather submit with these four rows named than with a text
+that implies the five items are closed. Each is visible in the manuscript as a
+stated boundary, in Section~VIII or at the point of use; R1.9 additionally
+remains an open scope question for the editor.
 
 \section{Files in this resubmission}
 
@@ -713,7 +755,7 @@ in Section~VIII or at the point of use.
 \item This response to reviewers.
 \item The revised manuscript with all changes highlighted.
 \item A clean copy of the revised manuscript, as PDF and as the LaTeX source
-package (90 files), which compiles in an empty directory and reproduces every
+package (92 files), which compiles in an empty directory and reproduces every
 table and figure from the raw records.
 \end{enumerate}
 

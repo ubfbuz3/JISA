@@ -3,12 +3,13 @@
 基线 = baseline/submitted_main.pdf（git 157edec，Access-2026-49387 初投稿版，
 16 页旧标题）。脚本启动时校验其 SHA-256，不符即拒绝运行。
 
-判定分三级，目的是不漏掉"轻微但实质"的改动：
+判定分两级，保守标记（宁可多标，不可漏标）：
   1. 归一化后与旧版某行完全一致            -> 未改
-  2. 否则取最相似的旧行；若相似度 >= SIM 且差异只涉及非显著词元（功能词）-> 未改
-  3. 其余一律判为改写/新增                  -> 高亮
-显著词元 = 含数字的词元、长度 >= 4 的非功能词。单个数字、否定词、量词、
-运算符、专有名词的变化因此都会被抓到。短行（<3 词元）只有完全一致才放行。
+  2. 其余一律判为改写/新增                  -> 高亮
+不做任何功能词/显著词过滤：插入 not、量词变化、<= 与 >= 互换这类"轻"
+改动都要求被标出（增量复核反例：相似度 0.941、差异仅 {not}，旧逻辑漏标）。
+归一化把 <=/>=/</>/= 保留为独立词元（le/ge/lt/gt/eq），运算符改动在
+第一层就不会被抹掉。短行（<3 词元）只有完全一致才放行。
 
 删除的句子无法在 PDF 里高亮，单独列在报告的 DELETED 段，供回复信点名。
 """
@@ -30,35 +31,22 @@ OLD_SHA256 = "d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c"
 
 SIM = 0.80
 
-# 功能词表：不含否定词与量词，它们必须算显著差异。
-STOP = set(
-    """a an the of to in on for and or is are be been being by with that this these those
-    we our us it its as at from into onto over under than then so such which who whom whose
-    while when where whether both each few more most other some any all can could may might
-    will would shall should do does did done have has had having i you your he she they them
-    their his her there here also very just only about after before between during if
-    """.split()
-)
+# 运算符必须作为独立词元存活到比较层，否则 x <= y 与 x >= y 归一化后相同，
+# 运算符改动会在第一层被抹掉（增量复核反例）。
+_OPS = [(r"<=", " le "), (r">=", " ge "), (r"<", " lt "), (r">", " gt "), (r"=", " eq ")]
 
 
 def norm(s: str) -> str:
     s = s.replace("\u00ad", "")
     s = re.sub(r"-\s+", "", s)  # 连接断字
+    for pat, rep in _OPS:
+        s = re.sub(pat, rep, s)
     s = re.sub(r"[^0-9A-Za-z]+", " ", s)
     return " ".join(s.lower().split())
 
 
 def toks(s: str):
     return s.split()
-
-
-def salient(tokens) -> bool:
-    for t in tokens:
-        if any(c.isdigit() for c in t):
-            return True
-        if len(t) >= 4 and t not in STOP:
-            return True
-    return False
 
 
 def lines_of(doc):
@@ -167,10 +155,12 @@ def main() -> int:
             a = set(nlist)
             b = set(old_lines[best_i].split())
             diff = (a - b) | (b - a)
-            if not salient(diff):
+            if not diff:
+                # 词元集合相同（仅顺序/重复差异）——按未改处理，消耗旧行额度
                 old_pool[old_lines[best_i]] -= 1
                 used_old[old_lines[best_i]] += 1
                 continue
+            # 有任何词元差异（含 not、量词、运算符）→ 保守高亮，不做过滤
 
         page = new[pno - 1]
         annot = page.add_highlight_annot(rect)
@@ -200,10 +190,9 @@ def main() -> int:
             if abs(len(m.split()) - len(n.split())) > 0.5 * len(n.split()) + 4:
                 continue
             if difflib.SequenceMatcher(None, n.split(), m.split()).ratio() >= SIM:
-                a, b = set(n.split()), set(m.split())
-                if not salient((a - b) | (b - a)):
-                    ok = True
-                    break
+                # 存在足够相似的对应行 = 被改写而非被删除（改写已在新版高亮）
+                ok = True
+                break
         if not ok:
             deleted.append(raw.strip()[:160])
 

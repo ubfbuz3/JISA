@@ -1,34 +1,34 @@
 baseline sha256 : d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c
 baseline pages  : 16 ; revised pages : 28
-changed lines   : 1742 (of which short lines: 295)
-deleted lines   : 357
-page 1: 30
-page 2: 39
-page 3: 59
-page 4: 51
-page 5: 93
-page 6: 55
-page 7: 62
-page 8: 84
-page 9: 55
+changed lines   : 1846 (of which short lines: 310)
+deleted lines   : 269
+page 1: 32
+page 2: 41
+page 3: 74
+page 4: 60
+page 5: 96
+page 6: 28
+page 7: 63
+page 8: 83
+page 9: 85
 page 10: 16
-page 11: 34
-page 12: 112
-page 13: 90
-page 14: 62
-page 15: 49
-page 16: 95
-page 17: 99
-page 18: 125
-page 19: 74
-page 20: 79
-page 21: 69
-page 22: 102
-page 23: 73
-page 24: 18
-page 25: 37
-page 26: 76
-page 27: 4
+page 11: 24
+page 12: 100
+page 13: 91
+page 14: 89
+page 15: 41
+page 16: 87
+page 17: 93
+page 18: 94
+page 19: 114
+page 20: 83
+page 21: 93
+page 22: 113
+page 23: 78
+page 24: 20
+page 25: 46
+page 26: 32
+page 27: 70
 
 ===== CHANGED =====
 p1	Two Reachability-Gated Relations in MST-wi:
@@ -51,6 +51,8 @@ p1	and effect agreeing on 712: 29 stale false proofs appear, and a recrawl with 
 p1	A real vulnerable/fixed pair (Gitea 1.20.5 to 1.20.6) shows the independent entitlement/effect gate reporting
 p1	1 true positive on the vulnerable build, 0 false proofs, and no alarm on the fixed build—a check of the gate,
 p1	not a measure of detection effectiveness.
+p1	authors call reachability—what ‘‘the functionality exposed by
+p1	the user interface’’ permits—with the role-to-resource map-
 p1	ping ‘‘not always available’’ [2]. We take that sentence as
 p1	premise, not discovery. Delegating adjudication to a reacha-
 p1	bility model makes the moment the model was read part of the
@@ -90,6 +92,7 @@ p2	a class the crawl never reaches contributes no negative inputs
 p2	at all, so the figure is silent about that class (Proposition 1).
 p2	The published labels are manually verified; the limit is the
 p2	denominator and the input set, not the labels.
+p2	it; the relation then treats the successful response as a vio-
 p2	lation. Every step is exactly as specified, so no guard is mis-
 p2	written: the predicate’s two representations—‘‘reachable as
 p2	recorded’’ and ‘‘not reachable as recorded’’—cannot express
@@ -100,9 +103,12 @@ p2	at all; only a recrawl that can observe the granting channel
 p2	removes it, which is what the temporal experiment does when
 p2	a privileged recrawl repairs all 29 stale cells. The reported
 p2	specificity does not register the failure either, because it is a
+p2	property of the adjudication’s reading moment rather than of
+p3	statement about what the relations mean. Our experiments
 p3	separate the two ways the world can move under the model:
 p3	the constructed study varies what the gate can see, and the
 p3	temporal study varies when the model was read.
+p3	dict (Section VII-C). Neither instrument is a benchmark: the
 p3	A raw alarm becomes a verdict through an exception pol-
 p3	icy, and different policies are different methods: raw (the
 p3	alarm itself, with no exception handling at all—this is the
@@ -122,43 +128,68 @@ p3	[short]	negative result.
 p3	Unknown and failure handling
 p3	Each predicate can fail to yield a bit, and the handling is fixed
 p3	by the pre-registered protocol before any cell is observed,
-p3	not negotiated per result. E is undefined if the entitlement-
-p3	changing transaction does not commit; the procedure retries
-p3	once, and a cell that still fails is marked failed and excluded
-p3	from every denominator, with the exclusion count reported
-p3	alongside the result. Y is undefined on an execution error or
-p3	timeout; such a cell is likewise unscored, never coerced to
-p3	allow or deny—in the native engine run, 11 relations were at-
-p3	tempted, 10 executed and 1 errored, and the errored one is re-
-p3	ported rather than silently dropped from the attempted count.
-p3	O is undefined wherever the introspection surface returns no
+p3	not negotiated per result. The three failure modes are distinct
+p3	and are stated as implemented. Transport-level retries: an
+p3	HTTP request that fails to connect (status 0) is re-issued
+p3	up to two more times; this retry exists for the network, not
+p3	for the transaction. E undefined: an entitlement-changing
+p3	transaction that is refused or otherwise does not commit is
+p3	not retried at the transaction level—the runner issues it once,
+p3	and the cell is marked failed (reason mutation_failed)
+p3	and excluded from every denominator, with the exclusion
+p3	count reported alongside the result. Y undefined: an execution
+p3	error or timeout leaves the cell unscored, never coerced to
+p3	allow or deny—in the native engine run, 11 relations were
+p3	attempted, 10 executed and 1 errored, and the errored one
+p3	is reported rather than silently dropped from the attempted
+p3	count. O undefined: the introspection surface may return no
 p3	definite answer; the state-calibrated method abstains on those
-p3	cells by construction, and the channel table reports them in an
-p3	explicit unanswered column (56 Gitea and 72 GitLab cells
-p3	for the anonymous reader, 0 on Gogs’ authenticated reader)
-p3	instead of absorbing them into deny. The twelve-row truth
-p3	table is defined over E ∈{allow, deny}; an E-undefined cell
-p3	would fall outside its rows and be reported as excluded, not
-p3	reassigned. In the reported runs no cell exercised these exits:
+p3	cells by construction, and the channel table reports them in
+p3	an explicit unanswered column (56 Gitea and 72 GitLab
+p3	cells for the anonymous reader, 0 on Gogs’ authenticated
+p3	reader) instead of absorbing them into deny. On those cells
+p3	E and Y remain scoreable—an unanswered oracle removes
+p3	the oracle-based adjudicators, not the cell. The twelve-row
+p3	truth table is defined over E ∈{allow, deny}; an E-undefined
+p3	cell would fall outside its rows and be reported as excluded,
+p3	not reassigned. E itself is unknown when an object is ab-
+p3	sent from the ledger model. For a modelled object with no
+p3	recorded granting channel, the pre-registered policy promised
+p3	unknown (‘‘the ledger models no channel for the triple’’),
+p3	while the shipped implementation returns a genuine deny for
+p3	that case, reserving unknown for the absent-object case and
+p3	for the one channel the protocol singles out as unmodellable
+p3	(deploy keys, which would have to surface as unknown). We
+p3	disclose this protocol-to-implementation divergence rather
+p3	than reconcile it silently. In the reported runs the two readings
+p3	coincide in effect: the channel space of every modelled object
+p3	is fixed by the setup ledger, no deploy-key-reachable cell
+p3	exists in the topology, and the 203 Gitea and 338 GitLab
+p3	deny cells under the default-deny stratum are exactly the cells
+p3	whose grant rows are absent—so no cell’s verdict depends on
+p3	which reading is taken. Were an unmodelled channel to arise,
+p3	the contract marks the cell unknown rather than guessing. In
+p3	the reported runs the failure-exclusion exits were never taken:
 p3	all 712 temporal cells and both Gogs readings committed,
-p3	answered and matched (E=Y throughout, zero abstentions),
-p3	so the contract is stated, exercised on no cell, and would bind
-p3	any rerun on a degraded deployment. Missing or modified
-p3	input records fail the pipeline outright (SHA-256 manifests
-p3	over inputs and outputs are shipped with the artefact); the
-p3	pipeline never substitutes a default value for an absent record.
-p3	Table 1 gives the complete cross, factor by factor: the levels
-p3	of each, how it is varied, the number of records at each level,
-p3	and what it is crossed with. Table 20 in Section VII gives the
-p3	cell-by-cell census—eight configurations by seven scenarios,
-p3	with a dash wherever a combination is undefined. Two di-
-p3	mensions are nested rather than crossed, and we state them
-p3	here instead of letting the tables imply a factorial that was not
-p3	run: channel visibility exists only where the application offers
-p3	a sharing facility, so the two no-exception configurations sit
-p3	outside it; and the listed level was instantiated only with
-p3	introspection on, so the combination listed and unreadable is
-p3	untested rather than shown to be impossible: a product can list
+p3	E=Y throughout, and zero cells were excluded as failed; the
+p3	unanswered-oracle exits, by contrast, were taken, and their
+p3	counts are the ones given above. The contract would bind any
+p3	rerun on a degraded deployment. Missing or modified input
+p3	records fail the pipeline outright (SHA-256 manifests over
+p3	inputs and outputs are shipped with the artefact); the pipeline
+p3	never substitutes a default value for an absent record.
+p4	Table 1 gives the complete cross, factor by factor: the levels
+p4	of each, how it is varied, the number of records at each level,
+p4	and what it is crossed with. Table 20 in Section VII gives the
+p4	cell-by-cell census—eight configurations by seven scenarios,
+p4	with a dash wherever a combination is undefined. Two di-
+p4	mensions are nested rather than crossed, and we state them
+p4	here instead of letting the tables imply a factorial that was not
+p4	run: channel visibility exists only where the application offers
+p4	a sharing facility, so the two no-exception configurations sit
+p4	outside it; and the listed level was instantiated only with
+p4	introspection on, so the combination listed and unreadable is
+p4	untested rather than shown to be impossible: a product can list
 p4	a share and still refuse to answer the per-object introspection
 p4	query, and this enumeration would not see it.
 p4	A. WHAT THE DESIGN VARIES, AND WHAT IT CAN
@@ -207,9 +238,6 @@ p4	we never compare relations with each other. What remains
 p4	is balanced: every (exception policy, reachability reading)
 p4	slice holds 52 readable and 44 unreadable records, so the
 p4	readability contrast cannot be carried by either thrown switch.
-p4	ings (a constant unreachable list and the listing current at
-p4	execution—the second deliberately thrown switch). The sec-
-p4	ond is a visibility manipulation, not a temporal one. The two
 p5	TABLE 1. The complete design. Every record is one point of the cross scenario × configuration × relation × exc
 p5	last two are deliberately thrown switches, not replicates, so the enumeration carries no sampling error. ‘‘Rec
 p5	factor, and the last column states what the factor is crossed with. Only the listed-with-introspection cell is
@@ -303,6 +331,10 @@ p5	[short]	unreadable →readable
 p5	verdict of violation-proven
 p5	no change where there is no vi-
 p5	olation to detect
+p5	ings (a constant unreachable list and the listing current at
+p5	execution—the second deliberately thrown switch). The sec-
+p5	ond is a visibility manipulation, not a temporal one. The two
+p6	grid (a representative grid; Section IV-F re-runs the same
 p6	Table 3 concludes the ablation. The first three rows are a
 p6	ladder, and they must be read in order: with no exception
 p6	handling at all, raw yields 120 false proofs; the existence
@@ -330,34 +362,6 @@ p6	do. Selective presentation would have hidden the cost: v3’s
 p6	precision of 1.00 was bought with 111 false negatives (F1
 p6	0.65), an exchange of 60 false alarms for missed violations
 p6	dressed as an improvement.
-p6	D. COVERAGE, SELECTIVE RISK, AND WHAT A POOLED
-p6	PRECISION DOES NOT SAY
-p6	Table 3 scores the alarm. A method that abstains is counted as
-p6	not having alarmed, so the abstention lands in TN or in FN: for
-p6	the question ‘‘does the tool report a violation’’ that is the right
-p6	scoring, but it is not the scoring for ‘‘does the method decide’’.
-p6	Table 4 rescores the same 576 records on the decision and
-p6	reports coverage, abstention rate, selective risk and request
-p6	[short]	cost.
-p6	v3 decides 348 of 576 records—coverage 60.42%—and
-p6	abstains on 228, 108 of them on true violations and 120 on
-p6	records with none. Its precision of 1.00 and its selective risk
-p6	of 0.86% are therefore properties of a 60.42% coverage: over
-p6	the remaining two records in five the method claims nothing,
-p6	and the pooled precision is not an error rate over all records.
-p6	The abstentions are not all of one kind (Table 4, panel b).
-p6	156 are structural—the surface returns nothing, and there is
-p6	nothing for the method to consult. The other 72 fall on a
-p6	readable surface that shows a covering grant: the access is
-p6	explained, and the method still declines to assert its absence.
-p6	A conservative method may prefer silence to a positive ‘‘no
-p6	violation’’, and we do not score that as an error; but it is a
-p6	non-decision, and it cannot be read as a correct rejection. The
-p6	comparison with v2 makes the arithmetic visible. v2 promotes
-p6	60 false proofs; v3 declines 24 of them because the surface is
-p6	unreadable and 36 because it is readable and shows the grant.
-p6	Only the first 24 are the availability gate the method is named
-p6	for. The rest is a false proof converted into a non-decision.
 p7	invisible to the framework’s own log, while the state-calibrated v3 abstains in two places: where its surface 
 p7	shows a covering grant it declines to override. Both panels are recomputed from the same records as Table 3.
 p7	TABLE 3. End-to-end confusion matrix over all 576 records (216 true violations, 360 correct cases). The record
@@ -365,6 +369,34 @@ p7	raw (no exception handling)
 p7	[short]	0.64
 p7	v1 (existence filter)
 p7	v2 (existence + coverage)
+p7	D. COVERAGE, SELECTIVE RISK, AND WHAT A POOLED
+p7	PRECISION DOES NOT SAY
+p7	Table 3 scores the alarm. A method that abstains is counted as
+p7	not having alarmed, so the abstention lands in TN or in FN: for
+p7	the question ‘‘does the tool report a violation’’ that is the right
+p7	scoring, but it is not the scoring for ‘‘does the method decide’’.
+p7	Table 4 rescores the same 576 records on the decision and
+p7	reports coverage, abstention rate, selective risk and request
+p7	[short]	cost.
+p7	v3 decides 348 of 576 records—coverage 60.42%—and
+p7	abstains on 228, 108 of them on true violations and 120 on
+p7	records with none. Its precision of 1.00 and its selective risk
+p7	of 0.86% are therefore properties of a 60.42% coverage: over
+p7	the remaining two records in five the method claims nothing,
+p7	and the pooled precision is not an error rate over all records.
+p7	The abstentions are not all of one kind (Table 4, panel b).
+p7	156 are structural—the surface returns nothing, and there is
+p7	nothing for the method to consult. The other 72 fall on a
+p7	readable surface that shows a covering grant: the access is
+p7	explained, and the method still declines to assert its absence.
+p7	A conservative method may prefer silence to a positive ‘‘no
+p7	violation’’, and we do not score that as an error; but it is a
+p7	non-decision, and it cannot be read as a correct rejection. The
+p7	comparison with v2 makes the arithmetic visible. v2 promotes
+p7	60 false proofs; v3 declines 24 of them because the surface is
+p7	unreadable and 36 because it is readable and shows the grant.
+p7	Only the first 24 are the availability gate the method is named
+p7	for. The rest is a false proof converted into a non-decision.
 p7	The other side of the ledger is dearer. 108 abstentions fall
 p7	on true violations, and with the 3 records on which no alarm
 p7	is raised at all, v3 leaves 111 of 216 violations unproven—the
@@ -393,77 +425,33 @@ p7	at unequal coverage. The stratified analysis (Section IV-F)
 p7	equalises the availability of the oracle, not the decision rate:
 p7	v3 still declines 72 readable records that show a covering
 p7	grant, so the two strata do not make coverage common, and
-p7	we say so wherever the comparison is made. A safe abstention
-p7	is not a detection and we never count it as one.
-p7	[short]	Cost
-p7	The enumeration issues 4833 requests over 576 records (me-
-p7	dian 8 per record, range 7–10). The oracle-consuming meth-
-p7	ods add 104 probe GETs over 52 cell-operations: charged per
-p7	record that is one request, and 0.18 amortised as executed,
-p7	because the probe is shared by the records of a cell. raw,
-p7	v1 and v2 issue none of their own—they read the log the
-p7	crawl already wrote. We do not report wall-clock time for this
-p7	study: every method replays the same recorded exchanges,
-p7	so a difference would measure our replay loop rather than
-p7	the system under test. The study we did execute end to end
-p7	is the temporal loop of Section V: a median of 21.2 s per
-p7	transition on Gitea and 7.3 s on GitLab, of which the mutation
-p7	is 0.10 s and 0.09 s, the recrawl 0.38 s and 1.35 s, and the
-p7	cross-credential probe sweep 20.7 s and 6.0 s. Each of these
-p7	is a separate median, so the parts need not sum to the total
-p7	exactly. The recrawl the mechanism needs is a small part of
-p7	the loop; re-reading every credential is what costs.
-p7	E. A PUBLISHED METRIC’S RESOLUTION: WHAT A
-p7	POOLED SPECIFICITY CANNOT REGISTER
-p7	The published figure is a specificity, not a false-alarm share
-p7	of all inputs. MST-wi defines it as TN/(TN + FP) over
-p7	the follow-up inputs F, and states that each reported MT
-p7	failure was manually verified [2]; the labels are therefore not
-p7	the crawler’s own answer. With FN = 0 throughout that
-p8	TABLE 4. The same 576 records scored on the decision rather than on the alarm. Coverage is the share of record
-p8	violation or its absence; the abstention column gives the count and, in parentheses, its rate, split by whethe
-p8	and misses are the two error counts among decided records, and risk is their sum over that denominator—compara
-p8	coverage, which these methods do not have. A passed record is one on which the method did not fire, not a cert
-p8	direct_observe abstain when the probe is unreadable, as the direct adjudicator does, so their coverage is 54.1
-p8	binary reference that forces a negative verdict on those cells, and its misses are the price of that forcing, 
-p8	abstentions by reason: only the first row is the availability gate the method is named for.
-p8	[short]	coverage (%)
-p8	[short]	abstained
-p8	[short]	on violation
-p8	[short]	on normal
-p8	[short]	misses
-p8	[short]	risk (%)
-p8	[short]	100.00
-p8	[short]	21.35
-p8	v1 (existence filter)
-p8	[short]	86.98
-p8	75 (13.02)
-p8	[short]	12.57
-p8	v2 (existence + coverage)
-p8	[short]	89.58
-p8	60 (10.42)
-p8	[short]	12.21
-p8	[short]	60.42
-p8	228 (39.58)
-p8	[short]	0.86
-p8	[short]	42.19
-p8	333 (57.81)
-p8	[short]	1.23
-p8	[short]	54.17
-p8	264 (45.83)
-p8	[short]	54.17
-p8	264 (45.83)
-p8	direct_observe, forced
-p8	[short]	negative
-p8	[short]	100.00
-p8	[short]	18.75
-p8	(b) v3’s abstentions by reason
-p8	abstentions (on violation / on normal)
-p8	[short]	surface unreadable
-p8	156 (108 / 48)
-p8	nothing to consult
-p8	surface readable, covering grant 72 (0 / 72)
-p8	a false proof converted into a non-decision
+p8	we say so wherever the comparison is made. A safe abstention
+p8	is not a detection and we never count it as one.
+p8	[short]	Cost
+p8	The enumeration issues 4833 requests over 576 records (me-
+p8	dian 8 per record, range 7–10). The oracle-consuming meth-
+p8	ods add 104 probe GETs over 52 cell-operations: charged per
+p8	record that is one request, and 0.18 amortised as executed,
+p8	because the probe is shared by the records of a cell. raw,
+p8	v1 and v2 issue none of their own—they read the log the
+p8	crawl already wrote. We do not report wall-clock time for this
+p8	study: every method replays the same recorded exchanges,
+p8	so a difference would measure our replay loop rather than
+p8	the system under test. The study we did execute end to end
+p8	is the temporal loop of Section V: a median of 21.2 s per
+p8	transition on Gitea and 7.3 s on GitLab, of which the mutation
+p8	is 0.10 s and 0.09 s, the recrawl 0.38 s and 1.35 s, and the
+p8	cross-credential probe sweep 20.7 s and 6.0 s. Each of these
+p8	is a separate median, so the parts need not sum to the total
+p8	exactly. The recrawl the mechanism needs is a small part of
+p8	the loop; re-reading every credential is what costs.
+p8	E. A PUBLISHED METRIC’S RESOLUTION: WHAT A
+p8	POOLED SPECIFICITY CANNOT REGISTER
+p8	The published figure is a specificity, not a false-alarm share
+p8	of all inputs. MST-wi defines it as TN/(TN + FP) over
+p8	the follow-up inputs F, and states that each reported MT
+p8	failure was manually verified [2]; the labels are therefore not
+p8	the crawler’s own answer. With FN = 0 throughout that
 p8	evaluation, TN = F −TP −FP and the figure equals
 p8	1−FP/(F −TP): the denominator is the negative follow-up
 p8	inputs, not every generated input. We use that form below, and
@@ -502,8 +490,68 @@ p8	classes, and it is computed on the inputs the crawl reached.
 p8	Neither point disputes the reported value or its labels; both
 p8	limit what a high value certifies about a class the run did not
 p8	[short]	exercise.
+p8	firmations in Section VII-D.
+p8	F. WHAT POOLING HID: THE ABLATION SPLIT BY ORACLE
 p8	Table 3 pools two populations in which the oracle-consuming
 p8	representative grid; this subsection, summarised in Table 6,
+p8	Reconciling the representative grid with this partition
+p8	The 36/18 grid of Section IV is not a miniature of the 312/264
+p8	partition, and the two should not be read as one number at
+p8	two sizes. The grid is a single point of the switch space: it
+p8	keeps the e3 configurations, fixes the exception policy at raw
+p8	and the reading at aware, and covers S3–S7, which leaves
+p8	54 records—36 readable and 18 unreadable. That starting set
+p8	is the original selection, and it already contains 8 v2 false
+p8	proofs; a reconciliation that started elsewhere would be a
+p8	different sample with the same headcount. Table 5 closes the
+p8	gap additively and record by record: the two other exception
+p8	policies add 108 (72 readable), the blind reading adds 162
+p8	(108 readable), S1–S2 add 144 (96 readable), and the two
+p8	no-exception configurations add 108, all of them unreadable.
+p9	TABLE 4. The same 576 records scored on the decision rather than on the alarm. Coverage is the share of record
+p9	violation or its absence; the abstention column gives the count and, in parentheses, its rate, split by whethe
+p9	and misses are the two error counts among decided records, and risk is their sum over that denominator—compara
+p9	coverage, which these methods do not have. A passed record is one on which the method did not fire, not a cert
+p9	direct_observe abstain when the probe is unreadable, as the direct adjudicator does, so their coverage is 54.1
+p9	binary reference that forces a negative verdict on those cells, and its misses are the price of that forcing, 
+p9	abstentions by reason: only the first row is the availability gate the method is named for.
+p9	[short]	coverage (%)
+p9	[short]	abstained
+p9	[short]	on violation
+p9	[short]	on normal
+p9	[short]	misses
+p9	[short]	risk (%)
+p9	[short]	100.00
+p9	[short]	21.35
+p9	v1 (existence filter)
+p9	[short]	86.98
+p9	75 (13.02)
+p9	[short]	12.57
+p9	v2 (existence + coverage)
+p9	[short]	89.58
+p9	60 (10.42)
+p9	[short]	12.21
+p9	[short]	60.42
+p9	228 (39.58)
+p9	[short]	0.86
+p9	[short]	42.19
+p9	333 (57.81)
+p9	[short]	1.23
+p9	[short]	54.17
+p9	264 (45.83)
+p9	[short]	54.17
+p9	264 (45.83)
+p9	direct_observe, forced
+p9	[short]	negative
+p9	[short]	100.00
+p9	[short]	18.75
+p9	(b) v3’s abstentions by reason
+p9	abstentions (on violation / on normal)
+p9	[short]	surface unreadable
+p9	156 (108 / 48)
+p9	nothing to consult
+p9	surface readable, covering grant 72 (0 / 72)
+p9	a false proof converted into a non-decision
 p9	TABLE 5. Reconciling the representative grid with the full partition,
 p9	record by record. The grid of Section IV is the original selection—e3
 p9	configurations, S3–S7, exception policy raw, aware reading—not a smaller
@@ -536,21 +584,7 @@ p9	+ no-exception configurations
 p9	[short]	+0
 p9	[short]	+108
 p9	[short]	+108
-p9	[short]	= all records
-p9	Reconciling the representative grid with this partition
-p9	The 36/18 grid of Section IV is not a miniature of the 312/264
-p9	partition, and the two should not be read as one number at
-p9	two sizes. The grid is a single point of the switch space: it
-p9	keeps the e3 configurations, fixes the exception policy at raw
-p9	and the reading at aware, and covers S3–S7, which leaves
-p9	54 records—36 readable and 18 unreadable. That starting set
-p9	is the original selection, and it already contains 8 v2 false
-p9	proofs; a reconciliation that started elsewhere would be a
-p9	different sample with the same headcount. Table 5 closes the
-p9	gap additively and record by record: the two other exception
-p9	policies add 108 (72 readable), the blind reading adds 162
-p9	(108 readable), S1–S2 add 144 (96 readable), and the two
-p9	no-exception configurations add 108, all of them unreadable.
+p9	= all records
 p9	The blocks are disjoint, their union is the full 576 records,
 p9	and the readable count runs 36 →108 →216 →312 →312
 p9	(unreadable 18 →54 →108 →156 →264). The arithmetic
@@ -572,10 +606,11 @@ p10	estimate against weak references, not a claim about meta-
 p10	morphic testing versus the best oracle-free detector, and we
 p10	make no such claim. Both references also share an observ-
 p10	able with the reference labelling (obs_success alarms on
-p10	TABLE 7. The grant surface of Gitea 1.22.6 (instance-independent).
+p10	the same access outcome that partly defines a violation), so
+p10	Section VII-C. Third, the reachability model is reported un-
 p10	Table 7 counts an endpoint as grant-capable if, without mod-
-p10	the surface’’. Table 8 collects these populations. On 48 of 48
-p11	TABLE 8. Authorization-introspection readability protocol on Gitea. Each
+p11	TABLE 7. The grant surface of Gitea 1.22.6 (instance-independent).
+p11	the surface’’. Table 8 collects these populations. On 48 of 48
 p11	Is the write path verified by state rather than status?
 p11	A status code cannot establish that a write took effect, so
 p11	the write path is checked by content: the subject creates a
@@ -587,28 +622,29 @@ p11	status code contradicted the content outcome (count: 0). The
 p11	owner control—a non-admin writing its own repository—
 p11	changed content in 24 of 24 attempts. On 2 of the 3 systems
 p11	the site administrator could not write through the contents
+p11	TABLE 8. Authorization-introspection readability protocol on Gitea. Each
 p11	API although the ledger grants write; those 24 control rows
 p11	are excluded from the cross-credential denominator and re-
 p11	ported as a modelling gap rather than absorbed. Restore is un-
 p11	available on 1 of the 3 systems, whose contents API exposes
 p11	no delete, so its probe files remain in a disposable instance.
 p11	Table 9 is the load-bearing result: the adjudication departs
-p11	TABLE 9. Departure from the real authorization state, per reading of the
-p11	TABLE 10. Endogenous control: two objects that are both public at the
-p11	[short]	end.
 p11	parameter, not a field prevalence. This comparison uses two
 p11	snapshots and therefore cannot separate a stale model from
 p11	a channel the crawl never listed; the transition experiment in
 p11	Section V-A separates the two.
-p11	The most serious alternative explanation is that public objects
-p11	are simply harder to enumerate—visibility, not time. Two
-p11	objects that end equally public but became public at different
-p11	moments control for this (Table 10): the predicate reports
-p11	unreachability on 5 of 6 cells only for the object made public
-p11	after the crawl, and on 0 for the object public throughout, with
-p11	the MR firing correspondingly (5 vs. 0). Final visibility is
-p11	identical, so within this design the only manipulated explana-
-p11	tory variable is when the model was read.
+p12	TABLE 9. Departure from the real authorization state, per reading of the
+p12	TABLE 10. Endogenous control: two objects that are both public at the
+p12	[short]	end.
+p12	The most serious alternative explanation is that public objects
+p12	are simply harder to enumerate—visibility, not time. Two
+p12	objects that end equally public but became public at different
+p12	moments control for this (Table 10): the predicate reports
+p12	unreachability on 5 of 6 cells only for the object made public
+p12	after the crawl, and on 0 for the object public throughout, with
+p12	the MR firing correspondingly (5 vs. 0). Final visibility is
+p12	identical, so within this design the only manipulated explana-
+p12	tory variable is when the model was read.
 p12	A. EIGHT COMMITTED TRANSITIONS WITH A FROZEN
 p12	MODEL, ON TWO PRODUCTS
 p12	The two-snapshot comparison above cannot separate two
@@ -697,30 +733,30 @@ p12	record this rather than hide it: 6 known cells on Gitea, and
 p12	on GitLab 4 gated cells plus two recorded diagnostics for the
 p12	secondary vantage (amendment A1).
 p12	A channel-by-channel view makes the mechanism explicit
-p12	(Table 11), for Gitea and GitLab. Each cell is assigned to
-p12	exactly one channel, and the rows sum to the cell count, so
-p12	no cell is counted twice; the grouping is by the strongest
-p12	channel that grants it, not a multi-label count. The same de-
-p12	composition is available for Gogs (Table 14), and the reason
-p12	an earlier draft omitted it is worth recording, because it is a
-p12	category error rather than a data limitation: a channel label
-p12	is a property of the entitlement ledger—built from the lab
-p12	topology, the documented inheritance rules and the recorded
-p12	out-of-band grant events, never from a probe response—so a
-p12	product whose API exposes no per-object membership route
-p12	does not lose the channel axis. What such a product loses is
-p12	the ability to enumerate those grants through that route, which
-p12	is a claim about the oracle surface, not about the labelling.
-p12	Both tabulated products answer every direct-collaborator and
-p12	group cell correctly, and Gitea also answers its public and site-
-p12	administrator cells correctly. GitLab errs only by omission,
-p12	and only on the two channels that are not membership: it
-p12	answers deny on 44 public cells that a non-member may read
-p12	and on 9 site-administrator cells. Neither product returns a
-p12	single false allow. A one-sided error is nevertheless sufficient
-p12	to manufacture a false proof, because an alarm on such a
-p12	cell is then adjudicated against a deny that the ledger does
-p12	not support—which is the cross-vendor failure reported in
+p13	(Table 11), for Gitea and GitLab. Each cell is assigned to
+p13	exactly one channel, and the rows sum to the cell count, so
+p13	no cell is counted twice; the grouping is by the strongest
+p13	channel that grants it, not a multi-label count. The same de-
+p13	composition is available for Gogs (Table 14), and the reason
+p13	an earlier draft omitted it is worth recording, because it is a
+p13	category error rather than a data limitation: a channel label
+p13	is a property of the entitlement ledger—built from the lab
+p13	topology, the documented inheritance rules and the recorded
+p13	out-of-band grant events, never from a probe response—so a
+p13	product whose API exposes no per-object membership route
+p13	does not lose the channel axis. What such a product loses is
+p13	the ability to enumerate those grants through that route, which
+p13	is a claim about the oracle surface, not about the labelling.
+p13	Both tabulated products answer every direct-collaborator and
+p13	group cell correctly, and Gitea also answers its public and site-
+p13	administrator cells correctly. GitLab errs only by omission,
+p13	and only on the two channels that are not membership: it
+p13	answers deny on 44 public cells that a non-member may read
+p13	and on 9 site-administrator cells. Neither product returns a
+p13	single false allow. A one-sided error is nevertheless sufficient
+p13	to manufacture a false proof, because an alarm on such a
+p13	cell is then adjudicated against a deny that the ledger does
+p13	not support—which is the cross-vendor failure reported in
 p13	Section V-B, now located in a named channel rather than
 p13	attributed to ‘‘the oracle’’ as a whole.
 p13	Two properties of the run are recorded because they are
@@ -771,6 +807,7 @@ p13	deployment changes, so none of the counts is a field rate.
 p13	B. CROSS-VENDOR REPLICATION OF THE SNAPSHOT
 p13	DESIGN: GOGS 0.14.3 AND GITLAB 17.11.7
 p13	on two further systems (Table 13): Gogs 0.14.3, the project
+p13	why clause (2) of the admissibility condition (Section VI-E)
 p13	cannot be automated from readability alone.
 p13	Table 14 locates those 17 errors instead of leaving them as
 p13	a single unsoundness figure, and it does so on the ledger axis
@@ -787,36 +824,13 @@ p13	vantage per-object collaboration route does not represent.
 p13	Panel (b) re-groups the same cells by mechanism and shows
 p13	the same concentration as a rate rather than a count, which
 p13	matters because the three affected strata are small: 4 team, 5
-p13	visibility and 8 site-administrator cells, all wrong, against 4
-p13	and 27 cells, all right.
-p13	That the blind spot belongs to the chosen surface rather
-p13	than to the product’s whole API is recorded, not inferred:
-p13	in the surface probe shipped with the run, the per-object
-p13	permission suffix returns 404, the per-object team route 404
-p13	and the collaboration route the oracle consults 204, while the
-p13	organisation team listing is reachable (200). A team listing
-p13	is not a per-object authorization surface and a surface-gated
-p13	adjudicator does not consult it; the measurement therefore
-p13	reports what the gated surface licenses, not what the product
-p13	could in principle expose. The decomposition is also stable
-p13	across readings: the live reading of the same cells gives 31
-p13	agreements and 17 false denials, so the concentration is not
-p13	an artifact of the snapshot reading.
-p13	Two labelling caveats are part of the table. First, 1 cell car-
-p13	ries two ledger rules (site administrator and public visibility);
-p13	it is counted once, under the stronger rule, so the rows sum
-p13	to 48 cells rather than to the 49 recorded rules—the grouping
-p13	is a partition of cells, not of mechanisms. Second, the run-
-p13	ner’s provenance bucket is a heuristic that files a collaborator
-p13	grant made outside one particular repository as out-of-band;
-p13	the table therefore takes its labels from the ledger, and as
-p13	a cross-check the channel attribution of the 17 error cells
 p14	TABLE 11. Oracle fidelity by granting channel, over the same transition cells as Table 12: a confusion matrix 
 p14	ledger, per channel and per product. allow and deny count cells where the oracle agrees with the ledger; f. al
 p14	unans. counts cells where the surface returns no definite answer (anonymous readers). A false deny is an oracl
 p14	readable cell. Neither product produces a single false allow: the membership surface errs only by omission, an
 p14	the channels that are not group or repository membership. The ‘‘no channel’’ row is the default-deny stratum: 
 p14	cells, so the ledger denies them.
+p14	(a) Gitea 1.22.6
 p14	[short]	Channel
 p14	[short]	allow
 p14	[short]	deny
@@ -829,6 +843,7 @@ p14	[short]	direct collaborator
 p14	[short]	team / group
 p14	[short]	no channel
 p14	[short]	total
+p14	(b) GitLab CE 17.11.7
 p14	[short]	Channel
 p14	[short]	allow
 p14	[short]	deny
@@ -845,6 +860,7 @@ p14	TABLE 12. Temporal transitions on two products with the same pre-registered 
 p14	the subject may legitimately read, so the relation would report a false proof. Fixed: a recrawl with the same 
 p14	also fails to list it. Each product has its own mechanism per row (team attach ↔project-group share; team memb
 p14	its own cell count (280 on Gitea, 432 on GitLab) and its own decision-time ledger; no row is pooled across pro
+p14	GitLab CE 17.11.7
 p14	[short]	Transition
 p14	[short]	Stale FP
 p14	[short]	Fixed
@@ -861,9 +877,34 @@ p14	[short]	public→private
 p14	role read→write
 p14	site admin grant
 p14	[short]	Total
+p14	visibility and 8 site-administrator cells, all wrong, against 4
+p14	and 27 cells, all right.
+p14	That the blind spot belongs to the chosen surface rather
+p14	than to the product’s whole API is recorded, not inferred:
+p14	in the surface probe shipped with the run, the per-object
+p14	permission suffix returns 404, the per-object team route 404
+p14	and the collaboration route the oracle consults 204, while the
+p14	organisation team listing is reachable (200). A team listing
+p14	is not a per-object authorization surface and a surface-gated
+p14	adjudicator does not consult it; the measurement therefore
+p14	reports what the gated surface licenses, not what the product
+p14	could in principle expose. The decomposition is also stable
+p14	across readings: the live reading of the same cells gives 31
+p14	agreements and 17 false denials, so the concentration is not
+p14	an artifact of the snapshot reading.
+p14	Two labelling caveats are part of the table. First, 1 cell car-
+p14	ries two ledger rules (site administrator and public visibility);
+p14	it is counted once, under the stronger rule, so the rows sum
+p14	to 48 cells rather than to the 49 recorded rules—the grouping
+p14	is a partition of cells, not of mechanisms. Second, the run-
+p14	ner’s provenance bucket is a heuristic that files a collaborator
+p14	grant made outside one particular repository as out-of-band;
+p14	the table therefore takes its labels from the ledger, and as
+p14	a cross-check the channel attribution of the 17 error cells
 p14	agrees between the two sources (8/5/4). The consequence is
 p14	measurable: on Gitea the surface-gated adjudicators produced
 p14	no false proofs (0 v3, 0 direct-observe), while on Gogs they
+p14	manufacture them (8 snapshot, 5 live, 17 direct-observe) and
 p14	on GitLab again (5, 18), every v3 false proof falling on a cell
 p14	whose authorization derives from site administration or pub-
 p14	lic visibility (8 and 5 such cells on Gogs; 8 and 10 on GitLab).
@@ -872,8 +913,8 @@ p14	that blind spot into confirmed violations; no admissible oracle
 p14	was available from the tested introspection surfaces on Gogs
 p14	or GitLab, so the honest adjudicator abstains on the stratum
 p14	where those surfaces would license a promotion.
-p14	fering in subject and object, not in fault location; Table 15
 p15	TABLE 13. Cross-vendor replication under the identical three-phase protocol (crawl, out-of-band authorization 
+p15	per-system oracle false negatives by channel (Section V-B). The Gitea grant count here is the normalised M1 ce
 p15	merged, non-authorization grant surface excluded), and therefore differs from the raw route count in Table 7; 
 p15	TABLE 14. Oracle fidelity by granting channel on Gogs 0.14.3, over the same 48 snapshot cells as Table 13. Cha
 p15	ledger, which is built from the lab topology, the documented inheritance rules and the recorded out-of-band gr
@@ -911,17 +952,19 @@ p15	[short]	100.00
 p15	site-administrator status
 p15	[short]	100.00
 p15	no grant recorded
-p15	Table 15 is consistent with the negative result of the ab-
-p15	lation in this controlled fault pattern: direct_observe
-p15	and v3 catch all 3 planted instances with zero false posi-
-p15	tives, while direct_only, which ignores the request out-
-p15	come, raises 30 alarms on cells where the surface says none
-p15	TABLE 15. Positive control: detection of 3 seeded vulnerable instances
-p15	and no access succeeds—alarms our strict definition does
-p15	not promote. The control thus narrows the claim to one
-p15	fault pattern: when a surface that fully resolves the autho-
-p15	rization question is available, the metamorphic step is not
-p15	necessary for detection here. It does not generalise beyond
+p15	C. A SEEDED POSITIVE CONTROL
+p15	fering in subject and object, not in fault location; Table 15
+p16	TABLE 15. Positive control: detection of 3 seeded vulnerable instances
+p16	Table 15 is consistent with the negative result of the ab-
+p16	lation in this controlled fault pattern: direct_observe
+p16	and v3 catch all 3 planted instances with zero false posi-
+p16	tives, while direct_only, which ignores the request out-
+p16	come, raises 30 alarms on cells where the surface says none
+p16	and no access succeeds—alarms our strict definition does
+p16	not promote. The control thus narrows the claim to one
+p16	fault pattern: when a surface that fully resolves the autho-
+p16	rization question is available, the metamorphic step is not
+p16	necessary for detection here. It does not generalise beyond
 p16	that pattern, and it also delimits the detector: we seeded
 p16	one BFLA defect (non-privileged bob succeeding at PUT
 p16	.../collaborators/{u}, HTTP 204), which the read-
@@ -951,6 +994,18 @@ p16	ment body. On 1.20.5 the write succeeds (HTTP 200) and
 p16	alice’s own re-read returns the replacement body, so the effect
 p16	is real and not a status-code artifact. On 1.20.6 the same re-
 p16	quest is refused (HTTP 404) and alice’s re-read is unchanged
+p16	TABLE 16. A publicly fixed defect (object-versus-path ownership). The
+p16	verdict uses E from the ledger and Y from the owner’s re-read, not the
+p16	[short]	write status.
+p16	[short]	version
+p16	[short]	PATCH
+p16	[short]	re-read
+p16	1.20.5 (vulnerable)
+p16	[short]	changed
+p16	[short]	true positive
+p16	1.20.6 (fixed)
+p16	[short]	unchanged
+p16	[short]	no claim
 p16	(Table 16). The ledger gives bob no write channel on alice’s
 p16	repository (E = deny), so the vulnerable cell is a true positive
 p16	under the definition used throughout, and the fixed cell raises
@@ -976,47 +1031,36 @@ p16	such defects: the identifier is given, the defect is public and
 p16	already fixed, and the exercise is a positive control for the
 p16	gate, not a discovery. Nor is it an evaluation on a population—
 p16	one defect, one fault pattern (object versus path ownership),
-p16	TABLE 16. A publicly fixed defect (object-versus-path ownership). The
-p16	verdict uses E from the ledger and Y from the owner’s re-read, not the
-p16	[short]	write status.
-p16	[short]	version
-p16	[short]	PATCH
-p16	[short]	re-read
-p16	1.20.5 (vulnerable)
-p16	[short]	changed
-p16	[short]	true positive
-p16	1.20.6 (fixed)
-p16	[short]	unchanged
-p16	[short]	no claim
 p16	one product line—and a multi-defect recall study, with in-
 p16	dependent read, write, inheritance and privilege-escalation
 p16	faults and their negative controls, is not attempted here. The
 p16	claim this pair supports is about the gate’s correctness on a
 p16	real vulnerable/fixed pair, not about detection coverage.
+p16	keeping exceptions—the adjudication reports a legitimate ac-
 p16	cess whose grant the crawl record does not contain as a find-
 p16	ing that the published accounting counts as an established
 p16	violation—the promotion policy P of Section VII-C, which we
 p16	state rather than inherit, since the engine’s own return value
-p16	asserts nothing about authorization—in the direction forced
-p16	by the two-valued predicate encoding. The two studies supply
-p16	the grant in different ways: the constructed study seeds it
-p16	outside the framework’s record, and the temporal study makes
-p16	it between the crawl and the request. On the constructed
-p16	system, rate 1.00 (8 of 8 alarms) against 0 for the same share
-p16	created in band; on Gitea, 10 false proofs on 25 authorized
-p16	cells (0.40) under the crawl-time reading, against 0 alarms
-p16	live—objects, entitlements and predicates held fixed, only
-p16	the reading time changed—so the error is a property of the
-p16	reading, not of the system; the endogenous control (Table 10)
-p16	holds final visibility fixed and isolates that moment. The
-p16	direction is forced: the predicate has exactly two representa-
-p16	tions, and a grant created outside the crawled interface has no
-p16	representation but ‘‘cannot reach’’. The predecessor attributes
-p16	its residual false alarms to crawler coverage [3]; we add that
-p16	the failure is a function of when the model was read, which
-p16	makes the natural oracle-based repair available while showing
-p16	no incremental adjudication benefit from the metamorphic
-p16	step (Finding 2).
+p17	asserts nothing about authorization—in the direction forced
+p17	by the two-valued predicate encoding. The two studies supply
+p17	the grant in different ways: the constructed study seeds it
+p17	outside the framework’s record, and the temporal study makes
+p17	it between the crawl and the request. On the constructed
+p17	system, rate 1.00 (8 of 8 alarms) against 0 for the same share
+p17	created in band; on Gitea, 10 false proofs on 25 authorized
+p17	cells (0.40) under the crawl-time reading, against 0 alarms
+p17	live—objects, entitlements and predicates held fixed, only
+p17	the reading time changed—so the error is a property of the
+p17	reading, not of the system; the endogenous control (Table 10)
+p17	holds final visibility fixed and isolates that moment. The
+p17	direction is forced: the predicate has exactly two representa-
+p17	tions, and a grant created outside the crawled interface has no
+p17	representation but ‘‘cannot reach’’. The predecessor attributes
+p17	its residual false alarms to crawler coverage [3]; we add that
+p17	the failure is a function of when the model was read, which
+p17	makes the natural oracle-based repair available while showing
+p17	no incremental adjudication benefit from the metamorphic
+p17	step (Finding 2).
 p17	We separate the two parts, because only one of them can
 p17	fail. The algebraic part is a lemma about function composi-
 p17	tion; the empirical part is a statement about what these two
@@ -1090,91 +1134,32 @@ p17	identity. On the domain evaluated here ¬sup = 1, err(o1) =
 p17	0, and q = y in all 312 records on which the second clause
 p17	was computed, so both collapse to the single map
 p17	A = y ∧¬m.
-p17	Equations (1)–(3) are not a paraphrase of the code;
-p17	they reproduce the recorded alarm of all 576 constructed
-p17	records and all 712 temporal cells with no disagreement
-p17	(analysis/ingest_truth.py), and the same script
-p17	checks part (a) cell by cell. The three records on which the
-p17	state-calibrated method and direct_observe still differ
-p17	are not a counterexample to (b): all three are the same S5 write
-p17	cell under the three exception settings, where the model lists
-p17	the object for reading, the alarm stays silent, and the oracle
-p17	reports that the write is denied. There the relation misses
-p17	a violation the direct adjudicator confirms—a loss, not an
-p17	gain, and one the reachability gate cannot express because it
-p17	collapses read and write reachability.
-p17	Reading the table
-p17	Table 17 evaluates both verdicts on every combination of the
-p17	four variables and reports how many of the 712 temporal cells
-p17	fall in each row, split by the ledger’s entitlement. Three things
-p17	are visible in it that prose cannot state as compactly. First, the
-p17	equivalence is exactly as narrow as the algebra says: the two
-p17	verdicts agree in 530 of the 584 cells with a usable oracle and
-p17	part only in the two rows where Y = 1 and M̸ = O, which
-p17	hold 54 cells. Second, the parting is not one phenomenon
-p17	but two, and they need different remedies. In the 40 cells
-p17	of row 6 the model is right and the membership surface
-p17	answers deny on a cell that is both entitled and readable, so
-p17	the direct adjudicator alone raises a false proof; a better oracle
-p18	TABLE 17. The truth table of the two relations, with the temporal cells that fall in each row. Y : the ordinar
-p18	lists the object for the subject. O: the introspection surface’s answer, an em dash meaning it returns no defi
-p18	this domain both reduce to y ∧¬m. D: the direct adjudicator, y ∧¬o, undefined in rows 9–12. H: the promoted ve
-p18	A ∧¬o, which exists only where O is definite and is therefore a subset of D by construction. The count columns
-p18	E, so every row states its truth conditions for both values of E; a dot is an unrealised combination, and in t
-p18	and the second E=allow. Where D is defined the two verdicts coincide whenever Y =deny or M=O, and part only in
-p18	M̸ = O—54 of the 584 readable cells. Those two rows are the two failure mechanisms that Section V-B keeps apar
-p18	oracle wrong, so D alone raises a false proof; in row 7 the model is stale and the oracle right, so the relati
-p18	explains—both surfaces answer deny on a cell the ledger allows, both verdicts are false proofs, and their agre
-p18	[short]	Y
-p18	[short]	O
-p18	[short]	D
-p18	verdict at the ledger
-p18	[short]	E=deny
-p18	[short]	E=allow
-p18	[short]	deny
-p18	[short]	blocked
-p18	[short]	deny
-p18	[short]	no access
-p18	[short]	deny
-p18	[short]	reach
-p18	[short]	deny
-p18	[short]	no access
-p18	[short]	deny
-p18	[short]	blocked
-p18	[short]	allow
-p18	[short]	no access
-p18	[short]	deny
-p18	[short]	reach
-p18	[short]	allow
-p18	[short]	no access
-p18	[short]	allow
-p18	[short]	blocked
-p18	[short]	deny
-p18	true positive / false proof
-p18	[short]	allow
-p18	[short]	reach
-p18	[short]	deny
-p18	miss / false proof by D
-p18	[short]	allow
-p18	[short]	blocked
-p18	[short]	allow
-p18	true positive / false proof
-p18	[short]	allow
-p18	[short]	reach
-p18	[short]	allow
-p18	miss / correct silence
-p18	[short]	deny
-p18	[short]	blocked
-p18	no oracle; no access
-p18	[short]	deny
-p18	[short]	reach
-p18	no oracle; no access
-p18	[short]	allow
-p18	[short]	blocked
-p18	no oracle; alarm
-p18	[short]	allow
-p18	[short]	reach
-p18	no oracle; miss / silence
+p18	Equations (1)–(3) are not a paraphrase of the code;
+p18	they reproduce the recorded alarm of all 576 constructed
+p18	records and all 712 temporal cells with no disagreement
+p18	(analysis/ingest_truth.py), and the same script
+p18	checks part (a) cell by cell. The three records on which the
+p18	state-calibrated method and direct_observe still differ
+p18	are not a counterexample to (b): all three are the same S5 write
+p18	cell under the three exception settings, where the model lists
+p18	the object for reading, the alarm stays silent, and the oracle
+p18	reports that the write is denied. There the relation misses
+p18	a violation the direct adjudicator confirms—a loss, not an
+p18	gain, and one the reachability gate cannot express because it
+p18	collapses read and write reachability.
+p18	Reading the table
+p18	Table 17 evaluates both verdicts on every combination of the
+p18	four variables and reports how many of the 712 temporal cells
+p18	fall in each row, split by the ledger’s entitlement. Three things
+p18	are visible in it that prose cannot state as compactly. First, the
+p18	equivalence is exactly as narrow as the algebra says: the two
+p18	verdicts agree in 530 of the 584 cells with a usable oracle and
+p18	part only in the two rows where Y = 1 and M̸ = O, which
+p18	hold 54 cells. Second, the parting is not one phenomenon
+p18	but two, and they need different remedies. In the 40 cells
+p18	of row 6 the model is right and the membership surface
+p18	answers deny on a cell that is both entitled and readable, so
+p18	the direct adjudicator alone raises a false proof; a better oracle
 p18	would remove those. In the 14 cells of row 7 the model is
 p18	stale and the oracle right, so the relation alone raises a false
 p18	proof; a recrawl would remove those. Third, row 5 shows why
@@ -1241,8 +1226,70 @@ p18	consistent with its absence; that is the whole of the claim.
 p18	We do not assert that no such observable could exist for
 p18	other relations in the catalogue, and we do not assert that the
 p18	relations are useless.
-p19	inside each stratum of effective oracle readability (Table 6)
+p18	The comparison above is pooled. Section IV-F re-runs it
+p18	inside each stratum of effective oracle readability (Table 6)
+p19	TABLE 17. The truth table of the two relations, with the temporal cells that fall in each row. Y : the ordinar
+p19	lists the object for the subject. O: the introspection surface’s answer, an em dash meaning it returns no defi
+p19	this domain both reduce to y ∧¬m. D: the direct adjudicator, y ∧¬o, undefined in rows 9–12. H: the promoted ve
+p19	A ∧¬o, which exists only where O is definite and is therefore a subset of D by construction. The count columns
+p19	E, so every row states its truth conditions for both values of E; a dot is an unrealised combination, and in t
+p19	and the second E=allow. Where D is defined the two verdicts coincide whenever Y =deny or M=O, and part only in
+p19	M̸ = O—54 of the 584 readable cells. Those two rows are the two failure mechanisms that Section V-B keeps apar
+p19	oracle wrong, so D alone raises a false proof; in row 7 the model is stale and the oracle right, so the relati
+p19	explains—both surfaces answer deny on a cell the ledger allows, both verdicts are false proofs, and their agre
+p19	[short]	Y
+p19	[short]	O
+p19	[short]	D
+p19	verdict at the ledger
+p19	E=deny
+p19	E=allow
+p19	[short]	deny
+p19	[short]	blocked
+p19	[short]	deny
+p19	[short]	no access
+p19	[short]	deny
+p19	[short]	reach
+p19	[short]	deny
+p19	[short]	no access
+p19	[short]	deny
+p19	[short]	blocked
+p19	[short]	allow
+p19	[short]	no access
+p19	[short]	deny
+p19	[short]	reach
+p19	[short]	allow
+p19	[short]	no access
+p19	[short]	allow
+p19	[short]	blocked
+p19	[short]	deny
+p19	true positive / false proof
+p19	[short]	allow
+p19	[short]	reach
+p19	[short]	deny
+p19	miss / false proof by D
+p19	[short]	allow
+p19	[short]	blocked
+p19	[short]	allow
+p19	true positive / false proof
+p19	[short]	allow
+p19	[short]	reach
+p19	[short]	allow
+p19	miss / correct silence
+p19	[short]	deny
+p19	[short]	blocked
+p19	no oracle; no access
+p19	[short]	deny
+p19	[short]	reach
+p19	no oracle; no access
+p19	[short]	allow
+p19	[short]	blocked
+p19	no oracle; alarm
+p19	[short]	allow
+p19	[short]	reach
+p19	no oracle; miss / silence
 p19	Evidence: Table 3—0 false proofs vs. 0 (a tie at zero, not
+p19	seeded vulnerability; the cross-vendor systems (Section V-B)
+p19	and the seeded control (Section V-C) complete the evidence.
 p19	C. FINDING 3 (RQ3): A POOLED SPECIFICITY CANNOT
 p19	REGISTER A CLASS IT DID NOT EXERCISE
 p19	The reported 99.81% is a specificity over follow-up inputs,
@@ -1274,47 +1321,59 @@ p19	crawled input set does not by itself certify that a class outside
 p19	that set was exercised, and that a class-uniform failure can be
 p19	held above any fixed threshold by unaffected inputs.
 p19	What an endogenous count certifies, conditionally
-p19	The reviewer asks what our own per-run count certifies. Fix
-p19	a run ω and a method D; let ni(D, ω) be the number of
-p19	negative inputs D generates for scenario i in that run and
-p19	fi(D, ω) the false proofs among them. The endogenous score
-p19	is S(D, ω) = 1 −∑︁
+p19	Fix a run ω and a method D; let ni(D, ω) be the number
+p19	of negative inputs D generates for scenario i in that run
+p19	and fi(D, ω) the false proofs among them. The endogenous
+p19	score is S(D, ω) = 1 −∑︁
 p19	i fi(D, ω)
-p19	i ni(D, ω) when the de-
-p19	nominator is positive. Three conditional statements, and no
+p19	i ni(D, ω) when the
+p19	denominator is positive. Three conditional statements, and no
 p19	more. (i) For each fixed ω, the identity holds by counting:
 p19	it is a definition evaluated on that run’s records, so it needs
 p19	no distributional assumption. (ii) Correlation among records
 p19	(a design cell shares its fixture) affects what confidence one
 p19	may attach to S if it were re-estimated on a fresh run; it does
 p19	not move the count itself, which is why we report counts
-p19	and rates and no interval. (iii) S →1 if every exercised
-p19	class has fi = 0; the converse fails—a single large class
-p19	with fi > 0 keeps S below 1 even while an unexercised
-p19	failing class contributes nothing, which is the same dilution
-p19	mechanism as Proposition 1. These are statements about one
-p19	run’s arithmetic, conditional on its scenario coverage; they are
-p19	not a theorem that any run detects every failure, and we do not
-p19	use them as one.
-p19	D. COMPETING BASELINES: WHAT A SUCCEEDING
-p19	REQUEST CANNOT SEPARATE
-p19	The comparison that matters is not against our own ablations
-p19	but against what a conventional differential prober can do
-p19	with the same two observations. We implemented three such
-p19	rules and ran them on the same 42 cells (six configurations
-p19	crossed with S1–S7), each consuming one request as the
-p19	owner and one as the actor. B1 status-only alarms whenever
-p19	the replayed request returns a non-error status—the coarsest
-p19	rule a replay scanner can use. B2 equality replay alarms only
-p19	when the owner’s request succeeded and the actor received
-p19	byte-identical output, which is the differential rule with no
-p19	authorization model. B3 adds the strongest information a
-p19	tester can hold without reading the target: it suppresses every
-p19	cell covered by the tester’s own share log, so it knows each
-p19	grant it created itself. The fourth row is MR-002 with the v3
-p19	Table 18 reports the outcome. The cells contain 15 true
-p19	violations, 12 legitimate accesses through a grant, and 15
-p19	denials. B1 and B2 claim on all 27 allowed cells: 15 true
+p19	and rates and no interval. (iii) For a family of runs ωk in
+p19	which the negative-input total stays positive,
+p19	[short]	Sk →1
+p19	[short]	if
+p19	and only if ∑︁
+p19	i fi(D, ωk)
+p19	i ni(D, ωk) →0; a finite-sample
+p19	S < 1 by itself says nothing about the limit. Two arithmetic
+p20	examples fix the distinction. If the false-proof count is held
+p20	fixed at one while the negative-input total grows with k, then
+p20	Sk = 1 −1/k →1: the failure never disappears, only
+p20	its weight in the ratio does. If instead the false proofs grow
+p20	proportionally—f = αk with 0 < α < 1 and k chosen so
+p20	the counts are integral—then Sk = 1 −α for every k: input
+p20	growth produces no dilution toward 1 at all. Both mechanisms
+p20	coexist with an unexercised failing class, which contributes
+p20	no negative inputs and leaves every Sk unchanged (the same
+p20	blind spot as Proposition 1). These are statements about one
+p20	run’s arithmetic, conditional on its scenario coverage; they are
+p20	not a theorem that any run detects every failure, and we do not
+p20	use them as one.
+p20	D. COMPETING BASELINES: WHAT A SUCCEEDING
+p20	REQUEST CANNOT SEPARATE
+p20	The comparison that matters is not against our own ablations
+p20	but against what a conventional differential prober can do
+p20	with the same two observations. We implemented three such
+p20	rules and ran them on the same 42 cells (six configurations
+p20	crossed with S1–S7), each consuming one request as the
+p20	owner and one as the actor. B1 status-only alarms whenever
+p20	the replayed request returns a non-error status—the coarsest
+p20	rule a replay scanner can use. B2 equality replay alarms only
+p20	when the owner’s request succeeded and the actor received
+p20	byte-identical output, which is the differential rule with no
+p20	authorization model. B3 adds the strongest information a
+p20	tester can hold without reading the target: it suppresses every
+p20	cell covered by the tester’s own share log, so it knows each
+p20	grant it created itself. The fourth row is MR-002 with the v3
+p20	Table 18 reports the outcome. The cells contain 15 true
+p20	violations, 12 legitimate accesses through a grant, and 15
+p20	denials. B1 and B2 claim on all 27 allowed cells: 15 true
 p20	positives and 12 false proofs, a precision of 55.56%. On these
 p20	cells the equality test adds nothing to the status test, because
 p20	every allowed access returns the owner’s bytes. B3 removes
@@ -1362,38 +1421,10 @@ p20	methods are scored from the same two recorded responses in
 p20	the same process, a per-method timing would measure our
 p20	replay loop rather than the rule, so we report none.
 p20	E. ADMISSIBILITY, AND FALSIFICATION
-p20	Pre-registered oracle-independence admission
-p20	Clause (2) is applied by a rule fixed before the run, per target
-p20	defect class. The target class is fixed first (here: object-level
-p20	authorization enforcement of read and write requests). Then
-p20	the two implementation paths are enumerated from the system
-p20	under test: the path that produces the enforcement answer
-p20	y, and the path that produces the oracle answer o; for each,
-p20	the components consulted (middleware, membership store,
-p20	policy cache) are recorded. The rule is: admit if the ora-
-p20	cle’s answer-producing path neither contains the enforcement
-p20	decision under test nor shares with it a component whose
-p20	failure could co-occur with the tested defect; reject if such
-p20	a shared component exists; unknown if either path cannot be
-p20	enumerated from documentation and observable behaviour,
-p20	in which case the method abstains from independence-based
-p20	promotion. Applying the rule to the three real systems yields
-p20	no admission: on each product the introspection endpoint is
-p20	answered by the same server-side authorization subsystem
-p20	whose decision y is being tested, so the oracle and enforce-
-p20	ment are path-coupled and clause (2) cannot be satisfied by
-p20	construction. That outcome is why every promoted verdict in
-p20	this paper is claimed as a gate-correctness control—the pro-
-p20	moted alarm is checked against the ledger, never as evidence
-p20	that the relations discover previously unknown defects—and
-p20	why the positive control of Section V stops at gate cor-
-p20	rectness. The ‘oracle_independence=shared’ trials reported
-p20	earlier are readings under this same rule (the rule’s reject
-p20	outcome): diagnostic to run, but not a soundness certificate,
-p20	and we do not present them as one.
-p20	and the outcome (Finding 2). And where no readable, ad-
-p20	missible oracle exists—the black-box case—there is nothing
-p20	for a sound method to consume, so it abstains rather than
+p20	An oracle-independence admission rule, applied retrospec-
+p20	[short]	tively
+p20	Clause (2) needs an operational procedure, and we give
+p20	one as part of this revision. The pre-registered proto-
 p21	TABLE 18. Competing baselines on the same 42 cells and the same probe pair. The cells comprise 15 true violati
 p21	grant (in-band or out-of-band), and 15 denials. Every method consumes one owner request and one actor request 
 p21	additional read of the authorization surface on the 27 cells where a relation alarms, and none where it does n
@@ -1422,7 +1453,50 @@ p21	Ours: MR-002 + v3
 p21	consult the SUT authorization surface; abstain if un-
 p21	[short]	59.52
 p21	100.00 / 66.67
+p21	col pinned by digest recorded the qualitative judgement
+p21	(oracle_independence=shared; the oracle read for
+p21	diagnosis only) but did not contain the procedure below, and
+p21	we do not backdate it: the rule is proposed here and applied
+p21	conservatively to the archived experiments. The rule, per tar-
+p21	get defect class (here: object-level authorization enforcement
+p21	of read and write requests): enumerate, at the level the prod-
+p21	uct’s own documentation and observable behaviour support,
+p21	the path that produces the enforcement answer y and the
+p21	path that produces the oracle answer o; admit if neither path
+p21	contains the other’s decision point nor shares a component
+p21	whose failure could co-occur with the tested defect; reject
+p21	if such sharing is found; unknown if either path cannot be
+p21	enumerated at that level, in which case independence-based
+p21	promotion is refused. Applied at that level of evidence: on
+p21	Gitea 1.22.6 the permission route the oracle consults and the
+p21	content routes are answered by the same server binary apply-
+p21	ing the same permission model; on Gogs 0.14.3 the per-object
+p21	route the oracle consults enumerates direct collaborators only,
+p21	and the permission suffix that would expose the remaining
+p21	channels does not exist (404), so the oracle path cannot even
+p21	be completed; on GitLab 17.11.7 the members/all route
+p21	the oracle consults and the content routes are answered by the
+p21	same application consulting the same membership tables. On
+p21	each product the enumeration stops at the server boundary—
+p21	below it we did not audit internal source, so the finer-grained
+p21	verdict would be unknown—and the conservative reading
+p21	already available at the API level, one process and one au-
+p21	thorization model on both paths, is recorded as reject. Three
+p21	epistemic statuses must then be kept apart: the diagnostic O/H
+p21	readings in the experiments (run under the recorded shared
+p21	status); the post-hoc classification of every promoted verdict
+p21	against the independent ledger E and the content observation
+p21	Y (gate correctness, which needs no oracle independence);
+p21	and independence-certified proofs of previously unknown
+p21	defects, which the rule refuses here. No recorded number
+p21	changes under the rule; what changes is the epistemic status of
+p21	the promotion, which is exactly the status the paper’s claims
+p21	[short]	already use.
+p21	and the outcome (Finding 2). And where no readable, ad-
+p21	missible oracle exists—the black-box case—there is nothing
+p21	for a sound method to consume, so it abstains rather than
 p21	proves. Across the statuses the oracle can take, the verdict the
+p21	evaluated relations can yield is thus a false proof, a result no
 p21	worse), or an abstention. None of those is a proof of illegal
 p21	access, because the relation’s alarm is not evidence of it: an
 p21	alarm says that the relation failed, and an ordinary request that
@@ -1439,30 +1513,11 @@ p21	ent kinds of evidence—source-level functional dependence,
 p21	a constructed enumeration, and two real-system studies—
 p21	and a reader should be able to see which kind carries which
 p21	[short]	sentence.
-p21	A. THE ENUMERATION, CELL BY CELL
-p21	Table 20 is the mapping the review asked for: every config-
-p21	uration against every scenario, with the number of records
-p21	under each populated cell and a dash where the combination
-p21	is undefined. The eight configurations are the full cross of in-
-p21	stantiation mode, enforcement correctness, channel visibility
-p21	and introspection availability, less two corners. The first is
-p21	undefined: with no exception mechanism there is no share to
-p21	list. The second—listed with the introspection surface off—
-p21	was simply not instantiated, and Section III-A treats it as
-p21	untested rather than impossible. Each populated cell holds
-p21	twelve records—three exception policies and two reachability
-p21	readings for each of the two relations—and six where only
-p21	one relation applies, as under S5.
-p21	Two partitions of these records are easy to confuse, because
-p21	both are counted in the same totals. Split by relation, MR-
-p21	002 holds 312 records and MR-004 264, since S5 carries the
-p21	first only. Split by effective readability, 312 are readable and
-p21	264 are not, since four of the eight configurations expose a
-p21	surface and four do not. The two pairs of totals coincide; the
-p21	partitions do not. Section IV-F uses the second, and every
-p21	statement about it can be recomputed from the census column
-p21	[short]	by column.
-p21	B. CONFIRMATION AT SOURCE
+p21	predicates read at source (Section VII-B), an execution of
+p21	the published relations on a real system (Section VII-C),
+p21	implementation of the same predicates (Section VII-D); the
+p21	seeded positive control (Section V-C) and the cross-vendor
+p21	replication (Section V-B) are the remaining confirmations
 p22	TABLE 19. Evidence to claim. Each row names the assumption the claim needs, the artefact that carries it, and 
 p22	not a research question: it checks the adjudication gate used throughout, and is not evidence about detection 
 p22	[short]	RQ
@@ -1549,22 +1604,54 @@ p22	One publicly fixed defect found
 p22	and supplied by us; this is a
 p22	check of the gate, not a recall
 p22	[short]	estimate.
-p22	TABLE 20. The enumeration itself: records under each configuration and scenario. A dash is an inadmissible com
-p22	no-exception configurations have no legitimate-sharing facility, so S6 and S7, which are defined by a share th
-p22	them. Each populated cell holds six exception-policy × reachability-reading records per relation, so twelve in
-p22	[short]	configuration
-p22	[short]	total
-p22	V-E3-vuln0-unlisted
-p22	V-E3-vuln1-unlisted
-p22	V-E3-vuln0-listed
-p22	V-E3-vuln1-listed
-p22	V-E3-vuln0-unlisted-nointro
-p22	V-E3-vuln1-unlisted-nointro
-p22	V-noE3-vuln0
-p22	V-noE3-vuln1
+p22	A. THE ENUMERATION, CELL BY CELL
+p22	Table 20 is the mapping the review asked for: every config-
+p22	uration against every scenario, with the number of records
+p22	under each populated cell and a dash where the combination
+p22	is undefined. The eight configurations are the full cross of in-
+p22	stantiation mode, enforcement correctness, channel visibility
+p22	and introspection availability, less two corners. The first is
+p22	undefined: with no exception mechanism there is no share to
+p22	list. The second—listed with the introspection surface off—
+p22	was simply not instantiated, and Section III-A treats it as
+p22	untested rather than impossible. Each populated cell holds
+p22	twelve records—three exception policies and two reachability
+p22	readings for each of the two relations—and six where only
+p22	one relation applies, as under S5.
+p22	Two partitions of these records are easy to confuse, because
+p22	both are counted in the same totals. Split by relation, MR-
+p22	002 holds 312 records and MR-004 264, since S5 carries the
+p22	first only. Split by effective readability, 312 are readable and
+p22	264 are not, since four of the eight configurations expose a
+p22	surface and four do not. The two pairs of totals coincide; the
+p22	partitions do not. Section IV-F uses the second, and every
+p22	statement about it can be recomputed from the census column
+p22	[short]	by column.
+p22	B. CONFIRMATION AT SOURCE
+p22	C. EXECUTING THE PUBLISHED RELATIONS
 p22	totalling 612 lines)—against Gitea 1.22.6 (Table 21). 10 of 11
 p22	in all—the engine’s own getFailures() value (Table 23).
-p22	TABLE 21. Execution facts for the native run of the published relations
+p23	TABLE 20. The enumeration itself: records under each configuration and scenario. A dash is an inadmissible com
+p23	no-exception configurations have no legitimate-sharing facility, so S6 and S7, which are defined by a share th
+p23	them. Each populated cell holds six exception-policy × reachability-reading records per relation, so twelve in
+p23	[short]	configuration
+p23	[short]	total
+p23	V-E3-vuln0-unlisted
+p23	V-E3-vuln1-unlisted
+p23	V-E3-vuln0-listed
+p23	V-E3-vuln1-listed
+p23	V-E3-vuln0-unlisted-nointro
+p23	V-E3-vuln1-unlisted-nointro
+p23	V-noE3-vuln0
+p23	V-noE3-vuln1
+p23	TABLE 21. Execution facts for the native run of the published relations
+p23	(Section VII-C). All values are emitted by ingest_native_engine.py
+p23	Which stage of that claim does the native run establish?
+p23	Three stages have to be kept apart, and only the third is a
+p23	security finding. The native alarm A is what the engine it-
+p23	self returns: getFailures() is appended by MR.fail()
+p23	(MR.java:909), which logs FAILURE together with the
+p23	failing input pair and asserts nothing about authorization—
 p23	TABLE 22. The native alarms split into the three stages: A (the engine’s
 p23	own getFailures()), H (the promotion policy P applied to A), and T
 p23	(independent truth from the ledger E and the content re-read Y ). Every
@@ -1606,12 +1693,6 @@ p23	[short]	carol/s1
 p23	[short]	allow
 p23	[short]	allow†
 p23	[short]	false proof
-p23	Which stage of that claim does the native run establish?
-p23	Three stages have to be kept apart, and only the third is a
-p23	security finding. The native alarm A is what the engine it-
-p23	self returns: getFailures() is appended by MR.fail()
-p23	(MR.java:909), which logs FAILURE together with the
-p23	failing input pair and asserts nothing about authorization—
 p23	no ledger, no expected decision, no verdict. Reading a fired
 p23	authorization relation as a violation claim H is a promotion
 p23	policy P that we state rather than inherit: P maps every fired
@@ -1627,35 +1708,42 @@ p23	on 3 cells (Table 22). A reader who declines P should read the
 p23	run as 6 failed metamorphic relations rather than as 6 vulner-
 p23	abilities; the disagreement survives that reading, because the
 p23	failures fall on accesses the ledger allows.
-p23	produced by the published relations on a real system under
-p23	the promotion policy P of Section VII-C; it does not convert
-p23	the rest: the scenario/configuration and cell studies remain
-p23	statements about our instantiation, our exception vocabulary
-p23	belongs to the same predicate family, and we report no sensi-
-p23	tivity or specificity attributable to MST-wi.
-p23	tion is paired and is reported as a discordance count. Finding 3
-p23	is a statement about what the published denominator pools
-p23	over, not about the value of any specificity figure: we do not
-p23	restate the predecessor’s specificity, and no conclusion in this
-p23	paper depends on it.
+p23	D. IMPLEMENTATION ROBUSTNESS
 p24	TABLE 23. The published authorization relations executed against Gitea 1.22.6. Each row is the applicability c
+p24	Maven; Section VII-B) and then executed the relations, un-
+p24	(Section VII-C). The harness substitutes an HTTP observa-
+p24	The run converts one class of claim: that a false proof is
+p24	produced by the published relations on a real system under
+p24	the promotion policy P of Section VII-C; it does not convert
+p24	the rest: the scenario/configuration and cell studies remain
+p24	statements about our instantiation, our exception vocabulary
+p24	belongs to the same predicate family, and we report no sensi-
+p24	tivity or specificity attributable to MST-wi.
+p24	tion is paired and is reported as a discordance count. Finding 3
+p24	is a statement about what the published denominator pools
+p24	over, not about the value of any specificity figure: we do not
+p24	restate the predecessor’s specificity, and no conclusion in this
+p24	paper depends on it.
+p24	The split of Section IV-F is on whether the introspection
 p24	step against methods that need nothing, not to identify the
 p24	best oracle-free detector; a differential prober across accounts
 p24	consumes more than those references do and is instantiated
 p24	instead in the separate controlled study of Section VI-D.
-p24	in which each request must carry an explicit authorization
-p24	decision rather than one inferred from endpoint reachabil-
-p24	ity [25]; our question sits at that decision level. Each of these
-p24	papers reports detections against an oracle it holds privately—
-p24	a policy, a seeded defect, a differential response—and none
-p24	of them is our comparison class, because we do not measure
-p24	detection rates. What this paper adds is three claims about
-p24	one published adjudication, each with a falsifier. Two of the
-p24	ingredients are already known—that a crawl-time model can
-p24	go stale, and that an authorization oracle can be unsound; the
-p24	claims below differ in that the first failure is deterministic and
-p24	attributable to a representation choice, the second is bounded
-p24	by an explicit equivalence rather than argued case by case, and
+p25	gates generation or probing to language models [22]–[24].
+p25	A concurrent line reframes BOLA under a zero-trust model,
+p25	in which each request must carry an explicit authorization
+p25	decision rather than one inferred from endpoint reachabil-
+p25	ity [25]; our question sits at that decision level. Each of these
+p25	papers reports detections against an oracle it holds privately—
+p25	a policy, a seeded defect, a differential response—and none
+p25	of them is our comparison class, because we do not measure
+p25	detection rates. What this paper adds is three claims about
+p25	one published adjudication, each with a falsifier. Two of the
+p25	ingredients are already known—that a crawl-time model can
+p25	go stale, and that an authorization oracle can be unsound; the
+p25	claims below differ in that the first failure is deterministic and
+p25	attributable to a representation choice, the second is bounded
+p25	by an explicit equivalence rather than argued case by case, and
 p25	the third is a property of the published metric’s denominator.
 p25	First, a gate that reads a crawl-time model misreports a grant
 p25	the record does not contain, deterministically rather than
@@ -1687,12 +1775,12 @@ p25	inputs a crawl could enumerate, so it cannot register a failure
 p25	confined to a class that crawl never reached, while the adjudi-
 p25	cation that consumes the same crawl can. We therefore read
 p25	a testing technique’s own reported metric as a measurement
-p25	instrument, stating explicitly what its denominator can and
-p25	[short]	cannot resolve.
-p25	published figure: it is TN/(TN + FP) over the follow-up
-p25	inputs the crawl could enumerate, with manually verified
-p25	labels, and that denominator cannot register a failure confined
-p25	to a class the run did not exercise.
+p26	instrument, stating explicitly what its denominator can and
+p26	[short]	cannot resolve.
+p26	published figure: it is TN/(TN + FP) over the follow-up
+p26	inputs the crawl could enumerate, with manually verified
+p26	labels, and that denominator cannot register a failure confined
+p26	to a class the run did not exercise.
 p26	What the two added experiments carry
 p26	The temporal finding is not confined to one product. Under
 p26	the same pre-registered protocol, frozen before the second
@@ -1714,68 +1802,83 @@ p26	1.20.5 yields 1 true positive with 0 false proofs, and the fixed
 p26	1.20.6 yields 0 alarms over 10 control probes. That is a check
 p26	of the gate on one defect we located and supplied; it is not a
 p26	[short]	detection rate.
+p26	that antecedent holds (Proposition 2, Section IV-F). And treat
 p26	first, a population of real systems that contain the flaw, so
 p26	detection can be measured—the single defect of Section V-D
 p26	checks the gate but cannot supply that population; and sec-
 p26	ond, relations whose gate is not the absence of evidence—
-p26	checkable against a subject’s entitlements without pretend-
-p26	ing that entitlements are reachable facts. The transferable
-p26	condition—we call it the same-observable condition—is the
-p26	one that killed our own mechanism: a component’s necessity
-p26	must be tested against a substitute that consumes the same
-p26	observable quantity as the ground truth; a substitute that con-
-p26	sumes less does not establish incremental value. The MST-wi
-p26	case study is an instance of that condition, not its scope: a
-p26	component’s necessity is not established unless a fair control
-p26	that lacks the component but consumes the same decision-
-p26	relevant observables is empirically or formally shown to be
-p26	[short]	weaker.
-p26	[short]	by
-p26	tag access-resubmission-v1 at the commit that
-p26	carries this revision. The earlier tag artifact-v1 remains
-p26	in place as the previously reviewed version; it does not
-p26	contain the temporal or vulnerable/fixed records added here,
-p26	and the two tags should not be conflated. The revision adds,
-p26	under experiments/: (1) the scenario/configuration
-p26	(results/raw_matrix.jsonl,
-p26	/results/*.json); (3) the temporal loop and its
-p26	archived pilot, with the protocol and both amendments
-p26	[short]	by
-p26	[short]	digest
-p26	(real_system/results/temporal/,
-p26	c_protocol*.json);
-p26	[short]	(4)
-p26	[short]	real
-p26	[short]	vulnerable/fixed
-p26	[short]	pair
-p26	(real_system/results/cve_pair.json);
-p26	(5) the execution of the published relations on the native
-p26	(native_engine/results/*.json);
-p26	(6) the seeded positive control (seeded.json). The
-p26	analysis pipeline (analysis/*.py) recomputes every
-p26	number, table and figure from those records, including the
-p26	design audit (ingest_design.py), the decision-scored
-p26	coverage table (ingest_coverage.py) and the truth
-p26	table (ingest_truth.py); check_macro_use.py
-p26	asserts that every macro cited in the manuscript has exactly
-p26	one definition. bash reproduce.sh regenerates all
-p26	outputs and the PDF, and bash verify_artifact.sh
-p26	[short]	checks
-p26	[short]	SHA-256
-p26	[short]	every
-p26	[short]	record
-p26	[short]	every
-p26	[short]	byte-reproducible
-p26	[short]	output.
-p26	[short]	manuscript
-p26	LATEX source ships in the same repository. The DOI
+p27	checkable against a subject’s entitlements without pretend-
+p27	ing that entitlements are reachable facts. The transferable
+p27	condition—we call it the same-observable condition—is the
+p27	one that killed our own mechanism: a component’s necessity
+p27	must be tested against a substitute that consumes the same
+p27	observable quantity as the ground truth; a substitute that con-
+p27	sumes less does not establish incremental value. The MST-wi
+p27	case study is an instance of that condition, not its scope: a
+p27	component’s necessity is not established unless a fair control
+p27	that lacks the component but consumes the same decision-
+p27	relevant observables is empirically or formally shown to be
+p27	[short]	weaker.
+p27	[short]	by
+p27	the tag access-resubmission-v3 at the commit
+p27	that carries this revision. The earlier tags remain in
+p27	place as snapshots of prior states and should not be
+p27	[short]	conflated
+p27	[short]	with
+p27	[short]	is
+p27	[short]	previously
+p27	reviewed version (without the temporal or vulnerable/fixed
+p27	records added here), and access-resubmission-v2
+p27	is the working freeze at which an internal accuracy
+p27	[short]	review
+p27	[short]	was
+p27	[short]	started;
+p27	access-resubmission-v3
+p27	[short]	supersedes
+p27	[short]	both.
+p27	[short]	revision
+p27	[short]	adds,
+p27	[short]	experiments/:
+p27	[short]	(1)
+p27	[short]	scenario/configuration
+p27	(results/raw_matrix.jsonl,
+p27	/results/*.json); (3) the temporal loop and its
+p27	archived pilot, with the protocol and both amendments
+p27	[short]	by
+p27	[short]	digest
+p27	(real_system/results/temporal/,
+p27	c_protocol*.json);
+p27	[short]	(4)
+p27	[short]	real
+p27	[short]	vulnerable/fixed
+p27	[short]	pair
+p27	(real_system/results/cve_pair.json);
+p27	(5) the execution of the published relations on the native
+p27	(native_engine/results/*.json);
+p27	(6) the seeded positive control (seeded.json). The
+p27	analysis pipeline (analysis/*.py) recomputes every
+p27	number, table and figure from those records, including the
+p27	design audit (ingest_design.py), the decision-scored
+p27	coverage table (ingest_coverage.py) and the truth
+p27	table (ingest_truth.py); check_macro_use.py
+p27	asserts that every macro cited in the manuscript has exactly
+p27	one definition. bash reproduce.sh regenerates all
+p27	outputs and the PDF, and bash verify_artifact.sh
+p27	[short]	checks
+p27	[short]	SHA-256
+p27	[short]	every
+p27	[short]	record
+p27	[short]	every
+p27	[short]	byte-reproducible
+p27	[short]	output.
+p27	[short]	manuscript
+p27	LATEX source ships in the same repository. The DOI
 p27	[short]	archives
 p27	previously reviewed version; a new Zenodo version covering
 p27	this revision will be deposited at acceptance, and the git tag
 p27	above is the version-pinned copy in the meantime.
 
 ===== DELETED (cannot be highlighted in the PDF) =====
-Limits of Metamorphic Testing for Object-Level
 Authorization: Temporal Reachability, Oracle
 Admissibility, and Measurement Resolution
 ABSTRACT Broken object-level authorization (BOLA) is the top-ranked API security risk, yet detecting it
@@ -1798,21 +1901,14 @@ mapping ‘‘not always available’’ [2]. We take that sen-
 tence as premise, not discovery. Delegating adjudication to
 a reachability model makes the moment the model was read
 part of the specification, so we instantiate the predicates as
-defined—over a model recorded at crawl time—and drive the
-system through three phases: crawl, change authorization out
 evaluation does not exercise.
-remain sound for authorization decisions after an out-of-band
-authorization change? No: the adjudication as designed pro-
 duces deterministic false proofs—a legitimate access granted
 out of band after the crawl is reported as a proven violation,
 at rate 1.00 on the constructed system and 0.40 on Gitea,
 because the predicate’s two representations cannot describe
 an out-of-band grant. The error is a property of the reading,
 not of the system. (2) Oracle (RQ2). When a readable, sound
-authorization oracle fully resolves the proposition under test,
 does the metamorphic step add incremental adjudication in-
-formation beyond the oracle and the request outcome? Not
-observably, within the evaluated scenarios: the step carries
 no additional decision-relevant information beyond what the
 oracle-plus-request pair already determines—an empirical
 premise about the evaluated relations, formalised as a con-
@@ -1827,15 +1923,10 @@ specificity is not conditioned on an explicit check that the
 reachability model coincides with the authorization state, and
 its input-level denominator cannot register a class-uniform
 failure, which unaffected inputs can dilute arbitrarily (Propo-
-olation. Every step is exactly as specified, so no guard is
-miswritten: the predicate’s two representations—‘‘reachable
-as recorded’’ and ‘‘not reachable as recorded’’—cannot ex-
-press ‘‘reachable, but only after the record was taken’’. More
 crawling does not remove the false proof, because the grant
 need not be visible through the subject’s interface at all, and
 the reported specificity never registers it, because the error is
 built so that the crawl-time and live readings can be told apart.
-A raw alarm becomes a verdict through an exception policy,
 and different policies are different methods: v1 (raw alarms
 proven); v2 (legitimate-sharing exceptions filtered); v3 (state-
 calibrated—consults a readable authorization introspection
@@ -1844,19 +1935,16 @@ surface, abstains when none is readable); degrade_all
 rization surface only, access outcome ignored—a deliberately
 unfair control); and direct_observe (a succeeding plain
 request checked against the same readable surface). The last
-consumes the same observable quantity as the MR family and
 decides the negative result.
 ings (the frozen crawl-time snapshot and the live execution-
 time state—the second deliberately thrown switch). The two
 Table 1 concludes the ablation. direct_observe has
 0 false proofs against v3’s 0—a tie at zero, not a win. The
-comparison is paired, so we report the discordance rather than
 an inferential interval: over the 216 true-violation records
 the two methods disagree on 3, and on every one of them
 direct_observe is right—it detects a violation that v3
 misses or abstains on, its reachability precondition blocking
 a detection the plain request makes. The aggregate recalls
-0.50 and 0.49 restate that asymmetry rather than measure a
 difference, and no margin was pre-specified, so no formal
 hypothesis-test claim attaches. We found no incremental ad-
 judication advantage of the metamorphic step over direct ob-
@@ -1866,14 +1954,12 @@ these scenarios: the step would have to be better at something
 the plain request cannot do. Selective presentation would have
 hidden the cost: v3’s precision of 1.00 was bought with 111
 false negatives (F1 0.65), an exchange of 60 false alarms for
-missed violations dressed as an improvement.
 D. A PUBLISHED METRIC’S RESOLUTION: WHAT THE
 REPORTED SPECIFICITY DOES NOT CONDITION ON
 The practical content of this finding is a diagnosis of a specific
 published figure, not a general property of ratios. Under the
 invisible to the framework’s own log, while the state-calibrated v3 abstains exactly where its surface is not readable. Both panels are recomputed from
 the same records as Table 1.
-TABLE 1. End-to-end confusion matrix over all 576 records (216 true violations, 360 correct cases). The records are a fixed enumeration, not a sample
 v2 (exception-aware)
 input-level specificity convention used by MST-wi [2], the
 reported specificity has the form
@@ -1889,7 +1975,6 @@ to-resource mapping is ‘‘not always available’’ and attributes
 its residual false alarms to crawler coverage of ‘‘all URLs for
 all users’’ [3]. The dilution below is elementary arithmetic,
 offered only to make the second half of the diagnosis—that
-the denominator cannot register a class-uniform failure—
 precise; we do not present it as the contribution.
 approximate two follow-up inputs per case—enough to ex-
 hibit the denominator’s resolution, the only point at issue. In
@@ -1906,68 +1991,26 @@ over all generated inputs and Nfailed the scenarios in which the
 failure is uniform. Sscenario is introduced only as an analytical
 construct for characterising resolution; it is not proposed as a
 replacement evaluation metric. The remark concerns metric
-resolution, not estimator consistency or statistical power.
 free inputs. Then Sinput = 1−(fa)/(fa+sm), which tends to
-1 as m →∞, while Sscenario = 1 −f /(f + s) is independent
-of m and strictly less than 1.
 Proof. Ninputs = fa + sm and FPinputs = fa; substitution
 gives Sinput = 1 −(fa)/(fa + sm) →1 as m →∞, whereas
-the scenario-level figure depends only on the fixed counts f
-metric below it: choosing m > (fa/s) · t/(1 −t) drives Sinput
 The two halves of the finding are about the specific re-
 ported figure, not about ratios in the abstract: its value records
 agreement with the tool’s own crawler where model and au-
 thorization state diverge, and its denominator cannot register
 a class-uniform failure even when one occurs.
-Table 1 pools two populations in which the oracle-consuming
-representative grid; this subsection, summarised in Table 2,
-direct_only—detects 0 of them, not because the relations
-are weak but because those methods have nothing to con-
 sult and, by their own definition, abstain. The metamorphic
 stantiated here. The lift we measure is therefore an estimate
-against weak references, not a claim about metamorphic
-testing versus the best oracle-free detector, and we make
-no such claim. Both references also share an observable
-with the reference labelling (obs_success alarms on the
-TABLE 2. The ablation of Table 1 re-run inside each stratum. The two panels are not rankings of the same population but two different regimes: in the
 v2 (exception-aware)
 v2 (exception-aware)
-Table 3 counts an endpoint as grant-capable if, without mod-
-TABLE 3. The grant surface of Gitea 1.22.6 (instance-independent).
-TABLE 4. Authorization-introspection readability protocol on Gitea. Each
-the surface’’. Table 4 collects these populations. On 48 of 48
-Table 5 is the load-bearing result: the adjudication departs
-TABLE 5. Departure from the real authorization state, per reading of the
-TABLE 6. Endogenous control: two objects that are both public at the end.
 parameter, not a field prevalence.
-The most serious alternative explanation is that public ob-
-jects are simply harder to enumerate—visibility, not time.
-Two objects that end equally public but became public at
 different moments control for this (Table 6): the predicate
-reports unreachability on 5 of 6 cells only for the object
-made public after the crawl, and on 0 for the object public
 throughout, with the MR firing correspondingly (5 vs. 0).
 Final visibility is identical, so within this design the only
-manipulated explanatory variable is when the model was read.
 A. CROSS-VENDOR REPLICATION: GOGS 0.14.3 AND
-on two further systems (Table 7): Gogs 0.14.3, the project
-cannot be automated from readability alone. The consequence
-is measurable: on Gitea the surface-gated adjudicators pro-
-duced no false proofs (0 v3, 0 direct-observe), while on Gogs
-and on GitLab again (5, 18), every v3 false proof falling on
 a cell whose authorization derives from site administration
-or public visibility (8 and 5 such cells on Gogs; 8 and 10 on
-GitLab). A readable membership surface with a blind spot
 converts that blind spot into confirmed violations; no admissi-
 ble oracle was available from the tested introspection surfaces
-on Gogs or GitLab, so the honest adjudicator abstains on the
-stratum where those surfaces would license a promotion.
-TABLE 7. Cross-vendor replication under the identical three-phase protocol (crawl, out-of-band authorization change, adjudicate) on Gitea 1.22.6, Gogs
-merged, non-authorization grant surface excluded), and therefore differs from the raw route count in Table 3; the two tables use different normalisations
-TABLE 8. Positive control: detection of 3 seeded vulnerable instances
-fering in subject and object, not in fault location; Table 8
-Table 8 is consistent with the negative result of the ablation
-in this controlled fault pattern: direct_observe and v3
 catch all 3 planted instances with zero false positives, while
 direct_only, which ignores the request outcome, raises
 30 alarms on cells where the surface says none and no access
@@ -1989,11 +2032,9 @@ JISA (tag artifact-v1).
 access granted out of band after the crawl as an already-
 established violation, in the direction forced by the two-
 valued predicate encoding. On the constructed system, rate
-1.00 (8 of 8 alarms) against 0 for the same share created in
 band; on Gitea, 10 false proofs on 25 authorized cells (0.40)
 under the crawl-time reading, against 0 alarms live—objects,
 entitlements and predicates held fixed, only the reading time
-changed—so the error is a property of the reading, not of the
 system; the endogenous control (Table 6) holds final visibility
 fixed and isolates that moment. The direction is forced: the
 predicate has exactly two representations, and a grant cre-
@@ -2005,7 +2046,6 @@ oracle-based repair available while showing no incremental
 adjudication benefit from the metamorphic step (Finding 2).
 Proposition 2 (adjudication of the evaluated relations is or-
 acle-determined). Let O be an authorization oracle that is
-readable (its answer can be obtained from the vantage in
 question) and sound (its answer equals the true permission),
 and let R be the observed outcome of an ordinary request.
 For the authorization relations and scenarios evaluated here—
@@ -2028,8 +2068,6 @@ by the ablation (Section IV-C); the middle clause then follows
 because M enters the verdict only through (O, R), and the
 remainder is the observation that a function agrees pointwise
 with itself, the last sentence being its contrapositive.
-inside each stratum of effective oracle readability (Table 2)
-Evidence: Table 1—0 false proofs vs. 0 (a tie at zero, not
 C. FINDING 3 (RQ3): THE REPORTED SPECIFICITY IS NOT
 CONDITIONED ON THE CORRESPONDENCE IT ASSUMES
 The reported 99.81% is a statement about a corpus of gen-
@@ -2053,33 +2091,16 @@ figure is false or the false positives misdiagnosed; the claim
 is that such a metric does not itself validate the reachability-
 to-authorization correspondence on which its interpretation
 depends, and that a class-uniform failure can be held above
-any fixed threshold by unaffected inputs.
 D. ADMISSIBILITY, AND FALSIFICATION
-and the outcome (Finding 2). And where no readable, admis-
-sible oracle exists—the black-box case—there is nothing for
-a sound method to consume, so it abstains rather than proves.
-Across the statuses the oracle can take, the outcomes the
 worse), or an abstention; adjudication of a genuinely illegal
 access is not among them for these relations.
 A. CONFIRMATION AT SOURCE
-totalling 612 lines)—against Gitea 1.22.6 (Table 9). 10 of 11
-in all—the engine’s own getFailures() value (Table 10).
-TABLE 9. Execution facts for the native run of the published relations
 C. IMPLEMENTATION ROBUSTNESS
 duced by the published relations on a real system); it does not
-convert the rest: the scenario/configuration and cell studies
-remain statements about our instantiation, our exception vo-
-cabulary belongs to the same predicate family, and we report
-no sensitivity or specificity attributable to MST-wi.
 The specificity approximation uses two follow-up inputs per
 case—not the engine’s count; the conclusion about the de-
 nominator’s resolution does not depend on the exact value.
-tion is paired and is reported as a discordance count.
-step against methods that need nothing, not to identify the best
-oracle-free detector; a differential prober across accounts con-
 sumes more than those references do and was not instantiated.
-TABLE 10. The published authorization relations executed against Gitea 1.22.6. Each row is the applicability chain from the catalogue to the outcome:
-which each request must carry an explicit authorization deci-
 sion rather than one inferred from endpoint reachability [25];
 our question sits at that decision level, asking what an oracle-
 substituting technique can establish about it. Our question is
@@ -2105,7 +2126,6 @@ without pretending that entitlements are reachable facts. The
 transferable condition—we call it the same-observable con-
 dition—is the one that killed our own mechanism: a com-
 ponent’s necessity must be tested against a substitute that
-consumes the same observable quantity as the ground truth;
 a substitute that consumes less does not establish incremental
 value. The MST-wi case study is an instance of that condition,
 not its scope: a component’s necessity is not established un-
@@ -2113,10 +2133,7 @@ less a fair control that lacks the component but consumes the
 same decision-relevant observables is empirically or formally
 shown to be weaker.
 submission commit): (1) the scenario/configuration study
-(experiments/results/raw_matrix.jsonl,
 (experiments/real_system/results/*.json);
-(experiments/native_engine/results/*.json);
-(4) the seeded positive control (seeded.json). The
 analysis pipeline (analysis/*.py: compute_all.py
 and the ingest scripts) recomputes every number, table
 and figure in this paper from those records; the stratified
@@ -2126,7 +2143,6 @@ whether the introspection surface returned a reading, and
 is recomputed, together with every macro it defines, by
 ingest_m2_stratum.py;
 check_macro_use.py
-asserts that every macro cited in the manuscript has
 exactly one definition. Running bash reproduce.sh
 verify_artifact.sh asserts the SHA-256 integrity
 of every raw record and byte-reproducible output. The
