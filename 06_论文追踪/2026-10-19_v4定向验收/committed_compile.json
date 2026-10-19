@@ -1,0 +1,25 @@
+{
+  "manuscript": {
+    "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_v4定向验收\\isolated_builds\\manuscript_acuv7k8f",
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "pages": 30,
+    "same_text_as_committed_pdf": true,
+    "undefined_references": false
+  },
+  "letter": {
+    "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-19_v4定向验收\\isolated_builds\\letter_sdauu5ui",
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "pages": 11,
+    "same_text_as_committed_pdf": true,
+    "undefined_references": false
+  }
+}

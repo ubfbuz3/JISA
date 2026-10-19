@@ -1,0 +1,5 @@
+{
+  "returncode": 0,
+  "stdout": "80d1e0750b420f7127049eae72471c6c09256ae7\trefs/heads/main\n8ed47a60d2ce734fa8cbdb2920024765caca440f\trefs/tags/access-resubmission-v4\n80d1e0750b420f7127049eae72471c6c09256ae7\trefs/tags/access-resubmission-v4^{}\n",
+  "stderr": ""
+}

@@ -1,44 +1,40 @@
 baseline sha256 : d641e6dad6899658385f5eb8aac008069ee5ac83ef4233d29a554d780c3d440c
 baseline pages  : 16 ; revised pages : 30
-changed lines   : 2001 (of which short lines: 319)
-deleted lines   : 286
-page 1: 34
+changed lines   : 1982 (of which short lines: 320)
+deleted lines   : 284
+page 1: 32
 page 2: 48
-page 3: 75
+page 3: 74
 page 4: 66
-page 5: 122
+page 5: 121
 page 6: 4
-page 7: 74
+page 7: 73
 page 8: 89
-page 9: 89
+page 9: 88
 page 10: 44
-page 11: 27
+page 11: 26
 page 12: 40
-page 13: 113
+page 13: 112
 page 14: 79
-page 15: 89
+page 15: 88
 page 16: 44
-page 17: 102
+page 17: 101
 page 18: 94
-page 19: 88
+page 19: 87
 page 20: 120
-page 21: 84
+page 21: 83
 page 22: 91
-page 23: 114
+page 23: 113
 page 24: 83
-page 25: 21
+page 25: 20
 page 26: 51
-page 27: 33
-page 28: 81
-page 29: 1
-page 30: 1
+page 27: 32
+page 28: 79
 
 ===== CHANGED =====
 p1	Two Reachability-Gated Relations in MST-wi:
 p1	Temporal Mismatch, Oracle Admissibility, and
 p1	[short]	Measurement Limits
-p1	1,2 AND XIAOYU KE1 AND NANLEI CHEN1,2
-p1	1Yango University, Fuzhou 350015, China (e-mail: ubfbzu3@163.com; 5197211@qq.com)
 p1	ABSTRACT Two system-agnostic relations in MST-wi, a Web-system metamorphic testing framework, gate
 p1	their verdict on a GUI-reachability model—a crawl-time snapshot of what the interface permits—so what
 p1	they establish about object-level authorization depends on when the model was read and what the adjudicator
@@ -116,7 +112,6 @@ p2	the adjudication’s reading moment rather than of any single
 p2	generated input. This is the mechanism the rest of the paper
 p2	measures, and the reason we speak of a boundary of the
 p2	specification rather than a defect of an implementation.
-p3	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p3	statement about what the relations mean. Our experiments
 p3	separate the two ways the world can move under the model:
 p3	the constructed study varies what the gate can see, and the
@@ -257,7 +252,6 @@ p4	and 0 gain one, while the same switch costs 3 detections
 p4	and gains none. The aware reading is therefore a trade in
 p4	a fixed direction, not noise around a rate. It is a statement
 p4	about what the gate can see, not about when authorization
-p5	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p5	TABLE 1. The complete design. Every record is one point of the cross scenario × configuration × relation × exc
 p5	last two are deliberately thrown switches, not replicates, so the enumeration carries no sampling error. ‘‘Rec
 p5	factor, and the last column states what the factor is crossed with. Only the listed-with-introspection cell is
@@ -383,7 +377,6 @@ p6	ings (a constant unreachable list and the listing current at
 p6	execution—the second deliberately thrown switch). The sec-
 p6	ond is a visibility manipulation, not a temporal one. The two
 p6	grid (a representative grid; Section IV-F re-runs the same
-p7	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p7	invisible to the framework’s own log, while the state-calibrated v3 abstains in two places: where its surface 
 p7	shows a covering grant it declines to override. Both panels are recomputed from the same records as Table 3.
 p7	Table 3 concludes the ablation. The first three rows are a
@@ -546,7 +539,6 @@ p8	number of negative follow-up inputs the run generated, and
 p8	define Sscenario = 1 −Nfailed/Nscenarios, where Nfailed is the
 p8	number of scenarios in which the failure is uniform. Sscenario
 p8	is an analytical construct for characterising resolution; it is
-p9	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p9	TABLE 4. The same 576 records scored on the decision rather than on the alarm. Coverage is the share of record
 p9	violation or its absence; the abstention column gives the count and, in parentheses, its rate, split by whethe
 p9	and misses are the two error counts among decided records, and risk is their sum over that denominator—compara
@@ -679,7 +671,6 @@ p10	morphic testing versus the best oracle-free detector, and we
 p10	make no such claim. Both references also share an observ-
 p10	able with the reference labelling (obs_success alarms on
 p10	the same access outcome that partly defines a violation), so
-p11	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p11	TABLE 6. The ablation of Table 3 re-run inside each stratum. The two panels are not rankings of the same popul
 p11	[short]	0.59
 p11	v1 (existence filter)
@@ -746,7 +737,6 @@ p12	increment the harness version hv only if the transaction re-
 p12	turns 2xx; re-crawl with the same credentials to obtain M1;
 p12	read the oracle from the owner vantage; issue the request and
 p12	verify the effect by content; and classify against the ledger at
-p13	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p13	decision time. All 16 transactions committed, all 16 frozen
 p13	M0 digests were unchanged when re-checked immediately
 p13	before probing, and all 16 cycles were version-consistent.
@@ -938,7 +928,6 @@ p14	cannot be automated from readability alone.
 p14	Table 15 locates those 17 errors instead of leaving them as
 p14	a single unsoundness figure, and it does so on the ledger axis
 p14	that the product’s own API does not have to provide. Panel (a)
-p15	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p15	TABLE 12. Temporal transitions on two products with the same pre-registered protocol. Stale FP: the frozen pre
 p15	the subject may legitimately read, so the relation would report a false proof. Fixed: a recrawl with the same 
 p15	also fails to list it. Each product has its own mechanism per row (team attach ↔project-group share; team memb
@@ -1071,7 +1060,6 @@ p16	TABLE 16. Positive control: detection of 3 seeded vulnerable instances
 p16	Table 16 is consistent with the negative result of the ab-
 p16	lation in this controlled fault pattern: direct_observe
 p16	and v3 catch all 3 planted instances with zero false posi-
-p17	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p17	tives, while direct_only, which ignores the request out-
 p17	come, raises 30 alarms on cells where the surface says none
 p17	and no access succeeds—alarms our strict definition does
@@ -1267,7 +1255,6 @@ p18	method and direct_observe still differ are not a coun-
 p18	terexample to (b): all three are the same S5 write cell under
 p18	the three exception settings, where the model lists the object
 p18	for reading, the alarm stays silent, and the oracle reports that
-p19	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p19	the write is denied. There the relation misses a violation the
 p19	direct adjudicator confirms—a loss, not a gain, and one the
 p19	reachability gate cannot express because it collapses read and
@@ -1475,7 +1462,6 @@ p20	i ni(D, ωk) →0; a finite-sample
 p20	S < 1 by itself says nothing about the limit. Two arithmetic
 p20	examples fix the distinction. If the false-proof count is held
 p20	fixed at one while the negative-input total grows with k, then
-p21	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p21	Sk = 1 −1/k →1: the failure never disappears, only
 p21	its weight in the ratio does. If instead the false proofs grow
 p21	proportionally—f = αk with 0 < α < 1 and k chosen so
@@ -1650,7 +1636,6 @@ p22	the published relations on a real system (Section VII-C),
 p22	implementation of the same predicates (Section VII-D); the
 p22	seeded positive control (Section V-C) and the cross-vendor
 p22	replication (Section V-B) are the remaining confirmations
-p23	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p23	TABLE 20. Evidence to claim. Each row names the assumption the claim needs, the artefact that carries it, and 
 p23	not a research question: it checks the adjudication gate used throughout, and is not evidence about detection 
 p23	[short]	RQ
@@ -1847,7 +1832,6 @@ p24	run as 6 failed metamorphic relations rather than as 6 vulner-
 p24	abilities; the disagreement survives that reading, because the
 p24	failures fall on accesses the ledger allows.
 p24	D. IMPLEMENTATION ROBUSTNESS
-p25	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p25	TABLE 24. The published authorization relations executed against Gitea 1.22.6. Each row is the applicability c
 p25	Maven; Section VII-B) and then executed the relations, un-
 p25	(Section VII-C). The harness substitutes an HTTP observa-
@@ -1919,7 +1903,6 @@ p26	over the access-control line; what we claim is a statement
 p26	about what an oracle-substituting technique can establish, and
 p26	where that statement stops.
 p26	a specificity figure whose denominator is pooled over the
-p27	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
 p27	inputs a crawl could enumerate, so it cannot register a failure
 p27	confined to a class that crawl never reached, while the adjudi-
 p27	cation that consumes the same crawl can. We therefore read
@@ -2026,15 +2009,11 @@ p28	[short]	archives
 p28	previously reviewed version; a new Zenodo version covering
 p28	this revision will be deposited at acceptance, and the git tag
 p28	above is the version-pinned copy in the meantime.
-p28	Qiulong Lin, Xiaoyu Ke, and Nanlei Chen contributed to
-p28	the work. Qiulong Lin and Nanlei Chen jointly developed
-p28	the conceptualisation and methodology, designed and imple-
-p28	mented the software and analysis pipeline, carried out the
-p28	investigation and formal analysis, and wrote the manuscript.
-p28	Xiaoyu Ke’s individual contribution statement is to be con-
-p28	firmed by the authors before submission.
-p29	Lin, Ke, and Chen: Reachability-Gated Relations in MST-wi
-p30	XIAOYU KE Xiaoyu Ke is with Yango University, Fuzhou, China.
+p28	Qiulong Lin and Nanlei Chen contributed to the work. They
+p28	jointly developed the conceptualisation and methodology,
+p28	designed and implemented the software and analysis pipeline,
+p28	carried out the investigation and formal analysis, and wrote
+p28	[short]	the manuscript.
 
 ===== DELETED (cannot be highlighted in the PDF) =====
 Authorization: Temporal Reachability, Oracle
@@ -2320,6 +2299,4 @@ manuscript LATEX source ships in the same repository. A
 persistent archival copy with a citable DOI is deposited at
 Both authors contributed to the work. Qiulong Lin and Nanlei
 Chen jointly developed the conceptualisation and method-
-ology, designed and implemented the software and analysis
-pipeline, carried out the investigation and formal analysis, and
 wrote the manuscript.

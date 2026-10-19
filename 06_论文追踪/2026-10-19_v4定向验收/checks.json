@@ -1,0 +1,94 @@
+{
+  "revision": "80d1e0750b420f7127049eae72471c6c09256ae7",
+  "head": "80d1e0750b420f7127049eae72471c6c09256ae7",
+  "live_worktree_status": " M 03_论文撰写/paper/main.pdf\n M 03_论文撰写/paper/main.tex\n M 03_论文撰写/paper/sections/10_declarations.tex\n M 03_论文撰写/response_to_reviewers/response_to_reviewers.tex\n?? 06_论文追踪/2026-10-19_v4定向验收/\n",
+  "committed_pdfs": {
+    "main": {
+      "pages": 30,
+      "author_metadata": "Qiulong Lin, Xiaoyu Ke, and Nanlei Chen",
+      "sha256": "01b2b225e5bf2cd8362ae4d65951c564bddb851121428d69ef6e9f078fc9c0fb",
+      "Ke_on_first_page": true,
+      "pending_contribution_in_text": false,
+      "highlights": 0
+    },
+    "letter": {
+      "pages": 11,
+      "author_metadata": "",
+      "sha256": "12843945d5fed12973dab9328f8c292a7573b0d73300576ba3f2bab4f73317ee",
+      "Ke_on_first_page": true,
+      "pending_contribution_in_text": false,
+      "highlights": 0
+    },
+    "highlighted": {
+      "pages": 30,
+      "author_metadata": "Qiulong Lin, Xiaoyu Ke, and Nanlei Chen",
+      "sha256": "f779782849d0035ecec72000a8c85b5a8cb074ebdac3b975bc140739183076f8",
+      "Ke_on_first_page": true,
+      "pending_contribution_in_text": false,
+      "highlights": 2001
+    }
+  },
+  "committed_zip": {
+    "files": 93,
+    "sha256": "77733a3b45eace11bccdb01b36ba856dc83a8740a4f8890c3ac53dd484a4d31c",
+    "bad_member": null,
+    "Ke_in_source": true,
+    "pending_contribution_in_source": [
+      "sections/10_declarations.tex"
+    ]
+  },
+  "live_source": {
+    "03_论文撰写/paper/main.tex": {
+      "same_as_v4": false,
+      "sha256": "9eb267daa72446d24df96b8dcba918844bf48e6c9f5e8c6ed612d27087187057",
+      "Ke_mentioned": false
+    },
+    "03_论文撰写/paper/sections/10_declarations.tex": {
+      "same_as_v4": false,
+      "sha256": "ac0359a6a5460d19b8ec5610a47a13d96918ffb9e58c6555fa7511165c728475",
+      "Ke_mentioned": false
+    },
+    "03_论文撰写/response_to_reviewers/response_to_reviewers.tex": {
+      "same_as_v4": false,
+      "sha256": "f87ec724128a70660dd871d91f9f5e631cf5b28d9bbf7632afa78ea4ec41cc19",
+      "Ke_mentioned": false
+    }
+  },
+  "checks": {
+    "numbers": {
+      "returncode": 0,
+      "output": "[ok] 75 项承重数字与生成器当前输出一致\n"
+    },
+    "refs": {
+      "returncode": 0,
+      "output": "main.pdf: 30 页, 24 张表\n检查了 31 个带页码的引用\n[ok] 回信全部表号/页码引用与 main.pdf 一致\n"
+    },
+    "pair_validation": {
+      "returncode": 0,
+      "output": "  [ok] 未扰动记录                            问题数=0\n  [ok] 删除脆弱版 own_comment 对照             问题数=2\n  [ok] 恢复改为失败                           问题数=1\n  [ok] 复读正文回退但保留 Y=True/TP              问题数=4\n  [ok] own_comment 改成 403               问题数=1\n  [ok] 标签重复                             问题数=2\n  [ok] 多出未登记标签                          问题数=2\n  [ok] E 与台账冲突                          问题数=1\n\n[ok] 8 个用例全部符合预期\n"
+    },
+    "manifest_entry": {
+      "returncode": 0,
+      "output": "[ok] make_manifests --check: all inputs and outputs match the committed manifests\n"
+    }
+  },
+  "manifests": {
+    "RAW_RECORDS_SHA256": {
+      "count": 23,
+      "mismatches": []
+    },
+    "OUTPUTS_SHA256": {
+      "count": 31,
+      "mismatches": []
+    }
+  },
+  "direct_only_recomputed": {
+    "counts": {
+      "abstain": 264,
+      "FP_binary": 108,
+      "TN": 96,
+      "TP": 108
+    },
+    "risk": 0.34615384615384615
+  }
+}
