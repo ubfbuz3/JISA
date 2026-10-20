@@ -1,0 +1,76 @@
+{
+  "stage": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\06_论文追踪\\2026-10-20_v10完整验收\\builds\\head_pds6_i7w",
+  "checks": [
+    {
+      "step": "compute_all.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_native_engine.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_gogs.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_gogs_channel.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_gitlab.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_seeded.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_cve_pair.py",
+      "returncode": 0
+    },
+    {
+      "step": "test_cve_pair_validation.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_temporal.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_truth.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_m2_stratum.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_design.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_coverage.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_baseline.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_budget.py",
+      "returncode": 0
+    },
+    {
+      "step": "ingest_multiclass.py",
+      "returncode": 0
+    },
+    {
+      "step": "make_diagrams.py",
+      "returncode": 0
+    }
+  ],
+  "outputs": 35,
+  "mismatches": [],
+  "scope": "same-host regeneration from committed tree, with the pinned external MST source dependency; no live system rerun"
+}

@@ -1,0 +1,207 @@
+{
+  "multiclass_summary_match": true,
+  "budget_caps_2_3_match": true,
+  "budget_records": 84,
+  "crawl_costs": [
+    {
+      "client": "alice",
+      "requests": 13,
+      "objects": 5
+    },
+    {
+      "client": "bob",
+      "requests": 9,
+      "objects": 3
+    },
+    {
+      "client": "carol",
+      "requests": 14,
+      "objects": 5
+    },
+    {
+      "client": "dave",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "eve",
+      "requests": 12,
+      "objects": 4
+    },
+    {
+      "client": "frank",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "root",
+      "requests": 7,
+      "objects": 2
+    },
+    {
+      "client": "eve",
+      "requests": 21,
+      "objects": 8
+    },
+    {
+      "client": "alice",
+      "requests": 13,
+      "objects": 5
+    },
+    {
+      "client": "bob",
+      "requests": 9,
+      "objects": 3
+    },
+    {
+      "client": "carol",
+      "requests": 14,
+      "objects": 5
+    },
+    {
+      "client": "dave",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "eve",
+      "requests": 12,
+      "objects": 4
+    },
+    {
+      "client": "frank",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "root",
+      "requests": 7,
+      "objects": 2
+    },
+    {
+      "client": "eve",
+      "requests": 21,
+      "objects": 8
+    },
+    {
+      "client": "alice",
+      "requests": 13,
+      "objects": 5
+    },
+    {
+      "client": "bob",
+      "requests": 9,
+      "objects": 3
+    },
+    {
+      "client": "carol",
+      "requests": 14,
+      "objects": 5
+    },
+    {
+      "client": "dave",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "eve",
+      "requests": 12,
+      "objects": 4
+    },
+    {
+      "client": "frank",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "root",
+      "requests": 7,
+      "objects": 2
+    },
+    {
+      "client": "eve",
+      "requests": 21,
+      "objects": 8
+    },
+    {
+      "client": "alice",
+      "requests": 13,
+      "objects": 5
+    },
+    {
+      "client": "bob",
+      "requests": 9,
+      "objects": 3
+    },
+    {
+      "client": "carol",
+      "requests": 11,
+      "objects": 4
+    },
+    {
+      "client": "dave",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "eve",
+      "requests": 9,
+      "objects": 3
+    },
+    {
+      "client": "frank",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "root",
+      "requests": 7,
+      "objects": 2
+    },
+    {
+      "client": "eve",
+      "requests": 21,
+      "objects": 8
+    },
+    {
+      "client": "alice",
+      "requests": 13,
+      "objects": 5
+    },
+    {
+      "client": "bob",
+      "requests": 9,
+      "objects": 3
+    },
+    {
+      "client": "carol",
+      "requests": 12,
+      "objects": 4
+    },
+    {
+      "client": "dave",
+      "requests": 15,
+      "objects": 5
+    },
+    {
+      "client": "eve",
+      "requests": 12,
+      "objects": 4
+    },
+    {
+      "client": "frank",
+      "requests": 13,
+      "objects": 4
+    },
+    {
+      "client": "root",
+      "requests": 7,
+      "objects": 2
+    },
+    {
+      "client": "eve",
+      "requests": 21,
+      "objects": 8
+    }
+  ]
+}

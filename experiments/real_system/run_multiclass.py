@@ -22,9 +22,10 @@ R1.9 · 多类独立授权缺陷 · 逐缺陷召回与误报
 **实际状态变化**判定（不是状态码），授予通道要求协作者记录真的出现。
 
 归因检验：全量跑一次，再对每一类做 leave-one-out（只关掉该类），确认该类的实例
-不再报警、其余类仍报警 —— 证明每个报警可归因到那一个缺陷，而不是共享根因。
-归因量取三条链路的复合（关系、渠道匹配关系、渠道匹配 oracle），四类都有可归因
-的报警。
+不再报警、其余类仍报警 —— 证明该报警可归因到那一个缺陷，而不是共享根因。
+归因量**按方法分开记**（leave_one_out_by_method）：复合量（三条链路的 OR）四类
+都有可归因的报警，但读关系只对 C1、渠道匹配关系只对 C1/C2 有"有→无"，
+C3/C4 的关系自始至终不报警，可归因的是渠道匹配的直接裁决。
 
 用法：python run_multiclass.py
 """
@@ -46,6 +47,32 @@ from gitea_lab import ADMIN_PASS, ADMIN_USER, Client as LabClient
 HERE = Path(__file__).resolve().parent
 RESULTS = HERE / "results"
 RESULTS.mkdir(parents=True, exist_ok=True)
+
+# ---- 真实 HTTP 计数 -----------------------------------------------------
+# 负例成本必须来自实际发出的请求，不能是每格一个常数：读格每格 3 次、写格 4 次、
+# 授予格 3 次，另有一次**共享**的授予后枚举（3 条列表 + 每个列表结果的对象访问）。
+# 计数器包在 Client.req 上，所以 crawl/introspect/探针都算在内；每格测前后取差。
+_ORIG_REQ = LabClient.req
+
+
+class _Counter:
+    def __init__(self) -> None:
+        self.n = 0
+
+    def reset(self) -> int:
+        prev, self.n = self.n, 0
+        return prev
+
+
+COUNT = _Counter()
+
+
+def _counting_req(self, *a, **kw):                              # noqa: ANN001
+    COUNT.n += 1
+    return _ORIG_REQ(self, *a, **kw)
+
+
+LabClient.req = _counting_req
 
 BASE_PORT = 3331
 
@@ -216,10 +243,12 @@ def _measure(port: int, cl, active: set[str]):
             if perm == "none":
                 continue
             o, n = obj.split("/")
+            COUNT.reset()
             ins = R.introspect(cl, obj, subj)
             st, b = cl[subj].get(f"/api/v1/repos/{o}/{n}")
             read_ok = (st == 200 and isinstance(b, dict)
                        and R._norm_repo(b) == R._norm_repo(owner_view(obj)))
+            nreq = COUNT.n
             cannot = bool(can_snap(subj, obj))
             log_has = subj in R.FRAMEWORK_LOG.get(obj, {})
             a = _alarms(cannot and read_ok, ins.get("readable", False),
@@ -233,7 +262,7 @@ def _measure(port: int, cl, active: set[str]):
                 "E_says": perm, "Y_effect": bool(read_ok),
                 "oracle_readable": bool(ins.get("readable")),
                 "oracle_says_none": bool(ins.get("says_none")),
-                "alarms": a, "requests": 2,
+                "alarms": a, "requests": nreq,
             })
 
     # (b) 写通道（PATCH）—— 成功以**实际状态变化**判定，不看状态码 --------
@@ -243,12 +272,14 @@ def _measure(port: int, cl, active: set[str]):
             if perm not in ("write", "admin"):
                 continue
             o, n = obj.split("/")
+            COUNT.reset()
             pre = owner_view(obj).get("description")
             st, _ = cl[subj].patch(f"/api/v1/repos/{o}/{n}",
                                    {"description": f"neg-write-{subj}-{n}"})
             post = owner_view(obj).get("description")
             effect = bool(st in (200, 204) and post != pre)
             ins = R.introspect(cl, obj, subj)
+            nreq = COUNT.n
             cannot = bool(can_snap(subj, obj))
             neg["write"].append({
                 "channel": "write", "subject": subj, "object": obj,
@@ -261,7 +292,7 @@ def _measure(port: int, cl, active: set[str]):
                 "oracle_says_none": bool(ins.get("says_none")),
                 "alarms": _alarms(cannot and effect, ins.get("readable", False),
                                   ins.get("says_none", False), effect),
-                "requests": 3,   # 读前状态 + PATCH + 读后状态（oracle 查询另计）
+                "requests": nreq,   # 写前状态 + PATCH + 写后状态 + 自省面（实测）
             })
 
     # (c) 授予通道（PUT collaborators）—— 只有 owner/admin 是合法授予者 ------
@@ -269,6 +300,7 @@ def _measure(port: int, cl, active: set[str]):
     # 先做完所有授予，再对同一个被授予者重新爬一次（1 次共享枚举），然后判。
     grantee = "eve"
     grant_cells: list[dict] = []
+    shared_req = 0
     for subj in users:
         for obj in ST.ALL_OBJS:
             if not (subj == ST.ADMIN_USER or m.repos[obj]["owner"] == subj):
@@ -276,11 +308,13 @@ def _measure(port: int, cl, active: set[str]):
             if m.intended_perm(grantee, obj) != "none":
                 continue          # 被授予者本就有权：该格不是"授予产生访问"的负例
             o, n = obj.split("/")
+            COUNT.reset()
             st, _ = cl[subj].put(f"/api/v1/repos/{o}/{n}/collaborators/{grantee}",
                                  {"permission": "read"})
             lst = cl[subj].get(f"/api/v1/repos/{o}/{n}/collaborators")[1] or []
             in_collab = any(isinstance(c, dict) and c.get("login") == grantee for c in lst)
             ins = R.introspect(cl, obj, grantee)
+            nreq = COUNT.n
             grant_cells.append({
                 "channel": "grant", "subject": subj, "grantee": grantee, "object": obj,
                 "truth_permission": "admin", "truth": "authorized",
@@ -288,10 +322,12 @@ def _measure(port: int, cl, active: set[str]):
                 "E_says": "admin", "Y_effect": bool(st in (200, 204) and in_collab),
                 "oracle_readable": bool(ins.get("readable")),
                 "oracle_says_none": bool(ins.get("says_none")),
-                "requests": 3,   # PUT + 协作者列表复核 + oracle
+                "requests": nreq,   # PUT + 协作者列表复核 + 自省面（实测）
             })
     if grant_cells:                       # 授予后的新鲜可达集（1 次共享枚举）
+        COUNT.reset()
         urls = set(R.crawl(cl[grantee], [ST.ORG])["urls"])
+        shared_req = COUNT.n
         for c in grant_cells:
             c["cannot_reach"] = c["object"] not in urls
             c["alarms"] = _alarms(c["cannot_reach"] and c["effect"],
@@ -301,8 +337,10 @@ def _measure(port: int, cl, active: set[str]):
 
     out["negatives"] = neg
     out["neg_denominator"] = {k: len(v) for k, v in neg.items()}
-    # 通道级共享成本：授予通道要在授予后重新枚举一次被授予者的可达集。
-    out["neg_shared_requests"] = {"read": 0, "write": 0, "grant": 2 if grant_cells else 0}
+    # 通道级共享成本：授予通道要在授予后重新枚举一次被授予者的可达集，
+    # 这次枚举本身也是 HTTP 请求（3 条列表 + 每个列表结果的对象访问），实测计数。
+    out["neg_shared_requests"] = {"read": 0, "write": 0,
+                                  "grant": shared_req if grant_cells else 0}
     # 兼容旧字段：合并读通道计数（与正文既有 8/23、0 同一口径）
     fp = {k: 0 for k in ("mr_bookkeeping", "v3", "v3_channel", "direct_observe",
                          "direct_observe_channel", "direct_only")}
@@ -322,12 +360,24 @@ def _measure(port: int, cl, active: set[str]):
 CLASS_CHANNEL = {"C1": "read", "C2": "write", "C3": "read", "C4": "grant"}
 
 
+METHODS = ("mr_read", "v3_channel", "direct_observe_channel")
+
+
+def _alarm_of(rec: dict, meth: str) -> bool:
+    """单条链路的告警，不带复合。留一法必须分开报，否则会把"oracle 能归因"
+    误读成"关系能归因"——C3/C4 的关系自始至终不报警。"""
+    if meth == "mr_read":
+        return bool(rec["mr_read"])
+    return bool(rec["alarms"][meth])
+
+
 def _any_alarm(rec: dict) -> bool:
-    """该实例上"有没有任何一条被检验的链路报警"。
+    """该实例上"有没有任何一条被检验的链路报警"（复合量）。
 
     取三条：已研究的关系（mr_read）、渠道匹配的关系（v3_channel）、渠道匹配的
-    oracle 裁决（direct_observe_channel 已在测量里用效果判定）。留一法用这个
-    复合量，四类都有可归因的报警，不再出现"某类本来就不响所以检验为空"。
+    oracle 裁决（direct_observe_channel 已在测量里用效果判定）。复合量四类都有
+    可归因的报警；但**不能**由此推出每个组成方法都能归因四类，正文引用归因时
+    必须用 leave_one_out_by_method 的分方法数字。
     """
     a = rec["alarms"]
     return bool(rec["mr_read"] or a["v3_channel"] or a["direct_observe_channel"])
@@ -379,7 +429,22 @@ def _summarise(runs: dict[str, dict]):
             "own_total_when_active": sum(1 for r in full["instances"]
                                          if r["class"] == cls and _any_alarm(r)),
         }
+    # 逐方法留一法：复合量覆盖四类，不代表每个组成方法都能覆盖四类。
+    loo_m = {}
+    for cls in CLASSES:
+        off = runs[f"without_{cls}"]
+        own_off = [r for r in off["instances"] if r["class"] == cls]
+        own_on = [r for r in full["instances"] if r["class"] == cls]
+        loo_m[cls] = {meth: {"active": sum(1 for r in own_on if _alarm_of(r, meth)),
+                             "disabled": sum(1 for r in own_off if _alarm_of(r, meth))}
+                      for meth in METHODS}
+        # 关掉该类后，其余类的实例在每条链路上是否仍然报警（共享根因检查）
+        other_off = [r for r in off["instances"] if r["class"] != cls]
+        for meth in METHODS:
+            loo_m[cls][meth]["other_retained"] = sum(
+                1 for r in other_off if _alarm_of(r, meth))
     return {"per_class": per_class, "leave_one_out": loo,
+            "leave_one_out_by_method": loo_m,
             "negatives": neg_fp,
             "fp": full["fp"], "fp_denominator": full["fp_denominator"]}
 
@@ -429,6 +494,9 @@ def main():
     print("\n误报（合并读通道）：", summary["fp"], "分母", summary["fp_denominator"])
     print("逐通道负例：", json.dumps(summary["negatives"], ensure_ascii=False))
     print("leave-one-out：", json.dumps(summary["leave_one_out"], ensure_ascii=False))
+    print("leave-one-out（逐方法）：")
+    for cls, m in summary["leave_one_out_by_method"].items():
+        print("  ", cls, json.dumps(m, ensure_ascii=False))
     print(f"[done] -> {p} ({out['meta']['elapsed_s']}s)")
 
 

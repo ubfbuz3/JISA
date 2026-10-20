@@ -479,7 +479,8 @@ consults and the content routes are answered by the same server binary applying
 the same permission model; on Gogs~\GgVersion{} the per-object route the oracle
 consults enumerates direct collaborators only, and the permission suffix that
 would expose the remaining channels does not exist (\GgChProbePermSuffix), so
-the oracle path cannot even be completed; on GitLab~\GlVersion{} the
+the complete oracle cannot be completed; what that route does answer is reported
+as a diagnostic surface, not as a complete oracle; on GitLab~\GlVersion{} the
 \texttt{members/all} route the oracle consults and the content routes are
 answered by the same application consulting the same membership tables. On each
 product the enumeration stops at the server boundary---below it we did not audit
@@ -489,12 +490,13 @@ authorization model on both paths, is recorded as \emph{reject}. On the
 controlled target, where we can read the source, the finer verdict is available
 and is also \emph{reject}, though the ground differs by class and the register
 states it per class: a shared decision function (read); a guard that duplicates
-the rule over the same record, so the bypass clause is guard-only while the state
-and rule are shared (write); a fault the oracle does not read---which is why it
+the rule over the same record, so the bypass clause is guard-only, the state is
+shared and the rule is a copy that can drift (write); a fault the oracle does not
+read---which is why it
 reports \texttt{none} there---but whose class could sit in the inheritance branch
 the oracle does read (inheritance); and a shared collaborator map distinguished
-only by the flag the grant path writes (escalation). One revision of the
-register, logged in place and without changing a verdict, corrected three of
+only by the flag the grant path writes (escalation). Two revisions of the
+register, logged in place and without changing a verdict, corrected five of
 those grounds; the protocol and the register ship with the artifact, with an
 errata that corrects the protocol header's commit pointer and its Gogs version
 label without touching the frozen bytes.

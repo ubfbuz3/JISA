@@ -551,19 +551,26 @@ oracle-based adjudicator alarms on \McFpOracleMax{} of \McNegRead{},
 success
 is judged by the object's state changing, not by the status code, so a
 \texttt{200} that leaves the object untouched is not counted as a detection; a
-grant counts only if the collaborator record actually appears. The zero in the
-oracle column is conditional on this target's oracle being sound, and
-Section~\ref{sec:admissibility} reports what happens when it is not. Two caveats
-belong here. First, the target's oracle shares the decision function with the
-content path, so under the admission rule of Section~\ref{sec:admissibility} every
-class is refused promotion (Section~\ref{sec:admissibility} and the application
-register in the package): the \McInstances{} hits are recall against known truth,
-not independence-certified proofs. Second, these are four mechanisms on one
-emulator, not four discoveries in production systems. Disabling one class's fault
-injection removes that class's alarms and leaves the other three classes' alarms
-in place, under the channel-matched probe as well as the relation---checked for
-all four classes---so an alarm is attributable to its own defect rather than to a
-shared root cause.
+grant counts only if the collaborator record actually appears. The oracle answers
+these recorded cases correctly; that is soundness on this target, not
+independence, and Section~\ref{sec:admissibility} reports what the admission rule
+does with an oracle that is sound but not independent. Two caveats
+belong here. First, the target's oracle shares authorization state or decision
+components with the content path---the ground differs by class, and the register
+states it per class---so under the admission rule of
+Section~\ref{sec:admissibility} every class is refused promotion
+(Section~\ref{sec:admissibility} and the application register in the package):
+the \McInstances{} hits are recall against known truth, not
+independence-certified proofs. Second, these are four mechanisms on one
+emulator, not four discoveries in production systems. The leave-one-out is
+reported per method rather than as one composite number. On the channel-matched
+adjudicator, disabling a class's fault removes that class's alarms and leaves
+the other classes' alarms in place, for all \McLooAdjudicatorClasses{} classes.
+The read relation provides the same evidence for \McLooReadClasses{} class and
+the channel-matched relation for \McLooChannelClasses{}; for the others both
+relations are silent whether the fault is on or off, so their leave-one-out says
+nothing about the relation. An alarm is thereby attributable to its own defect
+without implying that the relation itself covers the class.
 
 \subsection{A publicly fixed defect}
 \label{sec:cvepair}

@@ -70,7 +70,26 @@ def recompute_negatives(neg: dict[str, list], shared: dict | None = None) -> dic
     return out
 
 
-def cross_check(data: dict) -> tuple[dict, dict]:
+def recompute_loo(data: dict) -> dict:
+    """从 runs 的逐实例记录重算逐方法留一法。"""
+    full = data["runs"]["all"]["instances"]
+    out: dict = {}
+    for cls, _ in ROWS:
+        off = data["runs"][f"without_{cls}"]["instances"]
+        own_on = [r for r in full if r["class"] == cls]
+        own_off = [r for r in off if r["class"] == cls]
+        other_off = [r for r in off if r["class"] != cls]
+        out[cls] = {}
+        for meth in ("mr_read", "v3_channel", "direct_observe_channel"):
+            def hit(r, m=meth):
+                return bool(r["mr_read"]) if m == "mr_read" else bool(r["alarms"][m])
+            out[cls][meth] = {"active": sum(1 for r in own_on if hit(r)),
+                              "disabled": sum(1 for r in own_off if hit(r)),
+                              "other_retained": sum(1 for r in other_off if hit(r))}
+    return out
+
+
+def cross_check(data: dict) -> tuple[dict, dict, dict]:
     """逐条记录 ↔ 缓存 summary 的机械比对；不一致即拒绝出数。"""
     per = recompute_per_class(data["runs"]["all"]["instances"])
     cached = data["summary"]["per_class"]
@@ -95,12 +114,25 @@ def cross_check(data: dict) -> tuple[dict, dict]:
             if cneg[ch][k] != v:
                 raise SystemExit(f"[FAIL] negatives[{ch}].{k}: records {v} vs "
                                  f"summary {cneg[ch][k]}")
-    return per, neg
+
+    loo = recompute_loo(data)
+    cloo = data["summary"].get("leave_one_out_by_method")
+    if cloo is None:
+        raise SystemExit("[FAIL] summary has no leave_one_out_by_method; re-run "
+                         "run_multiclass.py (the per-method split is required by "
+                         "Section V-D)")
+    for cls, _ in ROWS:
+        for meth, vals in loo[cls].items():
+            for k, v in vals.items():
+                if cloo[cls][meth].get(k) != v:
+                    raise SystemExit(f"[FAIL] loo[{cls}][{meth}].{k}: records {v} vs "
+                                     f"summary {cloo[cls][meth].get(k)}")
+    return per, neg, loo
 
 
 def main() -> None:
     data = json.loads(SRC.read_text(encoding="utf-8"))
-    per, neg = cross_check(data)
+    per, neg, loo = cross_check(data)
     fp = data["summary"]["fp"]
     fp_den = data["summary"]["fp_denominator"]
     inst = data["runs"]["all"]["instances"]
@@ -153,6 +185,17 @@ def main() -> None:
     cmd("FpOracleMax", max(fp_orc.values()))
     _rate = max((fp_orc[ch] / neg[ch]["n"] for ch in fp_orc if neg[ch]["n"]), default=0.0)
     cmd("FprOracleMax", f"{100.0 * _rate:.2f}")
+    def attributed(meth: str) -> int:
+        """有"关掉该类 ⇒ 该链路从有告警变无告警"的类别数。"""
+        return sum(1 for c, _ in ROWS
+                   if loo[c][meth]["active"] > 0 and loo[c][meth]["disabled"] == 0)
+
+    cmd("LooReadClasses", attributed("mr_read"))
+    cmd("LooChannelClasses", attributed("v3_channel"))
+    cmd("LooAdjudicatorClasses", attributed("direct_observe_channel"))
+    cmd("ReqNegRead", neg["read"]["requests"])
+    cmd("ReqNegWrite", neg["write"]["requests"])
+    cmd("ReqNegGrant", neg["grant"]["requests"])
     cmd("FpBookkeeping", fp["mr_bookkeeping"])   # 合并读通道口径，供横向对照
     cmd("AuthorizedCells", fp_den)
 
@@ -181,9 +224,12 @@ def main() -> None:
         r"channel-matched relation does. C3 and C4 falsify the antecedent---the subject can "
         r"already see the object---so the gate is silent on them end to end and they remain "
         r"undetected in the overall denominator; that is a mechanism explanation, not a "
-        r"removal from the denominator. The zero in the oracle column is conditional on this "
-        r"target's oracle being sound, which it is not for any class under the admission "
-        r"rule of Section~\ref{sec:admissibility}.}")
+        r"removal from the denominator. The oracle answers these recorded cases correctly; "
+        r"that is soundness on this target, not independence, and no class is admitted as "
+        r"an independent entitlement source under the admission rule of "
+        r"Section~\ref{sec:admissibility}. The negative blocks cost \McReqNegRead{} read, "
+        r"\McReqNegWrite{} write and \McReqNegGrant{} grant requests, counted at the "
+        r"client rather than estimated per cell.}")
     body.append(r"\label{tab:multiclass}")
     body.append(r"\small")
     body.append(r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrr}")

@@ -4,10 +4,10 @@
     "target": "seeded_target.py (controlled Gitea API emulator)",
     "active_classes": {
       "all": [
-        "C2",
-        "C4",
         "C1",
-        "C3"
+        "C3",
+        "C4",
+        "C2"
       ]
     },
     "classes": {
@@ -70,7 +70,7 @@
     },
     "truth_source": "ST.Model.intended_perm (tainted grants excluded)",
     "fp_definition": "alarm on a cell whose intended permission is not none",
-    "elapsed_s": 7.1
+    "elapsed_s": 7.8
   },
   "summary": {
     "per_class": {
@@ -177,13 +177,83 @@
         "own_total_when_active": 2
       }
     },
+    "leave_one_out_by_method": {
+      "C1": {
+        "mr_read": {
+          "active": 3,
+          "disabled": 0,
+          "other_retained": 0
+        },
+        "v3_channel": {
+          "active": 3,
+          "disabled": 0,
+          "other_retained": 2
+        },
+        "direct_observe_channel": {
+          "active": 3,
+          "disabled": 0,
+          "other_retained": 6
+        }
+      },
+      "C2": {
+        "mr_read": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "v3_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "direct_observe_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 7
+        }
+      },
+      "C3": {
+        "mr_read": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "v3_channel": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 5
+        },
+        "direct_observe_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 7
+        }
+      },
+      "C4": {
+        "mr_read": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "v3_channel": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 5
+        },
+        "direct_observe_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 7
+        }
+      }
+    },
     "negatives": {
       "read": {
         "n": 23,
         "relation": 8,
         "relation_oracle": 0,
         "oracle_only": 0,
-        "requests": 46,
+        "requests": 69,
         "shared_requests": 0,
         "fpr_relation_oracle": 0.0,
         "fpr_oracle_only": 0.0
@@ -193,7 +263,7 @@
         "relation": 6,
         "relation_oracle": 0,
         "oracle_only": 0,
-        "requests": 48,
+        "requests": 64,
         "shared_requests": 0,
         "fpr_relation_oracle": 0.0,
         "fpr_oracle_only": 0.0
@@ -203,8 +273,8 @@
         "relation": 0,
         "relation_oracle": 0,
         "oracle_only": 0,
-        "requests": 23,
-        "shared_requests": 2,
+        "requests": 42,
+        "shared_requests": 21,
         "fpr_relation_oracle": 0.0,
         "fpr_oracle_only": 0.0
       }
@@ -553,7 +623,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -575,7 +645,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -597,7 +667,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -619,7 +689,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -641,7 +711,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -663,7 +733,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -685,7 +755,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -707,7 +777,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -729,7 +799,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -751,7 +821,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -773,7 +843,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -795,7 +865,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -817,7 +887,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -839,7 +909,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -861,7 +931,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -883,7 +953,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -905,7 +975,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -927,7 +997,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -949,7 +1019,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -971,7 +1041,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -993,7 +1063,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -1015,7 +1085,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -1037,7 +1107,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           }
         ],
         "write": [
@@ -1062,7 +1132,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1085,7 +1155,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1108,7 +1178,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1131,7 +1201,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1154,7 +1224,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1177,7 +1247,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1200,7 +1270,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1223,7 +1293,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1246,7 +1316,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1269,7 +1339,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1292,7 +1362,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1315,7 +1385,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1338,7 +1408,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1361,7 +1431,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1384,7 +1454,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -1407,7 +1477,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           }
         ],
         "grant": [
@@ -1575,7 +1645,7 @@
       "neg_shared_requests": {
         "read": 0,
         "write": 0,
-        "grant": 2
+        "grant": 21
       },
       "fp_denominator": 23,
       "setup": {
@@ -2092,7 +2162,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2114,7 +2184,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2136,7 +2206,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2158,7 +2228,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2180,7 +2250,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2202,7 +2272,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2224,7 +2294,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2246,7 +2316,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2268,7 +2338,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2290,7 +2360,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2312,7 +2382,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2334,7 +2404,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2356,7 +2426,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2378,7 +2448,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2400,7 +2470,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2422,7 +2492,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2444,7 +2514,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2466,7 +2536,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2488,7 +2558,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2510,7 +2580,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2532,7 +2602,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2554,7 +2624,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -2576,7 +2646,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           }
         ],
         "write": [
@@ -2601,7 +2671,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2624,7 +2694,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2647,7 +2717,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2670,7 +2740,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2693,7 +2763,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2716,7 +2786,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2739,7 +2809,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2762,7 +2832,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2785,7 +2855,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2808,7 +2878,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2831,7 +2901,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2854,7 +2924,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2877,7 +2947,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2900,7 +2970,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2923,7 +2993,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -2946,7 +3016,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           }
         ],
         "grant": [
@@ -3114,7 +3184,7 @@
       "neg_shared_requests": {
         "read": 0,
         "write": 0,
-        "grant": 2
+        "grant": 21
       },
       "fp_denominator": 23,
       "setup": {
@@ -3631,7 +3701,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3653,7 +3723,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3675,7 +3745,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3697,7 +3767,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3719,7 +3789,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3741,7 +3811,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3763,7 +3833,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3785,7 +3855,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3807,7 +3877,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3829,7 +3899,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3851,7 +3921,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3873,7 +3943,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3895,7 +3965,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3917,7 +3987,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3939,7 +4009,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3961,7 +4031,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -3983,7 +4053,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -4005,7 +4075,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -4027,7 +4097,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -4049,7 +4119,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -4071,7 +4141,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -4093,7 +4163,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -4115,7 +4185,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           }
         ],
         "write": [
@@ -4140,7 +4210,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4163,7 +4233,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4186,7 +4256,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4209,7 +4279,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4232,7 +4302,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4255,7 +4325,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4278,7 +4348,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4301,7 +4371,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4324,7 +4394,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4347,7 +4417,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4370,7 +4440,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4393,7 +4463,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4416,7 +4486,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4439,7 +4509,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4462,7 +4532,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -4485,7 +4555,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           }
         ],
         "grant": [
@@ -4653,7 +4723,7 @@
       "neg_shared_requests": {
         "read": 0,
         "write": 0,
-        "grant": 2
+        "grant": 21
       },
       "fp_denominator": 23,
       "setup": {
@@ -5170,7 +5240,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5192,7 +5262,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5214,7 +5284,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5236,7 +5306,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5258,7 +5328,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5280,7 +5350,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5302,7 +5372,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5324,7 +5394,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5346,7 +5416,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5368,7 +5438,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5390,7 +5460,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5412,7 +5482,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5434,7 +5504,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5456,7 +5526,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5478,7 +5548,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5500,7 +5570,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5522,7 +5592,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5544,7 +5614,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5566,7 +5636,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5588,7 +5658,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5610,7 +5680,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5632,7 +5702,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -5654,7 +5724,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           }
         ],
         "write": [
@@ -5679,7 +5749,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5702,7 +5772,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5725,7 +5795,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5748,7 +5818,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5771,7 +5841,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5794,7 +5864,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5817,7 +5887,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5840,7 +5910,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5863,7 +5933,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5886,7 +5956,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5909,7 +5979,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5932,7 +6002,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5955,7 +6025,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -5978,7 +6048,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -6001,7 +6071,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -6024,7 +6094,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           }
         ],
         "grant": [
@@ -6192,7 +6262,7 @@
       "neg_shared_requests": {
         "read": 0,
         "write": 0,
-        "grant": 2
+        "grant": 21
       },
       "fp_denominator": 23,
       "setup": {
@@ -6696,7 +6766,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6718,7 +6788,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6740,7 +6810,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6762,7 +6832,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6784,7 +6854,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6806,7 +6876,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6828,7 +6898,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6850,7 +6920,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6872,7 +6942,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6894,7 +6964,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6916,7 +6986,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6938,7 +7008,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6960,7 +7030,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -6982,7 +7052,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7004,7 +7074,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7026,7 +7096,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7048,7 +7118,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7070,7 +7140,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7092,7 +7162,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7114,7 +7184,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7136,7 +7206,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7158,7 +7228,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           },
           {
             "channel": "read",
@@ -7180,7 +7250,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 2
+            "requests": 3
           }
         ],
         "write": [
@@ -7205,7 +7275,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7228,7 +7298,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7251,7 +7321,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7274,7 +7344,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7297,7 +7367,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7320,7 +7390,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7343,7 +7413,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7366,7 +7436,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7389,7 +7459,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7412,7 +7482,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7435,7 +7505,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7458,7 +7528,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7481,7 +7551,7 @@
               "oracle_only": false,
               "bookkeeping": false
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7504,7 +7574,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7527,7 +7597,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           },
           {
             "channel": "write",
@@ -7550,7 +7620,7 @@
               "oracle_only": false,
               "bookkeeping": true
             },
-            "requests": 3
+            "requests": 4
           }
         ],
         "grant": [
@@ -7718,7 +7788,7 @@
       "neg_shared_requests": {
         "read": 0,
         "write": 0,
-        "grant": 2
+        "grant": 21
       },
       "fp_denominator": 23,
       "setup": {

@@ -271,18 +271,19 @@ is also \emph{reject}---but the ground differs by class, and the register states
 per class instead of under one label: for the read bypass the content decision
 calls the function the oracle answers from; for the write bypass the guard does
 \emph{not} call it---it duplicates the rule inline over the same repository record
-the oracle reads, so the bypass clause is guard-only while the authorization state
-and rule are shared; for the inheritance fault the oracle does not read the faulty
+the oracle reads, so the bypass clause is guard-only, the object record it decides
+over is shared, and the rule is a duplicated copy rather than a call; for the
+inheritance fault the oracle does not read the faulty
 field at all, which is why it reports \texttt{none} and detects the class, but the
 inheritance branch the oracle does execute is where a fault of that class would
 live, so non-propagation follows from where the fault was placed rather than from
 independence; for the escalation the two paths read the same collaborator map and
 differ only by the flag that marks the grant as tainted, so the oracle's
-correctness depends on the path under test having written that flag. A first fill
-of the register attributed three of these four to a simpler ground; it was revised
-from the pinned source and the revision is logged in the register itself, with the
-protocol's commit pointer corrected in a separate errata that leaves the frozen
-bytes and their digest untouched. No verdict changed.
+correctness depends on the path under test having written that flag. Two rounds of
+revision, each re-reading the pinned source, corrected five of these grounds; the
+log is in the register itself, and the protocol's commit pointer is corrected in a
+separate errata that leaves the frozen bytes and their digest untouched. No
+verdict, level or criterion changed.
 That last decision has teeth in this revision: because the target's oracle is not
 admissible, the \McInstances{} per-class hits of Table~17 are reported as recall against
 known truth and explicitly not as independence-certified proofs. Three epistemic
@@ -292,11 +293,10 @@ observation, which needs no oracle independence; and
 independence-certified proofs of previously unknown defects, which the rule
 refuses here. No recorded number changes under the rule.}
 \Action{Section~VI-E (the rule, the per-product path evidence, and the three
-epistemic statuses); \texttt{experiments/real\_system/prereg/} in the package
+epistemic statuses); \path{experiments/real_system/prereg/} in the package
 holds the frozen protocol with its \texttt{SHA256SUMS}, the errata that correct
 the protocol's commit pointer, and the per-system application register with its
-revision log, including the channel-matched leave-one-out checks on the controlled
-target.}
+revision log (two revisions, neither changing a verdict or a level).}
 \Remains{The evidence base for the three production products is API-observable
 behaviour, not an internal-source audit; a finer-grained per-component
 enumeration would be needed before any of them could be recorded as anything
@@ -540,20 +540,24 @@ operation: \McNegRead{} read cells, \McNegWrite{} write cells and \McNegGrant{}
 grant cells, the read set shared by C1 and C3. The relation's bookkeeping variant
 alarms on \McFpRelRead{} of \McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and
 \McFpRelGrant{} of \McNegGrant{} authorized cells; the oracle-based adjudicator
-alarms on \McFpOracleMax{} of each set, and that zero is conditional on this
-target's oracle being sound. Write success is judged by the object's state
+alarms on \McFpOracleMax{} of each set, and that zero is soundness on these
+recorded cases, not independence. Write success is judged by the object's state
 changing, not by the status code, so a \texttt{200} that leaves the object
 untouched is not counted as a detection, and a grant counts only if the
 collaborator record actually appears. Two limits are stated with the numbers: the
-target's oracle shares a decision function with the content path, so under the
-admission rule of Section~VI-E every class is refused promotion---with the ground
-differing by class, as the register records---and the \McInstances{} hits are
-recall against known truth rather than independence-certified proofs; and these
-are four mechanisms on one emulator, not four discoveries in production systems.
-Each class is also leave-one-out checked: disabling its fault injection removes
-that class's alarms and leaves the other classes' alarms in place, under the
-channel-matched adjudicator as well as the relation, for all four classes, so an
-alarm is attributable to its defect rather than to a shared root cause. The
+target's oracle shares authorization state or decision components with the
+content path---the ground differs by class, and the register records it per
+class---so under the admission rule of Section~VI-E every class is refused
+promotion, and the \McInstances{} hits are recall against known truth rather
+than independence-certified proofs; and these are four mechanisms on one
+emulator, not four discoveries in production systems. The leave-one-out is
+reported per method, not as one composite number: on the channel-matched
+adjudicator, disabling a class's fault removes that class's alarms and leaves
+the others in place for all \McLooAdjudicatorClasses{} classes; the read
+relation supports that attribution for \McLooReadClasses{} class and the
+channel-matched relation for \McLooChannelClasses{}, and on the remaining
+classes both relations are silent with the fault on and off, which is why C3 and
+C4 are reported as undetected by the relation rather than as attributable to it. The
 publicly fixed CVE pair is retained alongside this, as a
 control of the gate rather than of recall: Section~V-E and Table~18 (p.~18), one
 true positive on 1.20.5 and no claim on 1.20.6, with the seven-perturbation
@@ -693,7 +697,7 @@ observations.}
 seed and configuration files, the machine-readable raw records and the scripts
 that regenerate every table and figure, and it was verified rather than asserted: in a
 staging copy of the committed tree---extracted with \texttt{git archive}, so it
-cannot see the working tree---the pipeline regenerates all 31 byte-reproducible outputs byte-identically, including the two baseline tables; and in an empty
+cannot see the working tree---the pipeline regenerates all 35 byte-reproducible outputs byte-identically, including the two baseline tables; and in an empty
 directory the 97-file submission package compiles (32 pages, no undefined references). The native run is reported as three stages rather than one
 number (Section~VII-C, Tables~24--26, pp.~25--27): $A$, the engine's own
 \texttt{getFailures()} alarms, 6; $H$, our promotion policy applied to them, 6;
@@ -894,7 +898,7 @@ four defect classes, evidence levels L0--L3, an ordered
 \emph{admit}/\emph{reject}/\emph{unknown} rule, claim licensing and change
 control; applied to the four archived products (all \emph{reject}, L1) and to the
 controlled target (\emph{reject}, L2, source-level, with the ground stated per
-class in a register whose one revision is logged) & Independence for the three
+class in a register whose two revisions are logged) & Independence for the three
 production products: their evidence stops at the server boundary, so no
 promotion is claimed there and their results remain diagnostic readings; and no
 \emph{admit} row exists, so the rule licenses no independence-certified proof in
@@ -913,7 +917,7 @@ R1.9 & Four defect classes (read, modify, inheritance, escalation), \McInstances
 independently switchable instances, the same crawl/introspection/adjudication
 code, per-class recall, per-channel negative controls (\McNegRead{} read,
 \McNegWrite{} write, \McNegGrant{} grant authorized cells) with false-alarm rates,
-and a leave-one-out run per class & Population
+and a leave-one-out run per class and per method & Population
 evidence: one emulator and four mechanisms, not four discoveries in production
 systems; C3 and C4 stay in the denominator as undetected, because their
 antecedent is false rather than because the gate was not retuned; and the zero

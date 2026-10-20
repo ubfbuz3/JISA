@@ -1,0 +1,925 @@
+{
+  "actual_http_counts": {
+    "read": 69,
+    "write": 64,
+    "grant": 21,
+    "grant_shared_crawl": 21
+  },
+  "recorded_counts": {
+    "read": {
+      "n": 23,
+      "relation": 8,
+      "relation_oracle": 0,
+      "oracle_only": 0,
+      "requests": 46,
+      "shared_requests": 0,
+      "fpr_relation_oracle": 0.0,
+      "fpr_oracle_only": 0.0
+    },
+    "write": {
+      "n": 16,
+      "relation": 6,
+      "relation_oracle": 0,
+      "oracle_only": 0,
+      "requests": 48,
+      "shared_requests": 0,
+      "fpr_relation_oracle": 0.0,
+      "fpr_oracle_only": 0.0
+    },
+    "grant": {
+      "n": 7,
+      "relation": 0,
+      "relation_oracle": 0,
+      "oracle_only": 0,
+      "requests": 23,
+      "shared_requests": 2,
+      "fpr_relation_oracle": 0.0,
+      "fpr_oracle_only": 0.0
+    }
+  },
+  "calls": {
+    "read": [
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators/alice/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators/alice/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3/collaborators/alice/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4/collaborators/alice/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1/collaborators/alice/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators/bob/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/bob/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/bob/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators/carol/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/dave/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/dave/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5/collaborators/dave/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3/collaborators/eve/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/frank/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/frank/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 222
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5/collaborators/root/permission",
+        "caller_line": 219
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 220
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 222
+      }
+    ],
+    "write": [
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators/alice/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators/alice/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3/collaborators/alice/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4/collaborators/alice/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1/collaborators/alice/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/dave/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/dave/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5/collaborators/dave/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/root/permission",
+        "caller_line": 251
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 246
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 247
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 249
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5/collaborators/root/permission",
+        "caller_line": 251
+      }
+    ],
+    "grant": [
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/alice/r1/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1/collaborators/eve/permission",
+        "caller_line": 283
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/alice/r2/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2/collaborators/eve/permission",
+        "caller_line": 283
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/alice/r4/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4/collaborators/eve/permission",
+        "caller_line": 283
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/alice/pub1/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1/collaborators/eve/permission",
+        "caller_line": 283
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/dave/r5/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5/collaborators/eve/permission",
+        "caller_line": 283
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/acme/t1/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1/collaborators/eve/permission",
+        "caller_line": 283
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/repos/acme/t2/collaborators/eve",
+        "caller_line": 279
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators",
+        "caller_line": 281
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2/collaborators/eve/permission",
+        "caller_line": 283
+      }
+    ],
+    "grant_shared_crawl": [
+      {
+        "method": "GET",
+        "path": "/api/v1/user/repos?limit=50",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/orgs/acme/repos?limit=50",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/search?limit=50",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r2",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r3",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/r4",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/alice/pub1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t1",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/acme/t2",
+        "caller_line": 294
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/repos/dave/r5",
+        "caller_line": 294
+      }
+    ]
+  }
+}
