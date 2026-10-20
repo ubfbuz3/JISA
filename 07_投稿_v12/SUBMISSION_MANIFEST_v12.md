@@ -1,6 +1,6 @@
 # Access-2026-49387 重投提交包（v12）
 
-冻结版本：tag `access-resubmission-v12`（解引用 SHA：`__COMMIT__`）。2026-10-20 构建；
+冻结版本：tag `access-resubmission-v12`（解引用 SHA：`d9f08778aa68eeeb0b0b9a61f9e9b7c089f8c66e`）。2026-10-20 构建；
 本目录四个文件是该提交的产物，**未改动一个字节**。上一版 `07_投稿_v11_superseded/` 仅作快照，
 **不要上传**。
 

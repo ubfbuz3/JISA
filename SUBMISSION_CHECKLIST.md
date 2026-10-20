@@ -4,7 +4,7 @@
 > 逐项核对；每项标 ☑（已满足）/ ☐（待办）。配套脚本：`reproduce.sh`、`verify_artifact.sh`、
 > `04_绘图与分析/analysis/make_manifests.py`。Zenodo 步骤见 `ZENODO_GUIDE.md`。
 >
-> **2026-10-20 校准到 v11 冻结稿（`4d1036c` / `access-resubmission-v11`）**：下方页数、文件数、
+> **2026-10-20 校准到 v12 冻结稿（`d9f0877` / `access-resubmission-v12`）**：下方页数、文件数、
 > 产物数、Zenodo 标签口径均为 v11 实测值；重投上传见 `07_投稿_v11/`。
 
 ---
@@ -12,7 +12,7 @@
 ## A. Zenodo DOI（永久可引用归档）——已完成
 - ☑ `.zenodo.json` 已提交，Zenodo 已按 `artifact-v1`（= 提交 `a86cd4c`）归档。
 - ☑ **DOI 已派发：`10.5281/zenodo.22859942`**，已回填 `sections/10_declarations.tex` §Data availability。
-- ☑ GitHub 远端 `main` = **`4d1036c`**（= tag `access-resubmission-v11` 解引用，2026-10-20 用 `ls-remote` 核对；工作树干净）。
+- ☑ GitHub 远端 `main` = **`d9f0877`**（= tag `access-resubmission-v12` 解引用，2026-10-20 用 `ls-remote` 核对；工作树干净）。
   `artifact-v1` 冻结于 `a86cd4c`，**勿重锚**（重锚会使 tag 与 Zenodo 快照不一致）。
 
 ---
@@ -40,7 +40,7 @@
 
 ## C. Data availability（已精确化并回填真实 DOI）
 `10_declarations.tex` 的 Data availability 段现已给出真实 DOI：`10.5281/zenodo.22859942`，并指向
-**`access-resubmission-v11`**（含两个新实验的逐格记录；v9 只含初版运行，v10 为中间冻结），
+**`access-resubmission-v12`**（含两个新实验的逐格记录；v9 只含初版运行，v10/v11 为中间冻结），
 并点名列明四类原始记录（场景/配置研究、真实系统 cell 研究、原生引擎执行、seeded 阳性对照）、
 分析管线与自检脚本。无需再改（如后续重锚 tag 须同步更新措辞）。
 
@@ -67,7 +67,7 @@
 - ☑ **投稿包自足可编译**（2026-10-19 修正）：`make_submission_zip.py` 的宏文件清单改为从正文
   `\input{}` 自动推导——旧的硬编码清单漏了 `temporal_*`、`cve_pair_*`、`native_split_table`
   共 6 个生成表，ReX 端会直接编译失败。现为 **97 个文件**（含 R1.7/R1.9 的两个新生成表与宏文件）；
-  已验证：解压到空目录编译直接出 **32 页 / 714929 B** PDF，0 error、0 个未定义引用（与交付 PDF 字节相同）。
+  已验证：解压到空目录编译直接出 **32 页 / 716399 B** PDF，0 error、0 个未定义引用（与交付 PDF 同页数、同字节数，文本一致）。
 - ☑ **表格宽度实测**（2026-10-19）：把 12 张表的 tabular 取出单独装箱测 `\wd`，全部 ≤ `\textwidth`
   (505.1 pt)；正文段落只剩类文件 `\maketitle` 自带的 9.3 pt 一条 overfull。
 - ☑ 参考文献真实可溯源、无手敲（`refs.bib` 由 `normalize_bib.py` 规范化，字段值无 CJK）；bibliographystyle 已换 `IEEEtran`。
