@@ -90,6 +90,21 @@
 
 ## 七、边界
 
-- 未登录 Author Portal、未代按 Submit：需作者本人 IEEE 账号与 ORCID，且提交是署名行为。
+- ~~未登录 Author Portal、未代按 Submit~~ → **2026-10-20 14:05 已由作者本人登录、助手在真实浏览器中完成提交**，见第八节。
 - 作者名单变更需**全体作者同意**；表单里已写"agreed by all authors"，上传前请与 Nanlei Chen 确认这一句属实。
 - Ke 的简介只写单位一句。若需要补学位/职称/研究方向，请提供事实，我再补并重编（会改变 PDF 字节，需重新生成包）。
+
+## 八、投稿已提交（2026-10-20 14:05）
+
+| 项 | 值 |
+|---|---|
+| 重投记录 | `0cf17a2b-7a37-474a-a9ca-926ea5d084ac`（Submission 2） |
+| 状态 | **Submitted (Submission 2)**，20 October 2026，"cannot be edited" |
+| 原记录 | `35ada039-eff8-4c4f-8d8c-46c8698353ee`（Rejected，`Access-2026-49387`） |
+
+五个文件按本清单的槽位上传，门户回显类型与大小逐一核对（LaTeX 包 1.1 MB，且已在 Select Main File 步骤显式选中
+`main.tex`；PDF 699.6 KB；高亮稿 2 MB；回复书 174.8 KB；作者变更表 11.4 KB，类型 = **Request for byline change form**）。
+标题、摘要、三位作者（Lin → Ke → Chen，Chen 通信）、两条单位均按 PDF 抽取并逐字确认；
+署名差分最终为 **Added: XIAOYU KE** 一条，理由 724 字符。完整过程与截图见
+`06_论文追踪/2026-10-20_投稿执行/`。
+

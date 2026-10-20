@@ -90,5 +90,8 @@
   **Request for byline change form** 专用文件类型上传，并在门户填变更理由；不要只当 Author's Response 附件。
   表内 `Original Article Title` 必须是**原投稿题目**（Limits of Metamorphic Testing…Measurement Resolution），
   2026-10-20 已按编辑决定信改回并回读确认。
-- ☑ **GitHub 同步**：v11 已提交并推送（`4d1036c`，tag `access-resubmission-v11`，远端已核）。`artifact-v1` 勿重锚。
+- ☑ **已提交（2026-10-20 14:05）**：Author Portal 重投记录 `0cf17a2b-7a37-474a-a9ca-926ea5d084ac`，状态
+  **Submitted (Submission 2)**，不可再编辑。五件文件按槽位上传并核对回显；署名差分为 Added: XIAOYU KE 一条。
+  过程与截图见 `06_论文追踪/2026-10-20_投稿执行/`。
+- ☑ **GitHub 同步**：v12 代码/文档链已推送（冻结 tag `access-resubmission-v12` = `d9f0877`，文档提交 `a514d6b`、`a9d7b11`）。`artifact-v1` 勿重锚。
 - ☐ **单位口径确认**：IEEE Access 为 **SCIE 收录**，但**最新中科院分区为 4 区**（2025 版；2024 版曾 3 区）、非 CCF 推荐期刊 ⇒ 若单位硬卡"中科院 3 区/CCF B"，请先与单位确认是否认可。
