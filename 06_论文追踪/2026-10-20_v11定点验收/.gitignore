@@ -1,0 +1,4 @@
+builds/
+*.png
+*_text.txt
+*.log

@@ -2,14 +2,14 @@
 
 **To:** The Editor-in-Chief, *IEEE Access*
 **Article type:** Research Article (Original Research)
-**Manuscript title:** *Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution*
+**Manuscript title:** *Two Reachability-Gated Relations in MST-wi: Temporal Mismatch, Oracle Admissibility, and Measurement Limits*
 
 ---
 
 Dear Editor,
 
-We submit the enclosed manuscript for consideration as a Research Article in
-*IEEE Access*. It reports an empirical study, spanning both constructed and real
+We resubmit the enclosed manuscript (Access-2026-49387) as a Research Article in
+*IEEE Access*, together with a point-by-point response to the two reports. It reports an empirical study, spanning both constructed and real
 Web systems, of what metamorphic testing can and cannot establish when it is used
 to detect **broken object-level authorization (BOLA)** — the top-ranked API
 security risk in the OWASP API Security Top 10.

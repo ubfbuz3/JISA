@@ -1,0 +1,655 @@
+{
+  "main": {
+    "pages": 32,
+    "bytes": 714929,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "a64634a1595a0600a6189919b33e322be9f250269f33223744d3e289015f5550",
+    "annotations": 0
+  },
+  "letter": {
+    "pages": 12,
+    "bytes": 178755,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "33a2c6827aa3220f39aa094fdd5058e40860f4f7f0abf209217dba75b4ff6bdb",
+    "annotations": 0
+  },
+  "highlighted": {
+    "pages": 32,
+    "bytes": 2115736,
+    "author": "Qiulong Lin and Nanlei Chen",
+    "sha256": "74b45965e99272751c772fd5d4a5e68a8061a183bdd5ab5111c4500b16b2fc70",
+    "annotations": 2216
+  },
+  "text_identity": true,
+  "tables": [
+    {
+      "number": 1,
+      "page": 5,
+      "caption": "The complete design. Every record is one point of the cross scenario × configuration × relation × exception policy × reachability reading; the last two are deliberately thrown switches, not "
+    },
+    {
+      "number": 2,
+      "page": 5,
+      "caption": "Attribution by matched pairs. Each row compares two records that differ in exactly one switch, holding configuration, scenario, relation and exception policy (or reachability reading) fixed,"
+    },
+    {
+      "number": 3,
+      "page": 8,
+      "caption": "End-to-end confusion matrix over all 576 records (216 true violations, 360 correct cases). The records are a fixed enumeration, not a sample (Section III, statistical treatment), so no infer"
+    },
+    {
+      "number": 4,
+      "page": 9,
+      "caption": "The same 576 records scored on the decision rather than on the alarm. Coverage is the share of records on which a method asserts either a violation or its absence; the abstention column give"
+    },
+    {
+      "number": 5,
+      "page": 10,
+      "caption": "Reconciling the representative grid with the full partition, record by record. The grid of Section IV is the original selection—e3 configurations, S3–S7, exception policy raw, aware reading—"
+    },
+    {
+      "number": 6,
+      "page": 11,
+      "caption": "The ablation of Table 3 re-run inside each stratum. The two panels are not rankings of the same population but two different regimes: in the readable stratum the oracle-bearing methods can a"
+    },
+    {
+      "number": 7,
+      "page": 11,
+      "caption": "The grant surface of Gitea 1.22.6 (instance-independent). quantity count paths in the system’s API description 253 grant endpoints 15 of which usable without site-admin 8 revocation endpoint"
+    },
+    {
+      "number": 8,
+      "page": 12,
+      "caption": "Authorization-introspection readability protocol on Gitea. Each row is a distinct population and denominator, so the rows are not comparable: both the vantage and the unit of the denominator"
+    },
+    {
+      "number": 9,
+      "page": 12,
+      "caption": "Departure from the real authorization state, per reading of the reachability model. reading of the reachability model mismatch cells crawl-time snapshot (as the definitions pre- suppose) 10 "
+    },
+    {
+      "number": 10,
+      "page": 12,
+      "caption": "Endogenous control: two objects that are both public at the end. object cells cannotReach MR fires public before the crawl 6 0 0 public only after the crawl 6 5 5 unreachability on 5 of 6 ce"
+    },
+    {
+      "number": 11,
+      "page": 14,
+      "caption": "Oracle fidelity by granting channel, over the same transition cells as Table 12: a confusion matrix of the owner-vantage oracle against the ledger, per channel and per product. allow and den"
+    },
+    {
+      "number": 12,
+      "page": 15,
+      "caption": "Temporal transitions on two products with the same pre-registered protocol. Stale FP: the frozen pre-change model does not list a resource the subject may legitimately read, so the relation "
+    },
+    {
+      "number": 13,
+      "page": 15,
+      "caption": "The same transition cells under the two unknown rules of Section III. The implementation scores every committed cell by closed-world default deny; the protocol’s literal unknown policy marks"
+    },
+    {
+      "number": 14,
+      "page": 15,
+      "caption": "Cross-vendor replication under the identical three-phase protocol (crawl, out-of-band authorization change, adjudicate) on Gitea 1.22.6, Gogs 0.14.3, and GitLab 17.11.7. Counts are per readi"
+    },
+    {
+      "number": 15,
+      "page": 16,
+      "caption": "Oracle fidelity by granting channel on Gogs 0.14.3, over the same 48 snapshot cells as Table 14. Channel labels come from the entitlement ledger, which is built from the lab topology, the do"
+    },
+    {
+      "number": 16,
+      "page": 16,
+      "caption": "Positive control: detection of 3 seeded vulnerable instances (one fault pattern). TP/FN/FP/TN are counted against the known seed, not against a model. method TP FN FP TN mr_bookkeeping 3 0 2"
+    },
+    {
+      "number": 17,
+      "page": 18,
+      "caption": "Per-class recall and per-channel false alarms of the studied chain on the controlled target. Each instance is a cell whose true (correct-model) permission is none and on which the defect nev"
+    },
+    {
+      "number": 18,
+      "page": 18,
+      "caption": "A publicly fixed defect (object-versus-path ownership). The verdict uses E from the ledger and Y from the owner’s re-read, not the write status. version PATCH re-read verdict 1.20.5 (vulnera"
+    },
+    {
+      "number": 19,
+      "page": 21,
+      "caption": "The truth table of the two relations, with the temporal cells that fall in each row. Y : the ordinary request succeeds. M: the crawl-time model lists the object for the subject. O: the intro"
+    },
+    {
+      "number": 20,
+      "page": 23,
+      "caption": "Competing baselines on the same 42 cells and the same probe pair. The cells comprise 15 true violations, 12 legitimate accesses through a grant (in-band or out-of-band), and 15 denials. Ever"
+    },
+    {
+      "number": 21,
+      "page": 23,
+      "caption": "Equal-budget comparison on the same 42 cells and the same credentials. cap is the total request budget per cell. At cap 2 only the owner/actor probe pair fits: our method keeps its own order"
+    },
+    {
+      "number": 22,
+      "page": 25,
+      "caption": "Evidence to claim. Each row names the assumption the claim needs, the artefact that carries it, and the boundary that remains. The last row is not a research question: it checks the adjudica"
+    },
+    {
+      "number": 23,
+      "page": 25,
+      "caption": "The enumeration itself: records under each configuration and scenario. A dash is an inadmissible combination, not a missing run—the no-exception configurations have no legitimate-sharing fac"
+    },
+    {
+      "number": 24,
+      "page": 26,
+      "caption": "Execution facts for the native run of the published relations (Section VII-C). All values are emitted by ingest_native_engine.py; the upstream modification counts are generated from a frozen"
+    },
+    {
+      "number": 25,
+      "page": 26,
+      "caption": "The native alarms split into the three stages: A (the engine’s own getFailures()), H (the promotion policy P applied to A), and T (independent truth from the ledger E and the content re-read"
+    },
+    {
+      "number": 26,
+      "page": 27,
+      "caption": "The published authorization relations executed against Gitea 1.22.6. Each row is the applicability chain from the catalogue to the outcome: status is the engine’s per-relation result (10 of "
+    }
+  ],
+  "response_blocks": {
+    "Concern": 21,
+    "Response": 21,
+    "Action": 21
+  },
+  "abstract": {
+    "words_whitespace": 243,
+    "paragraphs": 1
+  },
+  "zip": {
+    "files": 97,
+    "sha256": "0aca4ef9b58292101319a50a6fb9c17f4e92d6ab0a3e555438d8a89fb795ea86",
+    "bad_crc": null,
+    "mismatches": []
+  },
+  "numbers": {
+    "returncode": 0,
+    "output": "[ok] 75 项承重数字与生成器当前输出一致\n"
+  },
+  "references": {
+    "returncode": 0,
+    "output": "main.pdf: 32 页, 26 张表\n检查了 41 个带页码的引用\n[ok] 回信全部表号/页码引用与 main.pdf 一致\n"
+  },
+  "manifests": {
+    "returncode": 0,
+    "output": "[ok] make_manifests --check: all inputs and outputs match the committed manifests\n"
+  },
+  "macros": {
+    "returncode": 0,
+    "output": "ok: 正文引用 540 个宏，全部在 32 个生成文件中有定义；无重复定义。\n"
+  },
+  "pair_validator": {
+    "returncode": 0,
+    "output": "  [ok] 未扰动记录                            问题数=0\n  [ok] 删除脆弱版 own_comment 对照             问题数=2\n  [ok] 恢复改为失败                           问题数=1\n  [ok] 复读正文回退但保留 Y=True/TP              问题数=4\n  [ok] own_comment 改成 403               问题数=1\n  [ok] 标签重复                             问题数=2\n  [ok] 多出未登记标签                          问题数=2\n  [ok] E 与台账冲突                          问题数=1\n\n[ok] 8 个用例全部符合预期\n"
+  },
+  "budget": {
+    "2": {
+      "records": 42,
+      "summary": {
+        "B1_status_only": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B2_diff_equal": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B3_diff_inband": {
+          "tp": 15,
+          "fp": 6,
+          "fn": 0,
+          "tn": 21,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 21,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.7143,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.1429,
+          "requests_total": 84
+        },
+        "ours_mr_v3": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 27,
+          "cells": 42,
+          "claimed": 0,
+          "violation_cells": 15,
+          "abstained_violations": 15,
+          "coverage": 0.3571,
+          "precision_on_claims": null,
+          "recall_on_decided": null,
+          "recall_all_violations": 0.0,
+          "false_proof_rate": 0.0,
+          "requests_total": 84
+        }
+      },
+      "per_cell_errors": []
+    },
+    "3": {
+      "records": 42,
+      "summary": {
+        "B1_status_only": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B2_diff_equal": {
+          "tp": 15,
+          "fp": 12,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 27,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.5556,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.2857,
+          "requests_total": 84
+        },
+        "B3_diff_inband": {
+          "tp": 15,
+          "fp": 6,
+          "fn": 0,
+          "tn": 21,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 21,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.7143,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 1.0,
+          "false_proof_rate": 0.1429,
+          "requests_total": 84
+        },
+        "B3r_diff_reach": {
+          "tp": 14,
+          "fp": 4,
+          "fn": 1,
+          "tn": 23,
+          "abstain": 0,
+          "cells": 42,
+          "claimed": 18,
+          "violation_cells": 15,
+          "abstained_violations": 0,
+          "coverage": 1.0,
+          "precision_on_claims": 0.7778,
+          "recall_on_decided": 0.9333,
+          "recall_all_violations": 0.9333,
+          "false_proof_rate": 0.0952,
+          "requests_total": 126
+        },
+        "ours_mr_v3": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "tn": 15,
+          "abstain": 17,
+          "cells": 42,
+          "claimed": 10,
+          "violation_cells": 15,
+          "abstained_violations": 5,
+          "coverage": 0.5952,
+          "precision_on_claims": 1.0,
+          "recall_on_decided": 1.0,
+          "recall_all_violations": 0.6667,
+          "false_proof_rate": 0.0,
+          "requests_total": 111
+        }
+      },
+      "per_cell_errors": []
+    }
+  },
+  "multiclass_cross_check": [
+    {
+      "C1": {
+        "n": 3,
+        "mr_read": 3,
+        "mr_channel": 3,
+        "detected": {
+          "mr_bookkeeping": 3,
+          "v3": 3,
+          "v3_channel": 3,
+          "direct_observe": 3,
+          "direct_observe_channel": 3,
+          "direct_only": 3
+        }
+      },
+      "C2": {
+        "n": 2,
+        "mr_read": 0,
+        "mr_channel": 2,
+        "detected": {
+          "mr_bookkeeping": 0,
+          "v3": 0,
+          "v3_channel": 2,
+          "direct_observe": 0,
+          "direct_observe_channel": 2,
+          "direct_only": 2
+        }
+      },
+      "C3": {
+        "n": 2,
+        "mr_read": 0,
+        "mr_channel": 0,
+        "detected": {
+          "mr_bookkeeping": 0,
+          "v3": 0,
+          "v3_channel": 0,
+          "direct_observe": 2,
+          "direct_observe_channel": 2,
+          "direct_only": 2
+        }
+      },
+      "C4": {
+        "n": 2,
+        "mr_read": 0,
+        "mr_channel": 0,
+        "detected": {
+          "mr_bookkeeping": 0,
+          "v3": 0,
+          "v3_channel": 0,
+          "direct_observe": 2,
+          "direct_observe_channel": 2,
+          "direct_only": 2
+        }
+      }
+    },
+    {
+      "read": {
+        "n": 23,
+        "relation": 8,
+        "relation_oracle": 0,
+        "oracle_only": 0,
+        "requests": 69,
+        "shared_requests": 0
+      },
+      "write": {
+        "n": 16,
+        "relation": 6,
+        "relation_oracle": 0,
+        "oracle_only": 0,
+        "requests": 64,
+        "shared_requests": 0
+      },
+      "grant": {
+        "n": 7,
+        "relation": 0,
+        "relation_oracle": 0,
+        "oracle_only": 0,
+        "requests": 42,
+        "shared_requests": 21
+      }
+    },
+    {
+      "C1": {
+        "mr_read": {
+          "active": 3,
+          "disabled": 0,
+          "other_retained": 0
+        },
+        "v3_channel": {
+          "active": 3,
+          "disabled": 0,
+          "other_retained": 2
+        },
+        "direct_observe_channel": {
+          "active": 3,
+          "disabled": 0,
+          "other_retained": 6
+        }
+      },
+      "C2": {
+        "mr_read": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "v3_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "direct_observe_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 7
+        }
+      },
+      "C3": {
+        "mr_read": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "v3_channel": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 5
+        },
+        "direct_observe_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 7
+        }
+      },
+      "C4": {
+        "mr_read": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 3
+        },
+        "v3_channel": {
+          "active": 0,
+          "disabled": 0,
+          "other_retained": 5
+        },
+        "direct_observe_channel": {
+          "active": 2,
+          "disabled": 0,
+          "other_retained": 7
+        }
+      }
+    }
+  ],
+  "leave_one_out_by_method": {
+    "all": {
+      "C1": {
+        "v3": 3,
+        "v3_channel": 3,
+        "direct_observe_channel": 3
+      },
+      "C2": {
+        "v3": 0,
+        "v3_channel": 2,
+        "direct_observe_channel": 2
+      },
+      "C3": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      },
+      "C4": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      }
+    },
+    "without_C1": {
+      "C1": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 0
+      },
+      "C2": {
+        "v3": 0,
+        "v3_channel": 2,
+        "direct_observe_channel": 2
+      },
+      "C3": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      },
+      "C4": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      }
+    },
+    "without_C2": {
+      "C1": {
+        "v3": 3,
+        "v3_channel": 3,
+        "direct_observe_channel": 3
+      },
+      "C2": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 0
+      },
+      "C3": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      },
+      "C4": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      }
+    },
+    "without_C3": {
+      "C1": {
+        "v3": 3,
+        "v3_channel": 3,
+        "direct_observe_channel": 3
+      },
+      "C2": {
+        "v3": 0,
+        "v3_channel": 2,
+        "direct_observe_channel": 2
+      },
+      "C3": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 0
+      },
+      "C4": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      }
+    },
+    "without_C4": {
+      "C1": {
+        "v3": 3,
+        "v3_channel": 3,
+        "direct_observe_channel": 3
+      },
+      "C2": {
+        "v3": 0,
+        "v3_channel": 2,
+        "direct_observe_channel": 2
+      },
+      "C3": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 2
+      },
+      "C4": {
+        "v3": 0,
+        "v3_channel": 0,
+        "direct_observe_channel": 0
+      }
+    }
+  },
+  "summary_perturbation_checks": [
+    {
+      "perturbation": "budget_cache",
+      "rejected": true
+    },
+    {
+      "perturbation": "multiclass_cache",
+      "rejected": true
+    }
+  ],
+  "negative_denials": {
+    "read": [],
+    "write": [
+      {
+        "subject": "dave",
+        "object": "acme/t1",
+        "status": 403,
+        "effect": false
+      },
+      {
+        "subject": "dave",
+        "object": "acme/t2",
+        "status": 403,
+        "effect": false
+      }
+    ],
+    "grant": []
+  },
+  "protocol_sha256": "198f21402fa6d800ffa9015ad378724de78234fc7fb6ea170e5140e5bf8be5b2",
+  "manifests_counts": {
+    "RAW_RECORDS_SHA256.json": 25,
+    "OUTPUTS_SHA256.json": 35
+  }
+}

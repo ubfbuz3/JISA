@@ -1,0 +1,105 @@
+{
+  "fresh_summary_matches": true,
+  "negatives": {
+    "read": {
+      "n": 23,
+      "relation": 8,
+      "relation_oracle": 0,
+      "oracle_only": 0,
+      "requests": 69,
+      "shared_requests": 0,
+      "fpr_relation_oracle": 0.0,
+      "fpr_oracle_only": 0.0
+    },
+    "write": {
+      "n": 16,
+      "relation": 6,
+      "relation_oracle": 0,
+      "oracle_only": 0,
+      "requests": 64,
+      "shared_requests": 0,
+      "fpr_relation_oracle": 0.0,
+      "fpr_oracle_only": 0.0
+    },
+    "grant": {
+      "n": 7,
+      "relation": 0,
+      "relation_oracle": 0,
+      "oracle_only": 0,
+      "requests": 42,
+      "shared_requests": 21,
+      "fpr_relation_oracle": 0.0,
+      "fpr_oracle_only": 0.0
+    }
+  },
+  "leave_one_out_by_method": {
+    "C1": {
+      "mr_read": {
+        "active": 3,
+        "disabled": 0,
+        "other_retained": 0
+      },
+      "v3_channel": {
+        "active": 3,
+        "disabled": 0,
+        "other_retained": 2
+      },
+      "direct_observe_channel": {
+        "active": 3,
+        "disabled": 0,
+        "other_retained": 6
+      }
+    },
+    "C2": {
+      "mr_read": {
+        "active": 0,
+        "disabled": 0,
+        "other_retained": 3
+      },
+      "v3_channel": {
+        "active": 2,
+        "disabled": 0,
+        "other_retained": 3
+      },
+      "direct_observe_channel": {
+        "active": 2,
+        "disabled": 0,
+        "other_retained": 7
+      }
+    },
+    "C3": {
+      "mr_read": {
+        "active": 0,
+        "disabled": 0,
+        "other_retained": 3
+      },
+      "v3_channel": {
+        "active": 0,
+        "disabled": 0,
+        "other_retained": 5
+      },
+      "direct_observe_channel": {
+        "active": 2,
+        "disabled": 0,
+        "other_retained": 7
+      }
+    },
+    "C4": {
+      "mr_read": {
+        "active": 0,
+        "disabled": 0,
+        "other_retained": 3
+      },
+      "v3_channel": {
+        "active": 0,
+        "disabled": 0,
+        "other_retained": 5
+      },
+      "direct_observe_channel": {
+        "active": 2,
+        "disabled": 0,
+        "other_retained": 7
+      }
+    }
+  }
+}
