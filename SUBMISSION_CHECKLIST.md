@@ -5,7 +5,7 @@
 > `04_绘图与分析/analysis/make_manifests.py`。Zenodo 步骤见 `ZENODO_GUIDE.md`。
 >
 > **2026-10-20 校准到 v12 冻结稿（`d9f0877` / `access-resubmission-v12`）**：下方页数、文件数、
-> 产物数、Zenodo 标签口径均为 v11 实测值；重投上传见 `07_投稿_v11/`。
+> 产物数、Zenodo 标签口径均为 v12 实测值；重投上传见 `07_投稿_v12/`。
 
 ---
 
@@ -84,8 +84,11 @@
 - ☐ **APC**：**US$2,075**（2025 官方价，另加当地税；接受后缴纳，投稿免费；IEEE 会员 5–20% 折扣，低收入国家可申请减免，询问 `apcinquiries@ieee.org`）。
 - ☐ **投稿系统**：**IEEE Author Portal（Atypon ReX）**（非 Elsevier EM；需先建 IEEE 账号）。
 - ☑ **上传件（重投，v12）**：见 `07_投稿_v12/`，四个文件与槽位对应关系见该目录 `SUBMISSION_MANIFEST_v12.md`；
-  另加 IEEE 作者名单变更申请 `Request_for_Byline_Change_Access-2026-49387.docx`：
   `response_to_reviewers.pdf` → Author's Response；`main_highlighted.pdf` → Highlighted PDF；
   `main.pdf` + `latex_source_files_submission.zip` → Main Manuscript（PDF / LaTeX）。
+- ☑ **IEEE 作者名单变更申请**（`Request_for_Byline_Change_Access-2026-49387.docx`）→ 以编辑原信指定的
+  **Request for byline change form** 专用文件类型上传，并在门户填变更理由；不要只当 Author's Response 附件。
+  表内 `Original Article Title` 必须是**原投稿题目**（Limits of Metamorphic Testing…Measurement Resolution），
+  2026-10-20 已按编辑决定信改回并回读确认。
 - ☑ **GitHub 同步**：v11 已提交并推送（`4d1036c`，tag `access-resubmission-v11`，远端已核）。`artifact-v1` 勿重锚。
 - ☐ **单位口径确认**：IEEE Access 为 **SCIE 收录**，但**最新中科院分区为 4 区**（2025 版；2024 版曾 3 区）、非 CCF 推荐期刊 ⇒ 若单位硬卡"中科院 3 区/CCF B"，请先与单位确认是否认可。

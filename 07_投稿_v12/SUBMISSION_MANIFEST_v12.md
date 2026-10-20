@@ -12,9 +12,18 @@
 | 2 | `main_highlighted.pdf` | Highlighted PDF（changes marked） | 32 页，2262 行标注 | 2 146 410 | `a59b3b6e6f2d5345…` |
 | 3 | `main.pdf` | Main Manuscript — PDF | 32 页 / 26 表 | 716 399 | `a158486a3e8e3104…` |
 | 4 | `latex_source_files_submission.zip` | Main Manuscript — LaTeX source | 97 个文件；空目录编译 32 页 / 716 399 B / 0 error | 1 187 987 | `bea12e9aa0bc0c9f…` |
-| 5 | `Request_for_Byline_Change_Access-2026-49387.docx` | 作者名单变更申请（随回复信一并上传） | 原名单 2 人 → 新名单 3 人，含理由 | 见 `dir` | — |
+| 5 | `Request_for_Byline_Change_Access-2026-49387.docx` | **Request for byline change form**（编辑原信指定的专用类型，不要只当 Author's Response 附件） | 原名单 2 人 → 新名单 3 人，含理由；原题目已改回编辑决定信记载的原投稿标题 | 11 629 | `8ca9c569c4cec76e…` |
 
-`SHA256SUMS.txt` 覆盖前四个（第五个是 Office 文档，重新保存会改变字节，不入校验）。
+`SHA256SUMS.txt` 覆盖前四个（第五个是 Office 文档，重新保存会改变字节，不入校验；其哈希单独记在本表）。
+
+### 作者变更表的两个字段（2026-10-20 最终审核后已核对）
+
+| 字段 | 值 |
+|---|---|
+| Original Manuscript ID | `Access-2026-49387` |
+| Original Article Title | Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution（**原投稿题目**，取自编辑决定信；不是修订后的 "Two Reachability-Gated Relations in MST-wi…"） |
+| Original Author List | Qiulong Lin; Nanlei Chen (corresponding author) |
+| Updated Author List | Qiulong Lin; Xiaoyu Ke; Nanlei Chen (corresponding author) |
 
 ## 二、v12 相对 v11 改了什么
 
@@ -31,7 +40,7 @@
 | 回复信首页署名 | Lin and Chen，19 October 2026 | Lin, Ke, and Chen，20 October 2026 |
 | Data availability | 指向 v11 | 指向 v12，并说明 v11 与 v12 只差作者块/简介/贡献声明 |
 
-页数不变（32 页 / 26 表），因此回信里 36 处表号页码引用与 75 项承重数字**全部照旧通过**。
+页数不变（32 页 / 26 表），因此回信里 41 处表号页码引用与 75 项承重数字**全部照旧通过**。
 
 ## 三、门户里要填的信息
 
@@ -44,16 +53,19 @@
 | Article type | Research Article（Original Research） |
 
 **门户里的作者列表必须与 `main.pdf` 第 1 页一致**（三作者、顺序如上）；若门户仍显示两作者，
-在 Author List 步骤增补 Ke 并调整顺序，再把 `Request_for_Byline_Change_Access-2026-49387.docx`
-随回复信上传，并在回复信正文说明。
+在 Author List 步骤增补 Ke 并调整顺序，再按下面第四节的专用槽位上传
+`Request_for_Byline_Change_Access-2026-49387.docx`，并在回复信正文说明。
 
 ## 四、上传顺序
 
 1. Author Portal → 该稿件 **Start Resubmission**。
-2. **Author's Response Files**：`response_to_reviewers.pdf`（+ `Request_for_Byline_Change_Access-2026-49387.docx`）。
+2. **Author's Response Files**：`response_to_reviewers.pdf`。
 3. **Highlighted PDF**：`main_highlighted.pdf`。
 4. **Main Manuscript**：PDF 槽位 `main.pdf`；LaTeX 槽位 `latex_source_files_submission.zip`（整包，不要解压）。
-5. Preview 后核对下面四处，再 Submit。
+5. **Request for byline change form**：`Request_for_Byline_Change_Access-2026-49387.docx`。
+   编辑原信明确要求以该**专用文件类型**上传（"uploading it as *Request for byline change form*"），
+   并在门户填写变更理由；不要只在 Author's Response 里附一份。
+6. Preview 后核对下面五处，再 Submit。
 
 ## 五、上传后预览要看的地方
 
@@ -64,6 +76,7 @@
 | `main.pdf` 末页 | 三段作者简介，Ke 的一段在 Lin 与 Chen 之间 |
 | `main_highlighted.pdf` | 32 页，与净稿文本逐字相同，仅多标注层 |
 | `response_to_reviewers.pdf` p.1 / p.4 / p.12 | 三作者署名与 20 October 2026；p.4 长路径断行；p.12 结尾完整 |
+| byline 表 | Original Manuscript ID = `Access-2026-49387`；**Original Article Title = 原投稿题目（Limits of Metamorphic Testing…Measurement Resolution）**；Original 2 人 / Updated 3 人顺序正确 |
 
 ## 六、校验记录（本轮实测）
 
@@ -71,6 +84,9 @@
 - 源码 zip：97 文件、CRC 通过，空目录 `pdflatex → bibtex → pdflatex ×2` 得 32 页 / 716 399 B / 0 error / 0 undefined。
 - 回信：12 页；75 项承重数字、41 项表号页码引用全部通过；overfull 与 v11 相同（仅类文件 `\Output` 项）。
 - 正文页内 overfull：65 × 505.12 pt（`ieeeaccess.cls` 页输出例程，全篇每页一条，历史一致）+ 2 × 9.27 pt（`\maketitle`），无新增真实越界。
+- 作者变更表（2026-10-20）：`Original Article Title` 由修订后题目改为编辑决定信记载的**原投稿题目**，
+  改后逐字回读确认旧题目 "MST-wi" 字样已不存在、字段内引号成对；其余字段（稿号、旧名单、新名单、理由）未动。
+  该表是 Office 文档，**不属于** `access-resubmission-v12` 冻结产物，改它不改变上面四个文件的任何字节。
 
 ## 七、边界
 

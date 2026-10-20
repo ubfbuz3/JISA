@@ -1,0 +1,63 @@
+{
+  "files": {
+    "response_to_reviewers.pdf": {
+      "bytes": 179015,
+      "sha256": "87ae1351620496920ee725e3c1ec19e3c29a1577ea36ffcad08377b53f6f6bad",
+      "matches_canonical": true,
+      "matches_manifest": true
+    },
+    "main_highlighted.pdf": {
+      "bytes": 2146410,
+      "sha256": "a59b3b6e6f2d53455d52aaa09354b400979c88d866cdb62242d83b8d0d8942bc",
+      "matches_canonical": true,
+      "matches_manifest": true
+    },
+    "main.pdf": {
+      "bytes": 716399,
+      "sha256": "a158486a3e8e3104a29a50c5bfbeb8b47e0917287d0f107f97ebdfb1cf0413b2",
+      "matches_canonical": true,
+      "matches_manifest": true
+    },
+    "latex_source_files_submission.zip": {
+      "bytes": 1187987,
+      "sha256": "bea12e9aa0bc0c9f47d297cfe670abd9c6b6ff0f9de84ee9701e61d55918ab6a",
+      "matches_canonical": true,
+      "matches_manifest": true
+    }
+  },
+  "authors": {
+    "response_to_reviewers.pdf": {
+      "metadata": "Qiulong Lin, Xiaoyu Ke, and Nanlei Chen",
+      "first_page_names": {
+        "Qiulong Lin": true,
+        "Xiaoyu Ke": true,
+        "Nanlei Chen": true
+      }
+    },
+    "main_highlighted.pdf": {
+      "metadata": "Qiulong Lin, Xiaoyu Ke, and Nanlei Chen",
+      "first_page_names": {
+        "Qiulong Lin": true,
+        "Xiaoyu Ke": true,
+        "Nanlei Chen": true
+      }
+    },
+    "main.pdf": {
+      "metadata": "Qiulong Lin, Xiaoyu Ke, and Nanlei Chen",
+      "first_page_names": {
+        "Qiulong Lin": true,
+        "Xiaoyu Ke": true,
+        "Nanlei Chen": true
+      }
+    }
+  },
+  "byline": {
+    "file": "C:\\Users\\Administrator\\WorkBuddy\\3区论文\\07_投稿_v12\\Request_for_Byline_Change_Access-2026-49387.docx",
+    "sha256": "3e9d5fbf79655048e32e693d51b07af96699a0e9ecc1128a615e3a753efb0b43",
+    "original_title_from_editor": "Limits of Metamorphic Testing for Object-Level Authorization: Temporal Reachability, Oracle Admissibility, and Measurement Resolution",
+    "field": "Original Article Title: “Two Reachability-Gated Relations in MST-wi: Temporal Mismatch, Oracle Admissibility, and Measurement Limits”",
+    "original_title_correct": false,
+    "old_list_present": true,
+    "new_list_present": true
+  }
+}
