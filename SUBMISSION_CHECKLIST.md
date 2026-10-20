@@ -74,7 +74,7 @@
 - ☑ 图表全部矢量、无 AI 生成像素；矢量图字节可复现。
 - ☑ 标题/摘要主张只覆盖 reachability-gated relations，不泛化（红线 ⑦）。
 - ☑ 撤回清单红线全部遵守（无 sensitivity/specificity 声明、无"机制非冗余"、无 "strictly dominates"、"自省面可读"带特权视点、无 "crawl-time aware" / "responsible variable" 措辞）。
-- ☑ **作者简介**：两位作者的简介已内嵌正文（参考文献后，`IEEEbiographynophoto`，`main.tex`），无需单独上传。
+- ☑ **作者简介**：三位作者（Lin / Ke / Chen）的简介已内嵌正文（参考文献后，`IEEEbiographynophoto`，`main.tex`），无需单独上传。
 - ☐ **Graphical Abstract**（IEEE Access 终稿阶段通常要求）：可复用现有矢量图 `04_绘图与分析/figures/fig1_protocol.pdf` 单独上传。
 
 ---
@@ -83,7 +83,8 @@
 - ☐ **ORCID（硬门槛）**：IEEE Access 要求投稿账号绑定**公开可见的 ORCID iD**（若作者尚无 ORCID 需先免费注册 `orcid.org`）。
 - ☐ **APC**：**US$2,075**（2025 官方价，另加当地税；接受后缴纳，投稿免费；IEEE 会员 5–20% 折扣，低收入国家可申请减免，询问 `apcinquiries@ieee.org`）。
 - ☐ **投稿系统**：**IEEE Author Portal（Atypon ReX）**（非 Elsevier EM；需先建 IEEE 账号）。
-- ☑ **上传件（重投，v11）**：见 `07_投稿_v11/`，四个文件与槽位对应关系见该目录 `SUBMISSION_MANIFEST_v11.md`：
+- ☑ **上传件（重投，v12）**：见 `07_投稿_v12/`，四个文件与槽位对应关系见该目录 `SUBMISSION_MANIFEST_v12.md`；
+  另加 IEEE 作者名单变更申请 `Request_for_Byline_Change_Access-2026-49387.docx`：
   `response_to_reviewers.pdf` → Author's Response；`main_highlighted.pdf` → Highlighted PDF；
   `main.pdf` + `latex_source_files_submission.zip` → Main Manuscript（PDF / LaTeX）。
 - ☑ **GitHub 同步**：v11 已提交并推送（`4d1036c`，tag `access-resubmission-v11`，远端已核）。`artifact-v1` 勿重锚。

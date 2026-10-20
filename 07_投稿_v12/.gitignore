@@ -1,0 +1,7 @@
+# 四个交付物是冻结提交 4d1036c 的构建产物，已分别 tracked 在
+# 03_论文撰写/paper/ 与 03_论文撰写/response_to_reviewers/ 下。
+# 这里只保留清单与校验和，避免同一份二进制在仓库里存两份。
+response_to_reviewers.pdf
+main_highlighted.pdf
+main.pdf
+latex_source_files_submission.zip
