@@ -185,7 +185,7 @@ The two-snapshot comparison above cannot separate two explanations: the model
 went stale, or the crawl never listed the channel in the first place. The
 transition experiment separates them by construction. We ran eight
 authorisation transitions on one fresh Gitea \TmpVersion{} instance and repeated
-the same eight, under the same pre-registered protocol (hash \texttt{\TmpProtocol})
+the same eight, under the same frozen protocol (hash \texttt{\TmpProtocol})
 and the same ledger rules, on an independent GitLab CE \TmpGVersion{} instance.
 The mechanisms differ per product---attaching a repository to a team becomes
 sharing a project with a group; removing a team member becomes removing a group
@@ -342,6 +342,34 @@ sample of deployment changes, so none of the counts is a field rate.
 \input{temporal_table.tex}
 
 \input{temporal_sensitivity_table.tex}
+
+\paragraph{What a recrawl repairs, and what it cannot}
+The \TmpBothFixed{} repairs in Table~\ref{tab:temporal} are not a general remedy,
+and the reason is that a grant can be absent from the model for two different
+causes. \emph{Staleness}: the grant is visible through the subject's own
+interface, was made after the snapshot was frozen, and a fresh crawl with the same
+credential lists it again. That is what Table~\ref{tab:temporal} measures, where
+\TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs disappear on recrawl and
+\TmpBothStillMiss{} resist. \emph{Coverage}: the grant is real and enforced, but no
+reading of the subject's own surface exposes it, because the view that would show
+it belongs to another subject or to an administrative interface---a team-derived
+grant, a public-visibility flag set by the owner, a site-administration privilege.
+Recrawling cannot repair a channel the crawl has no way to enumerate, and the
+cross-vendor run exhibits the residue: on Gogs \GgMismatchLive{} of
+\GgMismatchSnap{} mismatching cells survive the live reading, and so do
+\GgFpBookkeepingLive{} of \GgFpBookkeeping{} bookkeeping false proofs, all on
+public-visibility or team-derived grants. The live reading removes the staleness
+term and leaves the coverage term; where the same channels are represented in the
+subject's crawl, as on Gitea and GitLab, the live reading reaches zero.
+Two cautions follow. The repair count is conditioned on the transitions that study
+committed; it is not a rate over the channel taxonomy, and a design that drew its
+transitions from team-derived or public grants would report a different one. And
+the temporal sample and the cross-vendor sample are not paired observations of the
+same cells---they differ in product, topology and mutation script---so the count
+surviving recrawling in one must not be subtracted from the count surviving in the
+other. What generalises is the mechanism rather than the ratio: a recrawl repairs
+exactly those grants whose granting channel the renewed crawl can enumerate, which
+is a property of the interface, not of the tool.
 
 \subsection{Cross-vendor replication of the snapshot design: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}
@@ -615,7 +643,7 @@ does not show that we can \emph{find} such defects: the identifier is given, the
 defect is public and already fixed, and the exercise is a positive control for
 the gate, not a discovery. Nor is it an evaluation on a population---one defect,
 one fault pattern (object versus path ownership), one product line. The
-multi-defect coverage the same reviewer asked for is not obtained from this pair
+multi-defect coverage is not obtained from this pair
 but from the controlled target: Section~\ref{sec:multiclass} seeds read, modify,
 inheritance and escalation faults and reports per-class recall, with the limits
 of that construction stated there. The claim this pair supports is about the

@@ -1,0 +1,24 @@
+% 由 ingest_revision.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{The same records scored under the two \emph{unknown} rules, with the confusion matrix spelled out. A positive is a violation (ledger deny, effect allow) and a negative is every other cell; in these runs $E=Y$ on every cell, so the design contains no positive and recall has no denominator (marked N/A, not 0). Specificity and precision are therefore properties of the negative set each rule admits, and that set is what changes between the two calibers: the claims do not move, the denominator does.}
+\label{tab:caliber}
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrr@{}}
+\toprule
+ & & \multicolumn{3}{c}{cell population} & \multicolumn{2}{c}{claims} & \multicolumn{2}{c}{rates (\%)} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+caliber & product & scorable & negatives & $E$ unknown & false & true & spec. & prec. \\
+\midrule
+default deny & Gitea & \CalGtImpN & \CalGtImpNeg & 0 & \CalGtImpFp & \CalGtImpTp & \CalGtImpSpec & \CalGtImpPrec \\
+default deny & GitLab & \CalGlImpN & \CalGlImpNeg & 0 & \CalGlImpFp & \CalGlImpTp & \CalGlImpSpec & \CalGlImpPrec \\
+\;\emph{pooled} & & \CalImpN & \CalImpNeg & 0 & \CalImpFp & \CalImpTp & \CalImpSpec & \CalImpPrec \\
+\midrule
+literal & Gitea & \CalGtLitKnown & \CalGtLitNeg & \CalGtLitUnk & \CalGtLitFp & \CalGtLitTp & \CalGtLitSpec & \CalGtLitPrec \\
+literal & GitLab & \CalGlLitKnown & \CalGlLitNeg & \CalGlLitUnk & \CalGlLitFp & \CalGlLitTp & \CalGlLitSpec & \CalGlLitPrec \\
+\;\emph{pooled} & & \CalLitKnown & \CalLitNeg & \CalLitUnk & \CalLitFp & \CalLitTp & \CalLitSpec & \CalLitPrec \\
+\midrule
+\multicolumn{9}{l}{recall: N/A in both calibers ($0$ positives in the design; the temporal grid measures the false-proof face only)} \\
+\bottomrule
+\end{tabular*}
+\end{table*}

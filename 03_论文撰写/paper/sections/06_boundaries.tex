@@ -16,7 +16,7 @@ further claim and are collected as support evidence in Section~\ref{sec:support}
 exceptions---the adjudication reports a legitimate access whose grant the crawl
 record does not contain as a finding of an established violation under the
 promotion policy $P$ of
-Section~\ref{sec:native-run}, which we state explicitly for this evaluation
+Section~\ref{sec:stages}, which we state explicitly for this evaluation
 rather than inherit, since the
 engine's own return value asserts nothing about authorization---in the direction
 forced by the two-valued predicate encoding.} The two studies supply the grant
@@ -38,7 +38,42 @@ coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of
 available while showing no incremental adjudication benefit from the metamorphic
 step (Finding~2).
 
-\subsection{Finding 2 (RQ2): the metamorphic step adds no observed adjudication benefit}
+\subsection{How much of the false-proof count is the promotion policy}
+\label{sec:policy}
+
+Finding~1 is a statement about the pair (alarm, promotion policy), and the two
+halves separate cleanly, because the policy is a choice while the alarm is not.
+Table~\ref{tab:promotion} applies four policies to the same \PolAlarms{} alarms over
+the \PolCells{} scored transition cells. The alarm count is invariant: no policy
+changes what the relations return, and none of them recovers a violation. What a
+policy changes is how many alarms become claims, and therefore how many claims can
+be contradicted. P1 promotes every alarm and is the reading Finding~1 quantifies:
+\PolPallClaims{} claims, \PolPallFalse{} of them contradicted, none confirmed. P0
+reports alarms without making claims and yields no false proofs, but it is not a
+better method---it establishes nothing, and its \PolPnoneWithheld{} withheld alarms
+are the same phenomenon left unadjudicated. P2, the oracle-gated policy that the
+state-calibrated variant implements, does not remove the phenomenon either: it makes
+\PolPoracleClaims{} claims and all \PolPoracleFalse{} of them are contradicted, on the
+product whose introspection surface returns false denies, while on the other product
+it makes no claim at all and withholds \PolGtPoracleWithheld{} alarms. P3, which
+promotes only where the ledger itself records a definite denial, returns zero false
+proofs by consulting the reference---a policy that cannot be wrong and cannot be a
+detector.
+
+The honest reading is therefore neither ``zero false proofs'' nor
+``\PolPallFalse{} vulnerabilities''. It is that the technique's native output is an
+alarm whose security meaning is supplied entirely by a policy the technique does not
+contain; that the count this paper reports is what P1 makes of those alarms; and
+that each zero-false-proof variant earns its number differently---by silence (P0),
+by abstaining on one product while shifting the error to another source on the
+second (P2), or by consulting the ground truth (P3). We report the P1 count as the
+headline because it is the promotion the catalogue's purpose invites, not because it
+is the only defensible policy, and the same separation is applied to the native run
+in Section~\ref{sec:native-run}.
+
+\input{revision_policy_table.tex}
+
+\subsection{Finding 2 (RQ2): nothing beyond an admissible oracle}
 \label{sec:boundary2}
 
 \emph{If the false proofs of Finding~1 are removed by consulting a readable
@@ -46,12 +81,37 @@ introspection surface, it is the oracle that carries the work: for the
 authorization relations and scenarios evaluated here, once the oracle fully
 resolves the authorization proposition under test, replacing the entire
 metamorphic step with a single ordinary request---one that consumes the same
-readable oracle and access outcome---provides no observed incremental
-adjudication benefit.} We state the
-reason rather than present it as a discovered effect: its burden is an empirical
-premise about the evaluated relations, not an algebraic identity.
+readable oracle and access outcome---adds no adjudication information.} We state
+the reason rather than present it as a discovered effect, and the reason is
+partly algebraic: on the constructed grid the agreement is an identity, because
+the comparator is built from the same quantities that define the reference. What
+does carry empirical burden is the antecedent---that such an oracle is readable,
+sound and independent---and the next paragraph separates the two.
 
-We separate the two parts, because only one of them can fail. The algebraic part
+We separate the two parts, because only one of them can fail.
+
+\paragraph{What is construction here, and what is empirical}
+The comparison has one component that holds by construction and one that does not,
+and conflating them is the shortest path to over-reading the result.
+\texttt{direct\_observe} claims a violation exactly when the oracle answers
+\emph{deny} and the ordinary request succeeds; the reference label calls a cell a
+violation exactly when the ledger answers \emph{deny} and the content-level effect
+answers \emph{allow}. The two rules are built from the same two quantities, so on the
+domain where the oracle agrees with the ledger and the request outcome agrees with
+the content effect they \emph{cannot} disagree---not because one is sharper, but
+because the second is the first with the reference substituted for its proxy. The
+agreement reported below is therefore an identity on that domain, and we report it
+as one: it is not independent evidence that direct observation is a superior
+detector, and the paired counts should be read as a characterisation of two
+adjudication rules rather than as a measurement of one technique against another.
+What is genuinely empirical is the domain: whether, on a given deployment, the
+oracle is readable, sound \emph{and} admissible, and whether the request outcome
+tracks the content-level effect. Proposition~\ref{lem:oracle-suff} is stated
+conditionally for exactly that reason, and
+Section~\ref{sec:admissibility} records the antecedent failing on every system
+studied here.
+
+ The algebraic part
 is a lemma about function composition; the empirical part is a statement about
 what these two relations actually read, and it has a falsifier.
 
@@ -402,7 +462,7 @@ timing would measure our replay loop rather than the rule, so we report none.
 
 \paragraph{The same comparison at a matched total budget}
 Table~\ref{tab:baselines} matches the probe pair, not the bill: our method issues
-one further request per cell to read the authorization surface, so a reviewer may
+one further request per cell to read the authorization surface, so one may
 reasonably ask whether its precision is bought with requests the baselines were
 not allowed to spend. Table~\ref{tab:budget} answers that with a total-request
 ceiling per cell instead of a probe-pair match, on the same \BgtCells{} cells,
@@ -449,21 +509,35 @@ membership surface exists on both, but it is unsound for the authorization
 channels exercised here, so it fails clause~(2). Clause~(2) is a per-system
 judgement and not automatable from readability alone; the cross-vendor results
 make it concrete (Gogs and GitLab fail it; their adjudicators convert the blind
-spots into \GgFpVthree{} and \GlFpVthree{} false proofs). Where the condition
-holds, the honest method consumes the oracle directly and drops the relation;
-where it does not, the honest method abstains---as v3 does on the unreadable
-stratum, where the aggregate table would have ranked it best, a ranking that
-reflects abstention rather than improved detection.
+spots into \GgFpVthree{} and \GlFpVthree{} false proofs). The condition, not the
+technique, decides the advice. Where it holds, an analyst who already has an
+admissible oracle should consume it directly: on the domain where oracle and ledger
+coincide, promotion through the relation cannot confirm anything the oracle does
+not (Proposition~\ref{lem:oracle-suff}(b)), so the relation adds cost without
+confirmations. Where it fails---which is the case on every system studied
+here---dropping the relation for its direct counterpart is the wrong move, and the
+cross-vendor numbers say why: on Gogs \GgVersion{} and GitLab \GlVersion{} the
+direct adjudicator produces \GgFpDirectObserve{} and \GlFpDirectObserve{} false
+proofs against \GgFpVthree{} and \GlFpVthree{} for the oracle-gated relation
+(Table~\ref{tab:gogs-cross}), because the oracle there errs by omission on exactly
+the channels the relation's alarm is silent about. Neither product passes clause~(2),
+and neither does Gitea: on all three, the route the oracle consults and the routes
+that decide the request are answered by the same process under the same permission
+model, so the admission rule of
+Section~\ref{sec:admissibility} returns \emph{reject} throughout and the advice to
+drop the relation is unlicensed on the systems we tested. The honest method
+abstains---as v3 does on the unreadable stratum, where the aggregate table would have
+ranked it best, a ranking that reflects abstention rather than improved detection.
 
 \paragraph{An oracle-independence admission rule, applied before and after}
-Clause~(2) needs an operational procedure, and we give one as part of this
-revision. It is fixed as a standalone protocol---defect classes, four evidence
+Clause~(2) needs an operational procedure, and we give one here. It is fixed as a
+standalone protocol---defect classes, four evidence
 levels, an ordered \emph{admit}/\emph{reject}/\emph{unknown} rule, and what each
 status licenses---before the multi-class and equal-budget runs of
 Sections~\ref{sec:multiclass} and~\ref{sec:baselines}, and applied both to them
-and, conservatively, to the archived experiments. It was not part of the original
-submission and we do not backdate it: the pre-registered protocol pinned by
-digest recorded the qualitative judgement
+and, conservatively, to the archived experiments. It is newer than the frozen
+temporal protocol and we do not backdate it: that protocol, pinned by
+digest, recorded the qualitative judgement
 (\texttt{oracle\_independence=shared}; the oracle read for diagnosis
 only) but did not contain the procedure below. The rule, per target defect class
 (here: object-level authorization enforcement

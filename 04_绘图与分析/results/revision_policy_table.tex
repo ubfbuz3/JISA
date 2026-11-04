@@ -1,0 +1,20 @@
+% 由 ingest_revision.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{The same \PolAlarms{} alarms under four promotion policies, over the \PolCells{} scored transition cells of Table~\ref{tab:temporal}. An alarm $A$ is the relation's own output and does not depend on the policy; a \emph{claim} is a policy's promotion of $A$ to \texttt{violation-proven}; a claim is \emph{contradicted} (a false proof) when the ledger records the access as legitimate. \emph{withheld} counts alarms the policy declines to promote. P0 and P3 both reach zero contradicted claims and neither is evidence of a better detector: P0 makes no claim at all, and P3 decides by consulting the reference ledger. P2 halves the count and leaves it entirely on the product whose introspection surface returns false denies.}
+\label{tab:promotion}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+policy & alarms & claims & confirmed & contradicted & withheld \\
+\midrule
+P0 report the alarm, no claim & 29 & 0 & 0 & 0 & 29 \\
+P1 promote every alarm & 29 & 29 & 0 & 29 & 0 \\
+P2 oracle-gated (v3) & 29 & 13 & 0 & 13 & 16 \\
+\quad of which Gitea & 13 & 0 & 0 & 0 & 13 \\
+\quad of which GitLab & 16 & 13 & 0 & 13 & 3 \\
+\midrule
+P3 ledger-gated & 29 & 0 & 0 & 0 & 29 \\
+\bottomrule
+\end{tabular}
+\end{table*}

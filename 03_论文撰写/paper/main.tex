@@ -77,6 +77,10 @@
 \input{cve_pair_numbers.tex}
 % ---- 真时序转移实验（由 analysis/ingest_temporal.py 生成） ----
 \input{temporal_numbers.tex}
+% ---- 升格策略/台账暴露敏感性（由 analysis/ingest_revision.py 生成） ----
+\input{revision_policy_numbers.tex}
+% ---- unknown 双口径评分（由 analysis/ingest_revision.py 生成） ----
+\input{revision_caliber_numbers.tex}
 % ---- M2 补充分析：oracle 有效性分层（由 analysis/ingest_m2_stratum.py 生成） ----
 \input{m2_stratum.tex}
 % ---- 两条关系的显式谓词与真值表（由 analysis/ingest_truth.py 生成） ----
@@ -178,12 +182,17 @@ snapshot of what the interface permits---so what they establish about
 object-level authorization depends on when the model was read and what the
 adjudicator may consult. Source inspection shows the engine records only that a
 relation failed: promotion to a \emph{proven violation} is added policy, stated
-here explicitly. On a \ResSynRecords{}-record constructed study, a legitimate
+here explicitly, so every false-proof count is reported together with the
+promotion policy that produces it. On a \ResSynRecords{}-record constructed
+study, a legitimate
 access whose grant lies outside the framework's record is reported as proven in
 \ResObsOobVtwoFalseProof{} of \ResObsOobFalseAlarm{} alarms, and the same
 failure appears when the grant is made between crawl and request. Once a
-readable, sound oracle is supplied, the relation adds no observed adjudication
-benefit over the direct consumer of the same oracle and outcome; and the
+readable, sound and independent oracle is supplied, the relation adds no
+adjudication information over the direct consumer of the same oracle and
+outcome---an identity on the constructed grid rather than a measured gain, and
+conditional on an oracle that none of the systems tested here supplies, where the
+direct comparator in fact produces more false proofs; and the
 published specificity of \ResLitReportedSpecPct{}\% is an input-level figure
 whose denominator cannot, on its own, expose a class-uniform failure. A
 temporal experiment on Gitea \ResRsVersion{} and GitLab CE \GlVersion{} commits

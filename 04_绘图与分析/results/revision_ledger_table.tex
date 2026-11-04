@@ -1,0 +1,19 @@
+% 由 ingest_revision.py 生成，勿手改
+\begin{table*}[t]
+\centering
+\caption{Scoring against a damaged reference label: what one missing granting channel does to the reported numbers. The intervention edits the ledger, not the system. For each channel in turn its grant rows are deleted from every cell's recorded basis list, the resulting entitlement is passed to the same classifier the runs use, and the categories are counted. Nothing a subject is actually permitted to do changes; every cell that moves here stays a legitimate access, and the \PolAlarms{} false proofs are not repaired by its moving, only re-described. Held fixed: the cell sample, the alarms, the probe responses, and the promotion decisions---the alarm is computed from the crawl snapshot, the probe response and the role, and never reads the ledger, so no omission adds or removes one. Under the damaged label \emph{re-labelled} counts the cells that now read deny; of those, \emph{apparent TP} counts the alarmed ones (a false proof now scoring as a confirmed violation) and \emph{apparent FN} the unalarmed ones (a legitimate access now scoring as a missed violation); \emph{reported FP} is the false-proof count the damaged label still measures. Two premises are assumed and not tested: that the recorded basis lists are the ledger's complete justification for each cell, and that deleting one channel's rows does not cascade into another channel's entitlement. Cells resting on two channels keep their entitlement and are unaffected, which is asserted cell by cell.}
+\label{tab:ledger}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+channel omitted & resting & re-labelled & apparent TP & apparent FN & reported FP \\
+\midrule
+none (as run) & 171 & 0 & 0 & 0 & 29 \\
+\midrule
+public visibility & 99 & 97 & 11 & 86 & 18 \\
+direct collaborator & 50 & 47 & 2 & 45 & 27 \\
+team / project group & 11 & 8 & 2 & 6 & 27 \\
+site administrator & 16 & 14 & 14 & 0 & 15 \\
+\bottomrule
+\end{tabular}
+\end{table*}

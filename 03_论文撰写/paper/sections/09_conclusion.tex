@@ -9,7 +9,10 @@ crawled, permitted. Instantiating them as defined produced three findings
 \paragraph{Finding 1 (temporal)} As designed, the adjudication false-proofs on
 legitimately granted access, deterministically (\ResObsOobVtwoFpRate{}
 constructed; \ResRsMrBookkeepingFpRate{} Gitea), because an out-of-band grant fits
-only the wrong one of the predicate's two representations. On the real system the
+only the wrong one of the predicate's two representations. The alarm is the
+technique's own output; the count of proven violations is a policy's, and the same
+\PolAlarms{} alarms yield from \PolPnoneFalse{} to \PolPallFalse{} contradicted
+claims across the four policies of Table~\ref{tab:promotion}. On the real system the
 mismatch appears only under the crawl-time reading
 (\ResRsMismatchSnapshot{}/\ResRsMismatchDenom{}, vs.\ \ResRsMismatchLive{} live),
 with an endogenous control holding final visibility fixed: within this controlled
@@ -18,16 +21,22 @@ what was visible.
 
 \paragraph{Finding 2 (oracle)} The natural repair---a readable, sound
 authorization oracle that fully resolves the proposition under test---works, and
-in that regime the evaluated metamorphic step
-provides no observed incremental adjudication benefit over a direct consumer of the same oracle and outcome:
-an empirical premise, formalised as a conditional (Proposition~\ref{lem:oracle-suff}), whose empirical face is that
-a single ordinary request yields the same false-proof count (false proofs
-\ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}), and that of the \ResAbNBola{}
-true-violation records the paired comparison disagrees on only
-\ResAbDisagreementN{}, each time in favor of the plain request; no margin was
-pre-specified, so no inferential claim attaches.
-On Gitea the comparison is limited to false-proof behavior, because no
-vulnerability was present on the tested surface.
+in that regime the evaluated metamorphic step provides no incremental adjudication
+benefit over a direct consumer of the same oracle and outcome. On the constructed
+grid this is an identity rather than an effect: the direct adjudicator consumes the
+same entitlement and outcome quantities that define the reference label, so it
+cannot part from it where oracle and ledger coincide, and the matched counts
+(false proofs \ResAbDirectObserveFP{} vs.~\ResAbVThreeFP{}; disagreement on
+\ResAbDisagreementN{} of the \ResAbNBola{} true-violation records) characterise two
+rules rather than measure one technique against another. The empirical content is
+the antecedent---an oracle that is readable, sound \emph{and} admissible---and it
+fails on every system studied here, since on each the route the oracle consults and
+the routes that decide the request are answered by the same process under the same
+permission model. Where the antecedent fails, substituting the direct adjudicator is
+worse, not better: \GgFpDirectObserve{} against \GgFpVthree{} false proofs on Gogs
+and \GlFpDirectObserve{} against \GlFpVthree{} on GitLab
+(Table~\ref{tab:gogs-cross}). On Gitea the comparison is limited to false-proof
+behavior, because no vulnerability was present on the tested surface.
 
 \paragraph{Finding 3 (measurement)} The reported specificity of
 \ResLitReportedSpecPct{}\% is diagnosed as a specific published figure: it is
@@ -45,8 +54,8 @@ breaks a channel the relation does not test, and the inheritance and escalation
 faults falsify the antecedent because the subject can already see the object.
 
 \paragraph{What the two added experiments carry} The temporal finding is not
-confined to one product. Under the same pre-registered protocol, frozen before
-the second run was observed, GitLab CE \GlVersion{} commits \TmpGPolicyEvents{}
+confined to one product. Under the same frozen protocol, amended before the second
+run and pinned by digest, GitLab CE \GlVersion{} commits \TmpGPolicyEvents{}
 transitions over \TmpGCells{} cells, with entitlement and effect agreeing on
 \TmpGEeqY{} of them: \TmpGStaleFP{} stale false proofs, all \TmpGFixed{} removed
 by a recrawl with the same credentials, \TmpGLiveFP{} live false proofs and
@@ -87,11 +96,17 @@ consequences follow, each bounded by what was measured. Do not read a
 reachability-gated relation's alarm as proof: because the reading time is part of
 the specification, an alarm raised against a crawl-time snapshot---rather than
 against live state---cannot be promoted to \texttt{violation-proven} on the
-relation's word alone. If a readable, sound authorization oracle is in fact
-available to the analyst, consult it directly and drop the relation: for the
-relations studied it adds no adjudication information once that antecedent holds
-(Proposition~\ref{lem:oracle-suff}, Section~\ref{sec:stratum}). And treat a
-reported input-level specificity as a corpus statistic rather than a guarantee of
+relation's word alone, and the policy that decides promotion should be reported with
+the count it produces (Table~\ref{tab:promotion}). If an oracle is readable, sound
+\emph{and} passes the independence admission test of
+Section~\ref{sec:admissibility}, consult it directly rather than through the
+relation: on the domain where it agrees with the ledger the relation adds no
+confirmation. A readable, sound oracle that \emph{fails} that test does not license
+the substitution, and none of the three products studied passes it---substituting
+there raises false proofs from \GgFpVthree{} to \GgFpDirectObserve{} on Gogs and from
+\GlFpVthree{} to \GlFpDirectObserve{} on GitLab, so on the systems we could test the
+advice to drop the relation is unlicensed. And treat a reported input-level
+specificity as a corpus statistic rather than a guarantee of
 scenario-level resolution: it can sit near one while a whole class of legitimate
 access is misreported (Finding~3). These are not a claim that metamorphic testing
 is worthless; they locate its contribution where no oracle exists, and bound it

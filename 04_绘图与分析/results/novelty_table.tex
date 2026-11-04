@@ -1,0 +1,51 @@
+% 手写表（非数字生成）；由 08_related.tex 引用
+\begin{table*}[t]
+\centering
+\caption{Novelty ledger: each claim of this paper beside the prior position it
+extends, the specific increment, and the observation that would falsify it. Rows~1
+and~4 restate ingredients that are already known and are marked as such; the
+increment is in what is done with them, not in their discovery.}
+\label{tab:novelty}
+\footnotesize
+\begin{tabular}{@{}p{0.19\textwidth}p{0.24\textwidth}p{0.31\textwidth}p{0.19\textwidth}@{}}
+\toprule
+claim & prior position & what this paper adds & falsifier \\
+\midrule
+A legitimate access is reported as a proven violation
+& residual false alarms are attributed to crawler coverage~\cite{Mai2019Metamorphic};
+the role-to-resource mapping is ``not always
+available''~\cite{Chaleshtari2022Metamorphic}. \emph{Known.}
+& The failure is deterministic and direction-fixed by which of the predicate's two
+representations a grant fits; the governing variable is \emph{when} the model was
+read, not what was visible; and staleness (repaired by recrawling) is separated from
+channel blindness (not repaired)
+& A grant outside the recorded model that raises no alarm, or an alarm whose
+direction reverses
+\\
+An alarm is a violation
+& The catalogue's purpose invites the reading; its code performs no verdict
+& The promotion policy is stated as a parameter, and four policies are quantified on
+the same alarms, separating the technique's output from the adjudication layered on
+it (Table~\ref{tab:promotion})
+& A policy under which the false-proof count is invariant
+\\
+The metamorphic step adds adjudication value once an oracle is readable
+& Not posed; oracle-free detection is the design premise
+& Promotion is a subset of direct adjudication on the domain where oracle and ledger
+coincide, with the antecedent made operational as an admission test that refuses
+every system studied here
+& A record the relation confirms and a direct consumer of the same oracle and outcome
+does not
+\\
+A pooled specificity supports scenario-level resolution
+& Specificity is reported as an aggregate over follow-up
+inputs~\cite{Chaleshtari2022Metamorphic}. \emph{Known to be a corpus statistic.}
+& The denominator argument: a class the crawl never reached contributes no negative
+input, so the figure is silent about that class by construction
+(Proposition~\ref{prop:resolution})
+& A scenario-unit specificity that separates the configurations this input-unit figure
+cannot
+\\
+\bottomrule
+\end{tabular}
+\end{table*}

@@ -15,7 +15,7 @@ technique can detect.
 \subsection{The enumeration, cell by cell}
 \label{sec:census}
 
-Table~\ref{tab:design-census} is the mapping the review asked for: every
+Table~\ref{tab:design-census} gives the full mapping: every
 configuration against every scenario, with the number of records under each
 populated cell and a dash where the combination is undefined. The eight
 configurations are the full cross of instantiation mode, enforcement
@@ -126,17 +126,16 @@ the tested surface, enforces the expected decisions, so the run can only exhibit
 false proofs.
 
 \paragraph{Which stage of that claim does the native run establish?}
-Three stages have to be kept apart, and only the third is a security finding.
-The \emph{native alarm} $A$ is what the engine itself returns:
-\texttt{getFailures()} is appended by \texttt{MR.fail()} (\texttt{MR.java}:909),
-which logs \texttt{FAILURE} together with the failing input pair and asserts
-nothing about authorization---no ledger, no expected decision, no verdict.
-Reading a fired authorization relation as a \emph{violation claim} $H$ is a
-promotion policy $P$ that we state rather than inherit: $P$ maps every fired
-\texttt{OTG\_AUTHZ} relation to ``a violation was observed'', which is the
-reading the catalogue's purpose invites but its code does not perform. Since $P$
-applies to every alarm, $H=\NtStageH$ holds by construction and carries no
-empirical content. All of it is in the independent truth $T$, computed from the
+The three stages are those defined in Section~\ref{sec:stages}, and only the third
+is a security finding. Here the \emph{native alarm} $A$ is the engine's own
+return: \texttt{getFailures()} is appended by \texttt{MR.fail()}
+(\texttt{MR.java}:909), which logs \texttt{FAILURE} with the failing input pair
+and asserts nothing about authorization---no ledger, no expected decision, no
+verdict. The promotion policy $P$ for this run maps every fired
+\texttt{OTG\_AUTHZ} relation to ``a violation was observed'', the reading the
+catalogue's purpose invites and its code does not perform; since $P$ applies to
+every alarm, $H=\NtStageH$ holds by construction and carries no empirical
+content. All of it is in the independent truth $T$, computed from the
 ledger grant ($E$) and a content re-read ($Y$: the responder's bytes are
 identical to the owner's and a third account is refused): \NtStageTTrue{}
 violations are confirmed and \NtStageTFalse{} of the \NtStageA{} promoted alarms
