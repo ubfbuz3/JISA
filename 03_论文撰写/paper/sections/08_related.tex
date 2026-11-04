@@ -49,8 +49,8 @@ reachability~\cite{Wu2026Rethinking}; our question sits at that decision level.
 Each of these papers reports detections against an oracle it holds
 privately---a policy, a seeded defect, a differential response---and none of them
 is our comparison class, because we do not measure detection rates. What this
-paper adds is three claims about one published adjudication, each with a
-falsifier. Two of the ingredients are already known---that a crawl-time model
+paper adds is three claims about one published adjudication, each stated together
+with the check that would count against it. Two of the ingredients are already known---that a crawl-time model
 can go stale, and that an authorization oracle can be unsound; the claims below
 differ in that the first failure is deterministic and attributable to a
 representation choice, the second is bounded by an explicit equivalence rather
@@ -73,15 +73,17 @@ and channel blindness is not, and the two call
 for different remedies. Second, once a readable,
 sound oracle is supplied, the promoted verdict is a subset of direct adjudication
 on the evaluated domain, so the metamorphic step adds no confirmation there
-(Proposition~\ref{lem:oracle-suff}(b)); the falsifier is a record the relation
-confirms and the direct consumer does not. Third, the published specificity's
+(Proposition~\ref{lem:oracle-suff}(b)); the check that would count against it is
+a record the relation confirms and the direct consumer does not. Third, the
+published specificity's
 denominator is pooled over the inputs a crawl could enumerate, so a failure
 confined to a class outside that set does not move it
 (Proposition~\ref{prop:resolution}). We claim no new detector, no new oracle,
 and no recall advantage over the access-control line; what we claim is a
 statement about what an oracle-substituting technique can establish, and where
 that statement stops. The three claims, the position each extends, what each adds
-and its falsifier are collected in Table~\ref{tab:novelty}.
+and the check or counterexample attached to each are collected in
+Table~\ref{tab:novelty}.
 
 \input{novelty_table.tex}
 

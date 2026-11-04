@@ -2,9 +2,12 @@
 \begin{table*}[t]
 \centering
 \caption{Novelty ledger: each claim of this paper beside the prior position it
-extends, the specific increment, and the observation that would falsify it. Rows~1
+extends, the specific increment, and the check that would count against it. Rows~1
 and~4 restate ingredients that are already known and are marked as such; the
-increment is in what is done with them, not in their discovery.}
+increment is in what is done with them, not in their discovery. For rows~1, 3
+and~4 the last column names an observation that would refute the claim. The
+policy row is a decomposition rather than a proposition about the world, so its
+entry is the reproduction that would have to fail, not a counterexample.}
 \label{tab:novelty}
 \footnotesize
 \begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{0.19\textwidth}%
@@ -12,7 +15,7 @@ increment is in what is done with them, not in their discovery.}
 >{\RaggedRight\arraybackslash}p{0.31\textwidth}%
 >{\RaggedRight\arraybackslash}p{0.19\textwidth}@{}}
 \toprule
-claim & prior position & what this paper adds & falsifier \\
+claim & prior position & what this paper adds & check or counterexample \\
 \midrule
 A legitimate access is reported as a proven violation
 & residual false alarms are attributed to crawler coverage~\cite{Mai2019Metamorphic};
@@ -30,8 +33,9 @@ An alarm is a violation
 & The promotion policy is stated as a parameter, and four policies are quantified on
 the same alarms, separating the technique's output from the adjudication layered on
 it (Table~\ref{tab:promotion})
-& Two admissible promotion policies that return the same verdict on every recorded
-alarm, so that the choice of policy never moves a claim
+& Replay the declared policies on identical alarms and independent labels; the
+reported policy sensitivity is unsupported if the reproduced claim counts do not
+differ as reported
 \\
 The metamorphic step adds adjudication value once an oracle is readable
 & Not posed; oracle-free detection is the design premise

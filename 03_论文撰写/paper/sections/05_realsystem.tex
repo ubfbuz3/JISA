@@ -297,16 +297,18 @@ Section~\ref{sec:gogs}, now located in a named channel rather than attributed to
 
 Two properties of the run are recorded because they are what an external check can
 verify. The protocol was frozen before the first Gitea transition, and its digest
-is carried in both run records. For the amendments we establish the ordering by
-content binding rather than by a self-reported clock: the archived pilot records
-only A1, and the reported GitLab run records the digests of both A1 and A2, so
-A2's content was in place when that run executed. The pilot is archived with its
-cells excluded from every denominator. One recorded field does not support the
-stronger reading and we do not use it: A2's \texttt{written\_at} says 02:32,
-later than the run's last probe at 02:26:14, so the file's own timestamp cannot
-establish that it was written before the first transition. We retain the field as
-recorded and rely on the digest carried by the run; the discrepancy is documented
-with the artifact rather than corrected in place. Inside a run, every cell carries its event sequence number, the
+is carried in both run records. For the amendments we do not rely on a
+self-reported clock: the archived pilot records only A1, and the reported GitLab
+run carries the digests of both A1 and A2. That content binding identifies which
+amendment contents the run record is associated with; it does not on its own
+establish when those contents were created relative to the transitions. The pilot
+is archived with its cells excluded from every denominator. One recorded field
+would, if trusted for ordering, place A2 after that run, and we do not use it for
+that purpose: A2's \texttt{written\_at} says 02:32, later than the run's last probe
+at 02:26:14, so the file's own timestamp cannot establish that it was written
+before the first transition. We retain the field as recorded and rely on the
+digest carried by the run; the discrepancy is documented with the artifact rather
+than corrected in place. Inside a run, every cell carries its event sequence number, the
 harness version before and after the transition, the $M_0$ and $M_1$ digests and
 wall-clock timestamps, so the ordering---crawl, freeze, mutate, recrawl, oracle,
 probe---can be re-checked line by line rather than trusted. Within the
