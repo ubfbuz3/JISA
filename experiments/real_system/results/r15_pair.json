@@ -1,0 +1,179 @@
+{
+ "meta": {
+  "generated_by": "experiments/real_system/run_r15_pair.py",
+  "system": "Gogs",
+  "gogs_version": "0.14.3",
+  "lab_dir": "C:\\Users\\Administrator\\WorkBuddy\\gogs_lab\\inst_r15_pair",
+  "started": "2026-11-04T14:47:26+0800",
+  "crawl_surface": [
+   "GET /api/v1/user/repos?limit=50",
+   "GET /api/v1/orgs/acme/repos?limit=50",
+   "GET /api/v1/repos/search?limit=50"
+  ],
+  "promotion_policy": "P1 (alarm -> violation), fixed for all cells",
+  "design_note": "同一实例/主体/操作/爬取预算；只有授权通道不同。C 臂的对象在快照后才存在（Gogs 0.14.3 无 visibility 翻转路由），这一点不对称必须披露：它使 C 臂同时是'新对象'与'新通道'。",
+  "server_ready_ms": 509,
+  "identity_verified": true
+ },
+ "phaseB_snapshot": {
+  "urls": [],
+  "outputs": {},
+  "sources": {
+   "user_repos": 200,
+   "org:acme": 200,
+   "search": 200
+  }
+ },
+ "phaseD_recrawl": {
+  "urls": [
+   "acme/tT",
+   "alice/rS"
+  ],
+  "outputs": {
+   "alice/rS": "a6d0bb7871fdc1fc",
+   "acme/tT": "8d1c546cf91686a8"
+  },
+  "sources": {
+   "user_repos": 200,
+   "org:acme": 200,
+   "search": 200
+  }
+ },
+ "probes": {
+  "S": {
+   "repo_status": 200,
+   "file_status": 200,
+   "file_sha": "3e6b525bcbd42379",
+   "allowed": true
+  },
+  "T": {
+   "repo_status": 200,
+   "file_status": 200,
+   "file_sha": "b2e59d98e3e64a04",
+   "allowed": true
+  },
+  "C": {
+   "repo_status": 200,
+   "file_status": 200,
+   "file_sha": "c1155377c9c9f4ef",
+   "allowed": true
+  }
+ },
+ "name_query": {
+  "status": 200,
+  "q": "rC",
+  "found": [
+   "alice/rC"
+  ]
+ },
+ "arms": [
+  {
+   "arm": "S",
+   "channel": "direct collaborator",
+   "object": "alice/rS",
+   "in_snapshot_crawl": false,
+   "in_recrawl": true,
+   "readable": true,
+   "repo_status": 200,
+   "file_status": 200,
+   "file_sha": "3e6b525bcbd42379",
+   "alarm_snapshot": true,
+   "alarm_after_recrawl": false,
+   "false_proof_snapshot": true,
+   "false_proof_after_recrawl": false,
+   "repaired_by_recrawl": true
+  },
+  {
+   "arm": "T",
+   "channel": "team-derived",
+   "object": "acme/tT",
+   "in_snapshot_crawl": false,
+   "in_recrawl": true,
+   "readable": true,
+   "repo_status": 200,
+   "file_status": 200,
+   "file_sha": "b2e59d98e3e64a04",
+   "alarm_snapshot": true,
+   "alarm_after_recrawl": false,
+   "false_proof_snapshot": true,
+   "false_proof_after_recrawl": false,
+   "repaired_by_recrawl": true
+  },
+  {
+   "arm": "C",
+   "channel": "public visibility",
+   "object": "alice/rC",
+   "in_snapshot_crawl": false,
+   "in_recrawl": false,
+   "readable": true,
+   "repo_status": 200,
+   "file_status": 200,
+   "file_sha": "c1155377c9c9f4ef",
+   "alarm_snapshot": true,
+   "alarm_after_recrawl": true,
+   "false_proof_snapshot": true,
+   "false_proof_after_recrawl": true,
+   "repaired_by_recrawl": false
+  }
+ ],
+ "totals": {
+  "cells": 3,
+  "alarms_snapshot": 3,
+  "alarms_after_recrawl": 1,
+  "repaired": 2,
+  "persisting": 1
+ },
+ "steps": [
+  {
+   "step": "user:alice",
+   "status": 201,
+   "error": null
+  },
+  {
+   "step": "user:bob",
+   "status": 201,
+   "error": null
+  },
+  {
+   "step": "org:acme",
+   "status": 201,
+   "error": null
+  },
+  {
+   "step": "team:acme/dev",
+   "status": 201,
+   "error": null
+  },
+  {
+   "step": "repo:rS",
+   "status": 201,
+   "error": null
+  },
+  {
+   "step": "repo:tT",
+   "status": 201,
+   "error": null
+  },
+  {
+   "step": "grant S: alice/rS <- bob (collaborator)",
+   "status": 204,
+   "error": null
+  },
+  {
+   "step": "grant T: acme/tT -> team dev",
+   "status": 204,
+   "error": null
+  },
+  {
+   "step": "grant T: bob -> team dev",
+   "status": 204,
+   "error": null
+  },
+  {
+   "step": "grant C: alice/rC created public",
+   "status": 201,
+   "error": null
+  }
+ ],
+ "elapsed_s": -0.0
+}

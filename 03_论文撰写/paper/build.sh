@@ -32,6 +32,7 @@ for f in "$PROJ/04_绘图与分析/results/numbers.tex" \
          "$PROJ/04_绘图与分析/results/temporal_sensitivity_table.tex" \
          "$PROJ/04_绘图与分析/results/revision_policy_numbers.tex" \
          "$PROJ/04_绘图与分析/results/revision_caliber_numbers.tex" \
+         "$PROJ/04_绘图与分析/results/r15_pair_numbers.tex" \
          "$PROJ/04_绘图与分析/results/revision_policy_table.tex" \
          "$PROJ/04_绘图与分析/results/revision_caliber_table.tex" \
          "$PROJ/04_绘图与分析/results/revision_ledger_table.tex" \
@@ -109,6 +110,7 @@ cp "$PROJ/04_绘图与分析/results/temporal_channel_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/temporal_sensitivity_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/revision_policy_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/revision_caliber_numbers.tex" "$BUILD/"
+cp "$PROJ/04_绘图与分析/results/r15_pair_numbers.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/revision_policy_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/revision_caliber_table.tex" "$BUILD/"
 cp "$PROJ/04_绘图与分析/results/revision_ledger_table.tex" "$BUILD/"

@@ -352,18 +352,33 @@ credential lists it again. That is what Table~\ref{tab:temporal} measures, where
 \TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs disappear on recrawl and
 \TmpBothStillMiss{} resist. \emph{Coverage}: the grant is real and enforced, but no
 reading of the subject's own surface exposes it, because the view that would show
-it belongs to another subject or to an administrative interface---a team-derived
-grant, a public-visibility flag set by the owner, a site-administration privilege.
+it belongs to another subject or to an administrative interface---a
+public-visibility flag, a site-administration privilege, or a team-derived grant on
+a surface that does not resolve inheritance.
 Recrawling cannot repair a channel the crawl has no way to enumerate, and the
-cross-vendor run exhibits the residue: on Gogs \GgMismatchLive{} of
+cross-vendor run locates the residue: on Gogs \GgMismatchLive{} of
 \GgMismatchSnap{} mismatching cells survive the live reading, and so do
-\GgFpBookkeepingLive{} of \GgFpBookkeeping{} bookkeeping false proofs, all on
-public-visibility or team-derived grants. The live reading removes the staleness
-term and leaves the coverage term; where the same channels are represented in the
+\GgFpBookkeepingLive{} of \GgFpBookkeeping{} bookkeeping false proofs, all of them
+on public visibility or the site-administrator vantage and none on a team-derived
+or collaborator grant---this product resolves team inheritance in the subject's own
+list, so those channels are repaired. The live reading removes the staleness term
+and leaves the coverage term; where the same channels are represented in the
 subject's crawl, as on Gitea and GitLab, the live reading reaches zero.
-Two cautions follow. The repair count is conditioned on the transitions that study
-committed; it is not a rate over the channel taxonomy, and a design that drew its
-transitions from team-derived or public grants would report a different one. And
+
+That attribution is measured, not subtracted: in one instance, with the same
+subject, operation, surface and budget, and every grant made after the snapshot by
+another account, three channels ran in parallel---direct collaborator,
+team-derived, public repository (\RfArms{} arms, \RfSnapAlarms{} alarms). The
+recrawl repaired \RfRepaired{}: the collaborator and team objects appear in the
+subject's list on the second pass. It left \RfPersisting{}: the public repository,
+readable in the same probe as the other two (status 200 on the repository and on a file read)
+but never named by any traversal of the subject's surface. A query by that
+repository's name does return it (\RfNameFound{} hit), so what a recrawl misses is
+what its traversal never names, not what the system conceals. One asymmetry: Gogs exposes no
+visibility-flip route, so that object was created public rather than converted, and
+is new to the snapshot.
+Two cautions follow. The repair count is conditioned on the transitions committed,
+which the three arms make concrete---\RfRepaired{} repairs out of \RfArms{}---and
 the temporal sample and the cross-vendor sample are not paired observations of the
 same cells---they differ in product, topology and mutation script---so the count
 surviving recrawling in one must not be subtracted from the count surviving in the
@@ -459,8 +474,9 @@ granted access (Gitea \GtFpBookkeeping{}, Gogs \GgFpBookkeeping{}, GitLab
 with the same out-of-band-dominant grant profile; and the reachability mismatch
 persists (Gitea \GtMismatchSnap{}, Gogs \GgMismatchSnap{}, GitLab
 \GlMismatchSnap{} snapshot). On
-Gogs the mismatch only partially resolves live (\GgMismatchLive{} remain---team
-or public grants never enter a subject's personal crawl); on GitLab the live
+Gogs the mismatch only partially resolves live (\GgMismatchLive{} remain---public
+visibility and the site-administrator vantage never enter a subject's own list,
+whereas a team-derived grant does); on GitLab the live
 reading recovers everything (\GlMismatchLive{} remain)---a second,
 vendor-specific failure of the snapshot premise, in the crawl model rather than
 the oracle.
