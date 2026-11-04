@@ -105,81 +105,8 @@ def save(fig, stem: str, provenance: dict):
     print(f"  [fig] {stem}: " + " ".join(f"{k}({v['bytes']}B)" for k, v in made.items()))
 
 
-# ============================================================ 图 2
-
-def fig2_methods(M, prov):
-    """端到端混淆矩阵对照（Block 9）。"""
-    meth = M["block9_direct_observe"]["methods"]
-    order = ["degrade_all", "direct_only", "v3", "direct_observe", "v1", "v2"]
-    nice = {"degrade_all": "degrade-all\n(abstain)", "direct_only": "direct-only\n(oracle only)",
-            "v3": "v3\n(MR + oracle)", "direct_observe": "direct-observe\n(request + oracle)",
-            "v1": "v1\n(bookkeeping)", "v2": "v2\n(bookkeeping+)"}
-    fig, ax = plt.subplots(figsize=(7.0, 3.1))
-    xs = range(len(order))
-    w = 0.26
-    for i, (k, c, lab) in enumerate((("TP", C["tp"], "TP (true violations caught)"),
-                                     ("FP", C["fp"], "FP (false proofs)"),
-                                     ("FN", C["fn"], "FN (missed)"))):
-        vals = [meth[m][k] for m in order]
-        ax.bar([x + (i - 1) * w for x in xs], vals, w, color=c, label=lab,
-               edgecolor="white", linewidth=0.4)
-        for x, v in zip(xs, vals):
-            ax.annotate(str(v), (x + (i - 1) * w, v), ha="center", va="bottom",
-                        fontsize=6.4, color="#333333",
-                        xytext=(0, 1), textcoords="offset points")
-    for x, m in zip(xs, order):
-        d = meth[m]
-        f1 = "n/a" if d["f1"] is None else f"{d['f1']:.2f}"
-        p = "n/a" if d["precision"] is None else f"{d['precision']:.2f}"
-        r_ = "n/a" if d["recall"] is None else f"{d['recall']:.2f}"
-        nice[m] = nice[m] + f"\nP={p}\nR={r_}\nF1={f1}"
-    ax.set_xticks(list(xs))
-    ax.set_xticklabels([nice[m] for m in order], fontsize=6.8)
-    ax.set_ylabel("instances (n = 576)")
-    ax.set_ylim(0, 262)
-    ax.legend(loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 1.02))
-    ax.set_title("Adjudicator comparison: the MR trigger does not carry the work "
-                 "(Block 9, synthetic matrix)", pad=16)
-    fig.tight_layout()
-    save(fig, "fig4_methods", prov)
 
 
-# ============================================================ 图 3
-
-def fig3_strata(M, prov):
-    """v3 按授权自省面可读性分层（Block 8）。"""
-    on, off = M["block8_introspection_boundary"]["on"], M["block8_introspection_boundary"]["off"]
-    fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.6))
-    labels = [f"introspection\nreadable\n(abstain n={on['v3_abstain_unavailable_n']})",
-              f"introspection\nabsent\n(abstain n={off['v3_abstain_unavailable_n']})"]
-    a = axes[0]
-    x = range(2)
-    w = 0.36
-    a.bar([i - w / 2 for i in x], [on["v2_false_proof_rate"], off["v2_false_proof_rate"]],
-          w, color=C["v2"], label="v2 (bookkeeping oracle)", edgecolor="white", linewidth=0.4)
-    a.bar([i + w / 2 for i in x], [on["v3_false_proof_rate"], off["v3_false_proof_rate"]],
-          w, color=C["v3"], label="v3 (SUT introspection)", edgecolor="white", linewidth=0.4)
-    for i, v in zip(x, [on["v2_false_proof_rate"], off["v2_false_proof_rate"]]):
-        a.annotate(f"{v:.2f}", (i - w / 2, v), ha="center", va="bottom", fontsize=6.8)
-    for i, v in zip(x, [on["v3_false_proof_rate"], off["v3_false_proof_rate"]]):
-        a.annotate(f"{v:.2f}", (i + w / 2, v), ha="center", va="bottom", fontsize=6.8)
-    a.set_xticks(list(x)); a.set_xticklabels(labels)
-    a.set_ylim(0, 1.15); a.set_ylabel("false-proof rate\n(on real false alarms)")
-    a.set_title("(a) false proofs", fontsize=8.5)
-    a.legend(loc="upper right", frameon=False)
-
-    b = axes[1]
-    keep = [on["v3_detection_keep_rate"], off["v3_detection_keep_rate"]]
-    b.bar(list(x), keep, 0.5, color=[C["ok"], C["bad"]], edgecolor="white", linewidth=0.4)
-    for i, v in enumerate(keep):
-        b.annotate(f"{v:.2f}", (i, v), ha="center", va="bottom", fontsize=7)
-    b.set_xticks(list(x)); b.set_xticklabels(labels, fontsize=6.8)
-    b.set_ylim(0, 1.28); b.set_ylabel("v3 detection-keep rate")
-    b.set_title("(b) detection retained by v3", fontsize=8.5)
-    fig.suptitle("Admissibility condition is measurable: false proofs vanish only while "
-                 "the introspection face is readable", fontsize=9)
-    fig.tight_layout(rect=(0, 0, 1, 0.90))
-    save(fig, "fig3_strata", prov)
 
 
 # ============================================================ 图 4
@@ -281,34 +208,6 @@ def fig5_real(M, prov):
     save(fig, "fig5_real_system", prov)
 
 
-# ============================================================ 图 6（内生对照）
-
-def fig6_endogenous(M, prov):
-    """内生对照：同可见性、不同变更时点。"""
-    r = M["real_system"]["endogenous_control"]
-    keys = ["public_from_start", "public_after_crawl"]
-    labs = ["public from crawl\n(alice/pub1)", "public after crawl\n(alice/r4)"]
-    reach = [r[k]["cannotReach_true"] for k in keys]
-    denom = [r[k]["cells"] for k in keys]
-    fires = [r[k]["mr_fires"] for k in keys]
-    fig, ax = plt.subplots(figsize=(3.5, 2.4))
-    x = range(2)
-    ax.bar([i - 0.21 for i in x], reach, 0.34, color=C["warn"],
-           label="GUI-unreachable\n(but authorized)", edgecolor="white", linewidth=0.4)
-    ax.bar([i + 0.21 for i in x], fires, 0.34, color=C["fp"], label="MR fires",
-           edgecolor="white", linewidth=0.4)
-    for i, (v, d) in enumerate(zip(reach, denom)):
-        ax.annotate(f"{v}/{d}", (i - 0.21, v), ha="center", va="bottom", fontsize=7)
-    for i, v in zip(x, fires):
-        ax.annotate(str(v), (i + 0.21, v), ha="center", va="bottom", fontsize=7)
-    ax.set_xticks(list(x)); ax.set_xticklabels(labs, fontsize=7)
-    ax.set_ylim(0, 7.2)
-    ax.set_ylabel("cells (n = 6 per object)")
-    ax.legend(frameon=False, loc="upper left", fontsize=6.4)
-    ax.set_title("Identical final visibility, different change time:\n"
-                 "the failure is temporal, not about visibility", fontsize=8)
-    fig.tight_layout()
-    save(fig, "fig6_endogenous_control", prov)
 
 
 # ============================================================ 主流程
@@ -327,11 +226,8 @@ def main():
         if fp.exists():
             prov["_inputs"][name] = hashlib.sha256(fp.read_bytes()).hexdigest()[:16]
 
-    fig2_methods(M, prov)
-    fig3_strata(M, prov)
     fig4_scenarios(M, prov)
     fig5_real(M, prov)
-    fig6_endogenous(M, prov)
 
     (PROV / "FIGURES_PROVENANCE.json").write_text(
         json.dumps(prov, ensure_ascii=False, indent=2), encoding="utf-8")

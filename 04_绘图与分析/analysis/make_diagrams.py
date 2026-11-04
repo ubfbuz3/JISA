@@ -72,32 +72,6 @@ FIG1 = {
 
 
 # ------------------------------------------------------------------ 图 7
-FIG7 = {
-    "title": "The MR family is squeezed between two boundaries",
-    "canvas": {"width": 900, "height": 300},
-    "style": {"font_family": "DejaVu Sans, Helvetica, Arial, sans-serif",
-              "font_size": 14, "bg_color": "#FFFFFF"},
-    "nodes": [
-        {"id": "left", "label": "Boundary 1: oracle readable",
-         "sublabel": "a plain request with the oracle matches or beats the MR family",
-         "x": 230, "y": 96, "width": 400, "height": 92, "shape": "rounded",
-         "fill": F_TEAL, "stroke": TEAL, "text_color": "#04342C"},
-        {"id": "right", "label": "Boundary 2: oracle absent",
-         "sublabel": "MR is the only evidence, but it is a GUI-reachability proxy",
-         "x": 670, "y": 96, "width": 400, "height": 92, "shape": "rounded",
-         "fill": F_AMBER, "stroke": AMBER, "text_color": "#412402"},
-        {"id": "banner", "label": "No regime in which the MR family is the best available method",
-         "x": 450, "y": 232, "width": 860, "height": 60, "shape": "rounded",
-         "fill": F_RED, "stroke": RED, "text_color": "#501313"},
-    ],
-    "edges": [
-        {"from": "left", "to": "banner", "style": "dotted", "color": "#888780"},
-        {"from": "right", "to": "banner", "style": "dotted", "color": "#888780"},
-    ],
-    "labels": [],
-}
-
-
 def render_svg(spec: dict, stem: str) -> Path:
     sp = SPECS / f"{stem}.json"
     sp.write_text(json.dumps(spec, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -130,7 +104,7 @@ def svg_to_pdf(svg: Path) -> Path:
 
 def main():
     prov = {}
-    for spec, stem in ((FIG1, "fig1_protocol"), (FIG7, "fig7_boundaries")):
+    for spec, stem in ((FIG1, "fig1_protocol"),):
         svg = render_svg(spec, stem)
         pdf = svg_to_pdf(svg)
         prov[stem] = {

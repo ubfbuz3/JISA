@@ -29,8 +29,8 @@ conclusion in this paper depends on it.
 family---relations gated on the absence of evidence. The native run lifts the
 count to \NtMrExecuted{} of \ResArtAuthzMrTotal{} catalog authorization
 relations but not the family: only the reachability-gated ones alarm in our run.
-This is the paper's single most important limitation; raising it requires
-relations gated otherwise, a different experiment.
+Widening the family requires relations gated otherwise, which is a different
+experiment.
 
 \paragraph{Real systems} Three systems (one lineage pair, one independent),
 chosen for accessibility, none vulnerable on the tested surface---so only the
@@ -52,11 +52,3 @@ instead in the separate controlled study of
 Section~\ref{sec:baselines}. Both references share an observable with the
 labelling rule, as \texttt{direct\_observe} does, so only the differences against
 them---not their absolute rates---are meant to be read.
-
-\paragraph{Our own earlier claims} An earlier iteration proposed v3 as a
-mechanism on the strength of its precision (\ResAbVThreePrec{}), which was
-bought with \ResAbVThreeFN{} false negatives, and a control
-(\texttt{direct\_only}, precision \ResAbDirectOnlyPrec{}) that discarded the
-access result. Replacing it with a fair control produced the negative result. We
-record this as the condition any similar claim must meet: a control consuming the
-same observable quantity as the ground truth.

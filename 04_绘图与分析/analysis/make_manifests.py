@@ -72,7 +72,6 @@ REPRO_OUTPUTS = []   # filled in main() from the glob below
 EXTRA_OUTPUTS = [
     "04_绘图与分析/results/metrics.json",
     "04_绘图与分析/figures/fig1_protocol.pdf",
-    "04_绘图与分析/figures/fig7_boundaries.pdf",
 ]
 
 
