@@ -202,7 +202,12 @@ permitted to do changes, because a ledger is a record and not the system: every
 cell that moves here remains a legitimate access, and the \PolAlarms{} false proofs
 are not repaired by its moving, only re-described. The alarm cannot move either---it
 is computed from the crawl snapshot, the probe response and the role, and never
-reads the ledger. What the deletion changes is the reference label, and with it the
+reads the ledger. The intervention adds one premise to that construction: deleting
+one channel's rows does not cascade into another channel's entitlement. The premise
+is tested where it can fail---a cell resting on two channels keeps \emph{allow}
+under either deletion, asserted cell by cell for the \LedMultiBasis{} such cells.
+What the deletion changes is the
+reference label, and with it the
 words used for outcomes that did not change. Omitting public visibility re-labels
 \LedPublicDeny{} legitimate cells as deny in the damaged ledger; against that label
 \LedPublicTp{} existing alarms score as \emph{apparent} true positives and

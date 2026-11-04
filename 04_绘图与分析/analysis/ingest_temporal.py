@@ -304,7 +304,7 @@ def main() -> None:
         "% 由 ingest_temporal.py 生成，勿手改",
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Temporal transitions on two products with the same pre-registered "
+        "\\caption{Temporal transitions on two products under the same frozen "
         "protocol. \\emph{Stale FP}: the frozen pre-change model does not list a "
         "resource the subject may legitimately read, so the relation would report a "
         "false proof. \\emph{Fixed}: a recrawl with the same credential lists it "
@@ -412,7 +412,9 @@ def main() -> None:
         r"marks modelled-no-channel cells $E$-unknown and excludes them from "
         r"scoring. The rule changes the scorable set, the $E$ classification and "
         r"the $E/Y$ denominator; it does not move the stale false proofs, all of "
-        r"which fall on $E$-allow cells inside the literal-known set.}",
+        r"which fall on $E$-allow cells inside the literal-known set. "
+        r"Table~\ref{tab:caliber} gives the rates; this table gives the counts they "
+        r"are computed from, product by product.}",
         r"\label{tab:unknown-sensitivity}",
         r"\small",
         r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}",

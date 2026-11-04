@@ -401,7 +401,8 @@ def main() -> None:
         "% 由 ingest_revision.py 生成，勿手改",
         r"\begin{table*}[t]",
         r"\centering",
-        r"\caption{The same records scored under the two \emph{unknown} rules, with "
+        r"\caption{The \TmpBothCells{} committed cells scored under the two "
+        r"\emph{unknown} rules, with "
         r"the confusion matrix spelled out. A positive is a violation (ledger deny, "
         r"effect allow) and a negative is every other cell; in these runs $E=Y$ on "
         r"every cell, so the design contains no positive and recall has no "
@@ -458,26 +459,18 @@ def main() -> None:
         r"\centering",
         r"\caption{Scoring against a damaged reference label: what one missing "
         r"granting channel does to the reported numbers. The intervention edits "
-        r"the ledger, not the system. For each channel in turn its grant rows are "
+        r"the ledger, not the system: for each channel in turn its grant rows are "
         r"deleted from every cell's recorded basis list, the resulting entitlement "
         r"is passed to the same classifier the runs use, and the categories are "
-        r"counted. Nothing a subject is actually permitted to do changes; every "
-        r"cell that moves here stays a legitimate access, and the "
-        r"\PolAlarms{} false proofs are not repaired by its moving, only "
-        r"re-described. Held fixed: the cell sample, the alarms, the probe "
-        r"responses, and the promotion decisions---the alarm is computed from the "
-        r"crawl snapshot, the probe response and the role, and never reads the "
-        r"ledger, so no omission adds or removes one. Under the damaged label "
+        r"counted. The cell sample, the alarms, the probe responses and the "
+        r"promotion decisions are held fixed. Every cell that moves here stays a "
+        r"legitimate access, and the \PolAlarms{} false proofs are re-described by "
+        r"its moving, not repaired. Under the damaged label "
         r"\emph{re-labelled} counts the cells that now read deny; of those, "
         r"\emph{apparent TP} counts the alarmed ones (a false proof now scoring "
         r"as a confirmed violation) and \emph{apparent FN} the unalarmed ones (a "
         r"legitimate access now scoring as a missed violation); \emph{reported FP} "
-        r"is the false-proof count the damaged label still measures. Two premises are assumed and "
-        r"not tested: that the recorded basis lists are the ledger's complete "
-        r"justification for each cell, and that deleting one channel's rows does "
-        r"not cascade into another channel's entitlement. Cells resting on two "
-        r"channels keep their entitlement and are unaffected, which is asserted "
-        r"cell by cell.}",
+        r"is the false-proof count the damaged label still measures.}",
         r"\label{tab:ledger}",
         r"\small",
         r"\begin{tabular}{lrrrrr}",
@@ -489,6 +482,10 @@ def main() -> None:
     ] + lrows + [
         r"\bottomrule",
         r"\end{tabular}",
+        r"\par\smallskip\footnotesize\emph{resting} counts cells per channel and "
+        r"overlaps: \LedMultiBasis{} cells rest on two channels, so the column sums "
+        r"to $\LedLegitCells+\LedMultiBasis$ against the \LedLegitCells{} cells "
+        r"scored.",
         r"\end{table*}",
     ]
     (RES / "revision_ledger_table.tex").write_text("\n".join(ll) + "\n",
