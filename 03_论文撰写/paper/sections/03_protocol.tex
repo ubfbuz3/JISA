@@ -193,9 +193,9 @@ rather than by assertion. For each channel in turn its grant rows are deleted fr
 every cell's recorded basis list and the damaged entitlement is scored, with the
 scoring executed rather than re-derived. A cell that carries an alarm is passed to
 the same classifier the runs use, so its category is whatever that classifier
-returns; a cell that carries no alarm is counted as an \emph{apparent} false
-negative when the damaged label reads deny and the probe allowed, which is the
-category the classifier would assign to a denial nobody reported. The closed-form
+returns. A cell that carries no alarm is counted separately as an \emph{apparent}
+false negative when the damaged entitlement is deny and the observed effect is
+allow. The closed-form
 counts are asserted equal to the executed ones, so an analytic slip fails the
 build rather than reaching this table. Nothing a subject is
 permitted to do changes, because a ledger is a record and not the system: every
@@ -217,15 +217,12 @@ direct collaborator and \LedTeamShared{} on team inheritance.
 Read inside this analysis, the effect is one-directional and it is an undercount.
 With the cell sample, the alarms, the probe responses and the promotion decisions
 all held fixed, and only legitimate grant rows deleted under default deny, a
-damaged label can lower the reported false-proof count but cannot raise it. That,
-and only that, is what we claim. It is not a bound for unrecorded authorization
-mechanisms in general, it says nothing about channels this design never exercised,
-and it does not transfer to a deployment where the ledger may fail in the other
-direction. What it does establish is that the false-proof rate is conditioned on
-the completeness of the reference record, and that the conditioning is not benign:
-incompleteness hides false proofs from the measurement rather than exposing them.
-Under the literal rule the same cell instead leaves the denominator, the other horn
-of the same dilemma.
+damaged label can lower the reported false-proof count but cannot raise it. Its
+scope is the analysis rather than deployment: what it establishes is that the
+false-proof rate is conditioned on the completeness of the reference record, and
+that the conditioning is not benign---incompleteness hides false proofs from the
+measurement rather than exposing them. Under the literal rule the same cell instead
+leaves the denominator, the other horn of the same dilemma.
 
 One consequence of this must be kept apart from the label argument. A promotion
 policy that reads the ledger instead of being fixed in advance does not merely lose
