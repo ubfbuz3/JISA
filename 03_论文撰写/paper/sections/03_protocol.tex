@@ -203,9 +203,9 @@ cell that moves here remains a legitimate access, and the \PolAlarms{} false pro
 are not repaired by its moving, only re-described. The alarm cannot move either---it
 is computed from the crawl snapshot, the probe response and the role, and never
 reads the ledger. The intervention adds one premise to that construction: deleting
-one channel's rows does not cascade into another channel's entitlement. The premise
-is tested where it can fail---a cell resting on two channels keeps \emph{allow}
-under either deletion, asserted cell by cell for the \LedMultiBasis{} such cells.
+one channel's rows does not cascade into another channel's entitlement. Assertions
+on the \LedMultiBasis{} multi-channel cells verify that the implementation preserves
+an alternative recorded basis; they do not independently validate this premise.
 What the deletion changes is the
 reference label, and with it the
 words used for outcomes that did not change. Omitting public visibility re-labels
