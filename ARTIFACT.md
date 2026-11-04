@@ -5,18 +5,18 @@ and table in the paper** and to **re-run the experiments**. It is the companion
 to `reproduce.sh`.
 
 > Status (updated 2026-11-04): the artifact is **published**. The repository is
-> on GitHub, and this package is archived on Zenodo as version `artifact-v19`.
+> on GitHub, and this package is archived on Zenodo as version `artifact-v20`.
 > Cite the concept DOI `10.5281/zenodo.22859941`, which always resolves to the
 > newest version; the version DOI for this release is the one Zenodo prints on
 > the record page, and the earlier releases keep theirs (`artifact-v1` of
 > 2026-09-20 is `10.5281/zenodo.22859942`, `artifact-v18` is
 > `10.5281/zenodo.23942550`). A version DOI cannot be written into the package
 > it identifies, so this file names the concept DOI only. The manuscript this
-> package accompanies is frozen at tag `access-resubmission-v19`; the packaging
-> tag `artifact-v19` differs from it only in `.zenodo.json` and in this status
+> package accompanies is frozen at tag `access-resubmission-v20`; the packaging
+> tag `artifact-v20` differs from it only in `.zenodo.json` and in this status
 > block. Input/output
 > integrity: SHA-256 manifests over **25 raw records** (including the frozen
-> upstream source state) and **41 byte-reproducible outputs** plus one
+> upstream source state) and **40 byte-reproducible outputs** plus one
 > hand-written table that the pipeline verifies is unmodified, enforced at
 > pipeline entry by `reproduce.sh` step 0 (`make_manifests.py --check`). The
 > historical source-state facts of the native run are generated from
@@ -182,11 +182,11 @@ external services), then `python 04_绘图与分析/analysis/ingest_seeded.py`.
 ## 5. GitHub publication
 
 **Done.** The repository is published on GitHub and this package is archived on
-Zenodo as version `artifact-v19` (concept DOI `10.5281/zenodo.22859941`; the
+Zenodo as version `artifact-v20` (concept DOI `10.5281/zenodo.22859941`; the
 version DOI is printed on the record page). The record serves the package as
 four parts,
-`JISA-artifact-v19.zip.p001` through `.p004`; reassemble them with
-`cat JISA-artifact-v19.zip.p{001..004} > JISA-artifact-v19.zip` and check the
+`JISA-artifact-v20.zip.p001` through `.p004`; reassemble them with
+`cat JISA-artifact-v20.zip.p{001..004} > JISA-artifact-v20.zip` and check the
 SHA-256 given in the record description. The commit hash and the raw-records
 SHA-256 manifests (§1) are recorded in the manuscript's data-availability
 statement; refresh the manifests (`make_manifests.py`) and commit them together
