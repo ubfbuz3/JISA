@@ -4,7 +4,7 @@
   "description": "Reproducibility artifact accompanying the JISA submission. It contains (i) the raw experimental records --- the scenario/configuration study, a real-system cell study across Gitea 1.22.6, Gogs 0.14.3 and GitLab 17.11.7, a three-arm paired recrawl study on a pinned Gogs 0.14.3 instance, execution of the published relations on the native engine, and a seeded positive control; (ii) the analysis pipeline that recomputes every number, table and figure in the paper from those records, under both admissible rules for the *unknown* cells; and (iii) the LaTeX manuscript source. Running `bash reproduce.sh` regenerates all outputs and the PDF; `bash verify_artifact.sh` asserts SHA-256 integrity of every raw record and byte-reproducible output. No number in the paper is hand-typed; all figures are vector (no AI-generated pixels). This package corresponds to the revised manuscript archived as tag `access-resubmission-v18`.",
   "access_right": "open",
   "license": "cc-by-4.0",
-  "version": "artifact-v18",
+  "version": "artifact-v18.1",
   "creators": [
     {
       "name": "Lin, Qiulong",
@@ -25,7 +25,7 @@
     "specificity measurement",
     "reproducible research"
   ],
-  "notes": "Package built from tag `artifact-v18` of https://github.com/ubfbuz3/JISA. That tag's tree differs from the manuscript tag `access-resubmission-v18` only in this metadata file, so the archived code and manuscript PDF are the ones the paper refers to. The DOI minted by Zenodo should be cited in the paper's Data availability statement.",
+  "notes": "Package built from tag `artifact-v18.1` of https://github.com/ubfbuz3/JISA. That tag's tree differs from the manuscript tag `access-resubmission-v18` only in `.zenodo.json` and in `ARTIFACT.md` (whose status block now names this DOI, the packaging tag and the current manifest counts instead of the artefact-v1-era values), so the archived code and manuscript PDF are the ones the paper refers to. Review correspondence and internal tracking notes are deliberately not part of this package. The DOI minted by Zenodo should be cited in the paper's Data availability statement.",
   "related_identifiers": [
     {
       "identifier": "https://github.com/ubfbuz3/JISA/tree/access-resubmission-v18",
