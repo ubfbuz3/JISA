@@ -97,6 +97,13 @@ def m6_channels(d: dict) -> Counter:
     return Counter(r["channel"] for r in d["M6_provenance"])
 
 
+def channel_split(gogs: dict, cells: list[dict], pred) -> Counter:
+    """把满足 ``pred`` 的格子按 M6 记录的通道归类（机械查表，不猜）。"""
+    ch = {(r["cell"], r["subject"]): r["channel"] for r in gogs["M6_provenance"]}
+    return Counter(ch.get((c["object"], c["subject"]), "?")
+                   for c in cells if pred(c))
+
+
 def emit_macros(vals: dict) -> str:
     lines = [
         "% 由 analysis/ingest_gogs.py 自动生成 —— 勿手改",
@@ -132,6 +139,11 @@ def emit_macros(vals: dict) -> str:
         f"\\newcommand{{\\{PFX}FnSiteAdmin}}{{{vals['g_fn_ch'].get('implicit_site_admin', 0)}}}",
         f"\\newcommand{{\\{PFX}FnPublic}}{{{vals['g_fn_ch'].get('implicit_public', 0)}}}",
         f"\\newcommand{{\\{PFX}FnOob}}{{{vals['g_fn_ch'].get('out_of_band', 0)}}}",
+        f"\\newcommand{{\\{PFX}LiveMismatchPublic}}{{{vals['g_live_mm'].get('implicit_public', 0)}}}",
+        f"\\newcommand{{\\{PFX}LiveMismatchSiteAdmin}}{{{vals['g_live_mm'].get('implicit_site_admin', 0)}}}",
+        f"\\newcommand{{\\{PFX}LiveMismatchOther}}{{{vals['g_live_mm_other']}}}",
+        f"\\newcommand{{\\{PFX}LiveFpPublic}}{{{vals['g_live_fp']['implicit_public']}}}",
+        f"\\newcommand{{\\{PFX}LiveFpOther}}{{{vals['g_live_fp_other']}}}",
         "",
         "% ---- Gitea 1.22.6 侧（同协议、同模式表口径）----",
         f"\\newcommand{{\\{TPFX}RoutePaths}}{{{vals['t_route_paths']}}}",
@@ -155,72 +167,6 @@ def emit_macros(vals: dict) -> str:
     return "\n".join(lines)
 
 
-def emit_cross_table(vals: dict) -> str:
-    """跨厂商对照表（snapshot 读法 = MST-wi 的操作点；live 附于括号）。"""
-    g, l = vals["g_snap"], vals["g_live"]
-    t, tl = vals["t_snap"], vals["t_live"]
-
-    def pair(tv, tlv, gv, glv):
-        """返回 (Gitea 格, Gogs 格)；live 值缺省时不加括号。"""
-        def cell(v, lv):
-            return f"{v} ({lv})" if lv != "" else str(v)
-        return cell(tv, tlv), cell(gv, glv)
-
-    rows = [
-        ("API paths in pinned version (M1 denominator)",
-         pair(vals["t_route_paths"], "", vals["g_route_paths"], "")),
-        ("Grant endpoints (M1)",
-         pair(vals["t_grant_endpoints"], "", vals["g_grant_endpoints"], "")),
-        ("\\;of which usable without site admin",
-         pair(vals["t_grant_no_admin"], "", vals["g_grant_no_admin"], "")),
-        ("Owner-vantage oracle readable",
-         pair(t["oracle_readable"], "", g["oracle_readable"], "")),
-        ("\\;oracle agrees with actual access",
-         pair(t["oracle_agree"], "", g["oracle_agree"], "")),
-        ("\\;oracle wrong (false negatives)",
-         pair(t["oracle_fn"], "", g["oracle_fn"], "")),
-        ("Subject-vantage oracle readable",
-         pair(t["self_readable"], "", g["self_readable"], "")),
-        ("Reachability mismatch, snapshot (live)",
-         pair(t["mismatch"], tl["mismatch"], g["mismatch"], l["mismatch"])),
-        ("False proofs: bookkeeping alarm, snapshot (live)",
-         pair(t["fp_mr_bookkeeping"], tl["fp_mr_bookkeeping"],
-              g["fp_mr_bookkeeping"], l["fp_mr_bookkeeping"])),
-        ("False proofs: v3 (oracle-gated), snapshot (live)",
-         pair(t["fp_v3"], tl["fp_v3"], g["fp_v3"], l["fp_v3"])),
-        ("False proofs: direct-only (oracle only)",
-         pair(t["fp_direct_only"], tl["fp_direct_only"],
-              g["fp_direct_only"], l["fp_direct_only"])),
-        ("False proofs: direct-observe (oracle $\\wedge$ request)",
-         pair(t["fp_direct_observe"], tl["fp_direct_observe"],
-              g["fp_direct_observe"], l["fp_direct_observe"])),
-    ]
-    body = "\n".join(f"{name} & {tv} & {gv} \\\\"
-                     for name, (tv, gv) in rows)
-    tex = r"""% 由 analysis/ingest_gogs.py 自动生成 —— 勿手改
-% 双栏排版下本表列宽超出单栏 ⇒ 用 table* 跨栏（全宽）。
-\begin{table*}[t]
-\centering
-\small
-\caption{Cross-vendor replication under the identical three-phase protocol
-(crawl, out-of-band authorization change, adjudicate) on Gitea
-\ResRsVersion{} and Gogs \GgVersion{}. Counts are per reading of the same
-\ResRsCellsSnapshot{}-cell grid; the live reading is given in parentheses
-where both exist. The snapshot reading is the operating point of the
-published relations.}
-\label{tab:gogs-cross}
-\begin{tabular}{@{}lcc@{}}
-\toprule
- & Gitea \ResRsVersion{} & Gogs \GgVersion{} \\
-\midrule
-""" + body + r"""
-\bottomrule
-\end{tabular}
-\end{table*}
-"""
-    return tex
-
-
 def main() -> None:
     gogs = json.loads(GOGS_JSON.read_text(encoding="utf-8"))
     gitea = json.loads(GITEA_JSON.read_text(encoding="utf-8"))
@@ -239,6 +185,12 @@ def main() -> None:
                 and says_none(c, "introspection")]
     g_fn_ch = oracle_fn_channels(gogs, fn_cells)
 
+    # live 读法下残差与假确证的通道归因（供正文/related work 直接引宏）
+    live_cells = [c for c in g_cells if c["reading"] == "live"]
+    g_live_mm = channel_split(gogs, live_cells,
+                              lambda c: c["cannotReachThroughGUI"] and c["authorized"])
+    g_live_fp = channel_split(gogs, live_cells, lambda c: c["false_proofs"]["v3"])
+
     m1g = gogs["M1_grant_mechanism_census"]
     vals = {
         "gogs_version": gogs["meta"]["gogs_version"],
@@ -252,6 +204,12 @@ def main() -> None:
         "g_wrong_pct": round(100.0 * g_snap["oracle_fn"] / g_snap["oracle_readable"], 1)
                         if g_snap["oracle_readable"] else 0.0,
         "g_fn_ch": dict(g_fn_ch),
+        "g_live_mm": dict(g_live_mm),
+        "g_live_mm_other": sum(v for k, v in g_live_mm.items()
+                               if k not in ("implicit_public", "implicit_site_admin")),
+        "g_live_fp": dict(g_live_fp),
+        "g_live_fp_other": sum(v for k, v in g_live_fp.items()
+                               if k != "implicit_public"),
         "g_m6": dict(m6_channels(gogs)),
         "t_route_paths": gitea_m1["meta"]["swagger_paths_total"],
         "t_grant_endpoints": gitea_m1["grant_endpoints_total"],
@@ -262,14 +220,23 @@ def main() -> None:
 
     OUT.mkdir(parents=True, exist_ok=True)
     macros = OUT / "gogs_numbers.tex"
-    table = OUT / "gogs_cross_table.tex"
     macros.write_text(emit_macros(vals), encoding="utf-8")
-    table.write_text(emit_cross_table(vals), encoding="utf-8")
+
+    # 注意：`gogs_cross_table.tex`（Table 16）**只由 ingest_gitlab.py 产出**——它
+    # 把 gitea/gogs/gitlab 三列合并。本脚本早期版本也写同名文件（两列版），一旦在
+    # ingest_gitlab.py 之后运行，就会把 GitLab 列静默冲掉（2026-11-04 实际发生）。
+    # 因此这里只核验、不写：文件存在却缺 GitLab 列时直接报错，而不是悄悄覆盖。
+    cross = OUT / "gogs_cross_table.tex"
+    if cross.is_file():
+        body = cross.read_text(encoding="utf-8")
+        assert "GitLab" in body, (
+            "gogs_cross_table.tex 缺少 GitLab 列（两列中间版残留）——"
+            "请按 build.sh 的顺序，在 ingest_gogs.py 之后运行 ingest_gitlab.py")
 
     # ---- 人读小结 ----
     print("[ingest_gogs] 数字已生成:")
     print("  ", macros)
-    print("  ", table)
+    print(f"   （Table 16 三系统对照表由 ingest_gitlab.py 生成：{cross.name}）")
     print()
     print(f"Gogs {vals['gogs_version']}: 路由路径 {vals['g_route_paths']}, "
           f"授予端点 {vals['g_grant_endpoints']}（非站点管理员 "
@@ -296,6 +263,21 @@ def main() -> None:
     print()
     print(f"M6 通道: Gogs {vals['g_m6']}")
     print(f"         Gitea {vals['t_m6']}")
+    print(f"live 残差通道: {dict(g_live_mm)}；live v3 假确证通道: {dict(g_live_fp)}")
+
+    # ---- 一致性哨兵：live 残差/假确证的通道归因必须闭合 ----
+    # 正文与 Section IX 按通道点名"残留只在公开可见性与站点管理员两处"，
+    # 一旦归因不闭合（出现 '?' 或 third channel），那句话就不成立。
+    assert sum(g_live_mm.values()) == g_live["mismatch"], \
+        f"live 残差通道求和 {sum(g_live_mm.values())} != {g_live['mismatch']}"
+    assert "?" not in g_live_mm and "?" not in g_live_fp, \
+        f"有格子未能归入 M6 通道: {dict(g_live_mm)} / {dict(g_live_fp)}"
+    assert vals["g_live_mm_other"] == 0, \
+        f"live 残差出现在公开/站点管理员之外的通道: {dict(g_live_mm)}"
+    assert vals["g_live_fp_other"] == 0 and "implicit_public" in g_live_fp, \
+        f"live 假确证不只在公开可见性通道: {dict(g_live_fp)}"
+    assert sum(g_live_fp.values()) == g_live["fp_v3"], \
+        f"live v3 假确证通道求和 {sum(g_live_fp.values())} != {g_live['fp_v3']}"
 
     # 一致性哨兵：v3 假确证必须全部落在 oracle 假阴性的触发格上
     v3_fp = g_snap["fp_v3"]

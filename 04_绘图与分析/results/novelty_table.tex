@@ -30,7 +30,8 @@ An alarm is a violation
 & The promotion policy is stated as a parameter, and four policies are quantified on
 the same alarms, separating the technique's output from the adjudication layered on
 it (Table~\ref{tab:promotion})
-& A policy under which the false-proof count is invariant
+& Two admissible promotion policies that return the same verdict on every recorded
+alarm, so that the choice of policy never moves a claim
 \\
 The metamorphic step adds adjudication value once an oracle is readable
 & Not posed; oracle-free detection is the design premise
@@ -46,8 +47,8 @@ inputs~\cite{Chaleshtari2022Metamorphic}. \emph{Known to be a corpus statistic.}
 & The denominator argument: a class the crawl never reached contributes no negative
 input, so the figure is silent about that class by construction
 (Proposition~\ref{prop:resolution})
-& A scenario-unit specificity that separates the configurations this input-unit figure
-cannot
+& A failure confined to a class the crawl never enumerated that nevertheless moves
+the reported input-unit specificity
 \\
 \bottomrule
 \end{tabular}

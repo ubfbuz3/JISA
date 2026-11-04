@@ -62,11 +62,14 @@ misreport only when the grant is one the surface would have shown on a second
 reading: across the two products a same-credential recrawl removes
 \TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs, leaving
 \TmpBothLiveFP{} live ones. When the grant arrived through a channel the
-surface never exposes, no re-reading of that surface repairs it---on Gogs
-\GgMismatchLive{} of \GgMismatchSnap{} mismatching cells and \GgFpVthreeLive{}
-of \GgFpVthree{} surface-gated false proofs persist under live reading, all on
-public-visibility or team-derived grants that never enter a subject's personal
-crawl. Staleness is repairable and channel blindness is not, and the two call
+subject's own crawl does not enumerate, re-reading that crawl does not repair
+it: on Gogs \GgMismatchLive{} of \GgMismatchSnap{} mismatching cells persist
+under the live reading---\GgLiveMismatchPublic{} on public visibility and
+\GgLiveMismatchSiteAdmin{} on the site-administrator vantage---and every one of
+the \GgFpVthreeLive{} surviving surface-gated false proofs rests on public
+visibility. Team-derived and collaborator grants are repaired on this product,
+because its own repository list resolves inheritance. Staleness is repairable
+and channel blindness is not, and the two call
 for different remedies. Second, once a readable,
 sound oracle is supplied, the promoted verdict is a subset of direct adjudication
 on the evaluated domain, so the metamorphic step adds no confirmation there

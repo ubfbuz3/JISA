@@ -274,8 +274,8 @@ A channel-by-channel view makes the mechanism explicit
 exactly one channel, and the rows sum to the cell count, so no cell is counted
 twice; the grouping is by the strongest channel that grants it, not a
 multi-label count. The same decomposition is available for Gogs
-(Table~\ref{tab:gogs-channel}), and the reason an earlier draft omitted it is
-worth recording, because it is a category error rather than a data limitation:
+(Table~\ref{tab:gogs-channel}); the reason it looks unavailable there is a
+category error rather than a data limitation:
 a channel label is a property of the entitlement ledger---built from the lab
 topology, the documented inheritance rules and the recorded out-of-band grant
 events, never from a probe response---so a product whose API exposes no
@@ -332,8 +332,11 @@ cell's conclusion does not apply and the observation has to be repeated, and we
 do not claim that the harness would detect the interleaving. Second,
 \TmpBothStillMiss{} residual is
 a count on these surfaces, not a completeness claim: the crawl sources
-themselves define what can be seen, deploy keys are outside the ledger, and we
-did not construct a channel that the recrawl is known to miss. Third, $hv$ is a
+themselves define what can be seen, deploy keys are outside the ledger, and none
+of the \TmpBothPolicyEvents{} transitions reported here commits a grant through a
+channel the recrawl is known to miss. That last clause is a scope statement about
+this sample, not about recrawling in general: the paired run below constructs such
+a channel deliberately, on one instance. Third, $hv$ is a
 harness-maintained logical version, not an atomic server snapshot; the harness is
 single-threaded and no concurrent writer ran, which is what makes the still
 window meaningful. Fourth, the eight transitions are a designed set, not a
@@ -350,18 +353,19 @@ causes. \emph{Staleness}: the grant is visible through the subject's own
 interface, was made after the snapshot was frozen, and a fresh crawl with the same
 credential lists it again. That is what Table~\ref{tab:temporal} measures, where
 \TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs disappear on recrawl and
-\TmpBothStillMiss{} resist. \emph{Coverage}: the grant is real and enforced, but no
-reading of the subject's own surface exposes it, because the view that would show
-it belongs to another subject or to an administrative interface---a
-public-visibility flag, a site-administration privilege, or a team-derived grant on
-a surface that does not resolve inheritance.
+\TmpBothStillMiss{} resist. \emph{Coverage}: the grant is real and enforced, but the enumeration the crawl
+runs does not return the object, because the view that would return it belongs to
+another subject or to an administrative interface---a public-visibility listing the
+subject's own repository list does not contain, a site-administration privilege, or
+a team-derived grant on a surface that does not resolve inheritance.
 Recrawling cannot repair a channel the crawl has no way to enumerate, and the
 cross-vendor run locates the residue: on Gogs \GgMismatchLive{} of
-\GgMismatchSnap{} mismatching cells survive the live reading, and so do
-\GgFpBookkeepingLive{} of \GgFpBookkeeping{} bookkeeping false proofs, all of them
-on public visibility or the site-administrator vantage and none on a team-derived
-or collaborator grant---this product resolves team inheritance in the subject's own
-list, so those channels are repaired. The live reading removes the staleness term
+\GgMismatchSnap{} mismatching cells survive the live reading---\GgLiveMismatchPublic{}
+on public visibility and \GgLiveMismatchSiteAdmin{} on the site-administrator
+vantage---and \GgFpBookkeepingLive{} of \GgFpBookkeeping{} bookkeeping false proofs
+survive, all \GgLiveFpPublic{} of them on public visibility. No team-derived or
+collaborator grant survives, because this product resolves team inheritance in the
+subject's own list. The live reading removes the staleness term
 and leaves the coverage term; where the same channels are represented in the
 subject's crawl, as on Gitea and GitLab, the live reading reaches zero.
 
@@ -372,11 +376,22 @@ team-derived, public repository (\RfArms{} arms, \RfSnapAlarms{} alarms). The
 recrawl repaired \RfRepaired{}: the collaborator and team objects appear in the
 subject's list on the second pass. It left \RfPersisting{}: the public repository,
 readable in the same probe as the other two (status 200 on the repository and on a file read)
-but never named by any traversal of the subject's surface. A query by that
-repository's name does return it (\RfNameFound{} hit), so what a recrawl misses is
-what its traversal never names, not what the system conceals. One asymmetry: Gogs exposes no
-visibility-flip route, so that object was created public rather than converted, and
-is new to the snapshot.
+but not returned by the enumeration the recrawl runs---the subject's own repository
+list, the organisation list, and the first page of an unfiltered search. A query
+that names that repository does return it (\RfNameFound{} hit), so the boundary is
+the enumeration's page and filter rather than the system's visibility rules: the
+object is reachable by a named lookup and invisible to a browsing one.
+
+The arms are not a strictly single-variable contrast, and the departure is part of
+the result rather than a detail. Two of the three objects are user repositories and
+one is an organisation repository; more consequentially, Gogs exposes no
+visibility-flip route, so the public object was created public after the snapshot
+instead of being converted, which makes it new to the snapshot for two reasons at
+once---it postdates the crawl, and the crawl does not enumerate that channel. What
+the arm still establishes does not depend on separating those two: the object
+exists before the recrawl, is readable throughout it, and the recrawl still does not
+return it, whereas both stale arms were repaired on the same pass.
+
 Two cautions follow. The repair count is conditioned on the transitions committed,
 which the three arms make concrete---\RfRepaired{} repairs out of \RfArms{}---and
 the temporal sample and the cross-vendor sample are not paired observations of the

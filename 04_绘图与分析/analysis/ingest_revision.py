@@ -104,6 +104,7 @@ def caliber_block(cells: list[dict]) -> dict:
     imp_tp = sum(1 for c in imp_alarms if truth(c) == "violation")
     imp_fp = sum(1 for c in imp_alarms if truth(c) != "violation")
     imp_tn = imp_neg - imp_fp
+    imp_fn = imp_pos - imp_tp
 
     # ---- literal caliber: modelled-no-channel -> E unknown, dropped ----
     lit_known = [c for c in cells
@@ -116,6 +117,7 @@ def caliber_block(cells: list[dict]) -> dict:
     lit_tp = sum(1 for c in lit_alarms if truth(c) == "violation")
     lit_fp = sum(1 for c in lit_alarms if truth(c) != "violation")
     lit_tn = lit_neg - lit_fp
+    lit_fn = lit_pos - lit_tp
 
     def spec(tn: int, fp: int) -> float | None:
         return None if tn + fp == 0 else 100.0 * tn / (tn + fp)
@@ -129,12 +131,12 @@ def caliber_block(cells: list[dict]) -> dict:
 
     return {
         "ImpN": imp_n, "ImpPos": imp_pos, "ImpNeg": imp_neg,
-        "ImpTp": imp_tp, "ImpFp": imp_fp, "ImpTn": imp_tn,
+        "ImpTp": imp_tp, "ImpFp": imp_fp, "ImpTn": imp_tn, "ImpFn": imp_fn,
         "ImpSpec": spec(imp_tn, imp_fp), "ImpPrec": prec(imp_tp, imp_fp),
         "ImpShare": share(imp_fp, imp_n),
         "LitKnown": len(lit_known), "LitUnk": lit_unk,
         "LitPos": lit_pos, "LitNeg": lit_neg,
-        "LitTp": lit_tp, "LitFp": lit_fp, "LitTn": lit_tn,
+        "LitTp": lit_tp, "LitFp": lit_fp, "LitTn": lit_tn, "LitFn": lit_fn,
         "LitSpec": spec(lit_tn, lit_fp), "LitPrec": prec(lit_tp, lit_fp),
         "LitShare": share(lit_fp, len(lit_known)),
         "LitCov": 100.0 * len(lit_known) / len(cells) if cells else None,
@@ -402,8 +404,8 @@ def main() -> None:
         r"\begin{table*}[t]",
         r"\centering",
         r"\caption{The \TmpBothCells{} committed cells scored under the two "
-        r"\emph{unknown} rules, with "
-        r"the confusion matrix spelled out. A positive is a violation (ledger deny, "
+        r"\emph{unknown} rules, with all four entries of the confusion matrix given "
+        r"(TP, FP, TN, FN). A positive is a violation (ledger deny, "
         r"effect allow) and a negative is every other cell; in these runs $E=Y$ on "
         r"every cell, so the design contains no positive and recall has no "
         r"denominator (marked N/A, not 0). Specificity and precision are therefore "
@@ -412,29 +414,36 @@ def main() -> None:
         r"does.}",
         r"\label{tab:caliber}",
         r"\small",
-        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrr@{}}",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrr@{}}",
         r"\toprule",
-        r" & & \multicolumn{3}{c}{cell population} & \multicolumn{2}{c}{claims} "
+        r" & & \multicolumn{3}{c}{cell population} "
+        r"& \multicolumn{4}{c}{confusion matrix} "
         r"& \multicolumn{2}{c}{rates (\%)} \\",
-        r"\cmidrule(lr){3-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}",
-        r"caliber & product & scorable & negatives & $E$ unknown & false "
-        r"& true & spec. & prec. \\",
+        r"\cmidrule(lr){3-5}\cmidrule(lr){6-9}\cmidrule(lr){10-11}",
+        r"caliber & product & scorable & negatives & $E$ unknown "
+        r"& TP & FP & TN & FN & spec. & prec. \\",
         r"\midrule",
         f"default deny & Gitea & \\CalGtImpN & \\CalGtImpNeg & 0 & "
-        f"\\CalGtImpFp & \\CalGtImpTp & \\CalGtImpSpec & \\CalGtImpPrec \\\\",
+        f"\\CalGtImpTp & \\CalGtImpFp & \\CalGtImpTn & \\CalGtImpFn "
+        f"& \\CalGtImpSpec & \\CalGtImpPrec \\\\",
         f"default deny & GitLab & \\CalGlImpN & \\CalGlImpNeg & 0 & "
-        f"\\CalGlImpFp & \\CalGlImpTp & \\CalGlImpSpec & \\CalGlImpPrec \\\\",
-        f"\\;\\emph{{pooled}} & & \\CalImpN & \\CalImpNeg & 0 & \\CalImpFp & "
-        f"\\CalImpTp & \\CalImpSpec & \\CalImpPrec \\\\",
+        f"\\CalGlImpTp & \\CalGlImpFp & \\CalGlImpTn & \\CalGlImpFn "
+        f"& \\CalGlImpSpec & \\CalGlImpPrec \\\\",
+        f"\\;\\emph{{pooled}} & & \\CalImpN & \\CalImpNeg & 0 "
+        f"& \\CalImpTp & \\CalImpFp & \\CalImpTn & \\CalImpFn "
+        f"& \\CalImpSpec & \\CalImpPrec \\\\",
         r"\midrule",
         f"literal & Gitea & \\CalGtLitKnown & \\CalGtLitNeg & \\CalGtLitUnk & "
-        f"\\CalGtLitFp & \\CalGtLitTp & \\CalGtLitSpec & \\CalGtLitPrec \\\\",
+        f"\\CalGtLitTp & \\CalGtLitFp & \\CalGtLitTn & \\CalGtLitFn "
+        f"& \\CalGtLitSpec & \\CalGtLitPrec \\\\",
         f"literal & GitLab & \\CalGlLitKnown & \\CalGlLitNeg & \\CalGlLitUnk & "
-        f"\\CalGlLitFp & \\CalGlLitTp & \\CalGlLitSpec & \\CalGlLitPrec \\\\",
+        f"\\CalGlLitTp & \\CalGlLitFp & \\CalGlLitTn & \\CalGlLitFn "
+        f"& \\CalGlLitSpec & \\CalGlLitPrec \\\\",
         f"\\;\\emph{{pooled}} & & \\CalLitKnown & \\CalLitNeg & \\CalLitUnk & "
-        f"\\CalLitFp & \\CalLitTp & \\CalLitSpec & \\CalLitPrec \\\\",
+        f"\\CalLitTp & \\CalLitFp & \\CalLitTn & \\CalLitFn "
+        f"& \\CalLitSpec & \\CalLitPrec \\\\",
         r"\midrule",
-        r"\multicolumn{9}{l}{recall: N/A in both calibers ($0$ positives in the "
+        r"\multicolumn{11}{l}{recall: N/A in both calibers ($0$ positives in the "
         r"design; the temporal grid measures the false-proof face only)} \\",
         r"\bottomrule",
         r"\end{tabular*}",

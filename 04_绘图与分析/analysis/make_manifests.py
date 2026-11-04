@@ -104,15 +104,23 @@ def build(group: str, rel_paths) -> dict:
 
 
 def _generated_outputs():
+    """(可重算产物, 手写表) 两个列表。
+
+    首行含"手写"的表（如 novelty_table.tex）**不是**生成器产物：把它算进
+    "可重算"会让 repro 永远报 missing，若直接排除又丢掉完整性校验。故单列
+    ``handwritten``：仍进清单做哈希核对，但 repro 不重算、只要求未被改动。
+    """
     res = ROOT / "04_绘图与分析" / "results"
-    files = []
+    files, hand = [], []
     for p in sorted(res.glob("*.tex")):
         head = p.read_text(encoding="utf-8", errors="replace").splitlines()[:1]
-        if not head or not ("生成" in head[0] or "来源" in head[0]):
+        if not head or not ("生成" in head[0] or "来源" in head[0]
+                            or "手写" in head[0]):
             sys.exit(f"[make_manifests] {p.name} has no generator header; "
                      "refusing to certify an unclassified file")
-        files.append(str(p.relative_to(ROOT)))
-    return files + EXTRA_OUTPUTS
+        rel = str(p.relative_to(ROOT))
+        (hand if "手写" in head[0] else files).append(rel)
+    return files + EXTRA_OUTPUTS, hand
 
 
 def main() -> None:
@@ -121,8 +129,9 @@ def main() -> None:
         # reproduce.sh 在任何生成器运行之前先调用本模式，保证"改了输入
         # 就跑生成器"在流水线入口即被拒绝，而不是事后由 verify 抓住。
         bad = []
+        gen, hand = _generated_outputs()
         for prov, rels in (("RAW_RECORDS_SHA256.json", RAW_INPUTS),
-                           ("OUTPUTS_SHA256.json", _generated_outputs())):
+                           ("OUTPUTS_SHA256.json", gen + hand)):
             doc = json.loads((PROV / prov).read_text(encoding="utf-8"))
             have = {f["path"]: f["sha256"] for f in doc["files"]}
             for rel in rels:
@@ -143,7 +152,9 @@ def main() -> None:
               "committed manifests")
         return
     raw = build("raw", RAW_INPUTS)
-    out = build("output", _generated_outputs())
+    gen, hand = _generated_outputs()
+    out = build("output", gen + hand)
+    out["handwritten"] = hand     # repro 不重算这几张表，只要求"未被改动"
     (PROV / "RAW_RECORDS_SHA256.json").write_text(
         json.dumps(raw, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (PROV / "OUTPUTS_SHA256.json").write_text(

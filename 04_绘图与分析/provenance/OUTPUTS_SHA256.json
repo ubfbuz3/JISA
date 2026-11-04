@@ -83,8 +83,8 @@
     },
     {
       "path": "04_绘图与分析\\results\\gogs_numbers.tex",
-      "sha256": "1097f9f6b08a1a7a5a4d6f673c733c73fb7b19bf89ad7f857e89b9b868156752",
-      "bytes": 1755
+      "sha256": "e7ebc11b98605d3fa616e47da97fe924611122a50ed2e7ced4e8fedf7c24d200",
+      "bytes": 1939
     },
     {
       "path": "04_绘图与分析\\results\\m2_stratum.tex",
@@ -122,9 +122,39 @@
       "bytes": 17615
     },
     {
+      "path": "04_绘图与分析\\results\\r15_pair_numbers.tex",
+      "sha256": "0c11a1fc092eeacda6425aaf04767d04cf0b6f846b6d4769c93925e106b81a76",
+      "bytes": 309
+    },
+    {
       "path": "04_绘图与分析\\results\\reconcile_table.tex",
       "sha256": "0427ef089569ab8b9fc3e2d4491928f649c4cd589d8c1c601afd12daea9c0ada",
       "bytes": 1226
+    },
+    {
+      "path": "04_绘图与分析\\results\\revision_caliber_numbers.tex",
+      "sha256": "6cd79044a4e50e33b1d867f94c78270ec89c1a1676055d80fcc3f2cefd3adf9e",
+      "bytes": 2105
+    },
+    {
+      "path": "04_绘图与分析\\results\\revision_caliber_table.tex",
+      "sha256": "a869f9e68f648b8c2ea2f2dab4cab3c4fc6b313369cc7f57bd2dffcf8a801950",
+      "bytes": 2092
+    },
+    {
+      "path": "04_绘图与分析\\results\\revision_ledger_table.tex",
+      "sha256": "057e393752ddbd1acd9d419c825cd16fbdfe6820f753018223e8efb8693eab70",
+      "bytes": 1468
+    },
+    {
+      "path": "04_绘图与分析\\results\\revision_policy_numbers.tex",
+      "sha256": "e638efa488f3331f8f002b662f9d7369062ce44abc5a65ddc32315ea93da9943",
+      "bytes": 3093
+    },
+    {
+      "path": "04_绘图与分析\\results\\revision_policy_table.tex",
+      "sha256": "d6f4d0c77fe07c419b58bff4889a3f48d0d59562b0700b5d143a81d4249c4644",
+      "bytes": 1298
     },
     {
       "path": "04_绘图与分析\\results\\seeded_table.tex",
@@ -143,13 +173,13 @@
     },
     {
       "path": "04_绘图与分析\\results\\temporal_sensitivity_table.tex",
-      "sha256": "54381719b264c96eda4d55a21d57a47abe166d7044854bea542bddc3d4692738",
-      "bytes": 1318
+      "sha256": "7a6306f8df56a3b540115f6f9f57180b377aebf34a540fa3db0d6bc96bdef703",
+      "bytes": 1431
     },
     {
       "path": "04_绘图与分析\\results\\temporal_table.tex",
-      "sha256": "44e0f0d800b22e091e4ab17aa151b12efd1c7a4d501522b6ef0ea42dedd2ba93",
-      "bytes": 1439
+      "sha256": "bb2ae419dcf22e8e17fa4cba9eed16be63552745972cf00a6e7bff77a1fe305d",
+      "bytes": 1432
     },
     {
       "path": "04_绘图与分析\\results\\truth_numbers.tex",
@@ -175,6 +205,14 @@
       "path": "04_绘图与分析/figures/fig7_boundaries.pdf",
       "sha256": "724769316ec395812533f30032e0940c5008ce049b47170ded9efc9a374831c6",
       "bytes": 2477
+    },
+    {
+      "path": "04_绘图与分析\\results\\novelty_table.tex",
+      "sha256": "e9f77743cb9b6bb282d8f12afce0e1834206a6906b990a2f857bd2a34440f057",
+      "bytes": 2808
     }
+  ],
+  "handwritten": [
+    "04_绘图与分析\\results\\novelty_table.tex"
   ]
 }

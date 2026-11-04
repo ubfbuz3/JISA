@@ -164,17 +164,25 @@ PY
 
   # 4. response-letter numbers ---------------------------------------
   # 回信前言承诺每个承重数字都对着制品核过；这一步在本地树上重跑那个核对。
+  # 核对对象必须**跟着轮次走**：54021 这轮的信在 08_投稿_v13_54021/，由
+  # check_letter_numbers_54021.py 负责；只有该轮没有核对脚本时才回落到首轮那份，
+  # 否则会出现"报 PASS 但核的是另一封信"的假保证。
   echo
   echo "[4/4] Response-letter numbers vs generator output"
-  local letter_dir="$ROOT/03_论文撰写/response_to_reviewers"
-  if [ -f "$letter_dir/check_letter_numbers.py" ]; then
-    if ( cd "$letter_dir" && "$PYBIN" check_letter_numbers.py ); then
-      pass_line "response letter: every load-bearing number matches the generator"
+  local letter_dir="$ROOT/08_投稿_v13_54021"
+  local letter_chk="check_letter_numbers_54021.py"
+  if [ ! -f "$letter_dir/$letter_chk" ]; then
+    letter_dir="$ROOT/03_论文撰写/response_to_reviewers"
+    letter_chk="check_letter_numbers.py"
+  fi
+  if [ -f "$letter_dir/$letter_chk" ]; then
+    if ( cd "$letter_dir" && "$PYBIN" "$letter_chk" ); then
+      pass_line "response letter ($letter_chk): every load-bearing number matches the generator"
     else
-      fail_line "check_letter_numbers.py: letter numbers drifted from the generator"
+      fail_line "$letter_chk: letter numbers drifted from the generator"
     fi
   else
-    fail_line "missing: 03_论文撰写/response_to_reviewers/check_letter_numbers.py"
+    fail_line "missing: response-letter checker ($letter_chk)"
   fi
 
   # working-tree status (informational)
@@ -246,12 +254,15 @@ do_repro() {
 import sys, json, os
 mf, tmp = sys.argv[1], sys.argv[2]
 data = json.load(open(mf, encoding="utf-8"))
+hand = set(data.get("handwritten", []))
 n = 0
 for f in data["files"]:
+    if f["path"] in hand:      # 手写表不重算，保留原件参与"未被改动"核对
+        continue
     p = os.path.join(tmp, f["path"])
     if os.path.isfile(p):
         os.remove(p); n += 1
-print(f"  removed {n} staged output file(s)")
+print(f"  removed {n} staged output file(s); kept {len(hand)} hand-written")
 PY
 
   echo "  [run] analysis pipeline inside the temp copy ..."
@@ -282,6 +293,8 @@ PY
   run_step ingest_baseline.py          ingest_baseline.py
   run_step ingest_budget.py            ingest_budget.py
   run_step ingest_multiclass.py        ingest_multiclass.py
+  run_step ingest_revision.py          ingest_revision.py
+  run_step ingest_r15_pair.py          ingest_r15_pair.py
   if ! "$PYBIN" make_diagrams.py >/dev/null 2>&1; then
     echo "  [WARN] make_diagrams.py (figures) exited non-zero"
   fi
@@ -295,32 +308,40 @@ PY
   echo "  [cmp] regenerated outputs vs provenance/OUTPUTS_SHA256.json"
   bad=0
   # 回信数字必须在**重新生成后的**宏上再核一次（承诺的是"对着制品核过"）
-  if [ -f "$TMP/03_论文撰写/response_to_reviewers/check_letter_numbers.py" ]; then
-    if ( cd "$TMP/03_论文撰写/response_to_reviewers" && "$PYBIN" check_letter_numbers.py ); then
+  letter_dir="$TMP/08_投稿_v13_54021"
+  letter_chk="check_letter_numbers_54021.py"
+  if [ ! -f "$letter_dir/$letter_chk" ]; then
+    letter_dir="$TMP/03_论文撰写/response_to_reviewers"
+    letter_chk="check_letter_numbers.py"
+  fi
+  if [ -f "$letter_dir/$letter_chk" ]; then
+    if ( cd "$letter_dir" && "$PYBIN" "$letter_chk" ); then
       echo "  [PASS] response letter numbers match the regenerated generator output"
     else
-      echo "  [FAIL] check_letter_numbers.py (letter numbers drifted after regeneration)"
+      echo "  [FAIL] $letter_chk (letter numbers drifted after regeneration)"
       bad=$((bad+1))
     fi
   else
-    echo "  [FAIL] missing check_letter_numbers.py in the staged tree"
+    echo "  [FAIL] missing response-letter checker ($letter_chk) in the staged tree"
     bad=$((bad+1))
   fi
   rows="$("$PYBIN" - "$(winpath "$OUT_MANIFEST")" "$(winpath "$TMP")" "$(winpath "$ROOT")" <<'PY'
 import sys, json, os, hashlib
 mf, tmp, root = sys.argv[1], sys.argv[2], sys.argv[3]
 data = json.load(open(mf, encoding="utf-8"))
+hand = set(data.get("handwritten", []))
 for f in data["files"]:
     p = os.path.join(tmp, f["path"])
+    tag = "unchanged (hand-written): " if f["path"] in hand else ""
     if not os.path.isfile(p):
         print("FAIL|missing after regen: " + f["path"]); continue
     h = hashlib.sha256()
     with open(p, "rb") as fh:
         for b in iter(lambda: fh.read(1<<20), b""): h.update(b)
     if h.hexdigest() == f["sha256"]:
-        print("PASS|byte-identical: " + f["path"])
+        print("PASS|byte-identical: " + tag + f["path"])
     else:
-        print("FAIL|drift: " + f["path"])
+        print("FAIL|drift: " + tag + f["path"])
 PY
 )"
   while IFS='|' read -r st msg; do
@@ -349,6 +370,6 @@ case "${1:-check}" in
   repro|--repro|regen)  do_repro ;;
   gen-manifest|--gen-manifest)
     echo "[gen] regenerating manifests ..."
-    "$PYBIN" "$ANA/make_manifests.py" ;;
+    "$PYBIN" "$(winpath "$ANA/make_manifests.py")" ;;
   *) echo "usage: bash verify_artifact.sh [check|repro|gen-manifest]"; exit 2 ;;
 esac
