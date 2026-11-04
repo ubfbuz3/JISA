@@ -5,12 +5,16 @@ and table in the paper** and to **re-run the experiments**. It is the companion
 to `reproduce.sh`.
 
 > Status (updated 2026-11-04): the artifact is **published**. The repository is
-> on GitHub, and this package is archived on Zenodo as version `artifact-v18`,
-> DOI `10.5281/zenodo.23942550` (concept DOI `10.5281/zenodo.22859941`, which
-> always resolves to the newest version; the first release `artifact-v1` of
-> 2026-09-20 keeps its own DOI `10.5281/zenodo.22859942`). The manuscript this
-> package accompanies is frozen at tag `access-resubmission-v18`; the packaging
-> tag `artifact-v18` differs from it only in `.zenodo.json`. Input/output
+> on GitHub, and this package is archived on Zenodo as version `artifact-v19`.
+> Cite the concept DOI `10.5281/zenodo.22859941`, which always resolves to the
+> newest version; the version DOI for this release is the one Zenodo prints on
+> the record page, and the earlier releases keep theirs (`artifact-v1` of
+> 2026-09-20 is `10.5281/zenodo.22859942`, `artifact-v18` is
+> `10.5281/zenodo.23942550`). A version DOI cannot be written into the package
+> it identifies, so this file names the concept DOI only. The manuscript this
+> package accompanies is frozen at tag `access-resubmission-v19`; the packaging
+> tag `artifact-v19` differs from it only in `.zenodo.json` and in this status
+> block. Input/output
 > integrity: SHA-256 manifests over **25 raw records** (including the frozen
 > upstream source state) and **41 byte-reproducible outputs** plus one
 > hand-written table that the pipeline verifies is unmodified, enforced at
@@ -178,10 +182,11 @@ external services), then `python 04_绘图与分析/analysis/ingest_seeded.py`.
 ## 5. GitHub publication
 
 **Done.** The repository is published on GitHub and this package is archived on
-Zenodo as version `artifact-v18` (DOI `10.5281/zenodo.23942550`; concept DOI
-`10.5281/zenodo.22859941`). The record serves the package as four parts,
-`JISA-artifact-v18.zip.p001` through `.p004`; reassemble them with
-`cat JISA-artifact-v18.zip.p{001..004} > JISA-artifact-v18.zip` and check the
+Zenodo as version `artifact-v19` (concept DOI `10.5281/zenodo.22859941`; the
+version DOI is printed on the record page). The record serves the package as
+four parts,
+`JISA-artifact-v19.zip.p001` through `.p004`; reassemble them with
+`cat JISA-artifact-v19.zip.p{001..004} > JISA-artifact-v19.zip` and check the
 SHA-256 given in the record description. The commit hash and the raw-records
 SHA-256 manifests (§1) are recorded in the manuscript's data-availability
 statement; refresh the manifests (`make_manifests.py`) and commit them together
@@ -195,7 +200,7 @@ and reproducible:
 - `bash verify_artifact.sh`  (or `bash reproduce.sh check`) — pre-flight of the
   toolchain (Python + svglib/reportlab/matplotlib/pandas, pdflatex, bibtex;
   Docker is noted as optional for re-running the live labs); SHA-256 of all 25
-  raw records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 35
+  raw records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 41
   byte-reproducible outputs (every number-bearing `.tex`, `metrics.json`, and the
   two vector diagrams) vs `provenance/OUTPUTS_SHA256.json`; plus a git
   working-tree status note. The same input check runs at the entry of every
