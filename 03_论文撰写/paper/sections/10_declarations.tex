@@ -16,8 +16,8 @@ tag \texttt{access-resubmission-v13}, which archives every record behind every
 number in this paper, the frozen admission protocol, its errata and the
 application register
 (\texttt{real\_system\allowbreak/prereg/}), and the generation scripts that
-recompute the tables from those records, including the sensitivity analysis of
-Tables~\ref{tab:promotion}--\ref{tab:ledger}. The version on which the reviews
+recompute the tables from those records, including the scoring-rule, ledger-omission and promotion-policy sensitivities of
+Tables~\ref{tab:caliber}, \ref{tab:ledger} and~\ref{tab:promotion}. The version on which the reviews
 were written is pinned separately by \texttt{access-resubmission-v12}; it carries
 the same records but not that analysis. Earlier tags (\texttt{artifact-v1} and
 \texttt{access-resubmission-v2} through \texttt{v11}) are retained as snapshots
@@ -44,8 +44,8 @@ The analysis pipeline (\texttt{analysis/*.py}) recomputes every number, table an
 figure from those records, including the design audit
 (\texttt{ingest\_design.py}), the decision-scored coverage table
 (\texttt{ingest\_coverage.py}), the truth table (\texttt{ingest\_truth.py}) and
-the policy, caliber and ledger sensitivities of
-Tables~\ref{tab:promotion}--\ref{tab:ledger}
+the caliber, ledger and policy sensitivities of
+Tables~\ref{tab:caliber}, \ref{tab:ledger} and~\ref{tab:promotion}
 (\texttt{ingest\_revision.py});
 \texttt{check\_macro\_use.py} asserts that every macro cited in the manuscript
 has exactly one definition. \texttt{bash reproduce.sh} regenerates all outputs
