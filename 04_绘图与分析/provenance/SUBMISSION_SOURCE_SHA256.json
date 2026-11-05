@@ -1,0 +1,625 @@
+{
+  "generated_by": "check_submission_zip.py --write",
+  "purpose": "Byte-level binding between the packaged LaTeX sources and the manuscript tree. Every 'entries' row gives the archive entry, the tree file it must equal, and the SHA-256 of both the archived bytes and that file; the check fails if any pair drifts apart, so a package built from older sources cannot ride inside a tag whose sources are newer.",
+  "zip": {
+    "path": "03_论文撰写/paper/latex_source_files_submission.zip",
+    "sha256": "a13109def57caf34fd8eb5e73e15027ce1e4e52d279d8edf31dd2056c3b0ce70",
+    "bytes": 1174775,
+    "entries": 100
+  },
+  "abstract": {
+    "source": "03_论文撰写/paper/main.tex",
+    "words_whitespace_split": 245,
+    "words_em_dash_split": 250,
+    "note": "IEEE Access asks for 150-250 words. The first figure is what a word processor counts ('model---a' is one token); the second treats each of the em dashes as a separator and is the strictest reading. Both are reported so neither bound is asserted from a single convention."
+  },
+  "pinned_archive_tag": {
+    "file": "sections/10_declarations.tex",
+    "tag": "access-resubmission-v24"
+  },
+  "entries": [
+    {
+      "name": "IEEEtran.bst",
+      "sha256": "314f0ece704568faf827011bac498650691b2b5ee06320720830e782416d5a5f",
+      "bytes": 57748,
+      "source": "03_论文撰写/paper/ieeeaccess/IEEEtran.bst"
+    },
+    {
+      "name": "IEEEtran.cls",
+      "sha256": "da751920a317ed318b7b5cd7fa585a6cc7d28502d457856382e9be24b10a3bd7",
+      "bytes": 281957,
+      "source": "03_论文撰写/paper/ieeeaccess/IEEEtran.cls"
+    },
+    {
+      "name": "attribution_table.tex",
+      "sha256": "cf130db9735238b4f79edb9d966f22839495de7f9fa17d6f33d5f477cad579fd",
+      "bytes": 1728,
+      "source": "04_绘图与分析/results/attribution_table.tex"
+    },
+    {
+      "name": "baseline_numbers.tex",
+      "sha256": "01d1acfc4fcb27a8b8c7f6beaf303c6f5699f22bfbdb708d8a5f81d173ec41fe",
+      "bytes": 1253,
+      "source": "04_绘图与分析/results/baseline_numbers.tex"
+    },
+    {
+      "name": "baseline_table.tex",
+      "sha256": "b1ae380fee55d61ba585d482172f746a43d068a120dcc3a8f0e711c1af49d139",
+      "bytes": 1893,
+      "source": "04_绘图与分析/results/baseline_table.tex"
+    },
+    {
+      "name": "budget_numbers.tex",
+      "sha256": "ca57778c664845ac8babfaa9562c0e49c0fb6431eeb00c70eadba9c6dea3cb0f",
+      "bytes": 1653,
+      "source": "04_绘图与分析/results/budget_numbers.tex"
+    },
+    {
+      "name": "budget_table.tex",
+      "sha256": "22b23d468432511d3be2e8bb219165c73612ba21c3b83fd57e69409d691cb950",
+      "bytes": 2399,
+      "source": "04_绘图与分析/results/budget_table.tex"
+    },
+    {
+      "name": "bullet.png",
+      "sha256": "754772e36aab389556f98c14f5deeb4031e792b68a766dc5f9766e76e114fffc",
+      "bytes": 430,
+      "source": "03_论文撰写/paper/ieeeaccess/bullet.png"
+    },
+    {
+      "name": "coverage_numbers.tex",
+      "sha256": "efb064a4bd376573c4e4cb29f3b58d31f9344d4568c6bffa999f4ac87b25c0f9",
+      "bytes": 2584,
+      "source": "04_绘图与分析/results/coverage_numbers.tex"
+    },
+    {
+      "name": "coverage_table.tex",
+      "sha256": "bf5340606a8e42693d7f6c3fd22b9c9e7dbe515ed945c9dcc951082786695546",
+      "bytes": 3132,
+      "source": "04_绘图与分析/results/coverage_table.tex"
+    },
+    {
+      "name": "cve_pair_numbers.tex",
+      "sha256": "aac5a15ce3940232f16419a296d39c512f81f37c5a8c54b6c08c71af0f83bde6",
+      "bytes": 764,
+      "source": "04_绘图与分析/results/cve_pair_numbers.tex"
+    },
+    {
+      "name": "cve_pair_table.tex",
+      "sha256": "5a67a1b8cf28106d45368b6cad22d18d556cb8dec568d3d554f20e72b61e7336",
+      "bytes": 333,
+      "source": "04_绘图与分析/results/cve_pair_table.tex"
+    },
+    {
+      "name": "design_numbers.tex",
+      "sha256": "e975eb9538de0da916519ad5245ff403dd455312b1e3dc0527d87ce8facad382",
+      "bytes": 1789,
+      "source": "04_绘图与分析/results/design_numbers.tex"
+    },
+    {
+      "name": "design_table.tex",
+      "sha256": "f469a416294831462cb59d601803f2d63c3748f3aa43eae78a212e5a37345537",
+      "bytes": 2673,
+      "source": "04_绘图与分析/results/design_table.tex"
+    },
+    {
+      "name": "figures/fig1_protocol.pdf",
+      "sha256": "1b89d2693dc21507ab0363d45400e3a7e9052160ad23c90506f50d8bb067c6b0",
+      "bytes": 3320,
+      "source": "04_绘图与分析/figures/fig1_protocol.pdf"
+    },
+    {
+      "name": "figures/fig2_scenarios.pdf",
+      "sha256": "77ba5e194c579ad5be7a7aff0808b3752f2117fcd8b6104612e3405f874fab21",
+      "bytes": 14929,
+      "source": "04_绘图与分析/figures/fig2_scenarios.pdf"
+    },
+    {
+      "name": "figures/fig5_real_system.pdf",
+      "sha256": "e4eda4e8ab466e38bc3e8b1efa1326e91de9a10226bfa1a5a9b76a2b9459c560",
+      "bytes": 17067,
+      "source": "04_绘图与分析/figures/fig5_real_system.pdf"
+    },
+    {
+      "name": "gitlab_numbers.tex",
+      "sha256": "c097889aa5c4ac062715f44e7a63c5f5c867080c38eaec03ed6fd50746ec0b38",
+      "bytes": 1206,
+      "source": "04_绘图与分析/results/gitlab_numbers.tex"
+    },
+    {
+      "name": "gogs_channel_numbers.tex",
+      "sha256": "0e71cc473ba03d77dbbd198bb25d7a7f1f2d438c0514d109ebcbb1d78ff6fcdd",
+      "bytes": 1841,
+      "source": "04_绘图与分析/results/gogs_channel_numbers.tex"
+    },
+    {
+      "name": "gogs_channel_table.tex",
+      "sha256": "f97f5a82cb503219f4c7b481e8722b92e9f5bb4f279d113baa34f6a6aa430350",
+      "bytes": 2683,
+      "source": "04_绘图与分析/results/gogs_channel_table.tex"
+    },
+    {
+      "name": "gogs_cross_table.tex",
+      "sha256": "13d954e2ce6ea983098864850c539824241a88f78ba626a9e0aa34fe6ef17a02",
+      "bytes": 2070,
+      "source": "04_绘图与分析/results/gogs_cross_table.tex"
+    },
+    {
+      "name": "gogs_numbers.tex",
+      "sha256": "e7ebc11b98605d3fa616e47da97fe924611122a50ed2e7ced4e8fedf7c24d200",
+      "bytes": 1939,
+      "source": "04_绘图与分析/results/gogs_numbers.tex"
+    },
+    {
+      "name": "ieeeaccess.cls",
+      "sha256": "67b73c4da05479d592a9449c38a81fcc7779d78753085bb44199e7f2746b757d",
+      "bytes": 50800,
+      "source": "03_论文撰写/paper/ieeeaccess/ieeeaccess.cls"
+    },
+    {
+      "name": "logo.png",
+      "sha256": "7e04ba7f0c579f3765941680e2a19437e15a81b84a138d73c54bd4afead752cd",
+      "bytes": 9705,
+      "source": "03_论文撰写/paper/ieeeaccess/logo.png"
+    },
+    {
+      "name": "m2_stratum.tex",
+      "sha256": "c0319f39e16688de90f77ceb389188b5150be211abec1e42883fecb6a30466f0",
+      "bytes": 8337,
+      "source": "04_绘图与分析/results/m2_stratum.tex"
+    },
+    {
+      "name": "main.bbl",
+      "sha256": "8b0f0fcad52db7762a6d0ef0200fa705bc5f19e5e328c6a452ddc8c60b52d4d6",
+      "bytes": 13984,
+      "source": null,
+      "note": "TeX build artefact (bibtex output, not tracked)",
+      "external_path": "C:\\Users\\Administrator\\WorkBuddy\\ieee_access_build\\main.bbl",
+      "external_sha256": "8b0f0fcad52db7762a6d0ef0200fa705bc5f19e5e328c6a452ddc8c60b52d4d6"
+    },
+    {
+      "name": "main.tex",
+      "sha256": "ed427f5a676fe38d74b53ba0361de9871896a1d8f72c6764ea163f92e1c70828",
+      "bytes": 14374,
+      "source": "03_论文撰写/paper/main.tex"
+    },
+    {
+      "name": "multiclass_numbers.tex",
+      "sha256": "f7f0c2a0f4ad1ca3daa276907602c059f7c726afc5c60a39dc699e2a4ab732ff",
+      "bytes": 1266,
+      "source": "04_绘图与分析/results/multiclass_numbers.tex"
+    },
+    {
+      "name": "native_engine_numbers.tex",
+      "sha256": "a99be94bf6cea2b6153b339726e8e1739d561bdaeb154041b32614f1f81cdec7",
+      "bytes": 1565,
+      "source": "04_绘图与分析/results/native_engine_numbers.tex"
+    },
+    {
+      "name": "native_engine_table.tex",
+      "sha256": "e51c80abc55f2b6b72c3f4bbb08bb0d5b70313ec5bf2e633649820718703d75d",
+      "bytes": 749,
+      "source": "04_绘图与分析/results/native_engine_table.tex"
+    },
+    {
+      "name": "notaglinelogo.png",
+      "sha256": "955e9a07fb35ffbc8a41597b8c6e7ec4cedf6a8652f5c73a33957044aae64900",
+      "bytes": 3150,
+      "source": "03_论文撰写/paper/ieeeaccess/notaglinelogo.png"
+    },
+    {
+      "name": "novelty_table.tex",
+      "sha256": "53febb0818ff89061afc89919736fcf52a49352e3ac4f5ca27bf1bae6dee7607",
+      "bytes": 3109,
+      "source": "04_绘图与分析/results/novelty_table.tex"
+    },
+    {
+      "name": "numbers.tex",
+      "sha256": "bf8236335bf184542c31b8cf764d2a4cc3a23941f2fcb7607797bf2a6e513b74",
+      "bytes": 17615,
+      "source": "04_绘图与分析/results/numbers.tex"
+    },
+    {
+      "name": "r15_pair_numbers.tex",
+      "sha256": "0c11a1fc092eeacda6425aaf04767d04cf0b6f846b6d4769c93925e106b81a76",
+      "bytes": 309,
+      "source": "04_绘图与分析/results/r15_pair_numbers.tex"
+    },
+    {
+      "name": "refs.bib",
+      "sha256": "70812d5c30b22e8d05af6ca32dd1140d3226786b454b70ac72711988e899d5ec",
+      "bytes": 15955,
+      "source": "03_论文撰写/paper/refs.bib"
+    },
+    {
+      "name": "revision_caliber_numbers.tex",
+      "sha256": "6cd79044a4e50e33b1d867f94c78270ec89c1a1676055d80fcc3f2cefd3adf9e",
+      "bytes": 2105,
+      "source": "04_绘图与分析/results/revision_caliber_numbers.tex"
+    },
+    {
+      "name": "revision_caliber_table.tex",
+      "sha256": "a869f9e68f648b8c2ea2f2dab4cab3c4fc6b313369cc7f57bd2dffcf8a801950",
+      "bytes": 2092,
+      "source": "04_绘图与分析/results/revision_caliber_table.tex"
+    },
+    {
+      "name": "revision_ledger_table.tex",
+      "sha256": "057e393752ddbd1acd9d419c825cd16fbdfe6820f753018223e8efb8693eab70",
+      "bytes": 1468,
+      "source": "04_绘图与分析/results/revision_ledger_table.tex"
+    },
+    {
+      "name": "revision_policy_numbers.tex",
+      "sha256": "e638efa488f3331f8f002b662f9d7369062ce44abc5a65ddc32315ea93da9943",
+      "bytes": 3093,
+      "source": "04_绘图与分析/results/revision_policy_numbers.tex"
+    },
+    {
+      "name": "revision_policy_table.tex",
+      "sha256": "d6f4d0c77fe07c419b58bff4889a3f48d0d59562b0700b5d143a81d4249c4644",
+      "bytes": 1298,
+      "source": "04_绘图与分析/results/revision_policy_table.tex"
+    },
+    {
+      "name": "sections/01_intro.tex",
+      "sha256": "200a6fe9de5c6db488e1d01eeb90f2a14475b785655df56818343cbbdd594e39",
+      "bytes": 6450,
+      "source": "03_论文撰写/paper/sections/01_intro.tex"
+    },
+    {
+      "name": "sections/02_background.tex",
+      "sha256": "8c392786498f8bdb2344c0d81c12fe671ca346b0669c51f028c2d3fa19aacba7",
+      "bytes": 3476,
+      "source": "03_论文撰写/paper/sections/02_background.tex"
+    },
+    {
+      "name": "sections/03_protocol.tex",
+      "sha256": "82ff8f4ab97de15bbac88b81b8859bb49726cf7746117741c2dc148221d954d1",
+      "bytes": 17654,
+      "source": "03_论文撰写/paper/sections/03_protocol.tex"
+    },
+    {
+      "name": "sections/04_synthetic.tex",
+      "sha256": "81d4f4926c151d6a6e6a7401d8b6aa5e09996219fb33834de08bfc8dd4548eff",
+      "bytes": 15197,
+      "source": "03_论文撰写/paper/sections/04_synthetic.tex"
+    },
+    {
+      "name": "sections/04b_stratum.tex",
+      "sha256": "75ed99c5ccdd03106eb0963ff816444e21facb1558d228c919c3c8d0745120c0",
+      "bytes": 7894,
+      "source": "03_论文撰写/paper/sections/04b_stratum.tex"
+    },
+    {
+      "name": "sections/05_realsystem.tex",
+      "sha256": "3262c3de227aefeaacaf3a1d03e3fa5148339a03ab8cefcb4b051fa2e6e8a022",
+      "bytes": 26577,
+      "source": "03_论文撰写/paper/sections/05_realsystem.tex"
+    },
+    {
+      "name": "sections/06_boundaries.tex",
+      "sha256": "9021695585f171e174f6e8d21aa2e0271aa4b0975171f92da96e01177e54f636",
+      "bytes": 24377,
+      "source": "03_论文撰写/paper/sections/06_boundaries.tex"
+    },
+    {
+      "name": "sections/06b_support.tex",
+      "sha256": "0955dbfc275e881f5010e1e17d77d8cebca174e9e8e3e57e0d6ae9e64e38e6da",
+      "bytes": 6164,
+      "source": "03_论文撰写/paper/sections/06b_support.tex"
+    },
+    {
+      "name": "sections/07_threats.tex",
+      "sha256": "88a441ea10b2ed882de1d014d96fafab3c98e536296a4124e8c53e1487407588",
+      "bytes": 3248,
+      "source": "03_论文撰写/paper/sections/07_threats.tex"
+    },
+    {
+      "name": "sections/08_related.tex",
+      "sha256": "9f1388bcf9404cdcf3ef08136151d5ecb4bf390933626f3dda3a2521f5b1b40b",
+      "bytes": 6734,
+      "source": "03_论文撰写/paper/sections/08_related.tex"
+    },
+    {
+      "name": "sections/09_conclusion.tex",
+      "sha256": "063f68ce449d15a1823cb8ca8e8d89bb29191554a8f9e1d886f4ba73ed986f89",
+      "bytes": 4961,
+      "source": "03_论文撰写/paper/sections/09_conclusion.tex"
+    },
+    {
+      "name": "sections/10_declarations.tex",
+      "sha256": "6712f995a8e1818dea54a39b659fb0daaaa241748b075874f6b28f5258af7480",
+      "bytes": 5598,
+      "source": "03_论文撰写/paper/sections/10_declarations.tex"
+    },
+    {
+      "name": "seeded_table.tex",
+      "sha256": "ec25827f3bffa3948ba9df0c980453e48cc85fd753351cbdeb8489773a6b535d",
+      "bytes": 1288,
+      "source": "04_绘图与分析/results/seeded_table.tex"
+    },
+    {
+      "name": "spotcolor.sty",
+      "sha256": "a9c5bacbf5b832e5eac61393bf1b330fc75fa353cbc9cf4319c227de49bfa5fa",
+      "bytes": 2231,
+      "source": "03_论文撰写/paper/ieeeaccess/spotcolor.sty"
+    },
+    {
+      "name": "t1-formata-bold.pfb",
+      "sha256": "85cc7db8dc04090411600cfb2853bb2efe92a8dc3c406e57ba11fd21248e607b",
+      "bytes": 59944,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-bold.pfb"
+    },
+    {
+      "name": "t1-formata-bold.tfm",
+      "sha256": "07d3efeaf10af3eb2c15cc00ef16629cee96df315d0551984fce5b7f67cf8ee3",
+      "bytes": 1420,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-bold.tfm"
+    },
+    {
+      "name": "t1-formata-bolditalic.pfb",
+      "sha256": "51af5f6d5ae0c69597cf68e4f3f0a1b222ae1f8fe014f248379e3162d783a8da",
+      "bytes": 57834,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-bolditalic.pfb"
+    },
+    {
+      "name": "t1-formata-bolditalic.tfm",
+      "sha256": "edba8f3a19f9ccc6c3fc2b99aabb108d88ca16188cc110c34dba01716553f005",
+      "bytes": 1672,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-bolditalic.tfm"
+    },
+    {
+      "name": "t1-formata-condmedium.pfb",
+      "sha256": "21d1c9853f4c1d1975c13541629e9977380dd61cb461de130dd22f181f60c749",
+      "bytes": 63989,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-condmedium.pfb"
+    },
+    {
+      "name": "t1-formata-condmedium.tfm",
+      "sha256": "6b50cfdac0503850bd1042e6f81a5bc7106732b71a6e7382083290e8d28ae3d4",
+      "bytes": 1412,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-condmedium.tfm"
+    },
+    {
+      "name": "t1-formata-condmediumital.pfb",
+      "sha256": "2b9c7803d3d79d86ec2fe84785a2c5e92db7f8ea01f59ae4d4be19d806e4bc4b",
+      "bytes": 65644,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-condmediumital.pfb"
+    },
+    {
+      "name": "t1-formata-condmediumital.tfm",
+      "sha256": "bdcc73dd762e6345daf132d476845eda1f87a72e900203e43afb721626e2baae",
+      "bytes": 1660,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-condmediumital.tfm"
+    },
+    {
+      "name": "t1-formata-italic.pfb",
+      "sha256": "774a9b0f146bdc4fa3bfe366cc70a0c357f3a33095cc30f41622823a1514ce4e",
+      "bytes": 55897,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-italic.pfb"
+    },
+    {
+      "name": "t1-formata-italic.tfm",
+      "sha256": "b5abe759c73ab5f6c7130b11a1c58e793dc2d329affe8fc82583b97ef6acec3e",
+      "bytes": 1680,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-italic.tfm"
+    },
+    {
+      "name": "t1-formata-light.pfb",
+      "sha256": "e172485ed2369cd310b4510ed1175272c9a25e978c7d9394887d5258b3e22b69",
+      "bytes": 62934,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-light.pfb"
+    },
+    {
+      "name": "t1-formata-light.tfm",
+      "sha256": "e49ec9919a791c4db785743997fbdf6a1896c4820028ef6cf7460a6326bab6bd",
+      "bytes": 1416,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-light.tfm"
+    },
+    {
+      "name": "t1-formata-lightitalic.pfb",
+      "sha256": "e1e8b533ef124f9ce1e845031b67a4b71ed4ec283c784217b8383d18629c5efe",
+      "bytes": 56817,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-lightitalic.pfb"
+    },
+    {
+      "name": "t1-formata-lightitalic.tfm",
+      "sha256": "faf7c6e83e68da1342bbcba422021e18bc936292e25fc43ce2705e8cc3724dda",
+      "bytes": 1656,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-lightitalic.tfm"
+    },
+    {
+      "name": "t1-formata-medium.pfb",
+      "sha256": "86bcb9f9047a23d192e46b85af6ac50a3f557dd81bcb57bb77fe10fbd2c4f7a7",
+      "bytes": 67701,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-medium.pfb"
+    },
+    {
+      "name": "t1-formata-medium.tfm",
+      "sha256": "06bbc55cb560d7f16e3821f739756db3dcced3543542cfca79790cdaf7918b9d",
+      "bytes": 4720,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-medium.tfm"
+    },
+    {
+      "name": "t1-formata-mediumitalic.pfb",
+      "sha256": "81675003831e33e5e4f708d6d3ee6db81c0ec0da241a083e9457cc83fdd73df4",
+      "bytes": 62483,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-mediumitalic.pfb"
+    },
+    {
+      "name": "t1-formata-mediumitalic.tfm",
+      "sha256": "6af7b2d27109a2aeb09a6775974d67b0c78f4acdbc23e072138e0b69f39cb53d",
+      "bytes": 4948,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-mediumitalic.tfm"
+    },
+    {
+      "name": "t1-formata-regsymb.pfb",
+      "sha256": "28b3e632d96f651dbbd9f5225ed362f0506279513cf7ecb0785506bb77573c4f",
+      "bytes": 14621,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-regsymb.pfb"
+    },
+    {
+      "name": "t1-formata-regsymb.tfm",
+      "sha256": "2099220084353dd2414b1e47156b6b4745cfa94d8cf7a737c519f8e47d8d9cc2",
+      "bytes": 432,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-regsymb.tfm"
+    },
+    {
+      "name": "t1-formata-regular.pfb",
+      "sha256": "ddda54f35e3b59effa5bc0782bfc75b971d4503e3d643888e12ef8cf0a5c259c",
+      "bytes": 63982,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-regular.pfb"
+    },
+    {
+      "name": "t1-formata-regular.tfm",
+      "sha256": "5b72c4ed7ea54027bfd6206b35898e3d531372f9810b4a1d35325fa4a9bed95f",
+      "bytes": 1416,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata-regular.tfm"
+    },
+    {
+      "name": "t1-formata.map",
+      "sha256": "6bc40400c9d3e827bc8c9243699e5681fe2fd385aa58f1c010c0bb62db8ac7b4",
+      "bytes": 690,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-formata.map"
+    },
+    {
+      "name": "t1-giovannistd-bookitalic.pfb",
+      "sha256": "98ad0803de1518d803e7c6b339196f2a6907cf22b1a18475284c26a0d230a84f",
+      "bytes": 60827,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-giovannistd-bookitalic.pfb"
+    },
+    {
+      "name": "t1-giovannistd-bookitalic.tfm",
+      "sha256": "35669a03bfac8239f2c9aeb234c3d258fb3c8773add552fa79c21d0e8eaf77ce",
+      "bytes": 5452,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-giovannistd-bookitalic.tfm"
+    },
+    {
+      "name": "t1-giovannistd.map",
+      "sha256": "3b53bc7de8bce199c2b5cb5a7e0b0dd4625a8f15f3ab50ba6b550fc497b0ba37",
+      "bytes": 81,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-giovannistd.map"
+    },
+    {
+      "name": "t1-helvetica.map",
+      "sha256": "4cb73edb6c8f800aabedf7c69791cafd3df90dc04ef73d334b4f92cccb47d485",
+      "bytes": 253,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-helvetica.map"
+    },
+    {
+      "name": "t1-times-bold.pfb",
+      "sha256": "9de3b06aee8a29697b10861f1d4f4fff11568f5629ed2d03bfa82ff0d244c682",
+      "bytes": 74023,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times-bold.pfb"
+    },
+    {
+      "name": "t1-times-bold.tfm",
+      "sha256": "4c845739e4c4b74bd3314d191781ed5bfad3005e568376186ff3be72e4007a2b",
+      "bytes": 6264,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times-bold.tfm"
+    },
+    {
+      "name": "t1-times-bolditalic.pfb",
+      "sha256": "2bc33058718a7bce6defaa09a5c2684e410117baec62937da0b1952c66bf6452",
+      "bytes": 63189,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times-bolditalic.pfb"
+    },
+    {
+      "name": "t1-times-bolditalic.tfm",
+      "sha256": "2fdc98c536dc5e4c10948496450ae2afe5d221c3063c65d4b5d2322ef05ecc65",
+      "bytes": 5328,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times-bolditalic.tfm"
+    },
+    {
+      "name": "t1-times-italic.pfb",
+      "sha256": "8b291a54d50d0064621726d947d013743c097ddb6e0dca7704fedec65f6adda5",
+      "bytes": 59460,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times-italic.pfb"
+    },
+    {
+      "name": "t1-times-italic.tfm",
+      "sha256": "1a7a52a19b83939973e9a46a1615ca5b01b826670b77631c9e97313e325a6aa0",
+      "bytes": 6284,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times-italic.tfm"
+    },
+    {
+      "name": "t1-times.map",
+      "sha256": "34315863a8b07b692262ef6489a0cd2fab0e1c7ee2979379a3ab488dde62a1a9",
+      "bytes": 215,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times.map"
+    },
+    {
+      "name": "t1-times.pfb",
+      "sha256": "d7a1e71f532e430ecb31b0f70fdc3c13e6d952371899649ba70821ddc2aee3e8",
+      "bytes": 76176,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times.pfb"
+    },
+    {
+      "name": "t1-times.tfm",
+      "sha256": "5c8fb592c16a481b6594dc5edfa62ef24db5d233a1e57f36f502e2d0f79c1a20",
+      "bytes": 5932,
+      "source": "03_论文撰写/paper/ieeeaccess/t1-times.tfm"
+    },
+    {
+      "name": "t1formata.fd",
+      "sha256": "87385e77266d505e48556523732275185b9540ff06fb87b78ec5dc122346b10e",
+      "bytes": 706,
+      "source": "03_论文撰写/paper/ieeeaccess/t1formata.fd"
+    },
+    {
+      "name": "t1giovannistd.fd",
+      "sha256": "e071d747b940f03a238ee82c85b84be9991086ed2a487e4e6293a2185c0fc0a3",
+      "bytes": 115,
+      "source": "03_论文撰写/paper/ieeeaccess/t1giovannistd.fd"
+    },
+    {
+      "name": "t1helvetica.fd",
+      "sha256": "5ee12b5ba0ac6ad044218568bc38a9d706e3d1b842559dd3c4c625b0cfbf7012",
+      "bytes": 592,
+      "source": "03_论文撰写/paper/ieeeaccess/t1helvetica.fd"
+    },
+    {
+      "name": "t1times.fd",
+      "sha256": "257f290ea4e57bd9bcbaf22bdfeb1b17ada22d92e4b543d56625044302708e3b",
+      "bytes": 508,
+      "source": "03_论文撰写/paper/ieeeaccess/t1times.fd"
+    },
+    {
+      "name": "temporal_channel_table.tex",
+      "sha256": "4f0df72f36053b4da5d3572cd2d3f0da05c21a61248148f69b22d84330bf5eb3",
+      "bytes": 1951,
+      "source": "04_绘图与分析/results/temporal_channel_table.tex"
+    },
+    {
+      "name": "temporal_numbers.tex",
+      "sha256": "52e11b48c3e03306192b19f9bc462e8b7d919f88d0dd58da41642e6379332203",
+      "bytes": 3095,
+      "source": "04_绘图与分析/results/temporal_numbers.tex"
+    },
+    {
+      "name": "temporal_sensitivity_table.tex",
+      "sha256": "7a6306f8df56a3b540115f6f9f57180b377aebf34a540fa3db0d6bc96bdef703",
+      "bytes": 1431,
+      "source": "04_绘图与分析/results/temporal_sensitivity_table.tex"
+    },
+    {
+      "name": "temporal_table.tex",
+      "sha256": "bb2ae419dcf22e8e17fa4cba9eed16be63552745972cf00a6e7bff77a1fe305d",
+      "bytes": 1432,
+      "source": "04_绘图与分析/results/temporal_table.tex"
+    },
+    {
+      "name": "truth_numbers.tex",
+      "sha256": "cc3b416fe030a95f4d122e5787a8c368fc20d0a1999461d0717004f28c671f08",
+      "bytes": 859,
+      "source": "04_绘图与分析/results/truth_numbers.tex"
+    },
+    {
+      "name": "truth_table.tex",
+      "sha256": "d6b2faea4b477984e835bfa0d94f3f2fe22114f9200e7769014c6420698d5641",
+      "bytes": 3674,
+      "source": "04_绘图与分析/results/truth_table.tex"
+    }
+  ]
+}

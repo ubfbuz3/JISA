@@ -5,7 +5,7 @@ and table in the paper** and to **re-run the experiments**. It is the companion
 to `reproduce.sh`.
 
 > Status (updated 2026-11-05): the artifact is **published**. The repository is
-> on GitHub, and this package is archived on Zenodo as version `artifact-v23`
+> on GitHub, and this package is archived on Zenodo as version `artifact-v24`
 > (the record page prints its version DOI; the concept DOI below resolves to it).
 > Cite the concept DOI `10.5281/zenodo.22859941`, which always resolves to the
 > newest version; the version DOI for this release is the one Zenodo prints on
@@ -13,13 +13,17 @@ to `reproduce.sh`.
 > 2026-09-20 is `10.5281/zenodo.22859942`, `artifact-v18` is
 > `10.5281/zenodo.23942550`). A version DOI cannot be written into the package
 > it identifies, so this file names the concept DOI only. The manuscript this
-> package accompanies is frozen at tag `access-resubmission-v23`, and the
-> packaging tag `artifact-v23` names the same commit, so the archived code and
+> package accompanies is frozen at tag `access-resubmission-v24`, and the
+> packaging tag `artifact-v24` names the same commit, so the archived code and
 > the archived PDF are the ones the paper cites. Input/output integrity:
 > SHA-256 manifests over **25 raw records** (including the frozen upstream
 > source state) and **41 byte-reproducible outputs** plus one hand-written table
 > that the pipeline verifies is unmodified, enforced at pipeline entry by
-> `reproduce.sh` step 0 (`make_manifests.py --check`). The historical
+> `reproduce.sh` step 0 (`make_manifests.py --check`). The submitted LaTeX
+> source package is bound to the tree the same way: every one of its 100 entries
+> is hashed in `provenance/SUBMISSION_SOURCE_SHA256.json` together with the tree
+> file it must equal, so a package built from older sources fails the check
+> instead of shipping silently. The historical
 > source-state facts of the native run are generated from
 > `experiments/native_engine/results/frozen_source_state.json` (produced by
 > `analysis/freeze_native_sources.py`), not from a live checkout.
@@ -33,7 +37,8 @@ to `reproduce.sh`.
   `ingest_m2_stratum.py`, `ingest_truth.py`, `ingest_design.py`,
   `ingest_coverage.py`, `ingest_gogs_channel.py`, `ingest_baseline.py`,
   `freeze_native_sources.py`, `make_manifests.py`, `make_diagrams.py`,
-  `normalize_bib.py`, `check_macros.py`. Historical source-state facts are
+  `normalize_bib.py`, `check_macros.py`, `check_submission_zip.py`. Historical
+  source-state facts are
   frozen inputs (`freeze_native_sources.py` ->
   `frozen_source_state.json`), so `ingest_native_engine.py` and
   `compute_all.py` are deterministic functions of archived records; a live
@@ -183,19 +188,31 @@ external services), then `python 04_绘图与分析/analysis/ingest_seeded.py`.
 ## 5. GitHub publication
 
 **Done.** The repository is published on GitHub and this package is archived on
-Zenodo as version `artifact-v23` (concept DOI `10.5281/zenodo.22859941`; the
+Zenodo as version `artifact-v24` (concept DOI `10.5281/zenodo.22859941`; the
 version DOI is printed on the record page). The record serves the package as
-numbered parts (`JISA-artifact-v23.zip.p001` upward); reassemble them in
-order with
-`cat JISA-artifact-v23.zip.p* > JISA-artifact-v23.zip` and check the
-SHA-256 given in the record description. The package excludes internal
+numbered parts (`JISA-artifact-v24.zip.p001` upward); reassemble them in
+numeric order with
+`cat JISA-artifact-v24.zip.p001 JISA-artifact-v24.zip.p002 ... > JISA-artifact-v24.zip`
+before checking it. Two checksums are available and neither is a promise this
+file cannot keep: the record's file table lists the checksum of **each part**,
+and the SHA-256 of the assembled archive is recorded in the manuscript-side
+submission manifest, outside this package --- a file cannot carry the checksum
+of the container it is stored in. Inside the package,
+`provenance/SUBMISSION_SOURCE_SHA256.json` gives the SHA-256 of
+`03_论文撰写/paper/latex_source_files_submission.zip` and of each of its 100
+entries, alongside the tree file that entry must equal; that is the check to
+run if you want to confirm the LaTeX source you build is the source the
+archived `main.pdf` came from (`bash verify_artifact.sh` runs it, step 5). The
+package excludes internal
 tracking notes (`06_论文追踪/`), presentation material (`05_PPT与展示/`),
 superseded submission directories (`07_投稿_*`) and review correspondence
 (`03_论文撰写/response_to_reviewers*`); none of them carries a number, table or
 figure of the manuscript. The commit hash and the raw-records
 SHA-256 manifests (§1) are recorded in the manuscript's data-availability
-statement; refresh the manifests (`make_manifests.py`) and commit them together
-with any legitimate change to the raw records or the generation scripts.
+statement; refresh the manifests (`make_manifests.py`, and
+`check_submission_zip.py --write` for the source package) and commit them
+together with any legitimate change to the raw records, the generation scripts
+or the manuscript sources.
 
 ## 6. One-command self-check (clean-environment + reproducibility)
 
@@ -207,15 +224,21 @@ and reproducible:
   Docker is noted as optional for re-running the live labs); SHA-256 of all 25
   raw records vs `provenance/RAW_RECORDS_SHA256.json`; SHA-256 of all 41
   byte-reproducible outputs (every number-bearing `.tex`, `metrics.json`, and the
-  two vector diagrams) vs `provenance/OUTPUTS_SHA256.json`; plus a git
-  working-tree status note. The same input check runs at the entry of every
+  two vector diagrams) vs `provenance/OUTPUTS_SHA256.json`; the response
+  letter's load-bearing numbers against the current macro values; the submitted
+  LaTeX source package against every tree file it is a copy of
+  (`provenance/SUBMISSION_SOURCE_SHA256.json`); plus a git working-tree status
+  note. The same input check runs at the entry of every
   `reproduce.sh` invocation, before any generator executes.
 - `bash verify_artifact.sh repro` — extracts the *committed* tree with
   `git archive HEAD` into a throw-away copy, re-runs the full analysis pipeline,
-  and confirms every output regenerates byte-for-byte. The working tree is never
+  and confirms every output regenerates byte-for-byte, and that the package
+  committed in that tree is a copy of that same tree. The working tree is never
   touched.
 
-The manifests are produced by `04_绘图与分析/analysis/make_manifests.py`
-(`bash verify_artifact.sh gen-manifest`) and committed alongside the data;
-refresh them only after a legitimate change to the raw records or a generation
-script, and commit the refreshed manifest together with that change.
+The manifests are produced by `04_绘图与分析/analysis/make_manifests.py` for the
+records and outputs (`bash verify_artifact.sh gen-manifest`) and by
+`check_submission_zip.py --write` for the source package; both are committed
+alongside the data. Refresh them only after a legitimate change to the raw
+records, a generation script or the manuscript sources, and commit the
+refreshed manifest together with that change.

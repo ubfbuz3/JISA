@@ -22,7 +22,12 @@
 #        (SHA-256 matches provenance/OUTPUTS_SHA256.json);
 #     4. every load-bearing number quoted in the response letter matches
 #        the current generator output (check_letter_numbers.py), which is
-#        the check the letter's preface commits to.
+#        the check the letter's preface commits to;
+#     5. the submitted LaTeX source package (`latex_source_files_submission
+#        .zip`, the file a reader downloads and builds) is byte-identical to
+#        the tree: every entry hashed in provenance/SUBMISSION_SOURCE_SHA256
+#        .json and compared against the file it is a copy of, with the
+#        abstract length and the pinned archive tag checked at the same time.
 #
 #   `repro` additionally proves the numbers regenerate byte-for-byte from
 #   the raw records, inside a throw-away copy, leaving the working tree
@@ -85,7 +90,7 @@ do_check() {
 
   # 1. toolchain pre-flight ------------------------------------------
   echo
-  echo "[1/4] Toolchain pre-flight"
+  echo "[1/5] Toolchain pre-flight"
   echo "  interpreter: $PYBIN"
   if "$PYBIN" -c "import svglib, reportlab, matplotlib, pandas" >/dev/null 2>&1; then
     pass_line "Python packages present: svglib, reportlab, matplotlib, pandas"
@@ -108,7 +113,7 @@ do_check() {
 
   # 2. input integrity -----------------------------------------------
   echo
-  echo "[2/4] Raw-record integrity (inputs -> provenance/RAW_RECORDS_SHA256.json)"
+  echo "[2/5] Raw-record integrity (inputs -> provenance/RAW_RECORDS_SHA256.json)"
   if [ ! -f "$RAW_MANIFEST" ]; then
     fail_line "manifest missing: $RAW_MANIFEST (run: bash verify_artifact.sh gen-manifest)"
   else
@@ -136,7 +141,7 @@ PY
 
   # 3. output integrity ----------------------------------------------
   echo
-  echo "[3/4] Reproducible-output integrity (outputs -> provenance/OUTPUTS_SHA256.json)"
+  echo "[3/5] Reproducible-output integrity (outputs -> provenance/OUTPUTS_SHA256.json)"
   if [ ! -f "$OUT_MANIFEST" ]; then
     fail_line "manifest missing: $OUT_MANIFEST (run: bash verify_artifact.sh gen-manifest)"
   else
@@ -168,7 +173,7 @@ PY
   # check_letter_numbers_54021.py 负责；只有该轮没有核对脚本时才回落到首轮那份，
   # 否则会出现"报 PASS 但核的是另一封信"的假保证。
   echo
-  echo "[4/4] Response-letter numbers vs generator output"
+  echo "[4/5] Response-letter numbers vs generator output"
   local letter_dir="$ROOT/08_投稿_v13_54021"
   local letter_chk="check_letter_numbers_54021.py"
   if [ ! -f "$letter_dir/$letter_chk" ]; then
@@ -183,6 +188,25 @@ PY
     fi
   else
     fail_line "missing: response-letter checker ($letter_chk)"
+  fi
+
+  # 5. submitted LaTeX source package ---------------------------------
+  # 这份 zip 是**派生件**：由 make_submission_zip.py 从工作树 + 构建目录的
+  # main.bbl 生成，又被提交进仓库、随着 tag 一起进归档。它曾经落后于正文
+  # （摘要 309 词、声明指向上一个 tag），而所有按清单核 SHA 的步骤都发现不了，
+  # 因为它当时不在任何清单里。这一步把它每个条目都对着树上的原文件比一遍，
+  # 所以"包里是旧稿"这种偏差会直接 FAIL，而不是等到读者解包才发现。
+  echo
+  echo "[5/5] Submitted LaTeX source package vs tree"
+  local zip_chk="$ANA/check_submission_zip.py"
+  if [ -f "$zip_chk" ]; then
+    if "$PYBIN" "$(winpath "$zip_chk")" --root "$(winpath "$ROOT")"; then
+      pass_line "latex_source_files_submission.zip matches the tree byte-for-byte"
+    else
+      fail_line "source package drifted from the tree (rebuild it: python make_submission_zip.py)"
+    fi
+  else
+    fail_line "missing: $zip_chk"
   fi
 
   # working-tree status (informational)
@@ -307,12 +331,22 @@ PY
 
   echo "  [cmp] regenerated outputs vs provenance/OUTPUTS_SHA256.json"
   bad=0
-  # 回信数字必须在**重新生成后的**宏上再核一次（承诺的是"对着制品核过"）
+  # 回信数字必须在**重新生成后的**宏上再核一次（承诺的是"对着制品核过"）。
+  # 本轮的信与它的核对器都不入库（信中逐字引用了审稿意见），所以 git archive
+  # 出来的树里没有它们：这里从工作树**显式**拷进来并打印，绝不静默退回首轮
+  # 那封信的核对器——那样会得到"PASS 但核的是另一封 49387 的信"的假保证。
   letter_dir="$TMP/08_投稿_v13_54021"
   letter_chk="check_letter_numbers_54021.py"
   if [ ! -f "$letter_dir/$letter_chk" ]; then
-    letter_dir="$TMP/03_论文撰写/response_to_reviewers"
-    letter_chk="check_letter_numbers.py"
+    if [ -f "$ROOT/08_投稿_v13_54021/$letter_chk" ]; then
+      mkdir -p "$letter_dir"
+      cp "$ROOT/08_投稿_v13_54021/$letter_chk" "$letter_dir/"
+      cp "$ROOT/08_投稿_v13_54021/response_to_reviewers_54021.tex" "$letter_dir/" 2>/dev/null || true
+      echo "  [note] letter + checker are untracked by design; staged from the working tree"
+    else
+      letter_dir="$TMP/03_论文撰写/response_to_reviewers"
+      letter_chk="check_letter_numbers.py"
+    fi
   fi
   if [ -f "$letter_dir/$letter_chk" ]; then
     if ( cd "$letter_dir" && "$PYBIN" "$letter_chk" ); then
@@ -347,6 +381,17 @@ PY
   while IFS='|' read -r st msg; do
     case "$st" in PASS) echo "  [PASS] $msg";; FAIL) echo "  [FAIL] $msg"; bad=$((bad+1));; esac
   done <<< "$rows"
+
+  # 提交进树的那份源码包必须与**同一棵树**的源码逐字节一致。repro 天然适合核这件事：
+  # 树是 git archive 出来的提交态，包也在里面，两者若不同源就会在这里露出来。
+  echo "  [cmp] submitted LaTeX source package vs the staged tree"
+  if "$PYBIN" "$(winpath "$ANA/check_submission_zip.py")" --root "$(winpath "$TMP")" \
+       --manifest "$(winpath "$ROOT/04_绘图与分析/provenance/SUBMISSION_SOURCE_SHA256.json")"; then
+    echo "  [PASS] committed source package is a byte-for-byte copy of the committed sources"
+  else
+    echo "  [FAIL] committed source package does not correspond to the committed sources"
+    bad=$((bad+1))
+  fi
 
   echo "  cleaning staging copy ..."
   rm -rf "$TMP"

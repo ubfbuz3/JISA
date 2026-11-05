@@ -31,3 +31,16 @@
 # Shell scripts must keep LF: a CRLF checkout makes `bash build.sh` fail with
 # "\r: command not found" (build.sh / reproduce.sh / verify_artifact.sh).
 *.sh     text eol=lf
+
+# Manuscript sources are pinned to CRLF. The submitted LaTeX package
+# (`latex_source_files_submission.zip`) is built from the working tree and its
+# every entry is compared byte-for-byte with that tree
+# (provenance/SUBMISSION_SOURCE_SHA256.json, check_submission_zip.py). Without
+# an explicit eol the checkout ending is whatever core.autocrlf happens to be,
+# so the same package would "match" on this box and fail on a Linux clone --
+# a false alarm for anyone verifying the archive. Pinning the ending makes the
+# comparison machine-independent. The stored blobs stay LF; only the checkout
+# and the exported tree carry CRLF.
+*.tex    text eol=crlf
+*.bib    text eol=crlf
+*.bbl    text eol=crlf
