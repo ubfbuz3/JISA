@@ -3,119 +3,90 @@
 
 \paragraph{Metamorphic security testing} Metamorphic testing was brought to web
 security by Mai et al.~\cite{Mai2019Metamorphic}, who cast security test
-patterns---authentication, authorization, session---as metamorphic relations so
-that faults can be exposed without an oracle. The line matured into
+patterns---authentication, authorization, session---as metamorphic relations so that
+faults can be exposed without an oracle. The line matured into
 \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic}, whose \ResLitMrCatalog{}
-system-agnostic relations over a Web-specific domain language are the object of
-our study. We take the
-technique's own admission that the role-to-resource mapping is ``not always
-available'' at face value and follow it to its consequence for what the
-adjudication can decide. A relation whose guard reads a crawl-time model is
-sound in the false-proof direction whenever the model does not understate the
-subject's reachability; equality with the authorization state is a
-\emph{sufficient} condition for that, not a necessary one---a model that
-overstates reachability turns a legitimate access into silence rather than
-into a false proof, trading false proofs for misses. That equality is
+system-agnostic relations over a Web-specific domain language are the object of our
+study. We take the technique's own admission that the role-to-resource mapping is
+``not always available'' at face value and follow it to its consequence for what the
+adjudication can decide. A relation whose guard reads a crawl-time model is sound in
+the false-proof direction whenever the model does not understate the subject's
+reachability; equality with the authorization state is a \emph{sufficient} condition
+for that, not a necessary one---a model that overstates reachability turns a
+legitimate access into silence rather than into a false proof. That equality is
 exactly what the technique cannot check for itself.
 
-\paragraph{Detecting broken access control} A large and active literature
-detects access-control flaws directly, and these techniques differ in the oracle
-they rely on. Black-box probing drives requests with and without the rights of
-another subject and looks for a missing refusal~\cite{Liu2025BACScan,Dharmaadi2025BACFuzz},
-a line that runs back to AUTHSCOPE~\cite{Zuo2017AUTHSCOPE} and that has been
-extended to deployed systems under ethical constraints~\cite{Chehade2025Forbidden};
-where an API description is available, the oracle itself can be synthesised, for
-instance by transforming an OpenAPI specification into a colored Petri net that
-predicts per-object access~\cite{Filho2025Automated}.
-A complementary, white-box line recovers the \emph{enforced} policy from the
-implementation---by reverse-engineering RBAC policies~\cite{Le2021Automated}, by
-statically extracting authorization policies~\cite{Berger2020Static} or database
-access-control rules~\cite{Zhang2026Extracting}, or by locating the permission
-checks themselves~\cite{Shi2025Facilitating}---and then flags violations against
-that recovered model: BOLA in database-backed applications~\cite{Huang2024Detecting},
-missing-owner-check and function-level flaws in Java web
-applications~\cite{Liu2025MOCGuard,Feng2025JAuthGuard}, function- and object-level
+\paragraph{Detecting broken access control} A large literature detects access-control
+flaws directly, and these techniques differ in the oracle they rely on. Black-box probing
+drives requests with and without another subject's rights and looks for a missing
+refusal~\cite{Liu2025BACScan,Dharmaadi2025BACFuzz}, a line running back to
+AUTHSCOPE~\cite{Zuo2017AUTHSCOPE} and extended to deployed systems under ethical
+constraints~\cite{Chehade2025Forbidden}; where an API description is available, the oracle
+itself can be synthesised~\cite{Filho2025Automated}. A white-box line recovers the
+\emph{enforced} policy from the implementation---by reverse-engineering RBAC
+policies~\cite{Le2021Automated}, by statically extracting authorization
+policies~\cite{Berger2020Static} or database access-control
+rules~\cite{Zhang2026Extracting}, or by locating the permission checks
+themselves~\cite{Shi2025Facilitating}---and flags violations against that recovered model:
+BOLA in database-backed applications~\cite{Huang2024Detecting}, missing-owner-check and
+function-level flaws in Java web applications~\cite{Liu2025MOCGuard,Feng2025JAuthGuard},
 access-control flaws across Web applications~\cite{Schlaubitz2025A}, and privilege
 escalation in polyglot microservices~\cite{Li2026Detecting}. Specification-driven API
 fuzzers generate the requests well but inherit the same oracle
-difficulty~\cite{Atlidakis2019RESTler,Arcuri2024Advanced,Seran2025Handling};
-adding explicit access-policy violation checks~\cite{Sahin2027Enhancing} moves
-them toward the detection problem but does not remove the need for a ground
-truth, and a recent turn delegates generation or probing to language
-models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. A concurrent line
-reframes BOLA under a zero-trust model, in which each request must carry an
-explicit authorization decision rather than one inferred from endpoint
-reachability~\cite{Wu2026Rethinking}; our question sits at that decision level.
-Each of these papers reports detections against an oracle it holds
-privately---a policy, a seeded defect, a differential response---and none of them
-is our comparison class, because we do not measure detection rates. What this
-paper adds is three claims about one published adjudication, each stated together
-with the check that would count against it. Two of the ingredients are already known---that a crawl-time model
-can go stale, and that an authorization oracle can be unsound; the claims below
-differ in that the first failure is deterministic and attributable to a
-representation choice, the second is bounded by an explicit equivalence rather
-than argued case by case, and the third is a property of the published metric's
-denominator. First, a gate that reads a crawl-time model misreports a grant the
-record does not contain, deterministically rather than intermittently
-(Finding~1; the constructed enumeration). Re-reading the surface repairs that
-misreport only when the grant is one the surface would have shown on a second
-reading: across the two products a same-credential recrawl removes
-\TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs, leaving
-\TmpBothLiveFP{} live ones. When the grant arrived through a channel the
-subject's own crawl does not enumerate, re-reading that crawl does not repair
-it: on Gogs \GgMismatchLive{} of \GgMismatchSnap{} mismatching cells persist
-under the live reading---\GgLiveMismatchPublic{} on public visibility and
-\GgLiveMismatchSiteAdmin{} on the site-administrator vantage---and every one of
-the \GgFpVthreeLive{} surviving surface-gated false proofs rests on public
-visibility. Team-derived and collaborator grants are repaired on this product,
-because its own repository list resolves inheritance. Staleness is repairable
-and channel blindness is not, and the two call
-for different remedies. Second, once a readable,
-sound oracle is supplied, the promoted verdict is a subset of direct adjudication
-on the evaluated domain, so the metamorphic step adds no confirmation there
-(Proposition~\ref{lem:oracle-suff}(b)); the check that would count against it is
-a record the relation confirms and the direct consumer does not. Third, the
-published specificity's
-denominator is pooled over the inputs a crawl could enumerate, so a failure
-confined to a class outside that set does not move it
-(Proposition~\ref{prop:resolution}). We claim no new detector, no new oracle,
-and no recall advantage over the access-control line; what we claim is a
-statement about what an oracle-substituting technique can establish, and where
-that statement stops. The three claims, the position each extends, what each adds
-and the check or counterexample attached to each are collected in
+difficulty~\cite{Atlidakis2019RESTler,Arcuri2024Advanced,Seran2025Handling}; adding
+explicit access-policy violation checks~\cite{Sahin2027Enhancing} moves them toward the
+detection problem without removing the need for a ground truth, and a recent turn
+delegates generation or probing to language
+models~\cite{Uddin2026Automated,Sun2025LLM,Wang2025Large}. A concurrent line reframes BOLA
+under a zero-trust model, in which each request must carry an explicit authorization
+decision rather than one inferred from endpoint reachability~\cite{Wu2026Rethinking}; our
+question sits at that decision level. Each of these papers reports detections against an
+oracle it holds privately---a policy, a seeded defect, a differential response---and none
+is our comparison class, because we do not measure detection rates.
+
+What this paper adds is three claims about one published adjudication, each stated with
+the check that would count against it. Two of the ingredients are already known---that a
+crawl-time model can go stale, and that an authorization oracle can be unsound; the
+claims differ in that the first failure is deterministic and attributable to a
+representation choice, the second is bounded by an explicit equivalence, and the third is
+a property of the published metric's denominator. First, a gate that reads a crawl-time
+model misreports a grant the record does not contain, deterministically (Finding~1).
+Re-reading the surface repairs that misreport only when the grant is one the surface would
+have shown on a second reading: across the two products a same-credential recrawl removes
+\TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs, and on Gogs \GgMismatchLive{} of
+\GgMismatchSnap{} mismatching cells persist under the live reading. Second, once a
+readable, sound oracle is supplied, the promoted verdict is a subset of direct
+adjudication on the evaluated domain (Proposition~\ref{lem:oracle-suff}(b)); the check
+that would count against it is a record the relation confirms and the direct consumer does
+not. Third, the published specificity's denominator is pooled over the inputs a crawl could
+enumerate, so a failure confined to a class outside that set does not move it
+(Proposition~\ref{prop:resolution}). The three claims, the position each extends, what each
+adds and the check or counterexample attached to each are collected in
 Table~\ref{tab:novelty}.
 
 \input{novelty_table.tex}
 
 \paragraph{Direct authorization oracles, and what is at stake here} Comparing
-responses across principals or privilege states is an established way to obtain
-an authorization oracle when the ground-truth relation is available, and the
-black-box and white-box lines above are instances of it. We propose no new
-direct oracle, and we do not claim that direct authorization comparison is
-novel. Our subject is a different question: what an existing
-oracle-substituting technique \emph{decides} when it substitutes reachability
-for entitlement. The direct oracle enters our design in exactly one
-role---as the fair, same-observable control that a necessity claim about the
-metamorphic step must face. Without such a control, a substitution can appear
-necessary only because the alternative it is compared against was not allowed to
-consume the same decision-relevant observables.
+responses across principals or privilege states is an established way to obtain an
+authorization oracle, and the black-box and white-box lines above are instances of
+it. We propose no new direct oracle, and we do not claim that direct authorization
+comparison is novel. Our subject is a different question: what an existing
+oracle-substituting technique \emph{decides} when it substitutes reachability for
+entitlement. The direct oracle enters our design in one role---as the fair,
+same-observable control that a necessity claim about the metamorphic step must face.
 
-\paragraph{LLMs and the oracle problem} LLMs are used for vulnerability detection
-and specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can},
+\paragraph{LLMs and the oracle problem} LLMs are used for vulnerability detection and
+specification inference~\cite{Wang2024A,Wen2024Enchanting,Wang2026Measuring,LeCong2025Can},
 including lightweight models over hybrid code features~\cite{Liu2024Enhancing} and
 federated, explainable detectors~\cite{Senanayake2024Defendroid}; we use none in the
-detection loop. The transferable condition this paper exposes
-is that any claim of necessity must be tested against a fair substitute that
-consumes the same observable quantity as the ground truth.
+detection loop.
 
 \paragraph{Measurement and evaluation} Our contribution is finally a measurement,
-and it connects to work on the quality of the artifacts security studies are
-built on---for instance the observation that vulnerability datasets are
-frequently mislabeled, duplicated or otherwise unfit for the claims drawn from
-them~\cite{Croft2023Data}. The artifact we report is of the same family but
-inside a study rather than a dataset: a specificity figure whose
-\emph{denominator} is pooled over the inputs a crawl could enumerate, so it
-cannot register a failure confined to a class that crawl never reached, while
-the adjudication that consumes the same crawl can. We therefore read a testing technique's own reported metric
-as a measurement instrument, stating explicitly what its denominator can and
-cannot resolve.
+and it connects to work on the quality of the artifacts security studies are built
+on---for instance the observation that vulnerability datasets are frequently
+mislabeled or otherwise unfit for the claims drawn from
+them~\cite{Croft2023Data}. The artifact we report is of the same family but inside a
+study rather than a dataset: a specificity figure whose \emph{denominator} is pooled
+over the inputs a crawl could enumerate, so it cannot register a failure confined to
+a class that crawl never reached, while the adjudication that consumes the same crawl
+can.

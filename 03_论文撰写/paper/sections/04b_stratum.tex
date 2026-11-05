@@ -8,51 +8,28 @@
 \subsection{What pooling hid: the ablation split by oracle readability}
 \label{sec:stratum}
 
-Table~\ref{tab:ablation} pools two populations in which the oracle-consuming
-methods behave in opposite ways, and the pool is misleading in both directions.
-Section~\ref{sec:synthetic} reports the comparison on a representative grid; this
-subsection, summarised in Table~\ref{tab:stratum}, repeats it over all
-\MiiNTotal{} records. The records differ in one respect that decides whether
-those methods can act at
-all: whether the introspection surface returns a reading for the record. We
-therefore repeat the same comparison inside each stratum, with the same methods
-and the same decision rule, and we add two references that need no oracle
-against which the metamorphic family can be scored where no oracle exists.
+Table~\ref{tab:ablation} pools two populations in which the oracle-consuming methods behave in
+opposite ways. The records differ in one respect that decides whether those methods can act at
+all: whether the introspection surface returns a reading. We therefore repeat the same comparison
+inside each stratum (Table~\ref{tab:stratum}), with the same methods and decision rule, and add two
+references that need no oracle.
 
 \paragraph{Reconciling the representative grid with this partition}
-The 36/18 grid of Section~\ref{sec:synthetic} is not a miniature of the
-312/264 partition, and the two should not be read as one number at two sizes.
-The grid is a single point of the switch space: it keeps the e3
-configurations, fixes the exception policy at raw and the reading at aware,
-and covers S3--S7, which leaves \DsgGridN{} records---\DsgGridOn{} readable and
-\DsgGridOff{} unreadable. That starting set is the original selection, and it
-already contains \DsgGridVtwoFP{} v2 false proofs; a reconciliation that
-started elsewhere would be a different sample with the same headcount.
-Table~\ref{tab:reconcile} closes the gap additively and record by record: the
-two other exception policies add \DsgStepPvN{} (\DsgStepPvOn{} readable), the
-blind reading adds \DsgStepGuiN{} (\DsgStepGuiOn{} readable), S1--S2 add
-\DsgStepSXN{} (\DsgStepSXOn{} readable), and the two no-exception
-configurations add \DsgStepNoeThreeN{}, all of them unreadable. The blocks are
-disjoint, their union is the full \DsgRecords{} records, and the readable count
-runs \DsgGridOn{} $\rightarrow$ \DsgBaseTwoOn{} $\rightarrow$
-\DsgAllSwOn{} $\rightarrow$ \DsgEthreeOn{} $\rightarrow$ \DsgFullOn{}
-(unreadable \DsgGridOff{} $\rightarrow$ \DsgBaseTwoOff{} $\rightarrow$
-\DsgAllSwOff{} $\rightarrow$ \DsgEthreeOff{} $\rightarrow$ \DsgFullOff{}).
-The arithmetic is exact at every step, and each step was checked on record
-identifiers rather than on totals alone.
+The 36/18 grid of Section~\ref{sec:synthetic} is a single point of the switch space, not a
+miniature of the full partition. Table~\ref{tab:reconcile} closes the gap additively and record by
+record: the two other exception policies add \DsgStepPvN{}, the blind reading \DsgStepGuiN{},
+S1--S2 \DsgStepSXN{}, and the two no-exception configurations \DsgStepNoeThreeN{}, all unreadable.
+The blocks are disjoint and their union is the full \DsgRecords{} records; the readable count runs
+\DsgGridOn{} $\rightarrow$ \DsgBaseTwoOn{} $\rightarrow$ \DsgAllSwOn{} $\rightarrow$
+\DsgEthreeOn{} $\rightarrow$ \DsgFullOn{}.
 
 \input{reconcile_table.tex}
 
-\paragraph{Stratification variable} We stratify on the \emph{effective}
-readability of the surface---the value the probe returns for the record---not on
-the configuration switch. The distinction is not cosmetic: \MiiFlagOnButUnavailable{}
-records sit in configurations flagged \texttt{introspection=on} whose surface
-nevertheless returns nothing (the two no-exception configurations), so the
-configuration flag is not a faithful proxy for whether an oracle was available
-to the adjudicator, and using it would misclassify those records. The two strata
-partition all \MiiNTotal{} records: \MiiNOn{} readable, \MiiNOff{} unreadable.
-Both are fixed enumerations, so as elsewhere we report counts and rates and
-attach no inferential interval.
+\paragraph{Stratification variable} We stratify on the \emph{effective} readability of the
+surface---the value the probe returns---not on the configuration switch:
+\MiiFlagOnButUnavailable{} records sit in configurations flagged \texttt{introspection=on} whose
+surface nevertheless returns nothing. The two strata partition all \MiiNTotal{} records:
+\MiiNOn{} readable, \MiiNOff{} unreadable.
 
 \begin{table*}[t]
 \centering
@@ -90,75 +67,36 @@ unreadable (\MiiNOff)
 \end{table*}
 
 \paragraph{The readable stratum strengthens Finding~2}
-Splitting does not rescue the metamorphic step; it removes the comparison in
-which it looked best. On the \MiiNOn{} readable records
-\texttt{direct\_observe} reaches recall \MiiOnDirectObserveRec{} with
-\MiiOnDirectObserveFP{} false proofs, against v2's recall \MiiOnVTwoRec{} with
-\MiiOnVTwoFP{} false proofs, and against v3's recall \MiiOnVThreeRec{} with
-\MiiOnVThreeFP{}. The ordering is therefore not an artifact of the metric---the
-plain request is ahead on false proofs and not behind on detections---whereas
-the pooled table had let the family appear competitive on recall. We do not
-claim domination: the comparison rests on the constructed-observable argument of
-Proposition~\ref{lem:oracle-suff}, and \texttt{direct\_observe} is not an independent
-method here, since it is built from the same two quantities that define the
-reference (its second input, the access outcome, is part of how the reference
-labels a violation). What the split shows is the scope of the necessity claim:
-where an oracle resolves the proposition, there is nothing left for the relation
-to add, and the pooled numbers were flattering to the relation only because they
-mixed in records where the oracle-bearing methods could not run.
+Splitting does not rescue the metamorphic step; it removes the comparison in which it looked
+best. On the \MiiNOn{} readable records \texttt{direct\_observe} reaches recall
+\MiiOnDirectObserveRec{} with \MiiOnDirectObserveFP{} false proofs, against v2's \MiiOnVTwoRec{}
+with \MiiOnVTwoFP{} and v3's \MiiOnVThreeRec{} with \MiiOnVThreeFP{}. The plain request is ahead
+on false proofs and not behind on detections, whereas the pooled table had let the family appear
+competitive. The comparison rests on Proposition~\ref{lem:oracle-suff}, and
+\texttt{direct\_observe} is not an independent method here, being built from the same two
+quantities that define the reference.
 
 \paragraph{The unreadable stratum is the relation's own regime, and it is not empty}
-The \MiiNOff{} unreadable records contain \MiiOffNBola{} true violations and
-\MiiOffNNormal{} correct cases, a violation base rate of
-\MiiOffPrevalencePct{}\%. Every oracle-bearing method---v3,
-\texttt{direct\_observe}, \texttt{direct\_only}---detects none of them
-(\MiiOffVThreeTP{}), not because the relations are weak but because those
-methods have nothing to consult and, by the same contract, abstain. The metamorphic family does
-not abstain: v2 reaches all \MiiOffVTwoTP{} true violations
-(recall \MiiOffVTwoRec{}) with \MiiOffVTwoFP{} false proofs, precision
-\MiiOffVTwoPrec{}, a lift of \MiiLiftVTwo{}$\times$ over the base rate. Against
-the two no-oracle references: \texttt{always\_alarm} scores precision
-\MiiOffAlwaysAlarmPrec{}, which is the base rate itself---no information at
-all---and \texttt{obs\_success}, which alarms on the observed success of a plain
-request, reaches the \emph{same} recall at precision \MiiOffObsSuccessPrec{},
-lift \MiiLiftObsSuccess{}$\times$. The net difference between the metamorphic
-family and that reference is therefore not in detections
-(\MiiDeltaTPVTwoMinusObsSuccess{} additional true violations) but in false
-alarms: \MiiOffAttribSavedFPTotal{} fewer for the metamorphic family.
+The \MiiNOff{} unreadable records contain \MiiOffNBola{} true violations and \MiiOffNNormal{}
+correct cases, a base rate of \MiiOffPrevalencePct{}\%. Every oracle-bearing method detects none
+of them (\MiiOffVThreeTP{}), because those methods have nothing to consult and abstain. The
+metamorphic family does not: v2 reaches all \MiiOffVTwoTP{} true violations (recall
+\MiiOffVTwoRec{}) with \MiiOffVTwoFP{} false proofs at precision \MiiOffVTwoPrec{}, a lift of
+\MiiLiftVTwo{}$\times$ over the base rate. \texttt{always\_alarm} scores the base rate itself
+(\MiiOffAlwaysAlarmPrec{}); \texttt{obs\_success} reaches the \emph{same} recall at precision
+\MiiOffObsSuccessPrec{}, lift \MiiLiftObsSuccess{}$\times$. The net difference is therefore not in
+detections (\MiiDeltaTPVTwoMinusObsSuccess{} additional true violations) but in false alarms:
+\MiiOffAttribSavedFPTotal{} fewer for the metamorphic family.
 
 \paragraph{What the saving consists of}
-The attribution is one-sided and mechanical. Over the seven scenarios, every
-record of the \MiiOffAttribSavedFPTotal{}-alarm saving falls on S3, the
-legitimate share created \emph{through the framework's own facility} and hence
-recorded in its log: \MiiOffScenThreeObsSuccessFP{} false alarms for
-\texttt{obs\_success} against \MiiOffScenThreeVTwoFP{} for v2 on the
-\MiiOffScenThreeN{} records of that scenario. On S6, the same share created out
-of band, the two agree exactly (\MiiOffScenSixObsSuccessFP{} vs.\
-\MiiOffScenSixVTwoFP{} false alarms on \MiiOffScenSixN{} records), and both for the reason developed in
-Section~\ref{sec:boundary1}---the predicate has no representation for a grant the
-crawl did not see. So the incremental detection
-information the metamorphic step carries where no oracle exists is exactly the
-information the crawl-derived reachability model can see: it suppresses what was
-logged, and it reproduces Finding~1 on what was not. This bounds Finding~2
-rather than overturning it. Finding~2's antecedent---a readable, sound oracle
-that fully resolves the proposition---fails on this stratum by construction, and
-where it fails the relation is not worthless but worth precisely the reachability
-model it reads: above a trivial floor, above a single uninterpreted request, and
-below any method that can consult the entitlement.
-
-\paragraph{Limits of the comparison}
-Two references are deliberately weak, and we do not present them as the frontier
-of oracle-free detection: \texttt{obs\_success} uses one request and no model,
-and a differential prober that compares several accounts against one another---the
-shape taken by the black-box line reviewed in
-Section~\ref{sec:related}---consumes more than \texttt{obs\_success} does and was
-not instantiated on this record set; the same rule, evaluated on a separate
-controlled factorial with a live probe pair, is reported in
-Section~\ref{sec:baselines}. The lift we measure is therefore an estimate against
-weak references, not a claim about metamorphic testing versus the best oracle-free
-detector. Both references also share an observable
-with the reference labelling (\texttt{obs\_success} alarms on the same access
-outcome that partly defines a violation), so their absolute rates carry the same
-constructiveness caveat as \texttt{direct\_observe}; only the differences are
-meant to be read. Everything here is one constructed system, one MR family, and
-one criterion (the alarm) rather than the promoted verdict.
+The attribution is one-sided and mechanical. Every record of the \MiiOffAttribSavedFPTotal{}-alarm
+saving falls on S3, the legitimate share created \emph{through the framework's own facility}:
+\MiiOffScenThreeObsSuccessFP{} false alarms for \texttt{obs\_success} against
+\MiiOffScenThreeVTwoFP{} for v2 on the \MiiOffScenThreeN{} records of that scenario. On S6, the
+same share created out of band, the two agree exactly (\MiiOffScenSixObsSuccessFP{}
+vs.\ \MiiOffScenSixVTwoFP{}), for the reason developed in Section~\ref{sec:boundary1}. The
+incremental detection information the metamorphic step carries where no oracle exists is
+therefore exactly the information the crawl-derived model can see: it suppresses what was logged,
+and reproduces Finding~1 on what was not. That bounds Finding~2 rather than overturning it. Both
+references are deliberately weak and share an observable with the reference labelling, so only
+the differences are meant to be read.

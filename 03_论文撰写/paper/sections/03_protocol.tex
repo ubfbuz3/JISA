@@ -7,8 +7,8 @@ and~\ref{sec:realsystem}; a direct execution of the library's own
 relations---source unmodified, with the build configuration and a replay harness
 added---carries one qualitative claim, that the published code produces the
 false proof we predict (Section~\ref{sec:native-run}). Neither instrument is a
-benchmark: the standing scope and non-claims are collected in
-Section~\ref{sec:threats}, and neither yields a claim of detector accuracy.
+benchmark or yields a claim of detector accuracy; the standing scope and
+non-claims are collected in Section~\ref{sec:threats}.
 
 \paragraph{Three phases}
 (A)~\emph{Crawl}: record, per subject and object, whether the subject can reach
@@ -18,7 +18,7 @@ predicates will consult. (B)~\emph{Change authorization out of band}: alter a
 the frozen model is not updated, because the architecture has no mechanism to
 update it. (C)~\emph{Execute the MR} against the current state while the
 predicates consult the frozen model. Phase~B is what the original evaluation
-does not exercise, and it is where the reachability stand-in can be wrong
+does not exercise, and where the reachability stand-in can be wrong
 (Fig.~\ref{fig:protocol}).
 
 \begin{figure*}[t]
@@ -36,244 +36,191 @@ Finding~1.}
 \paragraph{The protocol is frozen, and it was amended twice}
 \label{sec:frozen}
 We describe the protocol as \emph{frozen} rather than as pre-registered, because
-the two words make different promises and only the first one is true here. The
-base protocol was pinned by digest (hash \texttt{\TmpProtocol}) before the first
-cell of the first run was observed, and the runs carry that digest in their
-records; but the rules a run followed are not all rules that were written before
-any observation. Two amendments were made. Amendment~A1 demoted the secondary
-calibration vantage from a pass/fail gate to a recorded diagnostic, on the ground
-that a credential which cannot read the surface cannot distinguish ``no grant''
-from ``no visibility'', so gating on that column would confound a product's
-choice of readable endpoints with a failure of the oracle; it scopes to the second
-product only, and the first product's record keeps the original gate and the
-original base digest. Amendment~A2 records a non-local side effect of an
-out-of-band mutation found in an archived pilot---removing a user's group
+only the first word is true here. The base protocol was pinned by digest (hash
+\texttt{\TmpProtocol}) before the first cell of the first run was observed, and
+the runs carry that digest in their records; but the rules a run followed are not
+all rules that were written before any observation. Amendment~A1 demoted the
+secondary calibration vantage from a pass/fail gate to a recorded diagnostic,
+because a credential that cannot read the surface cannot distinguish ``no grant''
+from ``no visibility''; it scopes to the second product only, and the first
+product's record keeps the original gate and base digest. Amendment~A2 records a
+non-local side effect found in an archived pilot---removing a user's group
 membership also removes that user's direct membership in the group's
-projects---and it is the reason the ledger is \emph{not} patched with a rule
-learned from observation: encoding it would make $E$ depend on a behaviour we
-learned from $Y$, which is the failure this design exists to avoid. The pilot is
-archived, and no cell of it enters any denominator.
-Which rules a given run followed is recoverable from that run's own
-\texttt{amendment\_id} and \texttt{amendment\_sha256} fields rather than from a
-timestamp, and we make no claim that A2 predates the first transition of the
-reported run: the digest is bound by the run record, whereas A2's self-reported
-write time falls after that run's last probe. We do not correct the field in
-place, because doing so would change the digest the run binds, and we state the
-inconsistency rather than paraphrase it away.
-What no amendment touched is fixed as written: the ground-truth source, the
-abstention exits, the \emph{unknown} policy, the denominator conventions, and the
-prohibition on letting $Y$ or $O$ reach $E$. The two rules the frozen text leaves
-genuinely open---how an \emph{unknown} entitlement is scored, and how an alarm
-becomes a claim---are treated below and in
-Section~\ref{sec:stages} as explicit choices, each with its sensitivity reported
-(Tables~\ref{tab:caliber} and~\ref{tab:promotion}).
+projects---and it is why the ledger is \emph{not} patched with a rule learned from
+observation: encoding it would make $E$ depend on a behaviour learned from $Y$.
+The pilot is archived and no cell of it enters any denominator. Which rules a run
+followed is recoverable from its \texttt{amendment\_id} and
+\texttt{amendment\_sha256} fields rather than from a timestamp, and we make no
+claim that A2 predates the first transition of the reported run: the digest is
+bound by the run record, whereas A2's self-reported write time falls after that
+run's last probe. We do not correct the field in place, because doing so would
+change the digest the run binds. What no amendment touched is fixed as written:
+the ground-truth source, the abstention exits, the \emph{unknown} policy, the
+denominator conventions, and the prohibition on letting $Y$ or $O$ reach $E$. The
+two rules left genuinely open---how an \emph{unknown} entitlement is scored, and
+how an alarm becomes a claim---are treated as explicit choices with their
+sensitivity reported (Tables~\ref{tab:caliber} and~\ref{tab:promotion}).
 
 \paragraph{Alarm, claim, and truth}
 \label{sec:stages}
-Three objects are kept apart throughout, and no result mixes them. The
-\emph{alarm} $A$ is what the technique itself returns: for the relations studied,
-$A=y\wedge\neg m$, the conjunction of a successful request with the absence of
-the subject from the frozen reachability model. It asserts that a metamorphic
-relation failed; it asserts nothing about authorization, and it has no ledger, no
-expected decision and no verdict behind it. A \emph{claim} $H$ is the promotion of
-an alarm to ``violation-proven'' by a policy $P$ that we state rather than
-inherit---the catalogue's purpose invites that reading, but its code does not
+Three objects are kept apart throughout. The \emph{alarm} $A$ is what the
+technique returns: $A=y\wedge\neg m$, the conjunction of a successful request with
+the absence of the subject from the frozen reachability model. It asserts that a
+metamorphic relation failed; it asserts nothing about authorization, and it has no
+ledger, no expected decision and no verdict behind it. A \emph{claim} $H$ is the
+promotion of an alarm to ``violation-proven'' by a policy $P$ that we state rather
+than inherit---the catalogue's purpose invites that reading, but its code does not
 perform it. The \emph{truth} $T$ is computed independently, from the ledger's
 entitlement $E$ and the content-level effect $Y$. Promotion is therefore an
 adjudication policy layered on the technique's native output, not part of it, and
-the reported false-proof count is a property of the pair $(A,P)$, not of $A$
-alone. Section~\ref{sec:policy} quantifies how far the choice of $P$ moves the
-published conclusion, and Section~\ref{sec:native-run} applies the same
-separation to the unmodified library.
+the reported false-proof count is a property of the pair $(A,P)$. 
+Section~\ref{sec:policy} quantifies how far the choice of $P$ moves the published
+conclusion, and Section~\ref{sec:native-run} applies the same separation to the
+unmodified library.
 
 \paragraph{Adjudicator variants and internal controls}
 A raw alarm becomes a verdict through an exception policy, and different policies
-are different methods: \texttt{raw} (the alarm itself, with no exception handling
-at all---this is the baseline any filter must be read against); \textbf{v1} (an
-\emph{existence} filter: any sharing record on the object downgrades the alarm,
-regardless of whom it names or what it permits); \textbf{v2} (existence plus
-operation coverage: the record must cover the operation the MR triggered);
-\textbf{v3} (state-calibrated---consults
-a readable authorization introspection surface, abstains when none is readable);
-\texttt{degrade\_all} (the floor: abstain on every alarm);
-\texttt{direct\_only} (authorization surface only, access outcome ignored---a
-deliberately unfair control); and \texttt{direct\_observe} (a succeeding plain
-request checked against the same readable surface). The last consumes the same
-observable quantity as the MR family and decides the negative result.
+are different methods: \texttt{raw} (no exception handling---the baseline any filter
+must be read against); \textbf{v1} (an \emph{existence} filter: any sharing record on
+the object downgrades the alarm); \textbf{v2} (existence plus operation coverage);
+\textbf{v3} (state-calibrated---consults a readable authorization introspection
+surface, abstains when none is readable); \texttt{degrade\_all} (the floor: abstain
+on every alarm); \texttt{direct\_only} (authorization surface only, access outcome
+ignored---a deliberately unfair control); and \texttt{direct\_observe} (a succeeding
+plain request checked against the same readable surface), which decides the negative
+result.
 
 \paragraph{Ground truth}
-Every quantitative result names its ground-truth source, and it is never the
-detector under test. For the real-system experiments the three quantities come
-from different places and are kept apart: $E$ (entitlement) is read from the
-runner's own ledger of authorization events, recorded at mutation time and
-independent of the interfaces under test; $Y$ (effect) is the content-level
-outcome of a probe by the subject's own credential (for writes, owner-side
-re-reads and deletion re-reads rather than status codes); $O$ (the
-introspection surface) is diagnostic only and never substitutes for either.
-That the ledger and the content probes agreed cell by cell is a measured result
-of the runs, not a definition, and the oracle's disagreements with the ledger
-are reported as findings, not absorbed. Construction state carries the
-constructed system and the scenario/configuration study; the pinned route
-tables carry the grant census; the seed list carries the seeded target.
+Every quantitative result names its ground-truth source, and it is never the detector
+under test. $E$ (entitlement) is read from the runner's own ledger of authorization
+events, recorded at mutation time and independent of the interfaces under test; $Y$
+(effect) is the content-level outcome of a probe by the subject's own credential (for
+writes, owner-side re-reads rather than status codes); $O$ (the introspection surface)
+is diagnostic only and never substitutes for either. That ledger and content probes
+agreed cell by cell is a measured result, and the oracle's disagreements with the
+ledger are reported as findings, not absorbed. Construction state carries the
+constructed system, the pinned route tables carry the grant census, and the seed list
+carries the seeded target.
 
 \paragraph{Unknown and failure handling}
-Each predicate can fail to yield a bit, and the handling is fixed by the frozen
-protocol (Section~\ref{sec:frozen}) before any cell is observed, not negotiated per
-result. The failure modes are distinct and are stated as implemented.
-\emph{Transport-level retries:} an HTTP request that fails to connect (status~0) is
-re-issued up to two more times; this retry exists for the network, not for the
-transaction. \emph{$E$ undefined:} an entitlement-changing transaction that is
-refused or otherwise does not commit is not retried at the transaction level---the
-runner issues it once, and the cell is marked \emph{failed} (reason
-\texttt{mutation\_failed}) and excluded from every denominator, with the exclusion
-count reported alongside the result. \emph{$Y$ undefined:} an execution error or
-timeout leaves the cell unscored, never coerced to \emph{allow} or \emph{deny}---in
-the native engine run, \NtMrTotal{} relations were attempted, \NtMrExecuted{}
-executed and \NtMrErrored{} errored, and the errored one is reported rather than
-silently dropped. \emph{$O$ undefined:} the introspection surface may return no
-definite answer; the state-calibrated method abstains on those cells by
-construction, and the channel table reports them in an explicit \emph{unanswered}
-column (\TmpUnansGitea{} Gitea and \TmpUnansGitlab{} GitLab cells for the anonymous
-reader, \GgChUnans{} on Gogs' authenticated reader) instead of absorbing them into
-\emph{deny}. On those cells $E$ and $Y$ remain scoreable---an unanswered oracle
-removes the oracle-based adjudicators, not the cell. The twelve-row truth table is
-defined over $E\in\{\text{allow},\text{deny}\}$; an $E$-undefined cell falls outside
-its rows and is reported as excluded, not reassigned.
+The failure modes are distinct and stated as implemented. \emph{Transport-level
+retries:} a request that fails to connect (status~0) is re-issued up to two more times;
+this retry exists for the network, not for the transaction. \emph{$E$ undefined:} an
+entitlement-changing transaction that is refused or does not commit is issued once,
+marked \emph{failed} (\texttt{mutation\_failed}) and excluded from every denominator,
+with the exclusion count reported. \emph{$Y$ undefined:} an execution error or timeout
+leaves the cell unscored, never coerced to \emph{allow} or \emph{deny}---in the native
+engine run, \NtMrTotal{} relations were attempted, \NtMrExecuted{} executed and
+\NtMrErrored{} errored, and the errored one is reported. \emph{$O$ undefined:} the
+state-calibrated method abstains on those cells by construction, and the channel table
+reports them in an explicit \emph{unanswered} column (\TmpUnansGitea{} Gitea and
+\TmpUnansGitlab{} GitLab cells for the anonymous reader, \GgChUnans{} on Gogs'
+authenticated reader) instead of absorbing them into \emph{deny}. On those cells $E$
+and $Y$ remain scoreable, and the twelve-row truth table is defined over
+$E\in\{\text{allow},\text{deny}\}$, so an $E$-undefined cell is reported as excluded,
+not reassigned.
 
 \paragraph{The \emph{unknown} rule is a scoring choice, and both calibers are reported}
 $E$ is \texttt{unknown} when an object is absent from the ledger model. For a
 modelled object with no recorded granting channel the frozen text promised
-\texttt{unknown} (``the ledger models no channel for the triple''), while the
-shipped implementation returns a genuine \emph{deny}, reserving \texttt{unknown} for
-the absent-object case and for the one channel the protocol singles out as
-unmodellable (deploy keys). We disclose this divergence rather than reconcile it
-silently, and we do not settle it by keeping the more favourable reading: both are
-reported. Closed-world default deny is what the main analysis uses; the literal
-reading marks those cells $E$-unknown and excludes them from scoring. Neither
-reading touches a single alarm, because every stale false proof falls on an
-$E$-allow cell: the \TmpBothStaleFP{} stale false proofs and the \TmpBothLiveFP{}
-live ones are identical under both. What the rule moves is the population the
-metrics are computed over, and it moves it far enough to change the reported rate
-by a factor of about four. Under default deny all \TmpBothCells{} committed cells
-are scorable, the \TmpBothStaleFP{} false proofs are a share of \CalImpShare{}\% of
-that set, and specificity is \CalImpSpec{}\%; under the literal rule the scorable
-set shrinks to the \TmpBothLitKnown{} cells whose entitlement the ledger fixes, the
-same false proofs are a share of \CalLitShare{}\% of it, and specificity falls to
-\CalLitSpec{}\%. The literal rule is not an improvement: it raises the observed
-share only by discarding the \TmpBothLitUnk{} cells on which the adjudication
-happened to be right, and it leaves coverage at \CalLitCov{}\% of the committed
-cells. Precision is zero in both calibers and recall is undefined in both, because
-this grid contains no violation and therefore no positive; specificity and the
-false-proof share are reported with their denominators and are not a false
-discovery rate. Table~\ref{tab:caliber} gives the two confusion matrices side by
-side.
+\texttt{unknown}, while the shipped implementation returns a genuine \emph{deny},
+reserving \texttt{unknown} for the absent-object case and for deploy keys. We
+disclose this divergence rather than reconcile it silently, and we do not settle it
+by keeping the more favourable reading: both are reported. Closed-world default
+deny is what the main analysis uses; the literal reading marks those cells
+$E$-unknown and excludes them from scoring. Neither reading touches a single alarm,
+because every stale false proof falls on an $E$-allow cell: the \TmpBothStaleFP{}
+stale false proofs and the \TmpBothLiveFP{} live ones are identical under both.
+What the rule moves is the population the metrics are computed over, far enough to
+change the reported rate by a factor of about four. Under default deny all
+\TmpBothCells{} committed cells are scorable, the \TmpBothStaleFP{} false proofs are
+a share of \CalImpShare{}\% of that set, and specificity is \CalImpSpec{}\%; under
+the literal rule the scorable set shrinks to the \TmpBothLitKnown{} cells whose
+entitlement the ledger fixes, the same false proofs are a share of \CalLitShare{}\%
+of it, and specificity falls to \CalLitSpec{}\%. The literal rule is not an
+improvement: it raises the observed share only by discarding the \TmpBothLitUnk{}
+cells on which the adjudication happened to be right, and it leaves coverage at
+\CalLitCov{}\% of the committed cells. Precision is zero in both calibers and recall
+is undefined in both, because this grid contains no violation; specificity and the
+false-proof share are reported with their denominators and are not a false discovery
+rate. Table~\ref{tab:caliber} gives the two confusion matrices side by side.
 
 \input{revision_caliber_table.tex}
 
 \paragraph{The closed-world assumption is bounded, not verified}
-Default deny is sound only if the ledger enumerates every granting channel, and
-that assumption cannot be established from inside the run. We therefore state what
-it rests on and what it would cost to be wrong. It holds \emph{by construction} for
-the frozen topologies used here: every grant written in the setup phase went through
-a modelled channel (owner, organisation owner, site administrator, public
-visibility, direct collaborator, team or group inheritance), and no other granting
-channel was exercised by the setup or mutation phase of these runs. It is also
-partially self-checking. An unrecorded grant that the system in fact enforces would
-surface as $E\neq Y$ on a probed cell, and $E=Y$ holds on all \TmpBothEeqY{} of
-\TmpBothCells{} cells here---a measured result rather than a definition, and not a
-tautology, since the oracle disagrees with $E$ on \TmpBothOracleDisagree{} cells in
-the same runs. What the check cannot see is an unrecorded grant on a cell nobody
-probed, a channel that exists but is never exercised, or a grant the system also
-fails to enforce. Deployment reality adds channels this design never instantiates:
-directory and SSO group synchronisation, deploy keys (named by the protocol itself
-as unmodellable), external identity providers, and grants written straight to the
-database.
-Table~\ref{tab:ledger} asks a narrower question, and answers it by intervention
-rather than by assertion. For each channel in turn its grant rows are deleted from
-every cell's recorded basis list and the damaged entitlement is scored, with the
-scoring executed rather than re-derived. A cell that carries an alarm is passed to
-the same classifier the runs use, so its category is whatever that classifier
-returns. A cell that carries no alarm is counted separately as an \emph{apparent}
-false negative when the damaged entitlement is deny and the observed effect is
-allow. The closed-form
-counts are asserted equal to the executed ones, so an analytic slip fails the
-build rather than reaching this table. Nothing a subject is
-permitted to do changes, because a ledger is a record and not the system: every
-cell that moves here remains a legitimate access, and the \PolAlarms{} false proofs
-are not repaired by its moving, only re-described. The alarm cannot move either---it
-is computed from the crawl snapshot, the probe response and the role, and never
-reads the ledger. The intervention adds one premise to that construction: deleting
-one channel's rows does not cascade into another channel's entitlement. Assertions
-on the \LedMultiBasis{} multi-channel cells verify that the implementation preserves
-an alternative recorded basis; they do not independently validate this premise.
-What the deletion changes is the
-reference label, and with it the
-words used for outcomes that did not change. Omitting public visibility re-labels
-\LedPublicDeny{} legitimate cells as deny in the damaged ledger; against that label
-\LedPublicTp{} existing alarms score as \emph{apparent} true positives and
-\LedPublicFn{} legitimate accesses as \emph{apparent} false negatives, and the
-reported false-proof count falls to \LedPublicFp{}. Site administration is the
-extreme case, where \LedSiteAdminTp{} of the \PolAlarms{} alarms become apparent
-true positives and no access becomes an apparent miss. Cells resting on a second
-channel are untouched, which is why the re-labelled counts fall short of the
-resting ones: \LedPublicShared{} on public visibility, \LedCollaboratorShared{} on
-direct collaborator and \LedTeamShared{} on team inheritance.
+Default deny is sound only if the ledger enumerates every granting channel, and that
+assumption cannot be established from inside the run. It holds \emph{by construction} for the
+frozen topologies used here: every grant written in the setup phase went through a modelled
+channel (owner, organisation owner, site administrator, public visibility, direct
+collaborator, team or group inheritance). It is also partially self-checking: an unrecorded
+grant the system in fact enforces would surface as $E\neq Y$ on a probed cell, and $E=Y$ holds
+on all \TmpBothEeqY{} of \TmpBothCells{} cells---a measured result rather than a definition,
+since the oracle disagrees with $E$ on \TmpBothOracleDisagree{} cells in the same runs. What
+the check cannot see is an unrecorded grant on a cell nobody probed, a channel that exists but
+is never exercised, or a grant the system also fails to enforce; deployment adds directory and
+SSO group synchronisation, deploy keys, external identity providers, and grants written
+straight to the database.
 
-Read inside this analysis, the effect is one-directional and it is an undercount.
-With the cell sample, the alarms, the probe responses and the promotion decisions
-all held fixed, and only legitimate grant rows deleted under default deny, a
-damaged label can lower the reported false-proof count but cannot raise it. Its
-scope is the analysis rather than deployment: what it establishes is that the
-false-proof rate is conditioned on the completeness of the reference record, and
-that the conditioning is not benign---incompleteness hides false proofs from the
-measurement rather than exposing them. Under the literal rule the same cell instead
-leaves the denominator, the other horn of the same dilemma.
+Table~\ref{tab:ledger} answers a narrower question by intervention. For each channel in turn
+its grant rows are deleted from every cell's recorded basis list and the damaged entitlement is
+scored, with the scoring executed rather than re-derived: an alarmed cell is passed to the same
+classifier the runs use, and an unalarmed cell counts as an \emph{apparent} false negative when
+the damaged entitlement is deny and the observed effect is allow. The closed-form counts are
+asserted equal to the executed ones, so an analytic slip fails the build rather than reaching
+the table. Nothing a subject is permitted to do changes, because a ledger is a record and not
+the system: every cell that moves here remains a legitimate access, and the \PolAlarms{} false
+proofs are not repaired by its moving, only re-described. The alarm cannot move either---it is
+computed from the crawl snapshot, the probe response and the role, and never reads the ledger.
+The intervention adds one premise: deleting one channel's rows does not cascade into another
+channel's entitlement, and assertions on the \LedMultiBasis{} multi-channel cells verify only
+that the implementation preserves an alternative recorded basis. Omitting public visibility
+re-labels \LedPublicDeny{} legitimate cells as deny; against that label \LedPublicTp{} existing
+alarms score as \emph{apparent} true positives and \LedPublicFn{} legitimate accesses as
+\emph{apparent} false negatives, and the reported false-proof count falls to \LedPublicFp{}.
+Site administration is the extreme case, where \LedSiteAdminTp{} of the \PolAlarms{} alarms
+become apparent true positives and no access becomes an apparent miss. Cells resting on a
+second channel are untouched: \LedPublicShared{} on public visibility,
+\LedCollaboratorShared{} on direct collaborator and \LedTeamShared{} on team inheritance.
 
-One consequence of this must be kept apart from the label argument. A promotion
-policy that reads the ledger instead of being fixed in advance does not merely lose
-its contradictions---it acts on them. The \LedPublicTp{} cells re-labelled above
-are exactly the alarms a ledger-gated policy would promote once it consulted the
-damaged ledger, because its rule is to promote where the ledger records a definite
-deny. Its zero in Table~\ref{tab:promotion} is a statement about a sound ledger and
-not a property that survives a damaged one; the two analyses touch the same cells
-from opposite directions and should not be merged.
+With the sample, the alarms, the probe responses and the promotion decisions all held fixed, and
+only legitimate grant rows deleted under default deny, a damaged label can lower the reported
+false-proof count but cannot raise it: incompleteness hides false proofs from the measurement
+rather than exposing them. One consequence must be kept apart: a promotion policy that reads
+the ledger rather than being fixed in advance acts on those contradictions, so the
+\LedPublicTp{} re-labelled cells are exactly the alarms a ledger-gated policy would promote,
+and its zero in Table~\ref{tab:promotion} is a statement about a sound ledger rather than a
+property that survives a damaged one.
 
 \input{revision_ledger_table.tex}
 
 Missing or modified input records fail the pipeline at entry: the SHA-256 manifests
-over inputs and outputs shipped with the artefact are checked before any generator
-runs, so a modified input is rejected before it can reach a table, and a missing one
-aborts rather than degrades; the pipeline never substitutes a default value for an
-absent record. The source-state facts of the native run are generated from frozen
-upstream inputs (commit, digests and patch manifest) rather than a live checkout, so
-the historical statements are recomputable from the archive alone.
+shipped with the artefact are checked before any generator runs, and the pipeline
+never substitutes a default value for an absent record. The source-state facts of
+the native run are generated from frozen upstream inputs (commit, digests and patch
+manifest) rather than a live checkout, so the historical statements are recomputable
+from the archive alone.
 
 \paragraph{Scenarios and design cells}
 Seven scenarios separate the reasons an MR can misfire: no shared object (S1,
 S2); an in-band legitimate share visible in the framework log (S3); an unshared
 plain violation (S4); a read-only share plus a write violation (S5); an
-out-of-band share invisible to the framework log (S6); an out-of-band share plus
-a genuine violation (S7). They are crossed with \ResSynConfigs{} configurations
+out-of-band share invisible to the framework log (S6); an out-of-band share plus a
+genuine violation (S7). They are crossed with \ResSynConfigs{} configurations
 defined by instantiation mode, enforcement correctness, channel visibility and
 introspection availability. The nominal cross is
-$\ResDesignScenarios{}\times\ResSynConfigs{}$ combinations,
-but four are inadmissible: the two no-exception configurations
-(\texttt{V-noE3-vuln0}, \texttt{V-noE3-vuln1}) are undefined under the two
-out-of-band scenarios (S6, S7), where the legitimate-sharing exception does not
-apply. This leaves \ResDesignCells{} admissible design cells.
+$\ResDesignScenarios{}\times\ResSynConfigs{}$ combinations, but four are
+inadmissible: the two no-exception configurations (\texttt{V-noE3-vuln0},
+\texttt{V-noE3-vuln1}) are undefined under S6 and S7, where the
+legitimate-sharing exception does not apply. This leaves \ResDesignCells{}
+admissible design cells.
 
-Table~\ref{tab:design} gives the complete cross, factor by factor: the levels of
-each, how it is varied, the number of records at each level, and what it is
-crossed with. Table~\ref{tab:design-census} in Section~\ref{sec:support} gives
-the cell-by-cell census---eight configurations by seven scenarios, with a dash
-wherever a combination is undefined. Two dimensions are nested rather than
-crossed, and we state them here instead of letting the tables imply a factorial
-that was not run: channel visibility exists only where the application offers a
-sharing facility, so the two no-exception configurations sit outside it; and the
-listed level was instantiated only with introspection on, so the combination
-\emph{listed and unreadable} is untested rather than shown to be impossible:
-a product can list a share and still refuse to answer the per-object
-introspection query, and this enumeration would not see it.
+Table~\ref{tab:design} gives the complete cross factor by factor, and
+Table~\ref{tab:design-census} in Section~\ref{sec:support} gives the cell-by-cell
+census. Two dimensions are nested rather than crossed: channel visibility exists
+only where the application offers a sharing facility, so the two no-exception
+configurations sit outside it; and the listed level was instantiated only with
+introspection on, so \emph{listed and unreadable} is untested rather than shown to
+be impossible.
 
 \input{design_table.tex}
 
@@ -281,79 +228,64 @@ introspection query, and this enumeration would not see it.
 \label{sec:identify}
 
 Because the exception policy and the reachability reading are thrown per record
-rather than held per configuration, every record has a partner that differs in
-that switch alone. Table~\ref{tab:attribution} uses that: it pairs records on
-configuration, scenario, relation and the other switch, and reports the
-discordant pairs. A contrast carried by some other factor would show up as
-movement in the paired cells; a contrast that is not there shows up as a zero.
+rather than held per configuration, every record has a partner that differs in that
+switch alone. Table~\ref{tab:attribution} pairs records on configuration, scenario,
+relation and the other switch, and reports the discordant pairs: a contrast carried
+by some other factor would show up as movement in the paired cells, and a contrast
+that is not there shows up as a zero.
 
 \input{attribution_table.tex}
 
-Three results come out of it, and they are stronger than the aggregate rates
-they explain. First, the reachability reading moves the outcome in one direction only:
-of \DsgGuiPairs{} blind--aware pairs, \DsgGuiFixedFP{} lose a false proof when
-the reading is aware and \DsgGuiNewFP{} gain one, while the same switch costs
-\DsgGuiLostTP{} detections and gains none. The aware reading is therefore a
-trade in a fixed direction, not noise around a rate. It is a statement about
-what the gate can see, not about when authorization changed: the constructed
-study seeds the out-of-band share before the run and never mutates entitlement
-inside it, so the temporal reading of this contrast belongs to
-Section~\ref{sec:realsystem}, not here. Second, the exception ladder has
-\emph{no} discordant pair at either step: raw and e1 differ on no individual
-record, and neither do e1 and e1e2. That is a stronger statement than the
-aggregate rate not moving---\DsgExcKeptFP{} records carry a false proof under all
-three policies---and it says the two exception predicates are, on this system,
-inert rather than merely weak. Third, oracle readability acts only where there
-is something to resolve: in the violating configuration \DsgReadGained{} of
-\DsgReadPairs{} paired records change from \texttt{violation-proven} to
-\texttt{indeterminate} when the surface is switched off, none the other way; in
-the correct configuration \DsgReadNullPairs{} pairs change not at all.
+Three results come out of it. First, the reachability reading moves the outcome in
+one direction only: of \DsgGuiPairs{} blind--aware pairs, \DsgGuiFixedFP{} lose a
+false proof when the reading is aware and \DsgGuiNewFP{} gain one, while the same
+switch costs \DsgGuiLostTP{} detections and gains none. It is a statement about what
+the gate can see, not about when authorization changed: the constructed study seeds
+the out-of-band share before the run and never mutates entitlement inside it, so the
+temporal reading belongs to Section~\ref{sec:realsystem}. Second, the exception
+ladder has \emph{no} discordant pair at either step: raw and e1 differ on no
+individual record, and neither do e1 and e1e2, so the two exception predicates are,
+on this system, inert rather than merely weak. Third, oracle readability acts only
+where there is something to resolve: in the violating configuration
+\DsgReadGained{} of \DsgReadPairs{} paired records change from
+\texttt{violation-proven} to \texttt{indeterminate} when the surface is switched
+off, none the other way; in the correct configuration \DsgReadNullPairs{} pairs
+change not at all.
 
-What the design cannot identify follows from the two nested dimensions, and we
-prefer to name it. The interaction between channel visibility and readability is
-not estimable, because the listed-and-unreadable cell was not run; the
-readability contrast is identified within unlisted only, and we make no claim
-that readability moderates the listed channel. The legitimate-sharing mechanism
-is not identified under S6--S7, where it is undefined by construction, so the
-out-of-band estimates are for the e3 configurations alone. The two relations are
-not orthogonal to scenario---S5 carries MR-002 only---so we never compare
-relations with each other. What remains is balanced: every
-(exception policy, reachability reading) slice holds \DsgBalOn{} readable and
-\DsgBalOff{} unreadable records, so the readability contrast cannot be carried by
-either thrown switch.
+What the design cannot identify follows from the two nested dimensions. The
+interaction between channel visibility and readability is not estimable, because the
+listed-and-unreadable cell was not run; the readability contrast is identified
+within unlisted only. The legitimate-sharing mechanism is not identified under
+S6--S7, where it is undefined by construction, so the out-of-band estimates are for
+the e3 configurations alone. The two relations are not orthogonal to
+scenario---S5 carries MR-002 only---so we never compare relations with each other.
+What remains is balanced: every (exception policy, reachability reading) slice holds
+\DsgBalOn{} readable and \DsgBalOff{} unreadable records.
 
 \paragraph{Statistical treatment}
-The \ResSynRecords{} records are not independent observations. Each admissible
-cell is expanded deterministically by the factors that are actually varied:
-\ResDesignMrs{} metamorphic relations (MR-002, MR-004), \ResDesignPrecondVariants{}
-exception-policy variants (raw, one level, two levels---the first deliberately
-thrown switch), and \ResDesignGuiModes{} reachability readings (a constant
-unreachable list and the listing current at execution---the second deliberately
-thrown switch). The second is a visibility manipulation, not a temporal one. The two relations do not both apply to every cell: only MR-002 applies
-under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while
-the remaining \ResDesignCellsTwoMr{} carry two. The record count is therefore
+The \ResSynRecords{} records are not independent observations: each admissible cell is
+expanded deterministically by the factors actually varied---\ResDesignMrs{} metamorphic
+relations (MR-002, MR-004), \ResDesignPrecondVariants{} exception-policy variants, and
+\ResDesignGuiModes{} reachability readings (a constant unreachable list and the listing
+current at execution, a visibility manipulation rather than a temporal one). Only MR-002
+applies under scenario~S5, so \ResDesignCellsOneMr{} S5 cells carry one relation while the
+remaining \ResDesignCellsTwoMr{} carry two, giving
 \[
 \ResSynRecords{} = \ResDesignCellsTwoMr{}\cdot\ResDesignMrs{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}
-+ \ResDesignCellsOneMr{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{},
++ \ResDesignCellsOneMr{}\cdot\ResDesignPrecondVariants{}\cdot\ResDesignGuiModes{}.
 \]
-a deliberately unbalanced design---the per-cell multiplier differs by
-scenario. The records are therefore a fixed enumeration, not a sample: we report
-counts, rates and design-cell denominators, and we attach no inferential
-interval to any of them. Where a headline count has a small denominator we say
-so explicitly (the anchored rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is
-unstable by construction) and lead with the larger-denominator count of the same
-phenomenon. No conclusion rests on statistical significance. Where a comparison
-is paired---the ablation of Section~\ref{sec:synthetic-ablation}---we report
-discordant-pair counts rather than an interval over a difference. The
-replication ceiling is
-explicit: one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs,
-three real systems.
+The records are a fixed enumeration, not a sample: we report counts, rates and
+design-cell denominators and attach no inferential interval to any of them. Where a
+headline count has a small denominator we say so (the anchored rate,
+\ResFpEthreeHits{}/\ResFpEthreeTotal{}, is unstable by construction) and lead with the
+larger-denominator count of the same phenomenon; where a comparison is paired we report
+discordant-pair counts rather than an interval over a difference. The replication ceiling
+is one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs, three real
+systems.
 
 \paragraph{Tooling and code provenance}
 Development of the analysis scripts was assisted by an AI coding assistant
-(declared in the Declarations). Every script that assistant touched was
-reviewed, executed, and its output checked by the authors against the raw
-records; the released pipeline recomputes every reported scalar from those
-records, every table is generated by the pipeline, and the macro files and the
-two auto-generated tables share a single source of truth. No AI tool
+(declared in the Declarations). Every script that assistant touched was reviewed,
+executed, and its output checked by the authors against the raw records; the
+released pipeline recomputes every reported scalar from those records. No AI tool
 participated in the detection loop or in any adjudication.

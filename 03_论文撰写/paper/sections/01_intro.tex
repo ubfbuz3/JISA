@@ -4,116 +4,88 @@
 \PARstart{B}{roken} object-level authorization (BOLA), first in the OWASP API
 Security Top~10~\cite{OWASP2023API1}, is the failure to enforce, per object, that the
 authenticated subject is entitled to the object touched. Detecting it is an
-\emph{oracle} problem: vulnerable and correct systems answer with the same
-success status. Metamorphic testing is an established approach to that oracle
-problem, and \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic} is a substantial
-system-agnostic instance for Web systems: \ResLitMrCatalog{} system-agnostic
-relations (MRs) over \ResLitSmrlFunctions{} Web-specific predicates, reported to
-detect \ResLitReportedDetection{}\% of vulnerabilities with specificity
+\emph{oracle} problem: vulnerable and correct systems answer with the same success
+status. Metamorphic testing is an established approach to that oracle problem, and
+\mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic} is a substantial system-agnostic
+instance for Web systems: \ResLitMrCatalog{} system-agnostic relations (MRs) over
+\ResLitSmrlFunctions{} Web-specific predicates, reported to detect
+\ResLitReportedDetection{}\% of vulnerabilities with specificity
 \ResLitReportedSpecPct{}\%.
 
 This paper asks what happens to that claim when the asserted property is
-object-level authorization. The predicates do not express entitlement; they
-express what their authors call reachability---what ``the functionality exposed
-by the user interface'' permits---with the role-to-resource mapping
-``\textbf{not always available}''~\cite{Chaleshtari2022Metamorphic}. We take
-that sentence as premise, not discovery. Delegating adjudication to a reachability
-model makes the moment the model was read part of the specification, so we
-instantiate the predicates \emph{as defined}---over a model recorded at crawl
-time---and drive the real systems through three phases: crawl, change
-authorization out of band, execute. The middle phase is the one the original
-evaluation does not exercise. The constructed study isolates the same defect
-without time: it seeds a share outside the framework's record and asks whether
-a gate that cannot see it still calls the access legal.
-
-We ran a \ResSynRecords{}-record scenario/configuration study on a constructed
-system and a controlled study on Gitea \ResRsVersion{}, extended, with a
-methodological variation, to Gogs
-\GgVersion{} and GitLab \GlVersion{}. We propose no mechanism. What survives is
-three findings, one per research question (Section~\ref{sec:findings}).
+object-level authorization. The predicates do not express entitlement; they express
+what their authors call reachability---what ``the functionality exposed by the user
+interface'' permits---with the role-to-resource mapping ``\textbf{not always
+available}''~\cite{Chaleshtari2022Metamorphic}. Delegating adjudication to a
+reachability model makes the moment the model was read part of the specification, so
+we instantiate the predicates \emph{as defined}---over a model recorded at crawl
+time---and drive the real systems through three phases: crawl, change authorization
+out of band, execute. The middle phase is the one the original evaluation does not
+exercise. The constructed study isolates the same defect without time: it seeds a
+share outside the framework's record and asks whether a gate that cannot see it
+still calls the access legal. We ran a \ResSynRecords{}-record
+scenario/configuration study on a constructed system and a controlled study on Gitea
+\ResRsVersion{}, extended, with a methodological variation, to Gogs \GgVersion{} and
+GitLab \GlVersion{}. We propose no mechanism; three findings survive, one per
+research question (Section~\ref{sec:findings}).
 
 \paragraph{Research questions and findings}
-(1)~\emph{Temporal (RQ1).} Does the crawl-time reachability model remain sound
-for authorization decisions after an out-of-band authorization change? No: the
+(1)~\emph{Temporal (RQ1).} Does the crawl-time reachability model remain sound for
+authorization decisions after an out-of-band authorization change? No: the
 adjudication as designed produces \emph{deterministic false proofs}---a legitimate
 access the model cannot see is reported as a proven violation once an alarm is
-promoted, at rate \ResObsOobVtwoFpRate{} in the constructed study, where the share
-is seeded outside the framework's record, and at rate
-\ResRsMrBookkeepingFpRate{} on Gitea, where the grant is made between the crawl and
-the request. The predicate's two representations cannot describe either grant. The
-error is a property of the \emph{reading}, not of the system. The alarm and the
-count of proven violations are separable, and we keep them apart: no policy changes
-what the relations return, while the number of contradictable claims runs from
-none, through \PolPallFalse{} under promote-every-alarm, to \PolPoracleFalse{} under
-the oracle-gated variant (Table~\ref{tab:promotion}). Reporting the promotion
-policy is therefore part of reporting the finding, not a footnote to it.
-(2)~\emph{Oracle (RQ2).} When a readable, sound authorization oracle fully
-resolves the proposition under test, does the metamorphic step add incremental
-adjudication information beyond the oracle and the request outcome? Not on the
-evaluated domain---and there the answer is a construction rather than a
-measurement: the direct adjudicator is built from the same entitlement and outcome
-quantities that define the reference label, so the two rules \emph{cannot} part
-where the oracle agrees with the ledger (Section~\ref{sec:boundary2}). Agreement on
-that domain is an identity, and we present it as one rather than as evidence that
-direct observation detects better. What is empirical is whether the domain is
-reached: the antecedent is an oracle that is readable, sound \emph{and} admissible,
-and no system studied here supplies one
+promoted, at rate \ResObsOobVtwoFpRate{} in the constructed study and
+\ResRsMrBookkeepingFpRate{} on Gitea. The predicate's two representations cannot
+describe either grant, so the error is a property of the \emph{reading}, not of the
+system. The alarm and the count of proven violations are separable: no policy
+changes what the relations return, while the number of contradictable claims runs
+from none, through \PolPallFalse{} under promote-every-alarm, to \PolPoracleFalse{}
+under the oracle-gated variant (Table~\ref{tab:promotion}).
+(2)~\emph{Oracle (RQ2).} When a readable, sound authorization oracle fully resolves
+the proposition under test, does the metamorphic step add incremental adjudication
+information beyond the oracle and the request outcome? Not on the evaluated
+domain---and there the answer is a construction rather than a measurement: the
+direct adjudicator is built from the same entitlement and outcome quantities that
+define the reference label, so the two rules \emph{cannot} part where the oracle
+agrees with the ledger (Section~\ref{sec:boundary2}). Whether that domain is reached
+is empirical: its antecedent is an oracle that is readable, sound \emph{and}
+admissible, and no system studied here supplies one
 (Section~\ref{sec:admissibility}). Where it fails, substituting the direct
-adjudicator for the relation makes matters worse rather than better---false proofs
-\GgFpDirectObserve{} against \GgFpVthree{} on Gogs and \GlFpDirectObserve{} against
-\GlFpVthree{} on GitLab (Table~\ref{tab:gogs-cross})---so the practical advice is
-conditional on an admission test, not a blanket replacement.
-(3)~\emph{Measurement (RQ3).} Can a pooled specificity over follow-up inputs
-provide stable scenario-level resolution for a failure confined to a class? No:
-unaffected inputs dilute it, and a class the crawl never reaches contributes no
-negative inputs at all, so the figure is silent about that class
-(Proposition~\ref{prop:resolution}). The published labels are manually
-verified; the limit is the denominator and the input set, not the labels.
-
-The native execution, the seeded target and the second implementation are support
-evidence for these findings, not further headline findings
-(Section~\ref{sec:support}).
+adjudicator makes matters worse---false proofs \GgFpDirectObserve{} against
+\GgFpVthree{} on Gogs and \GlFpDirectObserve{} against \GlFpVthree{} on GitLab
+(Table~\ref{tab:gogs-cross}).
+(3)~\emph{Measurement (RQ3).} Can a pooled specificity over follow-up inputs provide
+stable scenario-level resolution for a failure confined to a class? No: unaffected
+inputs dilute it, and a class the crawl never reaches contributes no negative inputs,
+so the figure is silent about that class (Proposition~\ref{prop:resolution}). The
+published labels are manually verified; the limit is the denominator and the input
+set.
 
 \paragraph{What is new here, and what is not}
-Two of the ingredients are already established, and we neither re-derive nor claim
-them: that a crawl-time reachability model can go stale or under-enumerate (the
-predecessor attributes its residual false alarms to crawler
-coverage~\cite{Mai2019Metamorphic}), and that a reachability predicate is not an
-entitlement predicate (its authors say the role-to-resource mapping is ``not always
-available''~\cite{Chaleshtari2022Metamorphic}). A third---that a pooled specificity
-is a weak instrument for class-level failure---is familiar from the measurement
-literature and is not offered as a discovery
-either~\cite{Croft2023Data}. Section~\ref{sec:related} sets each claim beside the
-prior position it extends and names the check that would count against it, so a
-reader can see which sentences carry new content. What is new is the following, and
-only this.
-(i)~\emph{A representation argument, not a coverage observation.} We show that the
-false proof is a deterministic consequence of which of the predicate's two
-representations a grant fits, hence fixed in direction, and that the variable that
-governs it is \emph{when} the model was read rather than what was visible---a
-distinction the coverage explanation does not make, and one that also tells
-staleness (repairable by recrawling) from channel blindness (not repairable by the
-same recrawl;
+Two of the ingredients are established and we neither re-derive nor claim them: that
+a crawl-time reachability model can go stale or under-enumerate (the predecessor
+attributes its residual false alarms to crawler coverage~\cite{Mai2019Metamorphic}),
+and that a reachability predicate is not an entitlement
+predicate~\cite{Chaleshtari2022Metamorphic}. A third---that a pooled specificity is a
+weak instrument for class-level failure---is familiar from the measurement
+literature~\cite{Croft2023Data}. Section~\ref{sec:related} sets each claim beside the
+prior position it extends and names the check that would count against it. What is
+new is the following.
+(i)~\emph{A representation argument, not a coverage observation.} The false proof is
+a deterministic consequence of which of the predicate's two representations a grant
+fits, and the variable that governs it is \emph{when} the model was read rather than
+what was visible---which also tells staleness (repairable by recrawling) from channel
+blindness (not repairable by the same recrawl;
 Section~\ref{sec:realsystem}). (ii)~\emph{The alarm/policy separation, quantified.}
 The technique returns an alarm; treating it as a violation is a policy we state, and
 we report what four policies make of the same alarms
 (Section~\ref{sec:policy}). (iii)~\emph{A conditional equivalence with a named
 antecedent.} Promotion through the relation is a subset of direct adjudication once
-an admissible oracle exists, which bounds the technique's added value from above
-without asserting that any deployed oracle satisfies the antecedent---and we apply an
-explicit admission test that, on the systems tested, refuses it
+an admissible oracle exists, which bounds the technique's added value from above; we
+apply an explicit admission test that, on the systems tested, refuses it
 (Section~\ref{sec:admissibility}). (iv)~\emph{A denominator argument about the
 published metric.} A specificity pooled over the inputs a crawl could enumerate
 cannot register a failure confined to a class that crawl did not reach
 (Proposition~\ref{prop:resolution}).
-The scope is a characterization of metamorphic testing for object-level
-authorization in Web/API systems, not a new detector. Although the technique is
-general, every empirical claim here is scoped to reachability-gated authorization
-relations, and we state where the transfer stops. The evidence---the three-phase
-instantiation with internal controls (Section~\ref{sec:protocol}), the
-scenario/configuration study (Section~\ref{sec:synthetic}), the Gitea study with an
-endogenous control and a seeded-vulnerability positive control extended to four
-defect classes (Section~\ref{sec:realsystem}), and the source reading, the native
-execution of the library's own relations and the second implementation
-(Section~\ref{sec:support})---supports these four items rather than standing as
-further headline claims.
+Sections~\ref{sec:protocol}--\ref{sec:support} carry the evidence, which supports
+these four items rather than standing as further headline claims.

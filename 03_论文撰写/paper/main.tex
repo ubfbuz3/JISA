@@ -121,6 +121,17 @@
 \setlength{\belowdisplayshortskip}{2pt plus 1pt}
 \renewcommand{\arraystretch}{0.95}
 
+% 浮动体密度：允许每页容纳更多表/图，减少被 float 撑出的空白页。
+% 只改 LaTeX 的排版配额，不改任何内容与编号。
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{3}
+\setcounter{topnumber}{3}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\bottomfraction}{0.45}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.72}
+
 % 表格与图题降为 \footnotesize，压缩浮动体高度
 \AtBeginEnvironment{table}{\footnotesize}
 \AtBeginEnvironment{table*}{\footnotesize}

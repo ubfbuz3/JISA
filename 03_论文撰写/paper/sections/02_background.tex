@@ -1,11 +1,11 @@
 \section{Background: the predicates in question}
 \label{sec:background}
 
-For authorization there is no intrinsic oracle: vulnerable and correct
-executions both answer with success. Metamorphic testing replaces the absent
-oracle with a relation over multiple executions---and the relation is only as
-sound as the assumptions it needs, which for authorization are exactly the facts
-the oracle was supposed to supply. \mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic},
+For authorization there is no intrinsic oracle: vulnerable and correct executions
+both answer with success. Metamorphic testing replaces the absent oracle with a
+relation over multiple executions---and the relation is only as sound as the
+assumptions it needs.
+\mbox{MST-wi}~\cite{Chaleshtari2022Metamorphic},
 building on Mai et al.~\cite{Mai2019Metamorphic}, crawls a per-user model of
 reachable URLs and contents, then checks MRs against that recorded model. In the
 artifact we inspected, the predicates guarding an authorization MR read either
@@ -23,34 +23,29 @@ subject cannot reach it; the relation then treats the successful response as a
 violation. Every step is exactly as specified, so no guard is miswritten: the
 predicate's two representations---``reachable as recorded'' and ``not reachable
 as recorded''---cannot express ``reachable, but only after the record was
-taken''. Two different cures exist for two different situations, and they must
-not be conflated. When the grant makes the object listable through the
-subject's own interface, a \emph{re-enumeration with the same credential}
-picks it up: in the temporal experiment such a same-credential recrawl repairs
-all \TmpBothFixed{} stale cells, and no elevation of credential is involved.
-When instead the object never enters that crawl source at all---the granting
-channel is invisible to the crawled interface---no amount of re-enumerating
-repairs the model, and that is the boundary the Gogs residual cells in
-Section~\ref{sec:gogs} illustrate. Observing the repair therefore requires only
-re-listing objects, not reading the administrative event that caused the
-grant, and the temporal experiment's repair claim is a same-credential one.
-The reported specificity does not register the
-failure either, because it is a property of the adjudication's \emph{reading
-moment} rather than of any single generated input.
-This is the mechanism the rest of the paper measures, and the reason we speak of
-a boundary of the specification rather than a defect of an implementation.
+taken''. The two cures that follow are different and must not be conflated. When
+the grant makes the object listable through the subject's own interface, a
+\emph{re-enumeration with the same credential} picks it up: in the temporal
+experiment such a same-credential recrawl repairs all \TmpBothFixed{} stale
+cells, with no elevation of credential involved. When instead the object never
+enters that crawl source at all, no amount of re-enumerating repairs the model,
+and that is the boundary the Gogs residual cells in Section~\ref{sec:gogs}
+illustrate. The reported specificity does not register the failure either,
+because it is a property of the adjudication's \emph{reading moment} rather than
+of any single generated input. This is the mechanism the rest of the paper
+measures, and the reason we speak of a boundary of the specification rather than
+a defect of an implementation.
 
 Two census figures frame what follows. Over the \ResCatalogMrTotal{} catalog
 MRs, \ResCatalogGuiDerived{} (\ResCatalogGuiDerivedPct{}\%) gate on a
 GUI-derived or identity predicate, and only \ResCatalogUnion{}
 (\ResCatalogUnionPct{}\%) are authorization-relevant by name or action---an
-upper bound, reported as a caveat; a full-text search for predicates reading the
-\emph{state of an authorization artifact} (ownership, permission record, share)
-finds \ResCatalogAuthzStateHits{} occurrences. Within the examined vocabulary,
-then, the authorization MRs have no authorization-artifact state observable to
-decide on, and the reading moment enters the specification: if an entitlement
-changes after the crawl, the MR evaluates reachability against a world that no
-longer exists. This is a statement about what the relations \emph{mean}. Our experiments
-separate the two ways the world can move under the model: the constructed study
-varies what the gate can see, and the temporal study varies when the model was
-read.
+upper bound; a full-text search for predicates reading the \emph{state of an
+authorization artifact} (ownership, permission record, share) finds
+\ResCatalogAuthzStateHits{} occurrences. Within the examined vocabulary, the
+authorization MRs have no authorization-artifact state observable to decide on,
+and the reading moment enters the specification: if an entitlement changes after
+the crawl, the MR evaluates reachability against a world that no longer exists.
+Our experiments separate the two ways the world can move under the model: the
+constructed study varies what the gate can see, and the temporal study varies
+when the model was read.

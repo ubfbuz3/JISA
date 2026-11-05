@@ -1,54 +1,40 @@
 \section{Threats to validity}
 \label{sec:threats}
 
-\paragraph{Source versus execution} We read the predicates at source (built
-under JDK~8 and Maven; Section~\ref{sec:impl}) and then executed the relations,
-unmodified apart from the build configuration and our harness
-(Section~\ref{sec:native-run}). The harness substitutes an HTTP observation
-channel---exact for the reachability predicate, not exercised for the content
-predicate, whose invocation count we report rather than claim cleanliness we did
-not demonstrate. The run converts one class of claim: that a false proof is
-produced by the \emph{published} relations on a real system under the promotion
-policy $P$ of Section~\ref{sec:native-run}; it does not convert the
-rest: the scenario/configuration and cell studies remain statements about our
-instantiation,
-our exception vocabulary belongs to the same predicate family, and we report no
-sensitivity or specificity attributable to \mbox{MST-wi}.
+\paragraph{Source versus execution} We read the predicates at source (built under JDK~8 and
+Maven; Section~\ref{sec:impl}) and then executed the relations, unmodified apart from the build
+configuration and our harness (Section~\ref{sec:native-run}). The harness substitutes an HTTP
+observation channel---exact for the reachability predicate, not exercised for the content
+predicate, whose invocation count we report rather than claim cleanliness we did not
+demonstrate. The run converts one class of claim, that a false proof is produced by the
+\emph{published} relations on a real system under the promotion policy $P$; it does not convert
+the rest: the scenario/configuration and cell studies remain statements about our instantiation,
+and we report no sensitivity or specificity attributable to \mbox{MST-wi}.
 
-\paragraph{Metric and statistics} Records within a design
-cell are not independent (Section~\ref{sec:protocol}, statistical
-treatment) and the records are a
-fixed enumeration, so we report counts and rates rather than inferential
-intervals, and no result rests on statistical significance. The RQ2 ablation is
-paired and is reported as a discordance count. Finding~3 is a statement about
-what the published denominator pools over, not about the value of any
-specificity figure: we do not restate the predecessor's specificity, and no
-conclusion in this paper depends on it.
+\paragraph{Metric and statistics} Records within a design cell are not independent and the
+records are a fixed enumeration, so we report counts and rates rather than inferential
+intervals, and no result rests on statistical significance. The RQ2 ablation is paired and is
+reported as a discordance count. Finding~3 is a statement about what the published denominator
+pools over, not about the value of any specificity figure: no conclusion here depends on it.
 
-\paragraph{Two MRs, one family} We instantiated \ResDesignMrs{} MRs of one
-family---relations gated on the absence of evidence. The native run lifts the
-count to \NtMrExecuted{} of \ResArtAuthzMrTotal{} catalog authorization
-relations but not the family: only the reachability-gated ones alarm in our run.
-Widening the family requires relations gated otherwise, which is a different
-experiment.
+\paragraph{Two MRs, one family} We instantiated \ResDesignMrs{} MRs of one family---relations
+gated on the absence of evidence. The native run lifts the count to \NtMrExecuted{} of
+\ResArtAuthzMrTotal{} catalog authorization relations but not the family: only the
+reachability-gated ones alarm in our run. Widening the family requires relations gated
+otherwise, which is a different experiment.
 
-\paragraph{Real systems} Three systems (one lineage pair, one independent),
-chosen for accessibility, none vulnerable on the tested surface---so only the
-false-proof side is measured, within one domain, the git forge. Channel
-proportions are topology design parameters, not field prevalence. Constructed
-scenarios with construction-defined ground truth are why the real-system section
-exists; three systems tested once each are still not a population.
+\paragraph{Real systems} Three systems (one lineage pair, one independent), chosen for
+accessibility, none vulnerable on the tested surface, so only the false-proof side is measured,
+within one domain, the git forge. Channel proportions are topology design parameters, not field
+prevalence, and three systems tested once each are still not a population.
 
-\paragraph{Stratification and the references used in it} The split of
-Section~\ref{sec:stratum} is on whether the introspection surface returned a
-reading for the record, not on the configuration switch: \MiiFlagOnButUnavailable{}
-records sit in configurations that enable introspection but whose probe returns
-nothing, so the switch would misclassify them. The two oracle-free references
-there are deliberately weak---one unconditional, one guessing from a single
-request---because the point is to size the metamorphic step against methods that
-need nothing, not to identify the best oracle-free detector; a differential
-prober across accounts consumes more than those references do and is instantiated
-instead in the separate controlled study of
-Section~\ref{sec:baselines}. Both references share an observable with the
-labelling rule, as \texttt{direct\_observe} does, so only the differences against
-them---not their absolute rates---are meant to be read.
+\paragraph{Stratification and the references used in it} The split of Section~\ref{sec:stratum}
+is on whether the introspection surface returned a reading for the record, not on the
+configuration switch: \MiiFlagOnButUnavailable{} records sit in configurations that enable
+introspection but whose probe returns nothing. The two oracle-free references there are
+deliberately weak---one unconditional, one guessing from a single request---because the point is
+to size the metamorphic step against methods that need nothing, not to identify the best
+oracle-free detector; a differential prober across accounts consumes more than those references
+do and is instantiated in Section~\ref{sec:baselines} instead. Both share an observable with the
+labelling rule, as \texttt{direct\_observe} does, so only the differences against them are meant
+to be read.

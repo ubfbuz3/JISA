@@ -1,93 +1,64 @@
 \section{Support evidence}
 \label{sec:support}
 
-Nothing here is a further finding. This section holds what the three findings
-rest on: the semantics of the two governing predicates read at source
-(Section~\ref{sec:impl}), an execution of the published relations on a real
-system (Section~\ref{sec:native-run}), and the robustness of our numbers to a
-second, independent implementation of the same predicates
-(Section~\ref{sec:secondimpl}); the seeded positive control
-(Section~\ref{sec:seeded}) and the cross-vendor replication (Section~\ref{sec:gogs}) are the
-remaining confirmations and stay with the study that produced them. Each item is
-a confirmation of a mechanism already stated, not a new claim about what the
-technique can detect.
+Nothing here is a further finding. It holds what the three findings rest on: the semantics of the
+two governing predicates read at source (Section~\ref{sec:impl}), an execution of the published
+relations on a real system (Section~\ref{sec:native-run}), and the robustness of our numbers to a
+second implementation (Section~\ref{sec:secondimpl}).
 
 \subsection{The enumeration, cell by cell}
 \label{sec:census}
 
-Table~\ref{tab:design-census} gives the full mapping: every
-configuration against every scenario, with the number of records under each
-populated cell and a dash where the combination is undefined. The eight
-configurations are the full cross of instantiation mode, enforcement
-correctness, channel visibility and introspection availability, less two
-corners. The first is undefined: with no exception mechanism there is no share
-to list. The second---listed with the introspection surface off---was simply
-not instantiated, and Section~\ref{sec:identify} treats it as untested rather
-than impossible. Each populated cell holds twelve records---three exception
-policies and two reachability readings for each of the two relations---and six
-where only one relation applies, as under S5.
+Table~\ref{tab:design-census} gives the full mapping: every configuration against every scenario,
+with the number of records under each populated cell and a dash where the combination is
+undefined. Each populated cell holds twelve records---three exception policies and two
+reachability readings for each of the two relations---and six where only one relation applies, as
+under S5.
 
 \input{design_census_table.tex}
 
-Two partitions of these records are easy to confuse, because both are counted in
-the same totals. Split by relation, MR-002 holds \DsgMrTwo{} records and MR-004
-\DsgMrFour{}, since S5 carries the first only. Split by effective readability,
-\DsgFullOn{} are readable and \DsgFullOff{} are not, since four of the eight
-configurations expose a surface and four do not. The two pairs of totals
-coincide; the partitions do not. Section~\ref{sec:stratum} uses the second, and
-every statement about it can be recomputed from the census column by column.
+Two partitions of these records are easy to confuse, because both are counted in the same totals.
+Split by relation, MR-002 holds \DsgMrTwo{} records and MR-004 \DsgMrFour{}; split by effective
+readability, \DsgFullOn{} are readable and \DsgFullOff{} are not. Section~\ref{sec:stratum} uses
+the second, and every statement about it can be recomputed from the census column by column.
 
 \subsection{Confirmation at source}
 \label{sec:impl}
 
-Definitions can be read generously, so we checked the predicates at source in
-the public library~\cite{Chaleshtari2022Metamorphic}. It ships \ResArtMrTotal{}
-relations, \ResArtAuthzMrTotal{} authorization relations,
-\ResArtAuthzGatedEither{} gating on the two predicates analyzed. Four
-implementation-level properties not made explicit in the main presentation:
-(1)~\emph{the freeze is hard-coded}---%
-\texttt{cannotReachThroughGUI} is set-membership over the crawl inputs, issues
-no request, and is cached in a field written once and never invalidated
-(\texttt{userCanRetrieveContent} likewise reads a crawl-produced store loaded
-once); (2)~\emph{the clause that could have caught it is inert}---the
-``absent across all users'' set is built by stopping each recorded sequence at
-the first login action, so it is always empty; (3)~\emph{missing data defaults
-to an alarm}---with an empty or null crawl argument the predicate returns
-``cannot reach'', so an empty crawl \emph{satisfies} the precondition: the
-mechanism behind Finding~1's deterministic direction; (4)~\emph{the role
-relation is configuration, not state}---the supervisor guard reads a static
-configuration file and reports true for identical accounts, so it cannot reflect
-a later grant.
+Definitions can be read generously, so we checked the predicates at source in the public
+library~\cite{Chaleshtari2022Metamorphic}: it ships \ResArtMrTotal{} relations,
+\ResArtAuthzMrTotal{} authorization relations, \ResArtAuthzGatedEither{} gating on the two
+predicates analyzed. Four implementation-level properties are not made explicit in the main
+presentation: (1)~\emph{the freeze is hard-coded}---\texttt{cannotReachThroughGUI} is
+set-membership over the crawl inputs, issues no request, and is cached in a field written once and
+never invalidated; (2)~\emph{the clause that could have caught it is inert}---the ``absent across
+all users'' set is built by stopping each recorded sequence at the first login action, so it is
+always empty; (3)~\emph{missing data defaults to an alarm}---with an empty or null crawl argument
+the predicate returns ``cannot reach'', so an empty crawl \emph{satisfies} the precondition, which
+is the mechanism behind Finding~1's deterministic direction; (4)~\emph{the role relation is
+configuration, not state}---the supervisor guard reads a static configuration file and reports true
+for identical accounts, so it cannot reflect a later grant.
 
 \subsection{Executing the published relations}
 \label{sec:native-run}
 
-The library ships relations but no execution environment; we supplied the system
-configuration and crawl snapshot and ran the relations---source unmodified,
-build configuration (\texttt{pom.xml}) and an external harness added
-(\NtUpstreamModified{} changed upstream file, \NtUpstreamJavaModified{} changed
-Java sources, two added classes totalling \NtHarnessLines{} lines)---against
-Gitea \NtGiteaVersion{} (Table~\ref{tab:native-facts}). \NtMrExecuted{} of \NtMrTotal{} authorization relations
-executed; \NtMrFired{} returned failures, \NtAlarms{} alarms in all---the
-engine's own \texttt{getFailures()} value (Table~\ref{tab:native}). What the run
-establishes is scoped to the \emph{reachability-gated subset that fires here},
-not a full replay of the catalogue: one relation aborts on an engine-side defect,
-most issue no request because their own guards are unsatisfied, and the content
-predicate is never invoked. Almost none
-of the \NtElapsedS{} seconds is analysis: each leaf evaluation invokes a
-browser-cleanup hook costing minutes, a cost of the missing environment that
-bounds any reproduction.
+The library ships relations but no execution environment; we supplied the system configuration and
+crawl snapshot and ran the relations---source unmodified, build configuration (\texttt{pom.xml})
+and an external harness added (\NtUpstreamModified{} changed upstream file,
+\NtUpstreamJavaModified{} changed Java sources, two added classes totalling \NtHarnessLines{}
+lines)---against Gitea \NtGiteaVersion{} (Table~\ref{tab:native-facts}). \NtMrExecuted{} of
+\NtMrTotal{} authorization relations executed; \NtMrFired{} returned failures, \NtAlarms{} alarms
+in all---the engine's own \texttt{getFailures()} value (Table~\ref{tab:native}). The claim is
+scoped to the \emph{reachability-gated subset that fires here}: one relation aborts on an
+engine-side defect, most issue no request because their own guards are unsatisfied, and the
+content predicate is never invoked.
 
 \begin{table}[t]
 \centering
-\caption{Execution facts for the native run of the published relations
-(Section~\ref{sec:native-run}). All values are emitted by
-\texttt{ingest\_native\_engine.py}; the upstream modification counts are
-generated from a frozen snapshot of the upstream source state (upstream commit,
-per-file digests and the build-configuration patch archived with the artifact),
-not from a live checkout, so they are a deterministic function of archived
-records; upstream Java sources are unchanged apart from the build
-configuration.}
+\caption{Execution facts for the native run of the published relations. All values
+are emitted by \texttt{ingest\_native\_engine.py}; the upstream modification counts
+are generated from a frozen snapshot of the upstream source state, not from a live
+checkout, so they are a deterministic function of archived records.}
 \label{tab:native-facts}
 \small
 \begin{tabular}{@{}p{0.66\columnwidth}r@{}}
@@ -104,45 +75,28 @@ added harness classes / added lines & two / \NtHarnessLines{} \\
 \end{tabular}
 \end{table}
 
-The load-bearing cell: the subject \NtKeyGrantee{} holds a legitimate
-entitlement to \NtKeyRepo{}, granted out of band after the crawl. There the
-published \texttt{cannotReachThroughGUI} answers ``cannot reach''---the answer
-it is \emph{defined} to give, since the subject's crawl record has no entry for
-the repository; across the run it answered so \NtCrtgTrue{} of \NtCrtgCalls{}
-invocations (\NtCrtgTruePct{}\%), \NtKeyCrtgTrue{} on this cell, and
-\NtKeyMrFired{} relations (\NtKeyMrNames{}) report a failure there. The access
-is authorized: all \NtByteCells{} granted cells were re-probed, and the
-grantee's response hashes identically to the owner's while a third account is
-refused. The \NtAlarms{} alarms fall on \NtAlarmCells{} cells, all post-crawl
+The load-bearing cell: the subject \NtKeyGrantee{} holds a legitimate entitlement to
+\NtKeyRepo{}, granted out of band after the crawl. There the published
+\texttt{cannotReachThroughGUI} answers ``cannot reach''---the answer it is \emph{defined} to give,
+since the subject's crawl record has no entry for the repository; across the run it answered so
+\NtCrtgTrue{} of \NtCrtgCalls{} invocations (\NtCrtgTruePct{}\%), \NtKeyCrtgTrue{} on this cell,
+and \NtKeyMrFired{} relations (\NtKeyMrNames{}) report a failure there. The access is authorized:
+all \NtByteCells{} granted cells were re-probed, and the grantee's response hashes identically to
+the owner's while a third account is refused. The \NtAlarms{} alarms fall on \NtAlarmCells{}
+cells, all post-crawl
 grants\ifnum\NtAlarmsOffGrant=0, none on a non-entitled object.\else, plus
-\NtAlarmsOffGrant{} on a non-entitled object.\fi{} Limits: the harness's HTTP
-observation channel is exact for the reachability predicate (set-membership, no
-request) but unexercised for the content predicate (\NtUcrcCalls{} invocations;
-supervisor guard \NtSupCalls{}, \NtSupTrue{} true); not all gated relations fire,
-for reasons inside their own guards, and \NtMrErrored{} abort on an engine-side
-defect---so the reproduced false proof is that of the reachability-gated subset
-that fires, not a full-replay count of the published relations. And Gitea, on
-the tested surface, enforces the expected decisions, so the run can only exhibit
-false proofs.
+\NtAlarmsOffGrant{} on a non-entitled object.\fi{} The reproduced false proof is therefore that of
+the reachability-gated subset that fires, not a full-replay count of the published relations.
 
 \paragraph{Which stage of that claim does the native run establish?}
-The three stages are those defined in Section~\ref{sec:stages}, and only the third
-is a security finding. Here the \emph{native alarm} $A$ is the engine's own
-return: \texttt{getFailures()} is appended by \texttt{MR.fail()}
-(\texttt{MR.java}:909), which logs \texttt{FAILURE} with the failing input pair
-and asserts nothing about authorization---no ledger, no expected decision, no
-verdict. The promotion policy $P$ for this run maps every fired
-\texttt{OTG\_AUTHZ} relation to ``a violation was observed'', the reading the
-catalogue's purpose invites and its code does not perform; since $P$ applies to
-every alarm, $H=\NtStageH$ holds by construction and carries no empirical
-content. All of it is in the independent truth $T$, computed from the
-ledger grant ($E$) and a content re-read ($Y$: the responder's bytes are
-identical to the owner's and a third account is refused): \NtStageTTrue{}
-violations are confirmed and \NtStageTFalse{} of the \NtStageA{} promoted alarms
-are contradicted, on \NtStageTCells{} cells (Table~\ref{tab:native-split}). A
-reader who declines $P$ should read the run as \NtStageA{} failed metamorphic
-relations rather than as \NtStageA{} vulnerabilities; the disagreement survives
-that reading, because the failures fall on accesses the ledger allows.
+Only the third of the three stages defined in Section~\ref{sec:stages} is a security finding. The
+\emph{native alarm} $A$ is the engine's own return: \texttt{getFailures()} is appended by
+\texttt{MR.fail()} (\texttt{MR.java}:909), which logs \texttt{FAILURE} with the failing input pair
+and asserts nothing about authorization. The promotion policy $P$ maps every fired
+\texttt{OTG\_AUTHZ} relation to ``a violation was observed'', so $H=\NtStageH$ holds by
+construction. All of it is in the independent truth $T$: \NtStageTTrue{} violations are confirmed
+and \NtStageTFalse{} of the \NtStageA{} promoted alarms are contradicted, on \NtStageTCells{} cells
+(Table~\ref{tab:native-split}).
 
 \begin{table}[t]
 \centering
@@ -156,7 +110,6 @@ account refused with 404. MR names abbreviate \texttt{OTG\_AUTHZ\_}$x$.}
 \footnotesize
 \input{native_split_table.tex}
 \end{table}
-
 
 \begin{table*}[t]
 \centering
@@ -175,15 +128,10 @@ relation observing them first.}
 \subsection{Implementation robustness}
 \label{sec:secondimpl}
 
-An independently written implementation of the same predicates was compared with
-the main one on a subset fixed before the comparison, not sampled after it: the
-in-band scenarios on which a second reading is defined, holding the
-exception-policy variant at the representative level and the reachability reading
-at the one each relation uses (MR-002 blind, MR-004 aware). This yields
-\ResAltPoints{} (configuration, scenario) points; MR-002 is defined on
-\ResAltMrTwoPoints{} of the resulting relation comparisons and MR-004 on the
-remaining \ResAltMrFourPoints{}, giving \ResAltCompared{} in all. The two agreed
-on \ResAltAgree{} of them (\ResAltAgreeRate{}); the point set is a fixed
-enumeration, so no interval is attached. Both were written from the same
-reading of the semantics, so this bounds implementation accident only; it does
-not bound a shared blind spot, and we do not present it as corroboration.
+An independently written implementation of the same predicates was compared with the main one on a
+subset fixed before the comparison, not sampled after it: the in-band scenarios on which a second
+reading is defined, holding the exception-policy variant at the representative level and the
+reachability reading at the one each relation uses (MR-002 blind, MR-004 aware). This yields
+\ResAltPoints{} (configuration, scenario) points, \ResAltCompared{} relation comparisons in all,
+on \ResAltAgree{} of which the two agreed (\ResAltAgreeRate{}). It is a fixed enumeration, so no
+interval is attached.

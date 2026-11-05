@@ -1,24 +1,14 @@
 \section{Real systems: Gitea, Gogs, GitLab, and a seeded control}
 \label{sec:realsystem}
 
-This section supplies the real-system evidence for Findings~1 and~2: the Gitea
-study with its endogenous control, the cross-vendor replication, and the seeded
-positive control (support evidence, Section~\ref{sec:support}).
-
-A synthetic system cannot tell us whether the crawl-time reading is an artifact
-of our construction, so we repeated the essential comparison on real systems. We
-chose Gitea \ResRsVersion{} for genuine object-level sharing with per-object
-visibility, a machine-readable sharing surface, and a documented administrative
-grant path. Three scope conditions, stated before the numbers. First, on the
-endpoints and authorization transitions exercised here, Gitea enforced the
-expected decisions: no instance of the studied vulnerability was found, so the
-experiment measures only the false-proof side. Second, the cell study uses our
-instantiation of the predicates, not the engine; the engine's own relations are
-executed separately in Section~\ref{sec:native-run}. Third, the reachability
-model is reported under \emph{both} readings---crawl-time snapshot (what the
-definitions presuppose) and the live execution-time state---so the time at which
-the model was read can be isolated as the explanatory variable. The experiment
-produces \ResRsCells{} cells, \ResRsCellsSnapshot{} per reading.
+We repeated the essential comparison on real systems, choosing Gitea \ResRsVersion{} for
+object-level sharing with per-object visibility, a machine-readable sharing surface, and a
+documented administrative grant path. Gitea enforced the expected decisions on the endpoints
+exercised here, so the experiment measures the false-proof side; the cell study uses our
+instantiation of the predicates, and the reachability model is reported under \emph{both}
+readings---crawl-time snapshot and live execution-time state---so the reading moment is the
+explanatory variable. The experiment produces \ResRsCells{} cells, \ResRsCellsSnapshot{} per
+reading.
 
 \begin{figure*}[t]
 \centering
@@ -35,15 +25,11 @@ run records by the analysis pipeline.}
 \end{figure*}
 
 \paragraph{Grant surface}
-Table~\ref{tab:rs-m1} counts an endpoint as grant-capable if, without modifying
-the system, a request can move a (subject, object) pair from not-entitled to
-entitled. The \ResRsGrantNoAdmin{} endpoints drivable by a non-administrator are
-the out-of-band channel in its real form: a subject who is not an administrator
-can create an entitlement that a crawl of that subject's own interface need not
-reveal. The cross-vendor table below reports a normalized census (semantically
-equivalent routes merged, non-authorization grant surface excluded), which is why
-its Gitea figure (\GtGrantEndpoints{}) differs from the raw count
-(\ResRsGrantEndpoints{}) here; the two answer different questions.
+Table~\ref{tab:rs-m1} counts an endpoint as grant-capable if, without modifying the system, a
+request can move a (subject, object) pair from not-entitled to entitled. The
+\ResRsGrantNoAdmin{} endpoints drivable by a non-administrator are the out-of-band channel in
+its real form. The cross-vendor table reports a normalized census, which is why its Gitea
+figure (\GtGrantEndpoints{}) differs from the raw count here.
 
 \begin{table}[t]
 \centering
@@ -62,43 +48,32 @@ revocation endpoints & \ResRsRevokeEndpoints{} \\
 \end{table}
 
 \paragraph{Is the authorization surface readable, and from where?}
-Readability depends entirely on the vantage, so the counts below are different
-populations and must not be read as one denominator. From the owner/administrator
-vantage the sharing surface is readable on \ResRsOwnerReadable{} of
-\ResRsOwnerReadableTotal{} owner-vantage attempts over the
-\ResRsCellsSnapshot{} cells: complete. From a black-box subject's own
-vantage---the vantage a black-box tool occupies---it is readable on
-\ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An intermediate
-count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from subjects who
-happen to be owners or administrators and does not constrain the mechanism; it is
-not synonymous with ``an arbitrary black-box subject can read the surface''.
-Table~\ref{tab:introspection-readable} collects these populations. On
-\ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable cells the
-credential-substitution check confirmed that our model agrees with the system's
-behavior (Fig.~\ref{fig:real-system}).
+The counts below are different populations, not one denominator
+(Table~\ref{tab:introspection-readable}). From the owner/administrator vantage the sharing surface
+is readable on \ResRsOwnerReadable{} of \ResRsOwnerReadableTotal{} attempts: complete. From a black-box subject's own vantage it is
+readable on \ResRsBlackboxSelfReadable{} of \ResRsBlackboxSelfCells{}: never. An intermediate
+count of \ResRsSelfReadable{}/\ResRsSelfTotal{} comes only from subjects who happen to be
+owners or administrators. On \ResRsFidelityConsistent{} of \ResRsFidelityTotal{} applicable
+cells the credential-substitution check confirmed that our model agrees with the system's
+behaviour (Fig.~\ref{fig:real-system}).
 
 \paragraph{Is the write path verified by state rather than status?}
-A status code cannot establish that a write took effect, so the write path is
-checked by content: the subject creates a uniquely named file, the owner
-re-reads it byte-for-byte as the ground truth, and the file is deleted where the
-API allows it. Across the \ResWpSystems{} systems, \ResWpAgreeTotal{} of
-\ResWpPairsTotal{} cross-credential write attempts agree with the ledger, with
-\ResWpUnauthTotal{} unauthorized writes; no status code contradicted the content
-outcome (count: \ResWpStatusOnlyDisagreements{}). The owner control---a non-admin
-writing its own repository---changed content in \ResWpOwnerObservedTotal{} of
-\ResWpOwnerRowsTotal{} attempts. On \ResWpAdminBlockedSystems{} of the
-\ResWpSystems{} systems the site administrator could not write through the
-contents API although the ledger grants write; those \ResWpAdminRowsTotal{}
-control rows are excluded from the cross-credential denominator and reported as
-a modelling gap rather than absorbed. Restore is unavailable on
-\ResWpRestoreUnsupported{} of the \ResWpSystems{} systems, whose contents API
-exposes no delete, so its probe files remain in a disposable instance.
+A status code cannot establish that a write took effect, so the write path is checked by
+content: the subject creates a uniquely named file, the owner re-reads it byte-for-byte, and
+the file is deleted where the API allows. Across the \ResWpSystems{} systems,
+\ResWpAgreeTotal{} of \ResWpPairsTotal{} cross-credential write attempts agree with the ledger,
+with \ResWpUnauthTotal{} unauthorized writes, and no status code contradicted the content
+outcome (\ResWpStatusOnlyDisagreements{}). The owner control changed content in
+\ResWpOwnerObservedTotal{} of \ResWpOwnerRowsTotal{} attempts. On \ResWpAdminBlockedSystems{}
+of the \ResWpSystems{} systems the site administrator could not write through the contents API
+although the ledger grants write; those \ResWpAdminRowsTotal{} control rows are excluded from
+the denominator and reported as a modelling gap, with the restore step unsupported on
+\ResWpRestoreUnsupported{} rows.
 
 \begin{table}[t]
 \centering
 \caption{Authorization-introspection readability protocol on Gitea. Each row is a
-distinct population and denominator, so the rows are not comparable: both the
-vantage and the unit of the denominator differ.}
+distinct population and denominator, so the rows are not comparable.}
 \label{tab:introspection-readable}
 \small
 \begin{tabular}{@{}p{0.44\columnwidth}rr@{}}
@@ -113,30 +88,22 @@ subject also owner/admin (representative grid) & \ResRsSelfTotal{} & \ResRsSelfR
 \end{table}
 
 \paragraph{The mismatch is in time, not in visibility}
-Table~\ref{tab:rs-m4} is the load-bearing result: the adjudication departs from
-the real authorization state on \ResRsMismatchSnapshot{} of \ResRsMismatchDenom{}
-cells under the crawl-time reading and \ResRsMismatchLive{} of the same cells
-under the live reading. System state and tested relation were held fixed; only
-the time at which the reachability model was read changed. Under the crawl-time
-reading a bookkeeping adjudication produces \ResRsMrBookkeepingFp{} false proofs
-on the \ResRsAuthorizedCells{} authorized cells (rate
-\ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{} alarms
-live; v3 produces \ResRsVThreeFp{} false proofs, and \texttt{direct\_observe}
-emits \ResRsDirectObserveFp{}. The unfair control \texttt{direct\_only} raises
-\ResRsDirectOnlyAlarms{} alarms, more than any other adjudicator, simply because
-it ignores the request outcome; on this system none is promoted to
-\texttt{violation-proven} under our strict false-proof definition
-(\ResRsDirectOnlyFp{} false proofs), so alarm count and false-proof count are not
-the same quantity. Channel provenance of the authorized access
-(\ResRsChannelNotObservable{} of \ResRsChannelAuthorizedTotal{} not observable
-by the framework log, \ResRsChannelNotObservableRate{}; of these
-\ResRsChannelOobLiteral{} are literal out-of-band grants and
-\ResRsChannelImplicit{} implicit via site administration or public visibility) is
-a property of our
-topology---a design parameter, not a field prevalence. This comparison uses two
-snapshots and therefore cannot separate a stale model from a channel the crawl
-never listed; the transition experiment in Section~\ref{sec:temporal} separates
-the two.
+Table~\ref{tab:rs-m4} is the load-bearing result: the adjudication departs from the real
+authorization state on \ResRsMismatchSnapshot{} of \ResRsMismatchDenom{} cells under the
+crawl-time reading and \ResRsMismatchLive{} of the same cells under the live reading, with
+system state and tested relation held fixed. Under the crawl-time reading a bookkeeping
+adjudication produces \ResRsMrBookkeepingFp{} false proofs on the \ResRsAuthorizedCells{}
+authorized cells (rate \ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{}
+alarms live; v3 produces \ResRsVThreeFp{}, and \texttt{direct\_observe} emits
+\ResRsDirectObserveFp{}. The unfair control \texttt{direct\_only} raises
+\ResRsDirectOnlyAlarms{} alarms because it ignores the request outcome, yet none is promoted
+(\ResRsDirectOnlyFp{}), so alarm count and false-proof count are not the same quantity.
+Channel provenance of the authorized access is mostly not observable by the framework log
+(\ResRsChannelNotObservable{} of \ResRsChannelAuthorizedTotal{},
+\ResRsChannelNotObservableRate{}; of these \ResRsChannelOobLiteral{} literal out-of-band and
+\ResRsChannelImplicit{} implicit), a property of our topology rather than a field prevalence.
+Two snapshots cannot separate a stale model from a channel the crawl never listed; the
+transition experiment separates them.
 
 \begin{table}[t]
 \centering
@@ -154,15 +121,14 @@ live execution-time state & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
 \end{table}
 
 \paragraph{An endogenous control}
-The most serious alternative explanation is that public objects are simply harder
-to enumerate---visibility, not time. Two objects that end equally public but
-became public at different moments control for this (Table~\ref{tab:rs-endo}):
-the predicate reports unreachability on \ResRsEndoAfterCrawlReach{} of
-\ResRsEndoAfterCrawlCells{} cells only for the object made public after the
-crawl, and on \ResRsEndoFromStartReach{} for the object public throughout, with
-the MR firing correspondingly (\ResRsEndoAfterCrawlFires{}
-vs.~\ResRsEndoFromStartFires{}). Final visibility is identical, so within this
-design the only manipulated explanatory variable is when the model was read.
+The most serious alternative explanation is that public objects are harder to
+enumerate---visibility, not time. Two objects that end equally public but became public at
+different moments control for this (Table~\ref{tab:rs-endo}): the predicate reports
+unreachability on \ResRsEndoAfterCrawlReach{} of \ResRsEndoAfterCrawlCells{} cells only for the
+object made public after the crawl, and on \ResRsEndoFromStartReach{} for the object public
+throughout, with the MR firing correspondingly (\ResRsEndoAfterCrawlFires{}
+vs.~\ResRsEndoFromStartFires{}). Final visibility is identical, so the only manipulated
+explanatory variable is when the model was read.
 
 \begin{table}[t]
 \centering
@@ -181,347 +147,194 @@ public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawl
 \subsection{Eight committed transitions with a frozen model, on two products}
 \label{sec:temporal}
 
-The two-snapshot comparison above cannot separate two explanations: the model
-went stale, or the crawl never listed the channel in the first place. The
-transition experiment separates them by construction. We ran eight
-authorisation transitions on one fresh Gitea \TmpVersion{} instance and repeated
-the same eight, under the same frozen protocol (hash \texttt{\TmpProtocol})
-and the same ledger rules, on an independent GitLab CE \TmpGVersion{} instance.
-The mechanisms differ per product---attaching a repository to a team becomes
-sharing a project with a group; removing a team member becomes removing a group
-member---so the two runs share a protocol, not a topology, and we report them
-side by side rather than pooled.
+We ran eight authorisation transitions on one fresh Gitea \TmpVersion{} instance and repeated
+the same eight, under the same frozen protocol (hash \texttt{\TmpProtocol}) and ledger rules, on
+an independent GitLab CE \TmpGVersion{} instance. The mechanisms differ per product, so the two
+runs share a protocol, not a topology, and we report them side by side rather than pooled.
 
-Each transition is a closed loop. We crawl every subject, serialise the
-per-subject reachable set, freeze it as $M_0$ and record its digest; commit one
-authorisation transaction and increment the harness version $hv$ only if the
-transaction returns 2xx; re-crawl with the \emph{same} credentials to obtain
-$M_1$; read the oracle from the owner vantage; issue the request and verify the
-effect by content; and classify against the ledger at decision time. All
-\TmpBothPolicyEvents{} transactions committed, all \TmpBothMzeroVerified{} frozen
-$M_0$ digests were unchanged when re-checked immediately before probing, and all
-\TmpBothVersionConsistent{} cycles were version-consistent. Across
-\TmpBothCells{} cross-credential cells (\TmpCells{} on Gitea plus \TmpGCells{} on
-GitLab), $E$ and $Y$ agree in \TmpBothEeqY{} cases, so no cell is scored on a
-modelling discrepancy---under the implementation's closed-world default-deny
-reading of $E$; Table~\ref{tab:unknown-sensitivity} reconciles this with the
-protocol's literal \emph{unknown} rule, under which the scorable set is the
-\TmpBothLitKnown{} $E$-allow cells and the agreement is
+Each transition is a closed loop: crawl every subject, serialise the per-subject reachable set,
+freeze it as $M_0$ and record its digest; commit one authorisation transaction and increment the
+harness version $hv$ only if it returns 2xx; re-crawl with the \emph{same} credentials to obtain
+$M_1$; read the oracle from the owner vantage; issue the request and verify the effect by
+content; classify against the ledger at decision time. All \TmpBothPolicyEvents{} transactions
+committed, all \TmpBothMzeroVerified{} frozen $M_0$ digests were unchanged when re-checked
+immediately before probing, and all \TmpBothVersionConsistent{} cycles were version-consistent,
+over \TmpCalChecks{} gate checks (\TmpGCalGateChecks{} on GitLab). Across \TmpBothCells{}
+cross-credential cells (\TmpCells{} on Gitea plus \TmpGCells{} on GitLab), $E$ and $Y$ agree in
+\TmpBothEeqY{} cases (\TmpGEeqY{} of the GitLab cells) under the closed-world default reading;
+Table~\ref{tab:unknown-sensitivity} reconciles this with the literal \emph{unknown} rule, under
+which the scorable set is the \TmpBothLitKnown{} $E$-allow cells and the agreement is
 \TmpBothLitEeqY/\TmpBothLitKnown{}.
 
-The stale model produces \TmpBothStaleFP{} false proofs (\TmpStaleFP{} on Gitea,
-\TmpGStaleFP{} on GitLab), and a recrawl with the same credential removes
-\TmpBothFixed{} of them, leaving \TmpBothStillMiss{} still missed and
-\TmpBothLiveFP{} live false proofs (Table~\ref{tab:temporal}). The composition is
-informative rather than uniform, and the two products agree on its shape: one
-cell for the direct grant, one for the inherited-channel attachment, five and
-six when a repository becomes public, and six and eight when a user becomes site
-administrator. The last two are the cases a single-object probe is least likely
-to anticipate, because the granting event is not about the object at all. The
-false-proof phenomenon is also the part of the result that the
-unknown-rule divergence does not touch: every stale false proof falls on an
-$E$-allow cell, so both calibers of Table~\ref{tab:unknown-sensitivity} count
-the same \TmpBothStaleFP{}, and the zero live false proofs likewise.
+The stale model produces \TmpBothStaleFP{} false proofs (\TmpStaleFP{} on Gitea, \TmpGStaleFP{}
+on GitLab), and a recrawl with the same credential removes \TmpBothFixed{} of them, leaving
+\TmpBothStillMiss{} still missed and \TmpBothLiveFP{} live false proofs
+(Table~\ref{tab:temporal}). The composition is informative rather than uniform, and the two
+products agree on its shape: one cell for the direct grant, one for the inherited-channel
+attachment, five and six when a repository becomes public, and six and eight when a user becomes
+site administrator---the cases a single-object probe is least likely to anticipate, because the
+granting event is not about the object. Revocations must not be scored as misses: the old model
+still lists \TmpBothOverRevoke{} cells whose access was revoked (\TmpOverRevoke{} on Gitea,
+\TmpGOverRevoke{} on GitLab), and in every one the request is refused.
 
-Revocations behave differently and must not be scored as misses. The old model
-still lists \TmpBothOverRevoke{} cells whose access was revoked (\TmpOverRevoke{}
-on Gitea, \TmpGOverRevoke{} on GitLab). In every one of them the request is
-refused, so no violation occurred; treating them as false negatives would
-require $E=\text{deny}$ \emph{and} $Y=\text{allow}$, which never happens here.
+The multi-channel transition is where the products part company: on Gitea, after the team member
+is removed, \texttt{acme/t1} remains readable through a direct collaboration while
+\texttt{acme/t2} becomes unreadable, and the ledger records the remaining channel. On GitLab
+removing a member from a group also deletes that user's project-level membership, so we placed
+the alternative channel on a personal project and record the cascade as a product-semantics
+observation rather than a ledger rule (amendment A2).
 
-The multi-channel transition is where the products part company, and the
-difference is itself a result. On Gitea, after the team member is removed,
-\texttt{acme/t1} remains readable through a direct collaboration while
-\texttt{acme/t2} becomes unreadable, and the ledger records the remaining
-channel. On GitLab the same test has to be moved outside the group namespace:
-removing a member from a group also deletes that user's project-level
-membership in the group's projects---the project's direct-member list went from
-one entry to none---so a direct grant placed inside the group would have measured
-that product rule instead of multi-channel access. We therefore placed the
-alternative channel on a personal project, and we record the cascade as a
-product-semantics observation rather than encoding it as a ledger rule
-(amendment A2 in the protocol record). This is the kind of non-local side effect
-that makes a hand-maintained expectation model wrong in a way no single probe
-can reveal.
+The oracle column separates the products more sharply than the transition counts. On Gitea the
+owner vantage answers \TmpOracleReadable{} of \TmpCells{} cells (the rest are anonymous), but the
+subject's own vantage answers only \TmpOracleSelfReadable{}---all after the site-admin grant. On
+GitLab the owner vantage answers \TmpGOracleReadable{} of \TmpGCells{}, and the subject's own
+credential answers \TmpGOracleSelfReadable{}, because GitLab's member endpoint is readable by
+any project member. That readability is not soundness: the endpoint answers ``is this principal
+a member'', so it returns 404 for a public project a non-member may read and for a site
+administrator who may read everything. Measured against the ledger, the Gitea oracle disagrees
+on \TmpOracleDisagree{} cells and the GitLab oracle on \TmpGOracleDisagree{}, all of the latter
+in the public (\TmpGOracleDisagreePublic{}) or site-administrator (\TmpGOracleDisagreeAdmin{})
+channel---wrong in exactly the channels that are cheapest to overlook, which is why we never let
+it set $E$.
 
-For the role change, the read cell is unchanged while the write probe goes from
-HTTP 403 with unchanged content to HTTP 201 with the owner re-reading the new
-bytes; the owner then deletes the probe branch and observes 404, and the
-repository's \texttt{README} digest is unchanged after cleanup.
-
-The oracle column separates the products more sharply than the transition
-counts. On Gitea the owner vantage answers \TmpOracleReadable{} of \TmpCells{}
-cells (the remainder are anonymous, for which no oracle credential exists), but
-the subject's own vantage answers only \TmpOracleSelfReadable{}---all of them
-after the site-admin grant; outside it, a read collaborator receives HTTP 403 and
-an outsider HTTP 404. On GitLab the owner vantage answers \TmpGOracleReadable{}
-of \TmpGCells{}, and there the subject's own credential answers
-\TmpGOracleSelfReadable{}: GitLab's member endpoint is readable by any project
-member. That readability is not soundness. The endpoint answers ``is this
-principal a member'', so it returns 404 for a public project a non-member may
-read and for a site administrator who may read everything. Measured against the
-ledger, the Gitea oracle disagrees on \TmpOracleDisagree{} cells and the GitLab
-oracle on \TmpGOracleDisagree{}, all of the latter in the public
-(\TmpGOracleDisagreePublic{}) or site-administrator (\TmpGOracleDisagreeAdmin{})
-channel. A readable oracle can therefore be systematically wrong in exactly the
-channels that are cheapest to overlook, which is why we never let it set $E$.
-The two calibration regimes record this rather than hide it: \TmpCalChecks{}
-known cells on Gitea, and on GitLab \TmpGCalGateChecks{} gated cells plus two
-recorded diagnostics for the secondary vantage (amendment A1).
-
-A channel-by-channel view makes the mechanism explicit
-(Table~\ref{tab:oracle-channel}), for Gitea and GitLab. Each cell is assigned to
-exactly one channel, and the rows sum to the cell count, so no cell is counted
-twice; the grouping is by the strongest channel that grants it, not a
-multi-label count. The same decomposition is available for Gogs
-(Table~\ref{tab:gogs-channel}); the reason it looks unavailable there is a
-category error rather than a data limitation:
-a channel label is a property of the entitlement ledger---built from the lab
-topology, the documented inheritance rules and the recorded out-of-band grant
-events, never from a probe response---so a product whose API exposes no
-per-object membership route does not lose the channel axis. What such a product
-loses is the ability to \emph{enumerate} those grants through that route, which
-is a claim about the oracle surface, not about the labelling. Both tabulated products answer every
-direct-collaborator and group cell correctly, and Gitea also answers its public
-and site-administrator cells correctly. GitLab errs only by omission, and only on the two channels that
-are not membership: it answers \emph{deny} on \TmpGOracleDisagreePublic{} public
-cells that a non-member may read and on \TmpGOracleDisagreeAdmin{}
-site-administrator cells. Neither product returns a single false allow. A
-one-sided error is nevertheless sufficient to manufacture a false proof, because
-an alarm on such a cell is then adjudicated against a deny that the ledger does
-not support---which is the cross-vendor failure reported in
-Section~\ref{sec:gogs}, now located in a named channel rather than attributed to
-``the oracle'' as a whole.
+Table~\ref{tab:oracle-channel} assigns each cell to exactly one channel, by the strongest channel
+that grants it; Table~\ref{tab:gogs-channel} gives the same decomposition for Gogs, because a
+channel label is a property of the entitlement ledger, never of a probe response. Both tabulated
+products answer every direct-collaborator and group cell correctly, and Gitea also answers its
+public and site-administrator cells correctly. GitLab errs only by omission, on the two channels
+that are not membership, and never returns a false allow; a one-sided error is enough to
+manufacture a false proof, since an alarm there is adjudicated against a deny the ledger does not
+support.
 
 \input{temporal_channel_table.tex}
 
-Two properties of the run are recorded because they are what an external check can
-verify. The protocol was frozen before the first Gitea transition, and its digest
-is carried in both run records. For the amendments we do not rely on a
-self-reported clock: the archived pilot records only A1, and the reported GitLab
-run carries the digests of both A1 and A2. That content binding identifies which
-amendment contents the run record is associated with; it does not on its own
-establish when those contents were created relative to the transitions. The pilot
-is archived with its cells excluded from every denominator. One recorded field
-would, if trusted for ordering, place A2 after that run, and we do not use it for
-that purpose: A2's \texttt{written\_at} says 02:32, later than the run's last probe
-at 02:26:14, so the file's own timestamp cannot establish that it was written
-before the first transition. We retain the field as recorded and rely on the
-digest carried by the run; the discrepancy is documented with the artifact rather
-than corrected in place. Inside a run, every cell carries its event sequence number, the
-harness version before and after the transition, the $M_0$ and $M_1$ digests and
-wall-clock timestamps, so the ordering---crawl, freeze, mutate, recrawl, oracle,
-probe---can be re-checked line by line rather than trusted. Within the
-enumeration, oracle and read probes, every call is a GET; the only mutating
-calls are the transitions themselves, and
-each is recorded with its status code. In addition to the read path, the write
-capable transitions carry one write probe per cycle (an HTTP POST that creates
-the probe artifact) followed by an owner-side DELETE that restores the state;
-these write calls are recorded like every other call, they change no
-authorization configuration, and they are the reason ``all observations are
-GET'' would be too strong a summary of the run. Failed observations are not dropped
-silently: a transport error after two retries is recorded as such and excluded
-from the scored set, a mutation outside 2xx excludes its whole transition, and an
-unreadable oracle is recorded as \emph{unknown} with the cell still scored on $E$
-and $Y$.
-
-Three scope limits are part of the result. First, the verdict is anchored to the
-request outcome, and the transitions are serialised: no mutation is issued
-between a cell's request and its probe, so the window between them is static by
-construction. A deployment in which a grant or revoke lands between the request
-and the adjudication is outside what these cells measure; for such a case the
-cell's conclusion does not apply and the observation has to be repeated, and we
-do not claim that the harness would detect the interleaving. Second,
-\TmpBothStillMiss{} residual is
-a count on these surfaces, not a completeness claim: the crawl sources
-themselves define what can be seen, deploy keys are outside the ledger, and none
-of the \TmpBothPolicyEvents{} transitions reported here commits a grant through a
-channel the recrawl is known to miss. That last clause is a scope statement about
-this sample, not about recrawling in general: the paired run below constructs such
-a channel deliberately, on one instance. Third, $hv$ is a
-harness-maintained logical version, not an atomic server snapshot; the harness is
-single-threaded and no concurrent writer ran, which is what makes the still
-window meaningful. Fourth, the eight transitions are a designed set, not a
-sample of deployment changes, so none of the counts is a field rate.
+Two properties of the run are what an external check can verify. The protocol was frozen before
+the first Gitea transition, and its digest is carried in both run records. For the amendments we
+do not rely on a self-reported clock: the archived pilot records only A1, and the reported GitLab
+run carries the digests of both A1 and A2. That content binding identifies which amendment
+contents the run record is associated with; it does not on its own establish when those contents
+were created relative to the transitions. One recorded field would, if trusted for ordering,
+place A2 after that run, and we do not use it for that purpose: A2's \texttt{written\_at} says
+02:32, later than the run's last probe at 02:26:14. We retain the field as recorded and rely on
+the digest; the discrepancy is documented with the artifact rather than corrected in place.
+Inside a run, every cell carries its event sequence number, the harness version before and after,
+the $M_0$ and $M_1$ digests and wall-clock timestamps, so the ordering can be re-checked line by
+line. A transport error after two retries is excluded from the scored set, a mutation outside
+2xx excludes its whole transition, and an unreadable oracle is recorded as \emph{unknown} with
+the cell still scored on $E$ and $Y$. The residual \TmpBothStillMiss{} is a count on these
+surfaces, not a completeness claim, and the eight transitions are a designed set, so none of the
+counts is a field rate.
 
 \input{temporal_table.tex}
 
 \input{temporal_sensitivity_table.tex}
 
 \paragraph{What a recrawl repairs, and what it cannot}
-The \TmpBothFixed{} repairs in Table~\ref{tab:temporal} are not a general remedy,
-and the reason is that a grant can be absent from the model for two different
-causes. \emph{Staleness}: the grant is visible through the subject's own
-interface, was made after the snapshot was frozen, and a fresh crawl with the same
-credential lists it again. That is what Table~\ref{tab:temporal} measures, where
-\TmpBothFixed{} of \TmpBothStaleFP{} stale false proofs disappear on recrawl and
-\TmpBothStillMiss{} resist. \emph{Coverage}: the grant is real and enforced, but the enumeration the crawl
-runs does not return the object, because the view that would return it belongs to
-another subject or to an administrative interface---a public-visibility listing the
-subject's own repository list does not contain, a site-administration privilege, or
-a team-derived grant on a surface that does not resolve inheritance.
-Recrawling cannot repair a channel the crawl has no way to enumerate, and the
-cross-vendor run locates the residue: on Gogs \GgMismatchLive{} of
-\GgMismatchSnap{} mismatching cells survive the live reading---\GgLiveMismatchPublic{}
-on public visibility and \GgLiveMismatchSiteAdmin{} on the site-administrator
-vantage---and \GgFpBookkeepingLive{} of \GgFpBookkeeping{} bookkeeping false proofs
-survive, all \GgLiveFpPublic{} of them on public visibility. No team-derived or
-collaborator grant survives, because this product resolves team inheritance in the
-subject's own list. The live reading removes the staleness term
-and leaves the coverage term; where the same channels are represented in the
-subject's crawl, as on Gitea and GitLab, the live reading reaches zero.
+The \TmpBothFixed{} repairs are not a general remedy, because a grant can be absent from the
+model for two causes. \emph{Staleness}: the grant is visible through the subject's own interface,
+was made after the snapshot was frozen, and a fresh crawl with the same credential lists it
+again. \emph{Coverage}: the grant is real and enforced, but the enumeration the crawl runs does
+not return the object, because the view that would return it belongs to another subject or to an
+administrative interface. Recrawling cannot repair a channel the crawl has no way to enumerate,
+and the cross-vendor run locates the residue: on Gogs \GgMismatchLive{} of \GgMismatchSnap{}
+mismatching cells survive the live reading---\GgLiveMismatchPublic{} on public visibility and
+\GgLiveMismatchSiteAdmin{} on the site-administrator vantage---and \GgFpBookkeepingLive{} of
+\GgFpBookkeeping{} bookkeeping false proofs survive, all \GgLiveFpPublic{} of them on public
+visibility. No team-derived or collaborator grant survives, because this product resolves team
+inheritance in the subject's own list. The live reading removes the staleness term and leaves the
+coverage term; where the same channels are represented in the subject's crawl, as on Gitea and
+GitLab, the live reading reaches zero.
 
-That attribution is measured, not subtracted: in one instance, with the same
-subject, operation, surface and budget, and every grant made after the snapshot by
-another account, three channels ran in parallel---direct collaborator,
-team-derived, public repository (\RfArms{} arms, \RfSnapAlarms{} alarms). The
-recrawl repaired \RfRepaired{}: the collaborator and team objects appear in the
-subject's list on the second pass. It left \RfPersisting{}: the public repository,
-readable in the same probe as the other two (status 200 on the repository and on a file read)
-but not returned by the enumeration the recrawl runs---the subject's own repository
-list, the organisation list, and the first page of an unfiltered search. A query
-that names that repository does return it (\RfNameFound{} hit), so the boundary is
-the enumeration's page and filter rather than the system's visibility rules: the
-object is reachable by a named lookup and invisible to a browsing one.
-
-The arms are not a strictly single-variable contrast, and the departure is part of
-the result rather than a detail. Two of the three objects are user repositories and
-one is an organisation repository; more consequentially, Gogs exposes no
-visibility-flip route, so the public object was created public after the snapshot
-instead of being converted, which makes it new to the snapshot for two reasons at
-once---it postdates the crawl, and the crawl does not enumerate that channel. What
-the arm still establishes does not depend on separating those two: the object
-exists before the recrawl, is readable throughout it, and the recrawl still does not
-return it, whereas both stale arms were repaired on the same pass.
-
-Two cautions follow. The repair count is conditioned on the transitions committed,
-which the three arms make concrete---\RfRepaired{} repairs out of \RfArms{}---and
-the temporal sample and the cross-vendor sample are not paired observations of the
-same cells---they differ in product, topology and mutation script---so the count
-surviving recrawling in one must not be subtracted from the count surviving in the
-other. What generalises is the mechanism rather than the ratio: a recrawl repairs
-exactly those grants whose granting channel the renewed crawl can enumerate, which
-is a property of the interface, not of the tool.
+That attribution is measured, not subtracted: in one instance, with the same subject, operation,
+surface and budget, and every grant made after the snapshot by another account, three channels
+ran in parallel---direct collaborator, team-derived, public repository (\RfArms{} arms,
+\RfSnapAlarms{} alarms). The recrawl repaired \RfRepaired{}: the collaborator and team objects
+appear in the subject's list on the second pass. It left \RfPersisting{}: the public repository,
+readable in the same probe as the other two but not returned by the enumeration the recrawl
+runs---the subject's own repository list, the organisation list, and the first page of an
+unfiltered search. A query that names that repository does return it (\RfNameFound{} hit), so the
+boundary is the enumeration's page and filter rather than the system's visibility rules. The
+public object was created public after the snapshot rather than converted, because Gogs exposes
+no visibility-flip route; the arm does not depend on separating those, since the object exists
+before the recrawl, is readable throughout it, and the recrawl still does not return it, whereas
+both stale arms were repaired on the same pass. What generalises is the mechanism rather than the
+ratio: a recrawl repairs exactly those grants whose granting channel the renewed crawl can
+enumerate.
 
 \subsection{Cross-vendor replication of the snapshot design: Gogs \GgVersion{} and GitLab \GlVersion{}}
 \label{sec:gogs}
 
-We repeated the same three-phase protocol and \ResRsCellsSnapshot{}-cell design on two further systems
-(Table~\ref{tab:gogs-cross}): \textbf{Gogs} \GgVersion{}, the project Gitea
-forked from in 2016 (related lineage, independently evolved code; census from its
-pinned route table, \GgRoutePaths{} paths), and \textbf{GitLab} \GlVersion{}
-(no lineage; census from the pinned running instance's routes, \GlRoutePaths{}
-paths, since its OpenAPI document omits core grant endpoints). Gogs is a
-replication across implementations, GitLab across vendors within one domain.
+We repeated the same three-phase protocol and \ResRsCellsSnapshot{}-cell design on two further
+systems (Table~\ref{tab:gogs-cross}): \textbf{Gogs} \GgVersion{}, the project Gitea forked from
+in 2016 (census from its pinned route table, \GgRoutePaths{} paths), and \textbf{GitLab}
+\GlVersion{} (census from the pinned running instance's routes, \GlRoutePaths{} paths, since its
+OpenAPI document omits core grant endpoints).
 
 \input{gogs_cross_table}
 
-The replication introduces a primary methodological variation: the
-authorization-introspection surface, which shows that \emph{readability does not
-imply soundness}. Gitea's owner-vantage
-surface is readable and sound (agrees with effective access on all \GtOracleAgree{}
-cells). Gogs's collaborator-membership endpoint is equally readable
-(\GgOracleReadable{}/\GgCells{}) but unsound---wrong on \GgOracleWrong{} cells
-(\GgOracleWrongPct\%), exactly the authorizations arising outside direct
-membership: site administration (\GgFnSiteAdmin{}), public visibility
-(\GgFnPublic{}), out-of-band grants (\GgFnOob{}). GitLab's
-\texttt{members/all/\{u\}} resolves inherited membership, but public visibility
-and site administration confer none: \GlOracleWrong{} false negatives
-(\GlOracleWrongPct\%). What a surface cannot see is predictable from what it
-measures---why clause~(2) of the admissibility condition
-(Section~\ref{sec:admissibility}) cannot be automated from readability alone.
+The replication introduces a primary methodological variation: the authorization-introspection
+surface, which shows that \emph{readability does not imply soundness}. Gitea's owner-vantage
+surface is readable and sound (agrees with effective access on all \GtOracleAgree{} cells).
+Gogs's collaborator-membership endpoint is equally readable (\GgOracleReadable{}/\GgCells{}) but
+unsound---wrong on \GgOracleWrong{} cells (\GgOracleWrongPct\%), exactly the authorizations
+arising outside direct membership: site administration (\GgFnSiteAdmin{}), public visibility
+(\GgFnPublic{}), out-of-band grants (\GgFnOob{}). GitLab's \texttt{members/all/\{u\}} resolves
+inherited membership, but public visibility and site administration confer none:
+\GlOracleWrong{} false negatives (\GlOracleWrongPct\%). What a surface cannot see is predictable
+from what it measures---why clause~(2) of the admissibility condition cannot be automated from
+readability alone.
 
 \input{gogs_channel_table.tex}
 
-Table~\ref{tab:gogs-channel} locates those \GgOracleWrong{} errors instead of
-leaving them as a single unsoundness figure, and it does so on the ledger axis
-that the product's own API does not have to provide. Panel~(a) groups the same
-\GgChCells{} cells by the granting channel recorded in the ledger. The surface
-is correct on every cell it can represent: all \GgChCollaboratorAgree{} of the
-\GgChCollaborator{} direct-collaborator cells and all \GgChNone{} cells with no
-recorded grant. It answers \emph{deny} on all \GgChFalseDeny{} cells whose
-entitlement arises from team membership (\GgChTeamFalseDeny{}), public
-visibility (\GgChPublicFalseDeny{}) or site administration
-(\GgChSiteAdminFalseDeny{}), and it never answers allow where the ledger denies
-(\GgChFalseAllow{}). The error is therefore one-sided and located: exactly the
-three mechanisms that the owner-vantage per-object collaboration route does not
-represent. Panel~(b) re-groups the same cells by mechanism and shows the same
-concentration as a rate rather than a count, which matters because the three
-affected strata are small: \GgChSrcTeam{} team, \GgChSrcPublic{} visibility and
-\GgChSrcSiteAdmin{} site-administrator cells, all wrong, against
-\GgChSrcCollaborator{} and \GgChSrcNone{} cells, all right.
-
-That the blind spot belongs to the chosen surface rather than to the product's
-whole API is recorded, not inferred: in the surface probe shipped with the run,
-the per-object permission suffix returns \GgChProbePermSuffix{}, the per-object
-team route \GgChProbeTeamMember{} and the collaboration route the oracle
-consults \GgChProbeCollabGet{}, while the organisation team listing is reachable
-(\GgChProbeOrgTeams{}). A team listing is not a per-object authorization surface
-and a surface-gated adjudicator does not consult it; the measurement therefore
-reports what the gated surface licenses, not what the product could in principle
-expose. The decomposition is also stable across readings: the live reading of
-the same cells gives \GgChLiveAgree{} agreements and \GgChLiveFalseDeny{} false
-denials, so the concentration is not an artifact of the snapshot reading.
-
-Two labelling caveats are part of the table. First, \GgChMultiBasis{} cell
-carries two ledger rules (site administrator and public visibility); it is
-counted once, under the stronger rule, so the rows sum to \GgChCells{} cells
-rather than to the \GgChRules{} recorded rules---the grouping is a partition of
-cells, not of mechanisms. Second, the runner's provenance bucket is a heuristic
-that files a collaborator grant made outside one particular repository as
-out-of-band; the table therefore takes its labels from the ledger, and as a
-cross-check the channel attribution of the \GgOracleWrong{} error cells agrees
-between the two sources
+Table~\ref{tab:gogs-channel} locates those \GgOracleWrong{} errors on the ledger axis. Panel~(a)
+groups the \GgChCells{} cells by granting channel: the surface is correct on all
+\GgChCollaboratorAgree{} of the \GgChCollaborator{} direct-collaborator cells and all \GgChNone{}
+cells with no recorded grant, answers \emph{deny} on all \GgChFalseDeny{} cells entitled through
+team membership (\GgChTeamFalseDeny{}), public visibility (\GgChPublicFalseDeny{}) or site
+administration (\GgChSiteAdminFalseDeny{}), and never answers allow where the ledger denies
+(\GgChFalseAllow{}). Panel~(b) re-groups the same cells by mechanism: \GgChSrcTeam{},
+\GgChSrcPublic{} and \GgChSrcSiteAdmin{} cells, all wrong, against \GgChSrcCollaborator{} and
+\GgChSrcNone{}, all right. The blind spot belongs to the chosen surface, not to the API: the
+per-object permission suffix returns \GgChProbePermSuffix{}, the per-object team route
+\GgChProbeTeamMember{} and the collaboration route the oracle consults \GgChProbeCollabGet{},
+while the organisation team listing is reachable (\GgChProbeOrgTeams{}) but is not a per-object
+authorization surface. The live reading gives \GgChLiveAgree{} agreements and
+\GgChLiveFalseDeny{} false denials. Two labelling facts belong to the table: \GgChMultiBasis{}
+cell carries two ledger rules and is counted once under the stronger rule, so the rows sum to
+\GgChCells{} cells rather than the \GgChRules{} recorded rules; and the runner's provenance
+bucket is a heuristic, so the table takes its labels from the ledger, whose channel attribution
+of the \GgOracleWrong{} error cells agrees with the other source
 (\GgChFnSiteAdminLedger{}/\GgChFnPublicLedger{}/\GgChFnTeamLedger{}).
-The consequence is measurable: on Gitea the surface-gated adjudicators produced no
-false proofs (\GtFpVthree{} v3, \GtFpDirectObserve{} direct-observe), while on
-Gogs they manufacture them (\GgFpVthree{} snapshot, \GgFpVthreeLive{} live,
-\GgFpDirectObserve{} direct-observe) and on GitLab again (\GlFpVthree{},
-\GlFpDirectObserve{}), every v3 false proof falling on a cell whose authorization
-derives from site administration or public visibility (\GgImplicitSiteAdmin{} and
-\GgImplicitPublic{} such cells on Gogs; \GlImplicitSiteAdmin{} and
-\GlImplicitPublic{} on GitLab). A readable membership surface with a blind spot converts that blind spot
-into confirmed violations; no admissible oracle was available from the tested
-introspection surfaces on Gogs or GitLab, so the honest adjudicator abstains on
-the stratum where those surfaces would license a promotion.
 
-Two results replicate everywhere: bookkeeping alarms false-proof on legitimately
-granted access (Gitea \GtFpBookkeeping{}, Gogs \GgFpBookkeeping{}, GitLab
-\GlFpBookkeeping{} cells)
-with the same out-of-band-dominant grant profile; and the reachability mismatch
-persists (Gitea \GtMismatchSnap{}, Gogs \GgMismatchSnap{}, GitLab
-\GlMismatchSnap{} snapshot). On
-Gogs the mismatch only partially resolves live (\GgMismatchLive{} remain---public
-visibility and the site-administrator vantage never enter a subject's own list,
-whereas a team-derived grant does); on GitLab the live
-reading recovers everything (\GlMismatchLive{} remain)---a second,
-vendor-specific failure of the snapshot premise, in the crawl model rather than
-the oracle.
+The consequence is measurable: on Gitea the surface-gated adjudicators produced no false proofs
+(\GtFpVthree{} v3, \GtFpDirectObserve{} direct-observe), while on Gogs they manufacture them
+(\GgFpVthree{} snapshot, \GgFpVthreeLive{} live, \GgFpDirectObserve{} direct-observe) and on
+GitLab again (\GlFpVthree{}, \GlFpDirectObserve{}), every v3 false proof falling on a cell whose
+authorization derives from site administration or public visibility (\GgImplicitSiteAdmin{} and
+\GgImplicitPublic{} such cells on Gogs; \GlImplicitSiteAdmin{} and \GlImplicitPublic{} on
+GitLab). No admissible oracle was available from the tested surfaces on Gogs or GitLab, so the
+honest adjudicator abstains where those surfaces would license a promotion.
+
+Bookkeeping alarms false-proof on legitimately granted access on every product (Gitea
+\GtFpBookkeeping{}, Gogs \GgFpBookkeeping{}, GitLab \GlFpBookkeeping{} cells) with the same
+out-of-band-dominant grant profile, and the reachability mismatch persists on all three (Gitea
+\GtMismatchSnap{}, Gogs \GgMismatchSnap{}, GitLab \GlMismatchSnap{} snapshot). On Gogs the
+mismatch only partially resolves live (\GgMismatchLive{} remain); on GitLab the live reading
+recovers everything (\GlMismatchLive{} remain)---a second, vendor-specific failure of the
+snapshot premise, in the crawl model rather than the oracle.
 
 \subsection{A seeded positive control}
 \label{sec:seeded}
 
-On the tested endpoints and transitions the three real systems enforce the
-expected decisions, so the question remains: \emph{when a real object-level flaw
-is present, does the same detector find it?} We answer with a positive control.
-A \emph{controlled authorization target} faithfully emulates the Gitea API
-contract the engine consumes, with a correct internal authorization model and
-\SeedBolaN{} seeded vulnerable instances---all instantiating one fault pattern
-(a none-entitlement subject served the object at
-\texttt{GET /api/v1/repos/\{owner\}/\{repo\}}), differing in subject and object,
-not in fault location; Table~\ref{tab:seeded} is therefore evidence about this
-fault pattern, not three independent defect discoveries. Two design points. The
-target deliberately exposes its authorization state to the subject-side harness
-(mirroring the admissibility condition), which production Gitea does not---there
-the oracle is readable from the owner/admin vantage
-(\ResRsOwnerReadable{}/\ResRsOwnerReadableTotal{}) but not from an arbitrary
-subject's (\ResRsBlackboxSelfReadable{}/\ResRsBlackboxSelfCells{})---and its
-introspection surface reports the \emph{correct} \texttt{none} permission, so the
-oracle stays sound and the defect is visible only as a discrepancy between oracle
-and request. We
-drove it with the same topology, mutation, crawl, introspection and adjudication
-code as above, differing only in the system under test; ground truth comes from
-the seed list, not from the detector.
+The three real systems enforce the expected decisions, so the question remains: \emph{when a real
+object-level flaw is present, does the same detector find it?} A \emph{controlled authorization
+target} emulates the Gitea API contract the engine consumes, with a correct internal authorization
+model and \SeedBolaN{} seeded vulnerable instances, all instantiating one fault pattern (a
+none-entitlement subject served the object at \texttt{GET /api/v1/repos/\{owner\}/\{repo\}}),
+differing in subject and object, not in fault location. Its introspection surface reports the
+\emph{correct} \texttt{none} permission, so the oracle stays sound and the defect is visible only
+as a discrepancy between oracle and request. We drove it with the same topology, mutation, crawl,
+introspection and adjudication code as above; ground truth comes from the seed list.
 
 \begin{table}[t]
 \centering
@@ -543,145 +356,78 @@ method & TP & FN & FP & TN \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:seeded} is consistent with the negative result of the ablation in
-this controlled fault pattern: \texttt{direct\_observe} and \texttt{v3} catch all
-\SeedBolaN{} planted instances with zero false positives, while
-\texttt{direct\_only}, which ignores the request outcome, raises
-\SeedFPDirectOnly{} alarms on cells where the surface says \texttt{none} and no
-access succeeds---alarms our strict definition does not promote. The control thus
-narrows the claim to one fault pattern: when a surface that fully resolves the
-authorization question is available, the metamorphic step is not necessary for
-detection here. It does not generalise beyond that pattern, and it also delimits
-the detector: we seeded one BFLA defect (non-privileged \SeedBflaActor{}
-succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP \SeedBflaStatus{}),
-which the read-oriented logic does not cover---a known boundary, reported as such
-rather than as a detection failure. This is a controlled research artifact, not
-production Gitea; a sanity check on the detector's logic, not a validation of
-detection effectiveness on a population, and not a statement about Gitea's CVE
-posture. Its source, seed list and run script are in the
-reproducibility package at \url{https://github.com/ubfbuz3/JISA} (tag
-\texttt{artifact-v1}).
+Table~\ref{tab:seeded} is consistent with the negative result of the ablation:
+\texttt{direct\_observe} and \texttt{v3} catch all \SeedBolaN{} planted instances with zero false
+positives, while \texttt{direct\_only} raises \SeedFPDirectOnly{} alarms on cells where the
+surface says \texttt{none} and no access succeeds---alarms our strict definition does not promote.
+Where a surface that fully resolves the authorization question is available, the metamorphic step
+is not necessary for detection. The boundary is explicit: we seeded one BFLA defect
+(non-privileged \SeedBflaActor{} succeeding at \texttt{PUT \dots/collaborators/\{u\}}, HTTP
+\SeedBflaStatus{}), which the read-oriented logic does not cover.
 
 \subsection{Four defect classes on the controlled target}
 \label{sec:multiclass}
 
-One fault pattern answers whether the detector finds the defect it was designed
-for; it does not answer whether the chain transfers across authorization defects.
-We therefore seed four classes on the same target---the read bypass already in
-use, with three instances, plus two instances each of three new classes---and
-drive them with the same crawl, introspection and adjudication code.
-C1 is the read bypass already used. C2 is a write bypass: a subject whose true
-permission is \texttt{none} changes the object's metadata with \texttt{PATCH}
-and the change is observable afterwards. C3 is a faulty inheritance expansion: an
-organization member outside the team is served the team's repository, and---this
-is the point---the defect lives in the expansion itself, so the listing, the
-search results and the object read all agree that the subject may see it. C4 is
-an escalation: a subject that is neither owner nor administrator grants a third
-party access it should not have, and the grantee can then reach the object; the
-grant is recorded in the target's state but marked as obtained through the
-defect, so the correct model still answers \texttt{none}. The classes are not
-interchangeable: they stress different premises of the relation.
+We seed four classes on the same target---the read bypass already in use with three instances,
+plus two instances each of three new classes. C1 is the read bypass. C2 is a write bypass: a
+subject whose true permission is \texttt{none} changes the object's metadata with
+\texttt{PATCH}. C3 is a faulty inheritance expansion: a member outside the team is served the
+team's repository, and the listing, the search results and the object read all agree that the
+subject may see it. C4 is an escalation: a subject that is neither owner nor administrator grants
+a third party access it should not have.
 
 \input{multiclass_table.tex}
 
-Table~\ref{tab:multiclass} reports per-class recall against the seeded truth and,
-separately, false alarms on authorized cells of the same channel. C1 is the class
-the gate was designed for, and it is the only class the read relation covers. C2
-breaks a different channel: the relation asks whether the object is \emph{served},
-not whether it can be \emph{changed}, so it is silent on both instances; moving
-the same relation to the channel the defect breaks recovers both, which says
-something about the relation family rather than about the relation we studied.
-C3 and C4 are undetected end to end, and the reason is mechanical: in both the
-subject already sees the object, so \texttt{cannotReachThroughGUI} is false and
-the antecedent of the relation does not hold. The gate is not failing to notice
-them; it reads its own premise and concludes there is nothing to test. They stay
-in the denominator---the study reports \McChannelHits{} of \McInstances{} for the
-channel-matched relation, not a rate over the classes the gate happens to
-cover---and the antecedent's failure is the explanation, not an exclusion.
+Table~\ref{tab:multiclass} reports per-class recall against the seeded truth and, separately,
+false alarms on authorized cells of the same channel. C1 is the only class the read relation
+covers. C2 breaks a different channel: the relation asks whether the object is \emph{served}, not
+whether it can be \emph{changed}, so it is silent on both instances; moving the same relation to
+the channel the defect breaks recovers both. C3 and C4 are undetected end to end, because in both
+the subject already sees the object, so \texttt{cannotReachThroughGUI} is false and the antecedent
+does not hold. The gate is not failing to notice them; it reads its own premise and concludes
+there is nothing to test. They stay in the denominator---\McChannelHits{} of \McInstances{} for
+the channel-matched relation---and the antecedent's failure is the explanation, not an exclusion.
 
-The oracle-consuming adjudicator fires on all \McInstances{} instances once the
-probe is channel-matched, and on \McOracleReadHits{} of \McInstances{} when
-confined to the read channel. False alarms are counted per channel, because a
-read cell cannot stand in for a write or a grant: \McNegRead{} read cells,
-\McNegWrite{} write cells and \McNegGrant{} grant cells, the read set shared by
-C1 and C3. The relation's bookkeeping variant alarms on \McFpRelRead{} of
-\McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and \McFpRelGrant{} of
-\McNegGrant{}---the same in-band failure the paper reports elsewhere---and the
-oracle-based adjudicator alarms on \McFpOracleMax{} of \McNegRead{},
-\McFpOracleMax{} of \McNegWrite{} and \McFpOracleMax{} of \McNegGrant{}. Write
-success
-is judged by the object's state changing, not by the status code, so a
-\texttt{200} that leaves the object untouched is not counted as a detection; a
-grant counts only if the collaborator record actually appears. The oracle answers
-these recorded cases correctly; that is soundness on this target, not
-independence, and Section~\ref{sec:admissibility} reports what the admission rule
-does with an oracle that is sound but not independent. Two caveats
-belong here. First, the target's oracle shares authorization state or decision
-components with the content path---the ground differs by class, and the register
-states it per class---so under the admission rule of
-Section~\ref{sec:admissibility} every class is refused promotion
-(Section~\ref{sec:admissibility} and the application register in the package):
-the \McInstances{} hits are recall against known truth, not
-independence-certified proofs. Second, these are four mechanisms on one
-emulator, not four discoveries in production systems. The leave-one-out is
-reported per method rather than as one composite number. On the channel-matched
-adjudicator, disabling a class's fault removes that class's alarms and leaves
-the other classes' alarms in place, for all \McLooAdjudicatorClasses{} classes.
-The read relation provides the same evidence for \McLooReadClasses{} class and
-the channel-matched relation for \McLooChannelClasses{}; for the others both
-relations are silent whether the fault is on or off, so their leave-one-out says
-nothing about the relation. An alarm is thereby attributable to its own defect
-without implying that the relation itself covers the class.
+The oracle-consuming adjudicator fires on all \McInstances{} instances once the probe is
+channel-matched, and on \McOracleReadHits{} of \McInstances{} when confined to the read channel.
+False alarms are counted per channel, because a read cell cannot stand in for a write or a grant:
+\McNegRead{} read cells, \McNegWrite{} write cells and \McNegGrant{} grant cells. The relation's
+bookkeeping variant alarms on \McFpRelRead{} of \McNegRead{}, \McFpRelWrite{} of \McNegWrite{} and
+\McFpRelGrant{} of \McNegGrant{}, and the oracle-based adjudicator on \McFpOracleMax{} of each.
+Write success is judged by the object's state changing, not by the status code. The oracle answers
+these recorded cases correctly, which is soundness on this target, not independence: it shares
+authorization state with the content path, so under the admission rule every class is refused
+promotion. The leave-one-out is reported per method: on the channel-matched adjudicator,
+disabling a class's fault removes that class's alarms and leaves the others in place, for all
+\McLooAdjudicatorClasses{} classes; the read relation provides the same evidence for
+\McLooReadClasses{} class and the channel-matched relation for \McLooChannelClasses{}.
 
 \subsection{A publicly fixed defect}
 \label{sec:cvepair}
 
-The seeded control is a controlled artifact, so we also ran one defect that
-nobody here planted: Gitea \CveVulnVersion{} against \CveFixedVersion{}, the
-release whose notes record a security fix titled ``Fix comment permissions''
-(\texttt{\#28213}, backported as \texttt{\#28216}); the same defect is catalogued
-as CVE-2023-49946 for Forgejo, the fork that reported it. What is missing is
-object ownership rather than path permission: a caller entitled to the
-repository named in the URL can address an object that belongs to a different,
-private repository.
+We also ran one defect nobody here planted: Gitea \CveVulnVersion{} against \CveFixedVersion{},
+the release whose notes record a security fix titled ``Fix comment permissions''
+(\texttt{\#28213}, backported as \texttt{\#28216}); the same defect is catalogued as
+CVE-2023-49946 for Forgejo. What is missing is object ownership rather than path permission: a
+caller entitled to the repository named in the URL can address an object belonging to a
+different, private repository. Each version runs as a fresh instance: alice owns a private
+repository with one issue comment, bob owns a public one, and bob sends \texttt{PATCH\allowbreak
+/api\allowbreak/v1\allowbreak/repos\allowbreak/bob\allowbreak/pub\allowbreak/issues\allowbreak/comments/\allowbreak\{alice's comment id\}}
+with a replacement body. On \CveVulnVersion{} the write succeeds (HTTP \CveVulnStatus{}) and
+alice's own re-read returns the replacement body, so the effect is real and not a status-code
+artifact; on \CveFixedVersion{} the same request is refused (HTTP \CveFixedStatus{}) and alice's
+re-read is unchanged (Table~\ref{tab:cvepair}). The ledger gives bob no write channel on alice's
+repository ($E$ = deny), so the vulnerable cell is a true positive and the fixed cell raises no
+alarm: \CveTruePositives{} true positive and \CveFalseProofs{} false proofs across the pair. All
+\CveControls{} control writes behave as expected in both versions, and alice's restore returns
+the body to the original in \CveRestored{} of \CveVersions{} instances. The generating script is
+fail-closed: it requires the complete label set with no duplicates, checks the recovery outcome,
+and recomputes $Y$ from alice's re-read before re-running the same \texttt{classify}.
 
-Each version runs as a fresh instance, and the collision is built into the
-topology: alice owns a private repository with one issue comment, bob owns a
-public one. Bob sends \texttt{PATCH\allowbreak
-/api\allowbreak/v1\allowbreak/repos\allowbreak/bob\allowbreak/pub\allowbreak/issues\allowbreak/comments/\allowbreak\{alice's comment id\}} with a replacement
-body. On \CveVulnVersion{} the write succeeds (HTTP \CveVulnStatus{}) and
-alice's own re-read returns the replacement body, so the effect is real and not
-a status-code artifact. On \CveFixedVersion{} the same request is refused (HTTP
-\CveFixedStatus{}) and alice's re-read is unchanged (Table~\ref{tab:cvepair}).
-The ledger gives bob no write channel on alice's repository ($E$ = deny), so the
-vulnerable cell is a true positive under the definition used throughout, and
-the fixed cell raises no alarm: \CveTruePositives{} true positive and
-\CveFalseProofs{} false proofs across the pair. All \CveControls{} control
-writes behave as expected in both versions---bob's own comment is editable, the
-correct path is refused, a third user is refused, anonymous is refused, an
-absent identifier is refused---and alice's restore returns the body to the
-original in \CveRestored{} of \CveVersions{} instances. The generating script is
-fail-closed rather than trusting these fields: it requires the complete label
-set with no duplicates, checks the recovery outcome, and recomputes $Y$ from
-alice's re-read of the comment body before re-running the same
-\texttt{classify}, refusing to emit a number if any layer disagrees.
-
-What this establishes is narrow, and worth stating plainly. The relation is not
-executed on this pair: the alarm recorded here is the $E/Y$ gate's own verdict,
-so the result measures the gate, not the relations' recall on a real defect. It
-shows that the gate can issue a correct violation claim and stops issuing it
-once the vendor fixes the defect, so the gate is not merely a false-alarm
-suppressor. It
-does not show that we can \emph{find} such defects: the identifier is given, the
-defect is public and already fixed, and the exercise is a positive control for
-the gate, not a discovery. Nor is it an evaluation on a population---one defect,
-one fault pattern (object versus path ownership), one product line. The
-multi-defect coverage is not obtained from this pair
-but from the controlled target: Section~\ref{sec:multiclass} seeds read, modify,
-inheritance and escalation faults and reports per-class recall, with the limits
-of that construction stated there. The claim this pair supports is about the
-gate's correctness on a real vulnerable/fixed pair, not about detection
-coverage.
+The relation is not executed on this pair, so the alarm recorded here is the $E/Y$ gate's own
+verdict: the result measures the gate, not the relations' recall on a real defect, and it shows
+the gate issuing a correct violation claim and ceasing to issue it once the vendor fixes the
+defect.
 
 \begin{table}[t]
 \centering
@@ -691,4 +437,3 @@ $E$ from the ledger and $Y$ from the owner's re-read, not the write status.}
 \small
 \input{cve_pair_table.tex}
 \end{table}
-
