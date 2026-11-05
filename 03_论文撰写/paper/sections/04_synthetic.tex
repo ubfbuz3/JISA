@@ -117,16 +117,14 @@ Table~\ref{tab:ablation} concludes the ablation. The first three rows are a ladd
 \texttt{raw} yields \ResAbRawFP{} false proofs; the existence filter v1 cuts them to
 \ResAbVOneFP{} but pays by abstaining on true violations (FN rises to
 \ResAbVOneFN{}); adding operation coverage (v2) restores the true violations (FN
-\ResAbVTwoFN{}) at the same false-proof count. Neither filter is a free improvement,
-and v3's zero in the FP column is bought with the FN column: its precision of
-\ResAbVThreePrec{} costs \ResAbVThreeFN{} false negatives (F1 \ResAbVThreeFone{}).
-\texttt{direct\_observe} has \ResAbDirectObserveFP{} false proofs against v3's
-\ResAbVThreeFP{}---a tie at zero, not a win. The comparison is paired, so we report
-the discordance: over the \ResAbNBola{} true-violation records the two methods
+\ResAbVTwoFN{}) at the same false-proof count. v3's zero in the FP column is bought with
+the FN column: its precision of \ResAbVThreePrec{} costs \ResAbVThreeFN{} false negatives
+(F1 \ResAbVThreeFone{}). \texttt{direct\_observe} has \ResAbDirectObserveFP{} false proofs
+against v3's \ResAbVThreeFP{}---a tie at zero, not a win. The comparison is paired, so we
+report the discordance: over the \ResAbNBola{} true-violation records the two methods
 disagree on \ResAbDisagreementN{}, and on every one \texttt{direct\_observe} is
-right---it detects a violation that v3 misses or abstains on, its reachability
-precondition blocking a detection the plain request makes. No margin was
-pre-specified, so no hypothesis-test claim attaches. On these oracle-available
+right---its reachability precondition blocks a detection the plain request makes. No
+margin was pre-specified, so no hypothesis-test claim attaches. On these oracle-available
 scenarios we find no incremental adjudication advantage of the metamorphic step over
 direct observation.
 
@@ -140,42 +138,36 @@ same \CvgN{} records on the decision. v3 decides \CvgVthreeDecided{} of them---c
 \CvgVthreeCoveragePct{}\%---abstaining on \CvgVthreeAbstain{} (\CvgVthreeAbstBola{} on true
 violations, \CvgVthreeAbstNormal{} on records with none), and its precision of $1.00$ and
 selective risk of \CvgVthreeRiskPct{}\% are properties of that coverage. The abstentions are
-not all of one kind (panel b): \CvgVthreeUnread{} are structural, and the other
-\CvgVthreeCover{} fall on a \emph{readable} surface that shows a covering grant---a
-non-decision, not a correct rejection. Of the \CvgVtwoFP{} false proofs v2 promotes, v3
-declines \CvgVtwoFPUnread{} because the surface is unreadable and \CvgVtwoFPCover{} because it
-shows the grant; only the first are the availability gate the method is named for. With the
-\CvgVthreeMissed{} records on which no alarm is raised at all, v3 leaves
-\CvgVthreeFNunproven{} of \CvgViolations{} violations unproven; the row that forces a verdict
-on an unreadable probe covers every record, detects the same violations and misses
-\CvgForcedObsFN{}, at a selective risk of \CvgForcedObsRiskPct{}\% made entirely of that
-forcing.
+not all of one kind: \CvgVthreeUnread{} are structural, and the other \CvgVthreeCover{} fall
+on a \emph{readable} surface that shows a covering grant---a non-decision, not a correct
+rejection. Of the \CvgVtwoFP{} false proofs v2 promotes, v3 declines \CvgVtwoFPUnread{}
+because the surface is unreadable and \CvgVtwoFPCover{} because it shows the grant; only the
+first are the availability gate the method is named for. With the \CvgVthreeMissed{} records
+on which no alarm is raised at all, v3 leaves \CvgVthreeFNunproven{} of \CvgViolations{}
+violations unproven.
 
-\texttt{direct\_only} asserts a violation whenever the authorization surface reports no
-granting channel; it decides \CvgDirOnlyDecided{} records and is right on
-\CvgDirOnlyTP{} true violations. Its \CvgDirOnlyFP{} invalid claims are not strict false
-proofs, since every one falls on a request the server denied
-(\CvgDirOnlyFpNoEffect{} without violation effect, \CvgDirOnlyFpEffect{} on an allowed
-request), and its selective risk is \CvgDirOnlyRiskPct\%, not zero. \texttt{direct\_observe}
-decides \CvgObsDecided{} records---coverage \CvgObsCoveragePct{}\%---abstaining on
-\CvgObsAbstain{} (\CvgObsAbstBola{} on true violations), detects \CvgObsDetected{} and raises
-no false proof; on the \CvgJointVthreeDirect{} records both decide, it detects
-\CvgDetectGap{} more violations than v3, and the remaining difference in pooled recall is
-coverage, not accuracy. Selective risk is not a ranking: \texttt{degrade\_all} alarms on
-nothing, has a selective risk of \CvgDegradeRiskPct{}\% at \CvgDegradeCoveragePct{}\% coverage,
-and detects no violation. We therefore report precision and selective risk with coverage
-attached and never compare them at unequal coverage.
+\texttt{direct\_only} decides \CvgDirOnlyDecided{} records and is right on \CvgDirOnlyTP{}
+true violations; its \CvgDirOnlyFP{} invalid claims are not strict false proofs, since every
+one falls on a request the server denied (\CvgDirOnlyFpNoEffect{} without violation effect,
+\CvgDirOnlyFpEffect{} on an allowed request), and its selective risk is \CvgDirOnlyRiskPct\%.
+\texttt{direct\_observe} decides \CvgObsDecided{} records---coverage \CvgObsCoveragePct{}\%
+---abstaining on \CvgObsAbstain{} (\CvgObsAbstBola{} on true violations), detects
+\CvgObsDetected{} and raises no false proof; on the \CvgJointVthreeDirect{} records both
+decide, it detects \CvgDetectGap{} more violations than v3, and the remaining difference in
+pooled recall is coverage, not accuracy. Selective risk is not a ranking:
+\texttt{degrade\_all} has a selective risk of \CvgDegradeRiskPct{}\% at
+\CvgDegradeCoveragePct{}\% coverage and detects no violation. We therefore report precision
+and selective risk with coverage attached and never compare them at unequal coverage.
 
 \paragraph{Cost} The enumeration issues \CvgReqTotal{} requests over \CvgN{} records
 (median \CvgReqMedian{} per record, range \CvgReqMin--\CvgReqMax); the oracle-consuming
 methods add \CvgProbeGets{} probe GETs over \CvgProbeCells{} cell-operations, one request
-per record and \CvgProbePerRecord{} amortised. The study we executed end to end is the
-temporal loop of Section~\ref{sec:realsystem}: a median of \CvgLoopGiteaTotal{}~s per
-transition on Gitea and \CvgLoopGitlabTotal{}~s on GitLab, of which the mutation is
-\CvgLoopGiteaMut{}~s and \CvgLoopGitlabMut{}~s, the recrawl \CvgLoopGiteaRecrawl{}~s and
-\CvgLoopGitlabRecrawl{}~s, and the cross-credential probe sweep \CvgLoopGiteaProbe{}~s and
-\CvgLoopGitlabProbe{}~s. Re-reading every credential is what costs; the recrawl the
-mechanism needs is a small part of the loop.
+per record and \CvgProbePerRecord{} amortised. The temporal loop of
+Section~\ref{sec:realsystem} runs a median of \CvgLoopGiteaTotal{}~s per transition on Gitea
+and \CvgLoopGitlabTotal{}~s on GitLab, of which the mutation is \CvgLoopGiteaMut{}~s and
+\CvgLoopGitlabMut{}~s, the recrawl \CvgLoopGiteaRecrawl{}~s and \CvgLoopGitlabRecrawl{}~s,
+and the cross-credential probe sweep \CvgLoopGiteaProbe{}~s and \CvgLoopGitlabProbe{}~s.
+Re-reading every credential is what costs.
 
 \input{coverage_table.tex}
 
@@ -190,16 +182,15 @@ crawler's own answer. With $\mathrm{FN}=0$ throughout that evaluation, the figur
 equals $1-\mathrm{FP}/(F-\mathrm{TP})$: the denominator is the \emph{negative}
 follow-up inputs, not every generated input.
 
-What such a figure cannot do is register a failure confined to a class, for two
-reasons that are arithmetic and coverage rather than labelling. First, the figure is
-pooled: a class contributing a share $w$ of the negative inputs can move it by at
-most $w$, so a real class-uniform failure is diluted by unaffected inputs. Second,
-the follow-up inputs are those the crawl could enumerate; a class of legitimate
-access the crawl never reaches contributes no negative inputs and cannot enter the
-ratio at all. The second point is the measurement face of Finding~1, and it is a
-statement about the coverage of the input set, not about the correctness of the
-human labels. We cannot reproduce the engine's exact input count, so we substitute no
-value for the published figure.
+Such a figure cannot register a failure confined to a class, for two reasons that are
+arithmetic and coverage rather than labelling. First, the figure is pooled: a class
+contributing a share $w$ of the negative inputs can move it by at most $w$, so a real
+class-uniform failure is diluted by unaffected inputs. Second, the follow-up inputs are
+those the crawl could enumerate; a class of legitimate access the crawl never reaches
+contributes no negative inputs and cannot enter the ratio at all. The second point is
+the measurement face of Finding~1, and it is a statement about the coverage of the input
+set, not about the correctness of the human labels. We cannot reproduce the engine's
+exact input count, so we substitute no value for the published figure.
 
 \paragraph{A bounded formal remark on the denominator}
 Write $S=1-\mathit{FP}/N^{-}$, where $N^{-}=\mathrm{TN}+\mathrm{FP}$ is the number of

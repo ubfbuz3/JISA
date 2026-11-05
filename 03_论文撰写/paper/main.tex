@@ -119,7 +119,7 @@
 \setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
 \setlength{\abovedisplayshortskip}{2pt plus 1pt}
 \setlength{\belowdisplayshortskip}{2pt plus 1pt}
-\renewcommand{\arraystretch}{0.95}
+\renewcommand{\arraystretch}{0.88}
 
 % 浮动体密度：允许每页容纳更多表/图，减少被 float 撑出的空白页。
 % 只改 LaTeX 的排版配额，不改任何内容与编号。
@@ -132,9 +132,11 @@
 \renewcommand{\textfraction}{0.07}
 \renewcommand{\floatpagefraction}{0.72}
 
-% 表格与图题降为 \footnotesize，压缩浮动体高度
-\AtBeginEnvironment{table}{\footnotesize}
-\AtBeginEnvironment{table*}{\footnotesize}
+% 表格统一到 \scriptsize（7pt）：表内自带的 \small/\footnotesize 会覆盖
+% \AtBeginEnvironment 的设定，故同时把这两个开关重定义掉。30 张表是页数的主要
+% 来源，表体降一号约省 1.3 页，且不改任何数字、编号与表注文字。
+\AtBeginEnvironment{table}{\scriptsize\let\small\scriptsize\let\footnotesize\scriptsize}
+\AtBeginEnvironment{table*}{\scriptsize\let\small\scriptsize\let\footnotesize\scriptsize}
 \AtBeginEnvironment{figure}{\footnotesize}
 \AtBeginEnvironment{figure*}{\footnotesize}
 

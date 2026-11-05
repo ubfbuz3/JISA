@@ -16,7 +16,7 @@ a finding of an established violation under the promotion policy $P$ of
 Section~\ref{sec:stages}, in the direction forced by the two-valued predicate encoding.}
 The two studies supply the grant differently: the constructed study seeds it outside the
 framework's record, the temporal study makes it between the crawl and the request. On the
-constructed system, rate \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of
+constructed system the rate is \ResObsOobVtwoFpRate{} (\ResObsOobVtwoFalseProof{} of
 \ResObsOobFalseAlarm{} alarms) against \ResObsFwVtwoFalseProof{} for the same share
 created in band; on Gitea, \ResRsMrBookkeepingFp{} false proofs on
 \ResRsAuthorizedCells{} authorized cells (\ResRsMrBookkeepingFpRate{}) under the
@@ -27,12 +27,10 @@ reach''. The predecessor attributes its residual false alarms to crawler
 coverage~\cite{Mai2019Metamorphic}; we add that the failure is a function of \emph{when}
 the model was read.
 
-\subsection{How much of the false-proof count is the promotion policy}
+A finding about a pair is only as sharp as the half that is chosen.
 \label{sec:policy}
-
-Finding~1 is a statement about the pair (alarm, promotion policy), and the two halves
-separate cleanly: the policy is a choice, the alarm is not. Table~\ref{tab:promotion}
-applies four policies to the same \PolAlarms{} alarms over the \PolCells{} scored
+Table~\ref{tab:promotion}
+applies four promotion policies to the same \PolAlarms{} alarms over the \PolCells{} scored
 transition cells. The alarm count is invariant---no policy changes what the relations
 return, and none recovers a violation---while the number of claims, and therefore of
 contradictable claims, moves. P1 promotes every alarm and is the reading Finding~1
@@ -44,8 +42,7 @@ claims, all \PolPoracleFalse{} of them contradicted, on the product whose intros
 surface returns false denies, while on the other it withholds \PolGtPoracleWithheld{}
 alarms. P3 promotes only where the ledger records a definite denial and returns zero
 false proofs by consulting the reference---a policy that cannot be wrong and cannot be a
-detector. We report the P1 count as the headline because it is the promotion the
-catalogue's purpose invites.
+detector.
 
 \input{revision_policy_table.tex}
 
@@ -64,23 +61,20 @@ readable, sound and independent.
 
 \paragraph{What is construction here, and what is empirical}
 \texttt{direct\_observe} claims a violation exactly when the oracle answers \emph{deny} and
-the ordinary request succeeds; the reference label calls a cell a violation exactly when the
-ledger answers \emph{deny} and the content-level effect answers \emph{allow}. The two rules
-are built from the same two quantities, so on the domain where the oracle agrees with the
-ledger and the request outcome with the content effect they \emph{cannot} disagree: the
-second is the first with the reference substituted for its proxy. The agreement below is
-therefore an identity on that domain, a characterisation of two adjudication rules rather
-than a measurement of one technique against another. What is empirical is the domain:
-whether the oracle is readable, sound \emph{and} admissible on a given deployment, and
-whether the request outcome tracks the content-level effect.
-Proposition~\ref{lem:oracle-suff} is stated conditionally for that reason, and
-Section~\ref{sec:admissibility} records the antecedent failing on every system studied here.
+the ordinary request succeeds; the reference label calls a cell a violation exactly when
+the ledger answers \emph{deny} and the content-level effect answers \emph{allow}. Both
+rules are built from the same two quantities, so on the domain where the oracle agrees
+with the ledger and the request outcome with the content effect they \emph{cannot}
+disagree: the agreement is an identity, a characterisation of two adjudication rules
+rather than a measurement of one technique against another. What is empirical is the
+domain---whether the oracle is readable, sound \emph{and} admissible on a given
+deployment. Proposition~\ref{lem:oracle-suff} is stated conditionally for that reason.
 
 \emph{The direct adjudicator.} Fix, before any run, the rule $D$ that issues
 \texttt{violation-proven} for $(o,s,a)$ exactly when the oracle $O$ answers \emph{deny}
 and the ordinary request $R$ succeeds. $D$ consumes $O$ and $R$ and nothing else; it is
-a definition, and it is the comparator of the ablation in
-Section~\ref{sec:synthetic-ablation} (\texttt{direct\_observe}).
+the comparator of the ablation in Section~\ref{sec:synthetic-ablation}
+(\texttt{direct\_observe}).
 
 \begin{lemma}[absorption]
 \label{lem:absorption}
@@ -117,11 +111,11 @@ does not confirm; it can only abstain or repeat.
 \end{proposition}
 
 Part~(b) is algebra and needs no premise about the model. Part~(a) is informative only
-where $m=o$, and that equality is measured: the oracle being sound does not make the
-crawl-time model sound. Row~7 of Table~\ref{tab:truth} holds \TvtModelWrong{} cells with
-$y=1$, $m=0$ and $o=1$---the oracle answers correctly, the model is stale, and the
-relation raises a false proof that $D$ does not. Premise~(ii) therefore fails on the
-recorded domain: rows~7 and~8 share $O=\mathrm{allow}$ but carry different $M$. What the
+where $m=o$, and that equality is measured: a sound oracle does not make the crawl-time
+model sound. Row~7 of Table~\ref{tab:truth} holds \TvtModelWrong{} cells with $y=1$,
+$m=0$ and $o=1$---the oracle answers correctly, the model is stale, and the relation
+raises a false proof that $D$ does not. Premise~(ii) therefore fails on the recorded
+domain: rows~7 and~8 share $O=\mathrm{allow}$ but carry different $M$. What the
 proposition establishes is narrower and sufficient: once a definite oracle is available,
 promotion through the relation is a \emph{subset} of direct adjudication.
 
@@ -141,67 +135,53 @@ A \;=\; y \;\wedge\; \neg m .
 Equations~\eqref{eq:a002}--\eqref{eq:aflat} reproduce the recorded alarm of all
 \TvtRecords{} constructed records and all \TvtCells{} temporal cells with no disagreement
 (\texttt{analysis/ingest\_truth.py}). The three records on which the state-calibrated
-method and \texttt{direct\_observe} differ are not a counterexample to~(b): all three are
-the same S5 write cell under the three exception settings, where the model lists the
-object for reading, the alarm stays silent, and the oracle reports the write denied---a
-loss for the relation, not a gain.
+method and \texttt{direct\_observe} differ are the same S5 write cell under the three
+exception settings, where the model lists the object for reading, the alarm stays silent,
+and the oracle reports the write denied---a loss for the relation, not a gain.
 
 \input{truth_table.tex}
 
 \paragraph{Reading the table}
 Table~\ref{tab:truth} evaluates both verdicts on every combination of the four variables,
-split by the ledger's entitlement. The native alarm $A$ and the direct adjudicator
-$D$---not the promoted verdict $H$, listed separately---agree in \TvtAgree{} of the
-\TvtReadable{} cells with a usable oracle and part only in the two rows where $Y=1$ and
-$M\ne O$, which hold \TvtDisagree{} cells. The parting is two phenomena needing different
-remedies: in the \TvtOracleWrong{} cells of row~6 the model is right and the membership
-surface answers \emph{deny} on a cell both entitled and readable, so the direct
-adjudicator alone raises a false proof that a better oracle would remove; in the
-\TvtModelWrong{} cells of row~7 the model is stale and the oracle right, so the relation
-alone raises a false proof that a recrawl would remove. Row~5 shows why agreement is not
-a certificate: in \TvtBothWrong{} cells both surfaces answer \emph{deny}, the ledger says
-the subject is entitled, the request succeeds, and both verdicts are false proofs.
+split by the ledger's entitlement. $A$ and $D$ agree in \TvtAgree{} of the \TvtReadable{}
+cells with a usable oracle and part only in the two rows where $Y=1$ and $M\ne O$, which
+hold \TvtDisagree{} cells. The parting is two phenomena needing different remedies: in
+the \TvtOracleWrong{} cells of row~6 the model is right and the membership surface answers
+\emph{deny} on a cell both entitled and readable, so $D$ alone raises a false proof that a
+better oracle would remove; in the \TvtModelWrong{} cells of row~7 the model is stale and
+the oracle right, so the relation alone raises a false proof that a recrawl would remove.
+Row~5 shows why agreement is not a certificate: in \TvtBothWrong{} cells both surfaces
+answer \emph{deny}, the ledger says the subject is entitled, the request succeeds, and
+both verdicts are false proofs. The rows without an oracle are not idle:
+\TvtUnreadable{} cells return no definite answer, $D$ is undefined on all of them, and the
+relation still alarms in \TvtUnreadAlarms{}. Nor is the model term free: the constant
+variant finds \TvtBlindTP{} violations at \TvtBlindFP{} false proofs, the current-listing
+variant \TvtConTP{} at \TvtConFP{}---\TvtModelSaveFP{} fewer false proofs for
+\TvtModelCostTP{} fewer detections, over \TvtConAware{} records each.
 
-The rows without an oracle are not idle: \TvtUnreadable{} cells return no definite
-answer, $D$ is undefined on all of them, and the relation still alarms in
-\TvtUnreadAlarms{}---the regime the antecedent excludes. Nor is the model term free: over
-the two model semantics of the constructed study, the constant variant, which alarms on
-every successful access, finds \TvtBlindTP{} violations at \TvtBlindFP{} false proofs;
-the current-listing variant finds \TvtConTP{} at \TvtConFP{}---\TvtModelSaveFP{} fewer
-false proofs for \TvtModelCostTP{} fewer detections, over \TvtConAware{} records each.
-
-\paragraph{Three differences from the ideal predicate}
 The shipped code departs from Equations~\eqref{eq:a002}--\eqref{eq:aflat} in three
-places, none of which changes the algebra: the model term is a store rather than a query,
-fixed at crawl time; the error predicate is a status code, so a denial served with 200
-makes $y$ wrong, and $y$ enters both $A$ and $D$; and response identity is not
-authorization identity, since a per-viewer field would make $q$ false while access had
-been granted.
-
-The proposition is falsifiable in one way: exhibit an observable $Z$, \emph{other than
-the model and the response}, that a relation consumes and that is decision-relevant. The
-model is not such a $Z$: a stale model also fails to be $O$-determined, but that breaks
-premise~(ii), and row~7 is a false proof, not an advantage. It concerns \emph{adjudication}
-only: a relation may still improve input generation or search-space reduction.
+places, none of which changes the algebra: the model term is a store fixed at crawl time;
+the error predicate is a status code, so a denial served with 200 makes $y$ wrong; and
+response identity is not authorization identity. The proposition is falsifiable in one
+way: exhibit an observable $Z$, \emph{other than the model and the response}, that a
+relation consumes and that is decision-relevant. It concerns \emph{adjudication} only: a
+relation may still improve input generation or search-space reduction.
 
 \paragraph{Scope, quantified}
 Section~\ref{sec:stratum} re-runs the comparison inside each stratum of effective oracle
 readability (Table~\ref{tab:stratum}). Where the oracle is readable (\MiiNOn{} records)
-the plain request carries fewer false proofs (\MiiOnDirectObserveFP{}
-vs.~\MiiOnVTwoFP{}) and no fewer detections. Where it is not (\MiiNOff{} records) the
-antecedent fails, so the family is compared against oracle-free references: it retains an
-advantage over a trivial floor and over a single uninterpreted request
-(\MiiLiftVTwo{}$\times$ vs.~\MiiLiftObsSuccess{}$\times$ over the base rate), coextensive
-with what the crawl-derived model can see.
-
-Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{} false proofs
-vs.~\ResAbVThreeFP{} (a tie at zero, not a win) over the \ResAbNBola{} true-violation
-records, at recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}, the two disagreeing on
-\ResAbDisagreementN{} and \texttt{direct\_observe} right on every one. Gitea reproduces the
-zero-false-proof result (\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}) without reproducing the
-comparison, because the tested surface contains no seeded vulnerability. The control is
-\emph{constructed}, not discovered---\texttt{direct\_observe} instantiates $D$---so the tie is
-the empirical face of the necessary condition.
+the plain request carries fewer false proofs (\MiiOnDirectObserveFP{} vs.~\MiiOnVTwoFP{})
+and no fewer detections. Where it is not (\MiiNOff{} records) the antecedent fails, so the
+family is compared against oracle-free references: it retains an advantage over a trivial
+floor and over a single uninterpreted request (\MiiLiftVTwo{}$\times$
+vs.~\MiiLiftObsSuccess{}$\times$ over the base rate), coextensive with what the
+crawl-derived model can see. Evidence: Table~\ref{tab:ablation}---\ResAbDirectObserveFP{}
+false proofs vs.~\ResAbVThreeFP{} (a tie at zero, not a win) over the \ResAbNBola{}
+true-violation records, at recall \ResAbDirectObserveRec{} vs.~\ResAbVThreeRec{}, the two
+disagreeing on \ResAbDisagreementN{} and \texttt{direct\_observe} right on every one. Gitea
+reproduces the zero-false-proof result (\ResRsDirectObserveFp{} vs.~\ResRsVThreeFp{}); the
+control is \emph{constructed}, not discovered, so the tie is the empirical face of the
+necessary condition.
 
 \subsection{Finding 3 (RQ3): a pooled specificity cannot register a class it did not exercise}
 \label{sec:resolution2}
@@ -215,33 +195,29 @@ enumerate.} With $\mathrm{FN}=0$ the figure is $1-\mathrm{FP}/(F-\mathrm{TP})$, 
 failure uniform across a class contributes only as many false positives as that class emits
 negative inputs and is diluted by the rest of the run
 (Proposition~\ref{prop:resolution}; Corollary~\ref{cor:resolution}). A class of legitimate
-access the crawl never reaches contributes no negative inputs, so the ratio is silent about
-it. Nor does the report fix the weights: if a failing class supplies a share $w$ of the
-negative inputs the figure moves only between $1$ and $1-w$, so telling a small-share
-failure from no failure needs an estimate of $w$ the published number does not carry.
+access the crawl never reaches contributes no negative inputs, so the ratio is silent
+about it. Nor does the report fix the weights: if a failing class supplies a share $w$ of
+the negative inputs the figure moves only between $1$ and $1-w$.
 
-\paragraph{What an endogenous count certifies, conditionally}
 Fix a run $\omega$ and a method $D$; let $n_i(D,\omega)$ be the number of negative inputs
 $D$ generates for scenario $i$ and $f_i(D,\omega)$ the false proofs among them, so
 $S(D,\omega)=1-\sum_i f_i(D,\omega)\big/\sum_i n_i(D,\omega)$ where the denominator is
-positive. The identity holds by counting on that run's records. Correlation among records
-affects the confidence one may attach to $S$ re-estimated on a fresh run, not the count,
-which is why we report counts and rates and no interval. For runs whose negative-input
-total stays positive $S_k\to 1$ iff the pooled false-proof share tends to zero, so a
-finite-sample $S<1$ says nothing about the limit: holding the false-proof count at one
-while the total grows gives $S_k=1-1/k\to1$, where the failure never disappears and only
-its weight does. Both cases coexist with an unexercised failing class, which contributes
-no negative inputs and leaves every $S_k$ unchanged.
+positive. The identity holds by counting on that run's records. For runs whose
+negative-input total stays positive $S_k\to 1$ iff the pooled false-proof share tends to
+zero, so a finite-sample $S<1$ says nothing about the limit: holding the false-proof count
+at one while the total grows gives $S_k=1-1/k\to1$. Both cases coexist with an unexercised
+failing class.
 
 \subsection{Competing baselines: what a succeeding request cannot separate}
 \label{sec:baselines}
 
-We implemented three conventional differential rules and ran them on the same \BlCells{} cells (six
-configurations crossed with S1--S7), each consuming one request as the owner and one as the actor
-(Table~\ref{tab:baselines}). \emph{B1 status-only} alarms whenever the replayed request returns a
-non-error status. \emph{B2 equality replay} alarms only when the owner's request succeeded and the
-actor received byte-identical output. \emph{B3} suppresses every cell covered by the tester's own
-share log. The fourth row is MR-002 with the v3 adjudication.
+We ran three conventional differential rules on the same \BlCells{} cells (six
+configurations crossed with S1--S7), each consuming one request as the owner and one as the
+actor (Table~\ref{tab:baselines}). \emph{B1 status-only} alarms whenever the replayed
+request returns a non-error status. \emph{B2 equality replay} alarms only when the owner's
+request succeeded and the actor received byte-identical output. \emph{B3} suppresses every
+cell covered by the tester's own share log. The fourth row is MR-002 with the v3
+adjudication.
 
 The cells contain \BlBolaCells{} true violations, \BlLegitCells{} legitimate accesses
 through a grant, and \BlDeniedCells{} denials. B1 and B2 claim on all 27 allowed cells:
@@ -249,23 +225,19 @@ through a grant, and \BlDeniedCells{} denials. B1 and B2 claim on all 27 allowed
 \BlBTwoPrecision{}\%; the equality test adds nothing to the status test, because every
 allowed access returns the owner's bytes. B3 removes the six in-band grants and still
 issues \BlBThreeFP{} false proofs, all on S6. Ours issues \BlOursTP{} true positives and no
-false proof (precision \BlOursPrecision{}\%), at the cost of \BlOursAbstain{} abstentions:
-the twelve legitimate grants plus five violations in the two configurations whose
-authorization surface is unreadable.
-
-This is not a detection gain: the baselines find all fifteen violations
-(\BlBaselineRecallAll{}\% total recall), whereas ours confirms ten---those whose surface is
-readable---and declines the other five. Over all \BlBolaCells{} violation cells including the
-\BlOursAbstainViol{} abstained ones total recall is \BlOursRecallAll{}\% and coverage falls to
-\BlOursCoverage{}\%. A succeeding request is compatible with both a grant and a defect, so a rule
-that treats it as proof must either ignore grants (B1, B2) or see only the grants it created (B3).
-The out-of-band grant is the residual: on the Gitea snapshot the equality rule fires on all
-\BlRsBTwoClaims{} legitimately allowed cells, and the in-band log still leaves
-\BlRsBThreeClaims{}. The budget is matched at the probe pair and only there---\BlProbeReq{}
-requests per cell for every method, \BlSharedProbes{} shared probes, and \BlOursRequestsTotal{}
-requests for ours, \BlOursExtraTotal{} of them extra: one surface read on each of the
-\BlOursExtraCells{} alarming cells, \BlOursExtraAvg{} amortised per cell. We report no per-method
-timing: every method is scored from the same recorded responses in the same process.
+false proof (precision \BlOursPrecision{}\%), at the cost of \BlOursAbstain{} abstentions.
+The baselines find all fifteen violations (\BlBaselineRecallAll{}\% total recall), whereas
+ours confirms ten---those whose surface is readable---and declines the other five. Over all
+\BlBolaCells{} violation cells total recall is \BlOursRecallAll{}\% and coverage falls to
+\BlOursCoverage{}\%. A succeeding request is compatible with both a grant and a defect, so a
+rule that treats it as proof must either ignore grants (B1, B2) or see only the grants it
+created (B3). The out-of-band grant is the residual: on the Gitea snapshot the equality
+rule fires on all \BlRsBTwoClaims{} legitimately allowed cells, and the in-band log still
+leaves \BlRsBThreeClaims{}. The budget is matched at the probe pair and only
+there---\BlProbeReq{} requests per cell for every method, \BlSharedProbes{} shared probes,
+and \BlOursRequestsTotal{} requests for ours, \BlOursExtraTotal{} of them extra.
+We report no per-method timing: every method is scored from the same recorded responses in
+the same process.
 
 \input{baseline_table.tex}
 
@@ -274,19 +246,18 @@ timing: every method is scored from the same recorded responses in the same proc
 \paragraph{The same comparison at a matched total budget}
 Table~\ref{tab:budget} replaces the probe-pair match with a total-request ceiling per cell
 on the same \BgtCells{} cells. At a ceiling of two only the owner/actor pair fits: where the
-relation does not trigger our method passes, which needs no surface read, and those
-\BgtOursPassCapTwo{} cells are recorded as true negatives; on the \BgtOursAbstainCapTwo{}
-cells where it does trigger, no request is left to read the surface, so it abstains rather
-than letting the relation stand in for the surface. At a ceiling of three each method may
-spend one further observation declared in advance---ours reads the authorization surface, B3r
-enumerates the actor's visible objects---while B1--B3 spend nothing extra, reported as
-under-spend rather than padded. Under that ceiling our method does not dominate: B3r reaches
-\BgtBthreeRTpCapThree{} of \BgtViolations{} violations with \BgtBthreeRFpCapThree{} false
-proofs, ours \BgtOursTpCapThree{} with \BgtOursFpCapThree{} and \BgtOursAbstainCapThree{}
-abstentions (it passes the relation-free \BgtOursPassCapThree{} cells), spending
-\BgtOursReqCapThree{} of the \BgtCells{}$\times$3 requests allowed. What survives a matched
-budget is the trade the paper describes---higher precision on the claims actually made, paid
-for in coverage---not a detection advantage.
+relation does not trigger our method passes (\BgtOursPassCapTwo{} cells, recorded as true
+negatives); on the \BgtOursAbstainCapTwo{} cells where it does trigger, no request is left
+to read the surface, so it abstains. At a ceiling of three each method may spend one further
+observation declared in advance---ours reads the authorization surface, B3r enumerates the
+actor's visible objects---while B1--B3 spend nothing extra. Under that ceiling our method
+does not dominate: B3r reaches \BgtBthreeRTpCapThree{} of \BgtViolations{} violations with
+\BgtBthreeRFpCapThree{} false proofs, ours \BgtOursTpCapThree{} with
+\BgtOursFpCapThree{} and \BgtOursAbstainCapThree{} abstentions (it passes the relation-free
+\BgtOursPassCapThree{} cells), spending \BgtOursReqCapThree{} of the
+\BgtCells{}$\times$3 requests allowed. What survives a matched budget is the trade the paper
+describes---higher precision on the claims actually made, paid for in coverage---not a
+detection advantage.
 
 \subsection{Admissibility, and falsification}
 \label{sec:admissibility}
@@ -309,36 +280,27 @@ analyst who already has an admissible oracle should consume it directly
 here---dropping the relation for its direct counterpart is the wrong move: on Gogs
 \GgVersion{} and GitLab \GlVersion{} the direct adjudicator produces
 \GgFpDirectObserve{} and \GlFpDirectObserve{} false proofs against \GgFpVthree{} and
-\GlFpVthree{} for the oracle-gated relation (Table~\ref{tab:gogs-cross}), because the
-oracle errs by omission on exactly the channels the relation's alarm is silent about.
-Neither product passes clause~(2), and neither does Gitea: on all three, the route the
-oracle consults and the routes that decide the request are answered by the same process
-under the same permission model.
+\GlFpVthree{} for the oracle-gated relation (Table~\ref{tab:gogs-cross}).
 
-\paragraph{An oracle-independence admission rule, applied before and after}
 Clause~(2) needs an operational procedure---defect classes, four evidence levels, an ordered
-\emph{admit}/\emph{reject}/\emph{unknown} rule, and what each status licenses---fixed before
-the multi-class and equal-budget runs of Sections~\ref{sec:multiclass}
-and~\ref{sec:baselines}, and applied both to them and, conservatively, to the archived
-experiments. It is newer than the frozen temporal protocol and we do not backdate it: that
-protocol, pinned by digest, recorded the qualitative judgement
-(\texttt{oracle\_independence=shared}) but did not contain the procedure. Per defect class the
-rule enumerates the path producing the enforcement answer $y$ and the path producing the oracle
-answer $o$: \emph{admit} if neither contains the other's decision point nor shares a component
-whose failure could co-occur with the tested defect, \emph{reject} if such sharing is found,
-\emph{unknown} if either path cannot be enumerated---in which case independence-based promotion
-is refused. On all three products the route the oracle consults and the routes that decide the
-request are answered by the same process under the same permission model (Gitea
-\ResRsVersion{}, Gogs \GgVersion{} with its direct-collaborator-only per-object route,
-\GgChProbePermSuffix{} for the permission suffix that would expose the rest, GitLab
-\GlVersion{} with \texttt{members/all}). The enumeration stops at the server boundary, so below
-it the finer verdict would be \emph{unknown} and we record the conservative API-level
-\emph{reject}; on the controlled target, where the source is readable, the finer verdict is also
-\emph{reject}, though the ground differs by class. Two revisions of the register, logged in
-place and without changing a verdict, corrected five of those grounds; protocol and register
-ship with the artifact. Three epistemic statuses stay apart throughout: the diagnostic $O$/$H$
-readings, the classification of every promoted verdict against $E$ and $Y$, and
-independence-certified proofs of previously unknown defects, which the rule refuses here.
+\emph{admit}/\emph{reject}/\emph{unknown} rule---fixed before the multi-class and
+equal-budget runs of Sections~\ref{sec:multiclass} and~\ref{sec:baselines}, and applied
+both to them and, conservatively, to the archived experiments. It is newer than the frozen
+temporal protocol and we do not backdate it. Per defect class the rule enumerates the path
+producing the enforcement answer $y$ and the path producing the oracle answer $o$:
+\emph{admit} if neither contains the other's decision point nor shares a component whose
+failure could co-occur with the tested defect, \emph{reject} if such sharing is found,
+\emph{unknown} if either path cannot be enumerated. On all three products the route the
+oracle consults and the routes that decide the request are answered by the same process
+under the same permission model (Gitea \ResRsVersion{}, Gogs \GgVersion{} with its
+direct-collaborator-only per-object route, \GgChProbePermSuffix{} for the permission suffix
+that would expose the rest, GitLab \GlVersion{} with \texttt{members/all}), so the verdict
+is \emph{reject}---at the API level, and also on the controlled target where the source is
+readable. Two revisions of the register, logged in place and without changing a verdict,
+corrected five of those grounds. Three epistemic statuses stay apart throughout: the
+diagnostic $O$/$H$ readings, the classification of every promoted verdict against $E$ and
+$Y$, and independence-certified proofs of previously unknown defects, which the rule
+refuses here.
 
 Each finding would fall as follows: Finding~1, if the predicates were defined over live
 rather than recorded reachability; Finding~2, by an authorization MR needing an observable
