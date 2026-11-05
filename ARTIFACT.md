@@ -4,22 +4,23 @@ This document lists everything a third party needs to **reproduce every number
 and table in the paper** and to **re-run the experiments**. It is the companion
 to `reproduce.sh`.
 
-> Status (updated 2026-11-04): the artifact is **published**. The repository is
-> on GitHub, and this package is archived on Zenodo as version `artifact-v20`.
+> Status (updated 2026-11-05): the artifact is **published**. The repository is
+> on GitHub, and this package is archived on Zenodo as version `artifact-v23`
+> (the record page prints its version DOI; the concept DOI below resolves to it).
 > Cite the concept DOI `10.5281/zenodo.22859941`, which always resolves to the
 > newest version; the version DOI for this release is the one Zenodo prints on
 > the record page, and the earlier releases keep theirs (`artifact-v1` of
 > 2026-09-20 is `10.5281/zenodo.22859942`, `artifact-v18` is
 > `10.5281/zenodo.23942550`). A version DOI cannot be written into the package
 > it identifies, so this file names the concept DOI only. The manuscript this
-> package accompanies is frozen at tag `access-resubmission-v20`; the packaging
-> tag `artifact-v20` differs from it only in `.zenodo.json` and in this status
-> block. Input/output
-> integrity: SHA-256 manifests over **25 raw records** (including the frozen
-> upstream source state) and **40 byte-reproducible outputs** plus one
-> hand-written table that the pipeline verifies is unmodified, enforced at
-> pipeline entry by `reproduce.sh` step 0 (`make_manifests.py --check`). The
-> historical source-state facts of the native run are generated from
+> package accompanies is frozen at tag `access-resubmission-v23`, and the
+> packaging tag `artifact-v23` names the same commit, so the archived code and
+> the archived PDF are the ones the paper cites. Input/output integrity:
+> SHA-256 manifests over **25 raw records** (including the frozen upstream
+> source state) and **41 byte-reproducible outputs** plus one hand-written table
+> that the pipeline verifies is unmodified, enforced at pipeline entry by
+> `reproduce.sh` step 0 (`make_manifests.py --check`). The historical
+> source-state facts of the native run are generated from
 > `experiments/native_engine/results/frozen_source_state.json` (produced by
 > `analysis/freeze_native_sources.py`), not from a live checkout.
 
@@ -182,12 +183,16 @@ external services), then `python 04_绘图与分析/analysis/ingest_seeded.py`.
 ## 5. GitHub publication
 
 **Done.** The repository is published on GitHub and this package is archived on
-Zenodo as version `artifact-v20` (concept DOI `10.5281/zenodo.22859941`; the
+Zenodo as version `artifact-v23` (concept DOI `10.5281/zenodo.22859941`; the
 version DOI is printed on the record page). The record serves the package as
-four parts,
-`JISA-artifact-v20.zip.p001` through `.p004`; reassemble them with
-`cat JISA-artifact-v20.zip.p{001..004} > JISA-artifact-v20.zip` and check the
-SHA-256 given in the record description. The commit hash and the raw-records
+numbered parts (`JISA-artifact-v23.zip.p001` upward); reassemble them in
+order with
+`cat JISA-artifact-v23.zip.p* > JISA-artifact-v23.zip` and check the
+SHA-256 given in the record description. The package excludes internal
+tracking notes (`06_论文追踪/`), presentation material (`05_PPT与展示/`),
+superseded submission directories (`07_投稿_*`) and review correspondence
+(`03_论文撰写/response_to_reviewers*`); none of them carries a number, table or
+figure of the manuscript. The commit hash and the raw-records
 SHA-256 manifests (§1) are recorded in the manuscript's data-availability
 statement; refresh the manifests (`make_manifests.py`) and commit them together
 with any legitimate change to the raw records or the generation scripts.
