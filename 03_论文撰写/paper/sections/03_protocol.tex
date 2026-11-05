@@ -193,8 +193,8 @@ inadmissible: the two no-exception configurations (\texttt{V-noE3-vuln0},
 legitimate-sharing exception does not apply. This leaves \ResDesignCells{}
 admissible design cells.
 
-Table~\ref{tab:design} gives the complete cross factor by factor, and
-Table~\ref{tab:design-census} gives the cell-by-cell census. Two dimensions are
+Table~\ref{tab:design} gives the complete cross factor by factor; the cell-by-cell census
+ships with the artifact. Two dimensions are
 nested rather than crossed: channel visibility exists only where the application
 offers a sharing facility, so the two no-exception configurations sit outside it;
 and the listed level was instantiated only with introspection on, so \emph{listed
@@ -251,15 +251,7 @@ relations (MR-002, MR-004), \ResDesignPrecondVariants{} exception-policy variant
 \]
 The records are a fixed enumeration, not a sample: we report counts, rates and
 design-cell denominators and attach no inferential interval to any of them. Where a
-headline count has a small denominator we say so (the anchored rate,
-\ResFpEthreeHits{}/\ResFpEthreeTotal{}, is unstable by construction) and lead with the
-larger-denominator count of the same phenomenon. The replication ceiling
-is one constructed system, \ResDesignCells{} cells, \ResDesignMrs{} MRs, three real
-systems.
-
-\paragraph{Tooling and code provenance}
-Development of the analysis scripts was assisted by an AI coding assistant
-(declared in the Declarations). Every script that assistant touched was reviewed,
-executed, and its output checked by the authors against the raw records; the
-released pipeline recomputes every reported scalar from those records. No AI tool
-participated in the detection loop or in any adjudication.
+headline count has a small denominator we lead with the larger-denominator count of the same
+phenomenon (the anchored rate, \ResFpEthreeHits{}/\ResFpEthreeTotal{}, is unstable by
+construction). The replication ceiling is one constructed system, \ResDesignCells{} cells,
+\ResDesignMrs{} MRs, three real systems.

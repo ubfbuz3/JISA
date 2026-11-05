@@ -24,27 +24,12 @@ run records by the analysis pipeline.}
 \end{figure*}
 
 \paragraph{Grant surface}
-Table~\ref{tab:rs-m1} counts an endpoint as grant-capable if, without modifying the system, a
-request can move a (subject, object) pair from not-entitled to entitled. The
-\ResRsGrantNoAdmin{} endpoints drivable by a non-administrator are the out-of-band channel in
-its real form. The cross-vendor table reports a normalized census, which is why its Gitea
-figure (\GtGrantEndpoints{}) differs from the raw count here.
-
-\begin{table}[t]
-\centering
-\caption{The grant surface of Gitea \ResRsVersion{} (instance-independent).}
-\label{tab:rs-m1}
-\begin{tabular}{lr}
-\toprule
-quantity & count \\
-\midrule
-paths in the system's API description & \ResRsSwaggerPaths{} \\
-grant endpoints & \ResRsGrantEndpoints{} \\
-\quad of which usable without site-admin & \ResRsGrantNoAdmin{} \\
-revocation endpoints & \ResRsRevokeEndpoints{} \\
-\bottomrule
-\end{tabular}
-\end{table}
+An endpoint is grant-capable if, without modifying the system, a request can move a
+(subject, object) pair from not-entitled to entitled. Of the \ResRsSwaggerPaths{} paths in the
+system's API description, \ResRsGrantEndpoints{} are grant-capable, \ResRsGrantNoAdmin{} of
+those are drivable by a non-administrator---the out-of-band channel in its real form---and
+\ResRsRevokeEndpoints{} revoke. The cross-vendor table reports a normalized census, which is
+why its Gitea figure (\GtGrantEndpoints{}) differs from the raw count here.
 
 \paragraph{Is the authorization surface readable, and from where?}
 The counts below are different populations, not one denominator
@@ -86,59 +71,30 @@ subject also owner/admin (representative grid) & \ResRsSelfTotal{} & \ResRsSelfR
 \end{table}
 
 \paragraph{The mismatch is in time, not in visibility}
-Table~\ref{tab:rs-m4} is the load-bearing result: the adjudication departs from the real
-authorization state on \ResRsMismatchSnapshot{} of \ResRsMismatchDenom{} cells under the
-crawl-time reading and \ResRsMismatchLive{} of the same cells live, with system state and
-tested relation held fixed. Under the crawl-time reading a bookkeeping adjudication produces
-\ResRsMrBookkeepingFp{} false proofs on the \ResRsAuthorizedCells{} authorized cells (rate
-\ResRsMrBookkeepingFpRate{}), against \ResRsMrBookkeepingAlarmsLive{} alarms live; v3
-produces \ResRsVThreeFp{}, and \texttt{direct\_observe} emits \ResRsDirectObserveFp{}. The
-unfair control \texttt{direct\_only} raises \ResRsDirectOnlyAlarms{} alarms because it
-ignores the request outcome, yet none is promoted (\ResRsDirectOnlyFp{}), so alarm count and
-false-proof count are not the same quantity. Channel provenance of the authorized access is
-mostly not observable by the framework log (\ResRsChannelNotObservable{} of
-\ResRsChannelAuthorizedTotal{}, \ResRsChannelNotObservableRate{}), a property of our topology
-rather than a field prevalence. Two snapshots cannot separate a stale model from a channel
-the crawl never listed; the transition experiment separates them.
-
-\begin{table}[t]
-\centering
-\caption{Departure from the real authorization state, per reading of the
-reachability model.}
-\label{tab:rs-m4}
-\begin{tabular}{@{}p{0.56\columnwidth}rr@{}}
-\toprule
-reading of the reachability model & mismatch & cells \\
-\midrule
-crawl-time snapshot (as the definitions presuppose) & \ResRsMismatchSnapshot{} & \ResRsMismatchDenom{} \\
-live execution-time state & \ResRsMismatchLive{} & \ResRsMismatchDenom{} \\
-\bottomrule
-\end{tabular}
-\end{table}
+The adjudication departs from the real authorization state on \ResRsMismatchSnapshot{} of
+\ResRsMismatchDenom{} cells under the crawl-time reading and \ResRsMismatchLive{} of the same
+cells live, with system state and tested relation held fixed. Under the crawl-time reading a
+bookkeeping adjudication produces \ResRsMrBookkeepingFp{} false proofs on the
+\ResRsAuthorizedCells{} authorized cells (rate \ResRsMrBookkeepingFpRate{}), against
+\ResRsMrBookkeepingAlarmsLive{} alarms live; v3 produces \ResRsVThreeFp{}, and
+\texttt{direct\_observe} emits \ResRsDirectObserveFp{}. The unfair control
+\texttt{direct\_only} raises \ResRsDirectOnlyAlarms{} alarms because it ignores the request
+outcome, yet none is promoted (\ResRsDirectOnlyFp{}), so alarm count and false-proof count are
+not the same quantity. Channel provenance of the authorized access is mostly not observable by
+the framework log (\ResRsChannelNotObservable{} of \ResRsChannelAuthorizedTotal{},
+\ResRsChannelNotObservableRate{}), a property of our topology rather than a field prevalence.
+Two snapshots cannot separate a stale model from a channel the crawl never listed; the
+transition experiment separates them.
 
 \paragraph{An endogenous control}
 The most serious alternative explanation is that public objects are harder to
 enumerate---visibility, not time. Two objects that end equally public but became public at
-different moments control for this (Table~\ref{tab:rs-endo}): the predicate reports
-unreachability on \ResRsEndoAfterCrawlReach{} of \ResRsEndoAfterCrawlCells{} cells only for
-the object made public after the crawl, and on \ResRsEndoFromStartReach{} for the object
-public throughout, with the MR firing correspondingly (\ResRsEndoAfterCrawlFires{}
-vs.~\ResRsEndoFromStartFires{}). Final visibility is identical, so the only manipulated
-explanatory variable is when the model was read.
-
-\begin{table}[t]
-\centering
-\caption{Endogenous control: two objects that are both public at the end.}
-\label{tab:rs-endo}
-\begin{tabular}{@{}p{0.40\columnwidth}rrr@{}}
-\toprule
-object & cells & \texttt{cannotReach} & MR fires \\
-\midrule
-public before the crawl & \ResRsEndoFromStartCells{} & \ResRsEndoFromStartReach{} & \ResRsEndoFromStartFires{} \\
-public only after the crawl & \ResRsEndoAfterCrawlCells{} & \ResRsEndoAfterCrawlReach{} & \ResRsEndoAfterCrawlFires{} \\
-\bottomrule
-\end{tabular}
-\end{table}
+different moments control for this: the predicate reports unreachability on
+\ResRsEndoAfterCrawlReach{} of \ResRsEndoAfterCrawlCells{} cells only for the object made
+public after the crawl, and on \ResRsEndoFromStartReach{} for the object public throughout,
+with the MR firing correspondingly (\ResRsEndoAfterCrawlFires{} vs.~\ResRsEndoFromStartFires{}).
+Final visibility is identical, so the only manipulated explanatory variable is when the model
+was read.
 
 \subsection{Eight committed transitions with a frozen model, on two products}
 \label{sec:temporal}
@@ -360,17 +316,18 @@ team's repository, and the listing, the search results and the object read all a
 subject may see it. C4 is an escalation: a subject that is neither owner nor administrator
 grants a third party access it should not have.
 
-\input{multiclass_table.tex}
-
-Table~\ref{tab:multiclass} reports per-class recall against the seeded truth and, separately,
-false alarms on authorized cells of the same channel. C1 is the only class the read relation
+Per class---three instances of C1, two each of C2--C4---the read gate recovers 3, 0, 0 and 0;
+the channel-matched gate 3, 2, 0 and 0; the oracle-consuming adjudicator 3, 0, 2 and 2 on the
+read channel and all \McInstances{} on the channel-matched probe, and the channel-matched
+relation \McChannelHits{} of \McInstances{}. False alarms on authorized cells of the same
+channel are 8/23, 6/16, 8/23 and 0/7 for the relation and zero for the oracle. C1 is the only
+class the read relation
 covers. C2 breaks a different channel: the relation asks whether the object is \emph{served},
 not whether it can be \emph{changed}, so it is silent on both instances; moving the same
 relation to the channel the defect breaks recovers both. C3 and C4 are undetected end to end,
 because in both the subject already sees the object, so \texttt{cannotReachThroughGUI} is
-false and the antecedent does not hold. They stay in the
-denominator---\McChannelHits{} of \McInstances{} for the channel-matched relation---and the
-antecedent's failure is the explanation, not an exclusion.
+false and the antecedent does not hold. They stay in the denominator, and the antecedent's
+failure is the explanation, not an exclusion.
 
 The oracle-consuming adjudicator fires on all \McInstances{} instances once the probe is
 channel-matched, and on \McOracleReadHits{} of \McInstances{} when confined to the read

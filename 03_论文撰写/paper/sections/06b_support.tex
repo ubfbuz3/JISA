@@ -9,14 +9,10 @@ second implementation (Section~\ref{sec:secondimpl}).
 \subsection{The enumeration, cell by cell}
 \label{sec:census}
 
-Table~\ref{tab:design-census} gives the full mapping: every configuration against every scenario,
-with the number of records under each populated cell and a dash where the combination is
-undefined. Each populated cell holds twelve records---three exception policies and two
-reachability readings for each of the two relations---and six where only one relation applies.
-Split by relation, MR-002 holds \DsgMrTwo{} records and MR-004 \DsgMrFour{}; split by effective
-readability, \DsgFullOn{} are readable and \DsgFullOff{} are not.
-
-\input{design_census_table.tex}
+Split by relation, the \ResSynRecords{} records fall \DsgMrTwo{} to MR-002 and \DsgMrFour{} to
+MR-004; split by effective readability, \DsgFullOn{} are readable and \DsgFullOff{} are not.
+Section~\ref{sec:stratum} uses the second partition, and the cell-by-cell census ships with the
+artifact.
 
 \subsection{Confirmation at source}
 \label{sec:impl}
@@ -42,34 +38,12 @@ The library ships relations but no execution environment; we supplied the system
 and crawl snapshot and ran them---source unmodified, build configuration (\texttt{pom.xml}) and
 an external harness added (\NtUpstreamModified{} changed upstream file, \NtUpstreamJavaModified{}
 changed Java sources, two added classes totalling \NtHarnessLines{} lines)---against Gitea
-\NtGiteaVersion{} (Table~\ref{tab:native-facts}). \NtMrExecuted{} of \NtMrTotal{} authorization
-relations executed; \NtMrFired{} returned failures, \NtAlarms{} alarms in all---the engine's own
-\texttt{getFailures()} value (Table~\ref{tab:native}). The claim is scoped to the
+\NtGiteaVersion{}. \NtMrExecuted{} of \NtMrTotal{} authorization relations executed; \NtMrFired{}
+returned failures, \NtAlarms{} alarms in all---the engine's own \texttt{getFailures()} value, with
+\NtHttpCalls{} HTTP requests attributable to the observing relations. The claim is scoped to the
 \emph{reachability-gated subset that fires here}: one relation aborts on an engine-side defect,
 most issue no request because their own guards are unsatisfied, and the content predicate is
 never invoked.
-
-\begin{table}[t]
-\centering
-\caption{Execution facts for the native run of the published relations. All values
-are emitted by \texttt{ingest\_native\_engine.py}; the upstream modification counts
-are generated from a frozen snapshot of the upstream source state, not from a live
-checkout, so they are a deterministic function of archived records.}
-\label{tab:native-facts}
-\small
-\begin{tabular}{@{}p{0.66\columnwidth}r@{}}
-\toprule
-item & value \\
-\midrule
-authorization relations: catalogue, executed, fired & \NtMrTotal{}, \NtMrExecuted{}, \NtMrFired{} \\
-engine alarms (the engine's own return value) & \NtAlarms{} \\
-HTTP requests attributed to observing relations & \NtHttpCalls{} \\
-changed upstream Java sources & \NtUpstreamJavaModified{} \\
-build/config changes (one \texttt{pom.xml} line) & \NtUpstreamBuildModified{} \\
-added harness classes / added lines & two / \NtHarnessLines{} \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 The load-bearing cell: the subject \NtKeyGrantee{} holds a legitimate entitlement to
 \NtKeyRepo{}, granted out of band after the crawl. There the published
@@ -92,20 +66,8 @@ and asserts nothing about authorization. The promotion policy $P$ maps every fir
 \texttt{OTG\_AUTHZ} relation to ``a violation was observed'', so $H=\NtStageH$ holds by
 construction. All of it is in the independent truth $T$: \NtStageTTrue{} violations are confirmed
 and \NtStageTFalse{} of the \NtStageA{} promoted alarms are contradicted, on \NtStageTCells{}
-cells (Table~\ref{tab:native-split}).
-
-\begin{table}[t]
-\centering
-\caption{The native alarms split into the three stages: $A$ (the engine's own
-\texttt{getFailures()}), $H$ (the promotion policy $P$ applied to $A$), and $T$
-(independent truth from the ledger $E$ and the content re-read $Y$). Every row
-is an alarm, so $A$ is not repeated as a column; $H$ likewise applies to every
-row. $^{\dagger}$responder bytes identical to the owner's (sha256) and a third
-account refused with 404. MR names abbreviate \texttt{OTG\_AUTHZ\_}$x$.}
-\label{tab:native-split}
-\footnotesize
-\input{native_split_table.tex}
-\end{table}
+cells---in each case a subject with a post-crawl grant, a ledger that records the entitlement, and
+responder bytes identical to the owner's while a third account is refused with 404.
 
 \begin{table*}[t]
 \centering
