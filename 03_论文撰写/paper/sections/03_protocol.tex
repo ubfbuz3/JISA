@@ -102,7 +102,8 @@ The failure modes are distinct and stated as implemented. \emph{Transport-level
 retries:} a request that fails to connect (status~0) is re-issued up to two more times.
 \emph{$E$ undefined:} an entitlement-changing transaction that is refused or does not
 commit is issued once, marked \emph{failed} (\texttt{mutation\_failed}) and excluded
-from every denominator, with the exclusion count reported. \emph{$Y$ undefined:} an
+from every denominator, with the exclusion count reported---none in the runs of
+Section~\ref{sec:temporal}. \emph{$Y$ undefined:} an
 execution error or timeout leaves the cell unscored, never coerced to \emph{allow} or
 \emph{deny}---in the native engine run, \NtMrTotal{} relations were attempted,
 \NtMrExecuted{} executed and \NtMrErrored{} errored. \emph{$O$ undefined:} the
@@ -126,7 +127,8 @@ change the reported rate by a factor of about four. Under default deny all
 \TmpBothCells{} committed cells are scorable, the \TmpBothStaleFP{} false proofs are
 a share of \CalImpShare{}\% of that set, and specificity is \CalImpSpec{}\%; under
 the literal rule the scorable set shrinks to the \TmpBothLitKnown{} cells whose
-entitlement the ledger fixes, the same false proofs are a share of \CalLitShare{}\%
+entitlement the ledger fixes (\CalLitCov{}\% of the committed cells), the same false
+proofs are a share of \CalLitShare{}\%
 of it, and specificity falls to \CalLitSpec{}\%. The literal rule is not an
 improvement: it raises the observed share only by discarding the \TmpBothLitUnk{}
 cells on which the adjudication happened to be right. Precision is zero in both

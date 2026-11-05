@@ -39,11 +39,12 @@ and crawl snapshot and ran them---source unmodified, build configuration (\textt
 an external harness added (\NtUpstreamModified{} changed upstream file, \NtUpstreamJavaModified{}
 changed Java sources, two added classes totalling \NtHarnessLines{} lines)---against Gitea
 \NtGiteaVersion{}. \NtMrExecuted{} of \NtMrTotal{} authorization relations executed; \NtMrFired{}
-returned failures, \NtAlarms{} alarms in all---the engine's own \texttt{getFailures()} value, with
-\NtHttpCalls{} HTTP requests attributable to the observing relations. The claim is scoped to the
+returned failures, \NtAlarms{} alarms in all---the engine's own \texttt{getFailures()} value
+(Table~\ref{tab:native}), with \NtHttpCalls{} HTTP requests attributable to the observing
+relations. The claim is scoped to the
 \emph{reachability-gated subset that fires here}: one relation aborts on an engine-side defect,
 most issue no request because their own guards are unsatisfied, and the content predicate is
-never invoked.
+never invoked (\NtUcrcCalls{} recorded invocations).
 
 The load-bearing cell: the subject \NtKeyGrantee{} holds a legitimate entitlement to
 \NtKeyRepo{}, granted out of band after the crawl. There the published

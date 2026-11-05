@@ -251,8 +251,10 @@ on GitLab again (\GlFpVthree{}, \GlFpDirectObserve{}), every v3 false proof fall
 whose authorization derives from site administration or public visibility
 (\GgImplicitSiteAdmin{} and \GgImplicitPublic{} such cells on Gogs; \GlImplicitSiteAdmin{} and
 \GlImplicitPublic{} on GitLab). No admissible oracle was available from the tested surfaces on
-Gogs or GitLab, so the honest adjudicator abstains where those surfaces would license a
-promotion.
+Gogs or GitLab: an adjudicator applying clause~(2) of
+Section~\ref{sec:admissibility} would abstain exactly where those surfaces license a
+promotion, and the oracle-gated variant, which does not apply that test, is where the
+\GgFpVthree{} and \GlFpVthree{} false proofs are produced.
 
 Bookkeeping alarms false-proof on legitimately granted access on every product (Gitea
 \GtFpBookkeeping{}, Gogs \GgFpBookkeeping{}, GitLab \GlFpBookkeeping{} cells) with the same
@@ -319,8 +321,10 @@ grants a third party access it should not have.
 Per class---three instances of C1, two each of C2--C4---the read gate recovers 3, 0, 0 and 0;
 the channel-matched gate 3, 2, 0 and 0; the oracle-consuming adjudicator 3, 0, 2 and 2 on the
 read channel and all \McInstances{} on the channel-matched probe, and the channel-matched
-relation \McChannelHits{} of \McInstances{}. False alarms on authorized cells of the same
-channel are 8/23, 6/16, 8/23 and 0/7 for the relation and zero for the oracle. C1 is the only
+relation \McChannelHits{} of \McInstances{}. False alarms on the authorized cells of the channel
+each class breaks are \McFpRelRead/\McNegRead{} for read (C1 and C3 are scored against the same
+read cells), \McFpRelWrite/\McNegWrite{} for write and \McFpRelGrant/\McNegGrant{} for grant;
+the oracle raises none. C1 is the only
 class the read relation
 covers. C2 breaks a different channel: the relation asks whether the object is \emph{served},
 not whether it can be \emph{changed}, so it is silent on both instances; moving the same
